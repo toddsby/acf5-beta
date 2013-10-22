@@ -1,0 +1,683 @@
+/*--------------------------------------------------------------------------------------------
+*
+*	General
+*
+*--------------------------------------------------------------------------------------------*/
+
+/* Horizontal List */
+.acf-hl { padding: 0; margin: 0; list-style: none; display: block; position: relative; }
+.acf-hl > li { float: left; display: block; margin: 0; padding: 0; }
+.acf-hl > li.acf-fr { float: right; }
+
+
+/* Horizontal List: Clearfix */
+.acf-hl:before, .acf-hl:after {
+    content: "";
+    display: table;
+    line-height: 0;
+}
+.acf-hl:after {
+    clear: both;
+}
+
+
+/* Block List */
+.acf-bl { padding: 0; margin: 0; list-style: none; display: block; position: relative; }
+.acf-bl > li { display: block; margin: 0; padding: 0; float: none; }
+
+
+/* Full width */
+img.acf-fw {
+	width: 100%;	
+}
+
+
+/* icon */
+[class^="acf-sprite-"], 
+[class*=" acf-sprite-"] {
+	display: block;
+	width: 16px;
+	height: 16px;
+	float: left;
+	background: url(../images/sprite.png);
+	margin: 0;
+}
+
+
+/* Browser */
+.acf-visible { display: block; visibility: visible; }
+.acf-hidden { display: none; visibility: visible; }
+
+
+/* Float */
+.acf-fl { float: left; }
+.acf-fr { float: right; }
+.acf-fn { float: none; }
+
+
+/* Align */
+.acf-al { text-align: left; }
+.acf-ar { text-align: right; }
+.acf-ac { text-align: center; }
+
+
+/* loading */
+.acf-loading {
+	display: block;
+	height: 22px;
+	width: 22px;
+	border: #BBBBBB solid 1px;
+	border-radius: 12px;
+	
+	background: #EAEAEA url(../images/wpspin_light.gif) no-repeat 50% 50%;
+    margin: 0 auto;
+}
+
+
+/* required */
+.acf-required {
+	color: #f00;
+}
+
+
+/*--------------------------------------------------------------------------------------------
+*
+*	acf-box
+*
+*--------------------------------------------------------------------------------------------*/
+
+.acf-box {
+    background: #FFFFFF;
+    border: 1px solid #DFDFDF;
+    position: relative;
+}
+
+.acf-box > .inner {
+    padding: 15px;
+}
+
+.acf-box h2 {
+	font-size: 25px;
+	line-height: 29px;
+	margin: 0.25em 0 0.75em;
+	padding: 0;
+	color: #333333;
+}
+
+.acf-box h3 {
+	margin: 1.5em 0 0;
+}
+
+.acf-box p {
+	margin-top: 0.5em;
+}
+
+.acf-box > .footer {
+    background: #EAF2FA;
+    border-top: 1px solid #DFDFDF;
+    padding: 10px 15px;
+    color: #859AC6;
+}
+
+.acf-box > .footer .acf-hl > li { margin: 0 10px 0 0; }
+.acf-box > .footer .acf-hl > li.acf-fr { margin: 0 0 0 10px; }
+
+
+/*--------------------------------------------------------------------------------------------
+*
+*	Basic ACF field wrap
+*
+*--------------------------------------------------------------------------------------------*/
+
+.acf-field {
+	
+}
+
+.acf-label {
+	vertical-align: top;
+}
+
+.acf-input {
+	vertical-align: top;	
+}
+
+/*--------------------------------------------------------------------------------------------
+*
+*	acf-table
+*
+*--------------------------------------------------------------------------------------------*/
+
+.acf-table {
+	background: #fff;
+	border: 0 none;
+	
+	border-spacing: 0;
+	border-radius: 0;
+	table-layout: auto;
+	
+	padding: 0;
+	margin: 0;
+    width: 100%;
+    
+    clear: both;
+}
+
+.acf-table th {
+	vertical-align: top;
+}
+
+.acf-table td {
+	vertical-align: top;
+	padding: 13px 15px;
+	
+	border: 0 none;
+	border-top: 1px solid #F5F5F5;
+	border-left: 1px solid #F5F5F5;
+}
+
+.acf-table td.acf-label {
+	background: #F9F9F9;
+    border-top-color: #F0F0F0;
+    
+    width: 24%;
+}
+
+.acf-table td.acf-label p {
+	color: #899194;
+    display: block;
+    font-size: 12px;
+    font-style: normal;
+    line-height: 16px;
+    margin: 3px 0 0 !important;
+    padding: 0 !important;
+}
+
+.acf-table td.acf-label label {
+    display: block;
+    font-weight: bold;
+    margin: 0 0 3px;
+}
+
+.acf-table td.acf-label + td {
+	border-left-color: #E1E1E1;
+}
+
+.acf-table tr:first-child > td { 
+	border-top: 0;
+}
+
+.acf-table tr > td:first-child { 
+	border-left: 0;
+}
+
+
+/* clear table */
+
+.acf-clear-table td,
+.acf-clear-table th {
+	border: 0 none;
+	padding: 4px;
+}
+
+
+/* input table */
+
+.acf-input-table {
+	table-layout: fixed;
+	border: 1px solid #F5F5F5;
+}
+
+
+/*--------------------------------------------------------------------------------------------
+*
+*	acf-button
+*
+*--------------------------------------------------------------------------------------------*/
+
+.acf-button {
+	position: relative;
+	display: inline-block;
+	border-radius: 2px;
+	height: 24px;
+	padding: 0 11px 1px;
+    cursor: pointer;
+    
+    -webkit-box-sizing: border-box;
+	-moz-box-sizing:    border-box;
+	box-sizing:         border-box;
+	
+    color: #333;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 23px;
+    text-align: center;
+	text-decoration: none;
+	
+	background: #F9F9F9;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#FEFEFE), to(#F4F4F4)); /* Safari 4+, Chrome */
+	background-image: -webkit-linear-gradient(top, #FEFEFE, #F4F4F4); /* Chrome 10+, Safari 5.1+, iOS 5+ */
+	background-image:    -moz-linear-gradient(top, #FEFEFE, #F4F4F4); /* Firefox 3.6-15 */
+	background-image:      -o-linear-gradient(top, #FEFEFE, #F4F4F4); /* Opera 11.10+ */
+	background-image:         linear-gradient(to bottom, #FEFEFE, #F4F4F4); /* Firefox 16+ */
+	
+	border: #BBBBBB solid 1px;
+	text-shadow: #fff 0 1px 0;
+	box-shadow: inset #fff 0 1px 0 0;
+	
+}
+
+.acf-button:hover {
+	color: #333;
+	border-color: #999;
+}
+
+.acf-button:focus,
+.acf-button:active {
+	outline: none;
+}
+
+.acf-button:active {
+	top: 1px;
+}
+
+
+/* sizes */
+.acf-button.large {
+	height: 28px;
+	line-height: 27px;
+	font-size: 13px;
+}
+
+
+/* all colors */
+.acf-button.blue,
+.acf-button.green,
+.acf-button.orange {
+	color: #fff !important;	
+}
+
+
+/* blue */
+.acf-button.blue {
+	background: #3595BC;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#46AFDB), to(#3199C5)); /* Safari 4+, Chrome */
+	background-image: -webkit-linear-gradient(top, #46AFDB, #3199C5); /* Chrome 10+, Safari 5.1+, iOS 5+ */
+	background-image:    -moz-linear-gradient(top, #46AFDB, #3199C5); /* Firefox 3.6-15 */
+	background-image:      -o-linear-gradient(top, #46AFDB, #3199C5); /* Opera 11.10+ */
+	background-image:         linear-gradient(to bottom, #46AFDB, #3199C5); /* Firefox 16+ */
+	
+	border: #268FBB solid 1px;
+	text-shadow: #268FBB 0 1px 0;
+	box-shadow: inset #5FC8F4 0 1px 0 0;
+}
+
+
+/* orange */
+.acf-button.orange {
+	background: #e86740;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#eb7551), to(#e05c37)); /* Safari 4+, Chrome */
+	background-image: -webkit-linear-gradient(top, #eb7551, #e05c37); /* Chrome 10+, Safari 5.1+, iOS 5+ */
+	background-image:    -moz-linear-gradient(top, #eb7551, #e05c37); /* Firefox 3.6-15 */
+	background-image:      -o-linear-gradient(top, #eb7551, #e05c37); /* Opera 11.10+ */
+	background-image:         linear-gradient(to bottom, #eb7551, #e05c37); /* Firefox 16+ */
+	
+	border: #c94c2a solid 1px;
+	text-shadow: #c94c2a 0 1px 0;
+	box-shadow: inset #f09674 0 1px 0 0;
+}
+
+
+/* green */
+.acf-button.green {
+	background: #2CB75A;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#39CB69), to(#27B957)); /* Safari 4+, Chrome */
+	background-image: -webkit-linear-gradient(top, #39CB69, #27B957); /* Chrome 10+, Safari 5.1+, iOS 5+ */
+	background-image:    -moz-linear-gradient(top, #39CB69, #27B957); /* Firefox 3.6-15 */
+	background-image:      -o-linear-gradient(top, #39CB69, #27B957); /* Opera 11.10+ */
+	background-image:         linear-gradient(to bottom, #39CB69, #27B957); /* Firefox 16+ */
+	
+	border: #21B351 solid 1px;
+	text-shadow: #21B351 0 1px 0;
+	box-shadow: inset #4DDF7D 0 1px 0 0;
+}
+
+
+/*--------------------------------------------------------------------------------------------
+*
+*	acf-icon
+*
+*--------------------------------------------------------------------------------------------*/
+
+.acf-icon {
+	display: block;
+	height: 22px;
+	width: 22px;
+	border: #BBBBBB solid 1px;
+	border-radius: 12px;
+	
+	position: relative;
+	overflow: hidden;
+	
+	font-size: 12px;
+	line-height: 22px;
+	text-align: center;
+}
+
+.acf-icon:hover {
+	border-color: #999;
+}
+
+.acf-icon:active,
+.acf-icon:focus {
+	outline: none;
+}
+
+
+/* add */
+.acf-icon .acf-sprite-add {
+	margin: 7px 0 0 7px;
+	background-position: 0 0;
+}
+
+.acf-icon:hover .acf-sprite-add {
+	background-position: 0 -50px;
+}
+
+
+/* remove */
+.acf-icon .acf-sprite-remove {
+	margin: 10px 0 0 7px;
+	background-position: -50px 0;
+}
+
+.acf-icon:hover .acf-sprite-remove {
+	background-position: -50px -50px;
+}
+
+
+/* arrow */
+.acf-sprite-arrow {
+	background-position: 0 -100px;
+	margin: 4px 5px 0 10px;
+}
+
+
+/*--------------------------------------------------------------------------------------------
+*
+*	acf-postbox
+*
+*--------------------------------------------------------------------------------------------*/
+
+.acf-postbox {
+	position: relative;
+}
+
+.acf-postbox > .inside {
+	
+}
+
+/* settings */
+.acf-postbox.settings {
+	border-radius: 0;
+	background: #fff;
+	border-radius: 0;
+}
+
+.acf-postbox.settings > .inside {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+
+/* no-border */
+.acf-postbox.seamless {
+	border: 0 none;
+	background: transparent;
+}
+
+.acf-postbox.seamless > .hndle,
+.acf-postbox.seamless > .handlediv {
+	display: none;
+}
+
+.acf-postbox.seamless > .inside {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+
+/*---------------------------------------------------------------------------------------------
+*
+*  Basic Field Styles
+*
+*---------------------------------------------------------------------------------------------*/
+
+.acf-field input[type="text"], 
+.acf-field input[type="password"], 
+.acf-field input[type="number"], 
+.acf-field input[type="search"], 
+.acf-field input[type="email"], 
+.acf-field input[type="url"], 
+.acf-field textarea,
+.acf-field select {
+    width: 100%;
+	padding: 5px;
+	resize: none;
+	margin: 0;
+    box-sizing: border-box;
+}
+
+.acf-field textarea {
+	resize: vertical;
+	min-height: 150px;
+}
+
+
+/* select */
+.acf-field select {
+	padding: 2px;
+}
+
+.acf-field select optgroup {
+	padding: 5px;
+	background: #fff;
+}
+
+.acf-field select option {
+	padding: 3px;
+}
+
+.acf-field select optgroup option {
+	padding-left: 5px;
+}
+
+.acf-field select optgroup:nth-child(2n) {
+    background: #F9F9F9;
+}
+
+
+/* radio */
+ul.acf-radio-list,
+ul.acf-checkbox-list {
+	background: transparent !important;
+	position: relative;
+	display: block;
+	padding: 1px;
+	margin: 0;
+}
+
+ul.acf-radio-list.horizontal,
+ul.acf-checkbox-list.horizontal {
+	overflow: hidden;
+}
+
+ul.acf-radio-list.horizontal li,
+ul.acf-checkbox-list.horizontal li {
+	float: left;
+	margin-right: 20px;
+}
+
+ul.acf-radio-list li input,
+ul.acf-checkbox-list li input {
+	margin-top: -1px;
+	margin-right: 5px !important;
+	width: auto !important;
+}
+
+
+/*---------------------------------------------------------------------------------------------
+*
+*  wp-admin
+*
+*---------------------------------------------------------------------------------------------*/
+
+/* Menu */
+#adminmenu #toplevel_page_edit-post_type-acf-field-group a[href="edit.php?post_type=acf&page=acf-upgrade"]{ display: none; }
+#adminmenu #toplevel_page_edit-post_type-acf-field-group .wp-menu-image { background-position: 1px -33px; }
+#adminmenu #toplevel_page_edit-post_type-acf-field-group:hover .wp-menu-image,
+#adminmenu #toplevel_page_edit-post_type-acf-field-group.wp-menu-open .wp-menu-image { background-position: 1px -1px; }
+
+
+/*---------------------------------------------------------------------------------------------
+*
+*  Field Group List
+*
+*---------------------------------------------------------------------------------------------*/
+
+#icon-edit.icon32-posts-acf-field-group {
+	background-position: -11px -5px;
+}
+
+#acf-col-wrap {
+	position: relative; clear: both;
+}
+
+#acf-col-main {
+	margin-right: 300px;
+}
+
+#acf-col-main .tablenav,
+#acf-col-main p.search-box {
+	display: none;
+}
+
+#acf-col-main .wp-list-table .check-column {
+	padding-left: 5px;
+}
+
+#acf-col-main .wp-list-table th#fields {
+	width: 25%;
+}
+
+#acf-col-main .tablenav.bottom {
+	display: block;
+}
+
+#acf-col-main form {
+	position: relative;
+	float: left;
+	width: 100%;
+}
+
+#acf-col-side {
+	float: right; 
+	width: 281px; 
+	padding-top: 37px !important;
+}
+
+#acf-col-main .wp-list-table {
+	border-radius: 0;
+}
+
+
+/*---------------------------------------------------------------------------------------------
+*
+*  Fake table
+*
+*---------------------------------------------------------------------------------------------*/
+
+.acf-thead,
+.acf-tbody,
+.acf-tfoot {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+.acf-thead > li,
+.acf-tbody > li,
+.acf-tfoot > li {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing:    border-box;
+	box-sizing:         border-box;
+	
+	padding: 7px 15px 8px;
+	font-size: 12px;
+	line-height: 13px;
+}
+
+
+.acf-thead {
+	background: #F2F2F2;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC)); /* Safari 4+, Chrome */
+	background-image: -webkit-linear-gradient(top, #F9F9F9, #ECECEC); /* Chrome 10+, Safari 5.1+, iOS 5+ */
+	background-image:    -moz-linear-gradient(top, #F9F9F9, #ECECEC); /* Firefox 3.6-15 */
+	background-image:      -o-linear-gradient(top, #F9F9F9, #ECECEC); /* Opera 11.10+ */
+	background-image:         linear-gradient(to bottom, #F9F9F9, #ECECEC); /* Firefox 16+ */
+	
+	border-top: #FFFFFF solid 1px;
+	border-bottom: #DFDFDF solid 1px;
+}
+
+.acf-thead > li {
+	font-size: 14px;
+	line-height: 1.3em;
+	
+	font-family: Georgia, "Times New Roman", "Bitstream Charter", Times, serif;
+	color: #333333;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.acf-tfoot {
+	background: #EAF2FA;
+}
+
+.acf-tfoot > li {
+	color: #7A9BBE;
+	text-shadow: 0 1px 0 #FFFFFF;
+	font-size: 12px;
+	line-height: 23px;
+}
+
+.acf-tfoot > li.comic-sans {
+	font-family: Comic Sans MS, sans-serif;
+	font-size: 11px;
+}
+
+
+/*---------------------------------------------------------------------------------------------
+*
+*  Retina
+*
+*---------------------------------------------------------------------------------------------*/
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (   min--moz-device-pixel-ratio: 2),
+only screen and (     -o-min-device-pixel-ratio: 2/1),
+only screen and (        min-device-pixel-ratio: 2),
+only screen and (                min-resolution: 192dpi),
+only screen and (                min-resolution: 2dppx) { 
+	
+	[class^="acf-sprite-"], 
+	[class*=" acf-sprite-"] {
+		background-image: url(../images/sprite@2x.png);
+		background-size: 500px 500px;
+	}
+	
+	.acf-loading {
+		background-image: url(../images/wpspin_light@2x.gif);
+		background-size: 16px 16px;
+	}
+	
+}
