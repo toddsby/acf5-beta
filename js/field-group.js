@@ -1,141 +1,6 @@
-/*
-*  field-group.js
-*
-*  All javascript needed to create a field group
-*
-*  @type	JS
-*  @date	1/08/13
-*/ 
+var acf_field_group = {};
 
-var acf = {
-	
-	// vars
-	l10n				:	null,
-	o					:	null,
-	
-	
-	// helper functions
-	helpers				:	{
-		uniqid			: 	null,
-		sortable		:	null,
-		render_field	:	null
-	},
-	
-	
-	// modules
-	fields				:	null,
-	conditional_logic	:	null,
-	location			:	null,
-	options				:	null,
-};
-
-
-(function($){
-
-	
-	/*
-	*  $.exists
-	*
-	*  This function will return true if the selector has found an element
-	*
-	*  @type	function
-	*  @date	30/09/13
-	*  @since	5.0.0
-	*
-	*  @param	n/a
-	*  @return	(bool)
-	*/
-	
-	$.fn.exists = function()
-	{
-		return $(this).length>0;
-	};
-	
-	
-	/*
-	*  Helper: sortable
-	*
-	*  This function will keep widths of td's inside a tr, iseful for drag / drop of a tr
-	*
-	*  @type	function
-	*  @date	30/09/13
-	*  @since	5.0.0
-	*
-	*  @param	n/a
-	*  @return	n/a
-	*/
-	
-	acf.helpers.sortable = function(e, ui)
-	{
-		ui.children().each(function(){
-			$(this).width($(this).width());
-		});
-		return ui;
-	};
-	
-	
-	/*
-	*  Helper: uniqid
-	*
-	*  This function is the JS equivelant of PHP uniqid
-	*
-	*  @type	function
-	*  @date	7/03/13
-	*  @since	3.6.0
-	*
-	*  @param	prefix (string)
-	*  @return	more_entropy (boolean)
-	*  @return	(string)
-	*/
-	
-	acf.helpers.uniqid = function(prefix, more_entropy)
-    {
-    	  // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-		  // +    revised by: Kankrelune (http://www.webfaktory.info/)
-		  // %        note 1: Uses an internal counter (in php_js global) to avoid collision
-		  // *     example 1: uniqid();
-		  // *     returns 1: 'a30285b160c14'
-		  // *     example 2: uniqid('foo');
-		  // *     returns 2: 'fooa30285b1cd361'
-		  // *     example 3: uniqid('bar', true);
-		  // *     returns 3: 'bara20285b23dfd1.31879087'
-		  if (typeof prefix == 'undefined') {
-		    prefix = "";
-		  }
-		
-		  var retId;
-		  var formatSeed = function (seed, reqWidth) {
-		    seed = parseInt(seed, 10).toString(16); // to hex str
-		    if (reqWidth < seed.length) { // so long we split
-		      return seed.slice(seed.length - reqWidth);
-		    }
-		    if (reqWidth > seed.length) { // so short we pad
-		      return Array(1 + (reqWidth - seed.length)).join('0') + seed;
-		    }
-		    return seed;
-		  };
-		
-		  // BEGIN REDUNDANT
-		  if (!this.php_js) {
-		    this.php_js = {};
-		  }
-		  // END REDUNDANT
-		  if (!this.php_js.uniqidSeed) { // init seed with big random int
-		    this.php_js.uniqidSeed = Math.floor(Math.random() * 0x75bcd15);
-		  }
-		  this.php_js.uniqidSeed++;
-		
-		  retId = prefix; // start with prefix, add current milliseconds hex string
-		  retId += formatSeed(parseInt(new Date().getTime() / 1000, 10), 8);
-		  retId += formatSeed(this.php_js.uniqidSeed, 5); // add seed hex string
-		  if (more_entropy) {
-		    // for more entropy we add a float lower to 10
-		    retId += (Math.random() * 10).toFixed(8).toString();
-		  }
-		
-		  return retId;
-    };
-        
+(function($){        
     
     /*
 	*  Submit Post
@@ -217,10 +82,10 @@ var acf = {
 		
 		
 		// initialize modules
-		acf.fields.init();
-		acf.location.init();
-		acf.conditional_logic.init();
-		acf.options.init();
+		acf_field_group.fields.init();
+		acf_field_group.location.init();
+		acf_field_group.conditional_logic.init();
+		acf_field_group.options.init();
 			
 	});
 	
@@ -238,7 +103,7 @@ var acf = {
 	*  @return	n/a
 	*/
 	
-	acf.fields = {
+	acf_field_group.fields = {
 		
 		$el : null,
 		
@@ -289,7 +154,7 @@ var acf = {
 				
 			});
 			
-			this.$el.on('change', '.field-type-select', function(){
+			this.$el.on('change', '.acf-field-type', function(){
 				
 				_this.change_type( $(this) );
 				
@@ -303,6 +168,12 @@ var acf = {
 				
 			});
 			
+			acf.on('open_field', function(e, $el){
+				
+				
+				
+			});
+			
 		},
 		
 		edit : function( $el ){
@@ -311,12 +182,12 @@ var acf = {
 			if( $el.hasClass('open') )
 			{
 				$el.removeClass('open');
-				$(document).trigger('acf/field_group/close_field', [ $el ]);
+				acf.trigger('close_field', [ $el ]);
 			}
 			else
 			{
 				$el.addClass('open');
-				$(document).trigger('acf/field_group/open_field', [ $el ]);
+				acf.trigger('open_field', [ $el ]);
 			}
 			
 			
@@ -406,7 +277,7 @@ var acf = {
 			
 			// clone last tr
 			var $field_list = this.$el.find('> .inside > .acf-field-list'),
-				$el			= $field_list.children('.field[data-key="field_clone"]').clone();
+				$el			= $field_list.children('.field[data-key="acfcloneindex"]').clone();
 			
 			
 			// update names
@@ -418,7 +289,7 @@ var acf = {
 			
 			
 			// append to table
-			$field_list.children('.field[data-key="field_clone"]').before( $el );
+			$field_list.children('.field[data-key="acfcloneindex"]').before( $el );
 			
 			
 			// remove no fields message
@@ -441,6 +312,10 @@ var acf = {
 			
 			// update order numbers
 			this.render();
+			
+			
+			// trigger append
+			acf.trigger('append', [ $el ]);
 			
 			
 			// open up form
@@ -631,7 +506,7 @@ var acf = {
 	*  @return	n/a
 	*/
 	
-	acf.options = {
+	acf_field_group.options = {
 		
 		$el : null,
 		
@@ -681,7 +556,7 @@ var acf = {
 	*  @created: 13/04/13
 	*/
 	
-	acf.location = {
+	acf_field_group.location = {
 		$el : null,
 		init : function(){
 			
@@ -877,106 +752,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 */
 	
 	
-	/*
-	*  Create Field
-	*
-	*  @description: 
-	*  @since 3.5.1
-	*  @created: 11/10/12
-	*/
-	
-	acf.helpers.render_field = function( options ){
-		
-		// dafaults
-		var defaults = {
-			'type' 		: 'text',
-			'classname'	: '',
-			'name' 		: '',
-			'value' 	: ''
-		};
-		options = $.extend(true, defaults, options);
-		
-		
-		// vars
-		var html = "";
-		
-		if( options.type == "text" )
-		{
-			html += '<input class="text ' + options.classname + '" type="text" id="' + options.name + '" name="' + options.name + '" value="' + options.value + '" />';
-		}
-		else if( options.type == "select" )
-		{
-			// vars
-			var groups = {};
-			
-			
-			// populate groups
-			$.each(options.choices, function(k, v){
-				
-				// group may not exist
-				if( v.group === undefined )
-				{
-					v.group = 0;
-				}
-				
-				
-				// instantiate group
-				if( groups[ v.group ] === undefined )
-				{
-					groups[ v.group ] = [];
-				}
-				
-				
-				// add to group
-				groups[ v.group ].push( v );
-				
-			});
-			
-			
-			html += '<select class="select ' + options.classname + '" id="' + options.name + '" name="' + options.name + '">';
-			
-			$.each(groups, function(k, v){
-				
-				// start optgroup?
-				if( k != 0 )
-				{
-					html += '<optgroup label="' + k + '">';
-				}
-				
-				
-				// options
-				$.each(v, function(k2, v2){
-					
-					var attr = '';
-					
-					if( v2.value == options.value )
-					{
-						attr = 'selected="selected"';
-					}
-					
-					html += '<option ' + attr + ' value="' + v2.value + '">' + v2.label + '</option>';
-					
-				});
-				
-				
-				// end optgroup?
-				if( k != 0 )
-				{
-					html += '</optgroup>';
-				}
-				
-			});
-			
-			
-			html += '</select>';
-		}
-		
-		html = $(html);
-		
-		return html;
-			
-	};
-	
+
 	
 	/*
 	*  Conditional Logic
@@ -990,7 +766,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 	*  @return	N/A
 	*/
 	
-	acf.conditional_logic = {
+	acf_field_group.conditional_logic = {
 		
 		triggers : null,
 		
@@ -1002,7 +778,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			
 			
 			// events
-			$(document).on('acf/field_form-open', function(e, $field){
+			acf.on('open_field', function(e, $field){
 				
 				// populate the triggers
 				_this.sync();
@@ -1071,7 +847,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 				
 				
 				// validate
-				if( id == 'field_clone' )
+				if( id == 'acfcloneindex' )
 				{
 					return;
 				}

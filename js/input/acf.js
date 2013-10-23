@@ -18,6 +18,8 @@ var acf = {
 	
 	update				:	null,
 	get					:	null,
+	on					:	null,
+	trigger				:	null,
 	
 	
 	// helper functions
@@ -53,7 +55,19 @@ var acf = {
 (function($){
 	
 	
-	// var functions
+	/*
+	*  Basic Object Functions
+	*
+	*  These functions interact with the o object, and events
+	*
+	*  @type	function
+	*  @date	23/10/13
+	*  @since	5.0.0
+	*
+	*  @param	$n/a
+	*  @return	$n/a
+	*/
+	
 	$.extend(acf, {
 		
 		update : function( k, v ){
@@ -65,6 +79,18 @@ var acf = {
 		get : function( k ){
 			
 			return this.o[ k ] || null;
+			
+		},
+		
+		on : function( event, callback ){
+			
+			$(this).on(event, callback);
+			
+		},
+		
+		trigger : function( event, args ){
+			
+			$(this).trigger(event, args);
 			
 		}
 		
@@ -345,6 +371,13 @@ var acf = {
 			
 		},
 		init : function(){
+			
+			// bail early if wp.media does not exist (field group edit page)
+			if( typeof(wp.media) == 'undefined' )
+			{
+				return false;
+			}
+			
 			
 			// vars
 			var _prototype = wp.media.view.AttachmentCompat.prototype;
@@ -736,32 +769,18 @@ var acf = {
 	
 	
 	
-		
-	/*
-	*  Document Ready
-	*
-	*  @description: 
-	*  @since: 3.5.8
-	*  @created: 17/01/13
-	*/
 	
 	$(document).ready(function(){
+		
+		acf.trigger('ready', [ $(document) ]);
 		
 		
 		// conditional logic
 		acf.conditional_logic.init();
 		
 		
-		// fix for older options page add-on
-		$('.acf_postbox > .inside > .options').each(function(){
-			
-			$(this).closest('.acf_postbox').addClass( $(this).attr('data-layout') );
-			
-		});
-		
-		
 		// Remove 'field_123' from native custom field metabox
-		$('#metakeyselect option[value^="field_"]').remove();
+		//$('#metakeyselect option[value^="field_"]').remove();
 		
 	
 	});
@@ -776,6 +795,9 @@ var acf = {
 	*/
 	
 	$(window).load(function(){
+		
+		acf.trigger('load', [ $(document) ]);
+		
 		
 		// init
 		acf.media.init();
@@ -800,35 +822,12 @@ var acf = {
 			
 			
 			// setup fields
-			$(document).trigger('acf/setup_fields', [ $(document) ]);
+			//$(document).trigger('acf/setup_fields', [ $(document) ]);
 			
 		}, 10);
 		
 	});
 	
-	
-	/*
-	*  Gallery field Add-on Fix
-	*
-	*  Gallery field v1.0.0 required some data in the acf object.
-	*  Now not required, but older versions of gallery field need this.
-	*
-	*  @type	object
-	*  @date	1/08/13
-	*
-	*  @param	N/A
-	*  @return	N/A
-	*/
-	
-	acf.fields.gallery = {
-		add : function(){},
-		edit : function(){},
-		update_count : function(){},
-		hide_selected_items : function(){},
-		text : {
-			title_add : "Select Images"
-		}
-	};
 	
 	
 })(jQuery);
