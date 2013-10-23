@@ -519,10 +519,86 @@ ul.acf-checkbox-list.horizontal li {
 
 ul.acf-radio-list li input,
 ul.acf-checkbox-list li input {
-	margin-top: -1px;
+	margin-top: 0;
 	margin-right: 5px !important;
 	width: auto !important;
 }
+
+ul.acf-radio-list.pill {
+	overflow: hidden;
+}
+
+ul.acf-radio-list.pill li {
+	float: left;
+}
+
+ul.acf-radio-list.pill li label {
+	display: block;
+	overflow: hidden;
+	position: relative;
+	
+	border-radius: 0;
+	height: 21px;
+	padding: 0 11px 1px 7px;
+    cursor: pointer;
+	
+    color: #333;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 23px;
+    text-align: center;
+	
+	background: #F9F9F9;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#FEFEFE), to(#F4F4F4)); /* Safari 4+, Chrome */
+	background-image: -webkit-linear-gradient(top, #FEFEFE, #F4F4F4); /* Chrome 10+, Safari 5.1+, iOS 5+ */
+	background-image:    -moz-linear-gradient(top, #FEFEFE, #F4F4F4); /* Firefox 3.6-15 */
+	background-image:      -o-linear-gradient(top, #FEFEFE, #F4F4F4); /* Opera 11.10+ */
+	background-image:         linear-gradient(to bottom, #FEFEFE, #F4F4F4); /* Firefox 16+ */
+	
+	border: #BBBBBB solid 1px;
+	text-shadow: #fff 0 1px 0;
+	box-shadow: inset #fff 0 1px 0 0;
+}
+
+ul.acf-radio-list.pill li label:hover {
+	color: #333;
+	border-color: #999;
+	z-index: 1;
+}
+
+ul.acf-radio-list.pill li.active label {
+	background: #3595BC;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#46AFDB), to(#3199C5)); /* Safari 4+, Chrome */
+	background-image: -webkit-linear-gradient(top, #46AFDB, #3199C5); /* Chrome 10+, Safari 5.1+, iOS 5+ */
+	background-image:    -moz-linear-gradient(top, #46AFDB, #3199C5); /* Firefox 3.6-15 */
+	background-image:      -o-linear-gradient(top, #46AFDB, #3199C5); /* Opera 11.10+ */
+	background-image:         linear-gradient(to bottom, #46AFDB, #3199C5); /* Firefox 16+ */
+	
+	z-index: 1;
+	color: #fff;
+	border: #268FBB solid 1px;
+	text-shadow: #268FBB 0 1px 0;
+	box-shadow: inset #5FC8F4 0 1px 0 0;
+}
+
+ul.acf-radio-list.pill li:first-child label {
+	border-radius: 5px 0 0 5px;
+}
+
+ul.acf-radio-list.pill li:last-child label {
+	border-radius: 0 5px 5px 0;
+}
+
+ul.acf-radio-list.pill li + li label {
+	margin-left: -1px;
+}
+
+/*
+ul.acf-radio-list.pill li label input {
+	margin: 0 0 0 -999px;
+	position: absolute;
+}
+*/
 
 
 /*---------------------------------------------------------------------------------------------
