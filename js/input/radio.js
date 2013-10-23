@@ -15,7 +15,6 @@
 		$el : null,
 		$input : null,
 		$other : null,
-		farbtastic : null,
 		
 		set : function( o ){
 			
@@ -32,8 +31,14 @@
 			return this;
 			
 		},
+		
 		change : function(){
-
+			
+			// label classes
+			this.$el.find('li').removeClass('active');
+			this.$input.closest('li').addClass('active');
+			
+			
 			if( this.$input.val() == 'other' )
 			{
 				this.$other.attr('name', this.$input.attr('name'));
@@ -46,6 +51,33 @@
 			}
 		}
 	};
+	
+	
+	/*
+	*  acf/setup_fields
+	*
+	*  run init function on all elements for this field
+	*
+	*  @type	event
+	*  @date	20/07/13
+	*
+	*  @param	{object}	e		event object
+	*  @param	{object}	el		DOM object which may contain new ACF elements
+	*  @return	N/A
+	*/
+	
+	/*
+acf.on('ready append', function(e, el){
+		
+		$(el).find('.acf-radio-list').each(function(){
+			
+			acf.fields.radio.set({ $el : $(this) }).init();
+			
+		});
+		
+	});
+*/
+	
 	
 	
 	/*
