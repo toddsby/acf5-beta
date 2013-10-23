@@ -502,6 +502,10 @@ function acf_esc_attr( $atts )
 	return implode(' ', $e);
 }
 
+function acf_esc_attr_e( $atts ) {
+	echo acf_esc_attr( $atts );
+}
+
 
 /*
 *  acf_extract_var
@@ -522,8 +526,7 @@ function acf_extract_var( &$array, $key ) {
 	$r = null;
 	
 	
-	// important. isset will return false if value is null. This is why we also need the is_null argument
-	if( isset($array[ $key ]) || is_null($array[ $key ]) )
+	if( array_key_exists($key, $array) )
 	{
 		$r = $array[ $key ];
 		unset( $array[ $key ] );
@@ -755,5 +758,48 @@ function acf_get_admin_notices()
 	return $admin_notices;
 }
 
+
+/*
+*  acf_get_image_sizes
+*
+*  This function will return an array of available image sizes
+*
+*  @type	function
+*  @date	23/10/13
+*  @since	5.0.0
+*
+*  @param	n/a
+*  @return	(array)
+*/
+
+function acf_get_image_sizes() {
+	
+	// vars
+	$sizes = array(
+		'thumbnail'	=>	__("Thumbnail",'acf'),
+		'medium'	=>	__("Medium",'acf'),
+		'large'		=>	__("Large",'acf'),
+		'full'		=>	__("Full",'acf')
+	);
+
+
+	// find all sizes
+	$all_sizes = get_intermediate_image_sizes();
+	
+	
+	// add extra registered sizes
+	foreach( $all_sizes as $size )
+	{
+		if( !isset($sizes[ $size ]) )
+		{
+			$sizes[ $size ] = ucwords( str_replace('-', ' ', $size) );
+		}
+	}
+	
+	
+	// return
+	return $sizes;
+	
+}
 
 ?>
