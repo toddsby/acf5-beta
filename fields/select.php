@@ -23,7 +23,7 @@ class acf_field_select extends acf_field
 			'choices'		=>	array(),
 			'default_value'	=>	'',
 			'ui'			=>	1,
-			'search'		=>	0,
+			//'search'		=>	0,
 			'ajax'			=>	0,
 			'sortable'		=>	0
 		);
@@ -66,6 +66,7 @@ class acf_field_select extends acf_field
 				if( is_array($v) )
 				{
 					$optgroup = true;
+					break;
 				}
 			}
 		}
@@ -91,20 +92,34 @@ class acf_field_select extends acf_field
 		$field['value'] = array_map('trim', $field['value']);
 		
 		
-		// multiple select
-		$multiple = '';
+		// vars
+		$atts = array(
+			'id'			=> $field['id'],
+			'class'			=> $field['class'],
+			'name'			=> $field['name'],
+			'data-ui'		=> $field['ui'],
+			//'data-search'	=> $field['search'],
+			'data-ajax'		=> $field['ajax'],
+			'data-sortable'	=> $field['sortable'],
+		);
+		
+		
+		// multiple
 		if( $field['multiple'] )
 		{
 			// create a hidden field to allow for no selections
-			echo '<input type="hidden" name="' . $field['name'] . '" />';
+			echo '<input type="hidden" name="' . acf_esc_attr($field['name']) . '" />';
 			
-			$multiple = ' multiple="multiple" size="5" ';
-			$field['name'] .= '[]';
+			
+			// update to atts
+			$atts['multiple'] = 'multiple';
+			$atts['size'] = 5;
+			$atts['name'] .= '[]';
 		} 
 		
 		
 		// html
-		echo '<select id="' . $field['id'] . '" class="' . $field['class'] . '" name="' . $field['name'] . '" ' . $multiple . ' >';	
+		echo '<select ' . acf_esc_attr( $atts ) . '>';	
 		
 		
 		// null
@@ -173,7 +188,7 @@ class acf_field_select extends acf_field
 		}
 		
 		
-		// library
+		// choices
 		acf_render_field_option( $this->name, array(
 			'label'			=> __('Choices','acf'),
 			'instructions'	=> __('Enter each choice on a new line.','acf') . '<br /><br />' . __('For more control, you may specify both a value and label like this:','acf'). '<br /><br />' . __('red : Red','acf'),
@@ -244,7 +259,8 @@ class acf_field_select extends acf_field
 		
 		
 		// search
-		acf_render_field_option( $this->name, array(
+		/*
+acf_render_field_option( $this->name, array(
 			'label'			=> __('Allow Search?','acf'),
 			'instructions'	=> '',
 			'type'			=> 'radio',
@@ -257,6 +273,7 @@ class acf_field_select extends acf_field
 			),
 			'layout'	=>	'horizontal',
 		));
+*/
 		
 		
 		// ajax
