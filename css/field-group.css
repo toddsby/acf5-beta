@@ -178,7 +178,7 @@
 	border-color: #fff;
 }
 
-.acf-field-list .field[data-key="field_clone"] {
+.acf-field-list .field[data-key="acfcloneindex"] {
 	display: none !important;
 }
 

@@ -10,8 +10,8 @@ $fields = acf_get_fields(array( 'field_group' => $post->ID ));
 
 // add clone
 $fields[] = acf_get_valid_field(array(
-	'ID'	=> 'field_clone',
-	'key'	=> 'field_clone',
+	'ID'	=> 'acfcloneindex',
+	'key'	=> 'acfcloneindex',
 	'label'	=> __('New Field','acf'),
 	'name'	=> 'new_field',
 	'type'	=> 'text',

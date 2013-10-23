@@ -243,7 +243,7 @@ class acf_field_group {
         
         
         // save fields
-		unset( $_POST['acf_fields']['field_clone'] );
+		unset( $_POST['acf_fields']['acfcloneindex'] );
 		
 		if( !empty($_POST['acf_fields']) )
 		{
