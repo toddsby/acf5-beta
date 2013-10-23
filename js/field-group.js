@@ -168,7 +168,7 @@ var acf_field_group = {};
 				
 			});
 			
-			acf.on('open_field', function(e, $el){
+			acf.on('open', function(e, $el){
 				
 				
 				
@@ -182,12 +182,12 @@ var acf_field_group = {};
 			if( $el.hasClass('open') )
 			{
 				$el.removeClass('open');
-				acf.trigger('close_field', [ $el ]);
+				acf.trigger('close', [ $el ]);
 			}
 			else
 			{
 				$el.addClass('open');
-				acf.trigger('open_field', [ $el ]);
+				acf.trigger('open', [ $el ]);
 			}
 			
 			
@@ -231,6 +231,10 @@ var acf_field_group = {};
 			{
 				// show and enable options
 				$tbody.children('tr[data-option="' + new_type + '"]').show().find('[name]').removeAttr('disabled');
+				
+				
+				// trigger event
+				acf.trigger('change', [ $el ]);
 			}
 			else
 			{
@@ -263,7 +267,18 @@ var acf_field_group = {};
 							return;
 						}
 						
-						$tr.replaceWith( html );
+						
+						// vars
+						var $new_tr = $(html);
+						
+						
+						// replace
+						$tr.replaceWith( $new_tr );
+						
+						
+						// trigger event
+						acf.trigger('append', [ $new_tr ]);
+						acf.trigger('change', [ $el ]);
 						
 					}
 				});
@@ -778,7 +793,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			
 			
 			// events
-			acf.on('open_field', function(e, $field){
+			acf.on('open', function(e, $field){
 				
 				// populate the triggers
 				_this.sync();
@@ -1110,6 +1125,64 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 	};
 	
 	
+	
+	/*
+	*  Select
+	*
+	*  The select field requies some conditional logic on it's settings
+	*
+	*  @type	function
+	*  @date	24/10/13
+	*  @since	5.0.0
+	*
+	*  @param	n/a
+	*  @return	n/a
+	*/
+	
+	
+	function acf_render_select_field( $el ){
+		
+		// vars
+		var ui			= $el.find('.acf-field[data-name="ui"] input:checked').val(),
+			multiple	= $el.find('.acf-field[data-name="multiple"] input:checked').val();
+		
+		
+		
+		if( multiple == '1' )
+		{
+			$el.find('.acf-field[data-name="sortable"]').show();
+		}
+		else
+		{
+			$el.find('.acf-field[data-name="sortable"]').hide();
+		}
+		
+		
+		if( ui == '1' )
+		{
+			$el.find('.acf-field[data-name="search"], .acf-field[data-name="ajax"]').show();
+		}
+		else
+		{
+			$el.find('.acf-field[data-name="search"], .acf-field[data-name="ajax"], .acf-field[data-name="sortable"]').hide();
+		}		
+		
+	}
+	
+	acf.on('open', function( e, $el ){
+		
+		if( $el.attr('data-type') == 'select' )
+		{
+			acf_render_select_field( $el );
+		}
+		
+	});
+	
+	$(document).on('change', '.field[data-type="select"] input[type="radio"]', function(){
+		
+		acf_render_select_field( $(this).closest('.field') );
+		
+	});
 	
 	
 	/*

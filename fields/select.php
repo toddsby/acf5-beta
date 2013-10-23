@@ -24,7 +24,8 @@ class acf_field_select extends acf_field
 			'default_value'	=>	'',
 			'ui'			=>	1,
 			'search'		=>	0,
-			'ajax'			=>	0
+			'ajax'			=>	0,
+			'sortable'		=>	0
 		);
 		
 		
@@ -266,6 +267,22 @@ class acf_field_select extends acf_field
 			'name'			=> 'ajax',
 			'prefix'		=> $field['prefix'],
 			'value'			=> $field['ajax'],
+			'choices'		=> array(
+				1				=> __("Yes",'acf'),
+				0				=> __("No",'acf'),
+			),
+			'layout'	=>	'horizontal',
+		));
+		
+		
+		// sortable
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Allow values to be sortable','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'sortable',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['sortable'],
 			'choices'		=> array(
 				1				=> __("Yes",'acf'),
 				0				=> __("No",'acf'),
