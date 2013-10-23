@@ -177,7 +177,7 @@ class acf
 		include_once('fields/user.php');
 		
 		include_once('fields/google-map.php');
-		include_once('fields/date_picker/date_picker.php');
+		include_once('fields/date_picker.php');
 		include_once('fields/color_picker.php');
 		
 		include_once('fields/message.php');
@@ -281,33 +281,29 @@ class acf
 		// register scripts
 		$scripts = array();
 		$scripts[] = array(
-			'handle'	=> 'acf-field-group',
-			'src'		=> acf_get_dir( 'js/field-group.js'),
-			'deps'		=> array('jquery'),
-			'in_footer'	=> false
-		);
-		$scripts[] = array(
 			'handle'	=> 'acf-input',
 			'src'		=> acf_get_dir( 'js/input.js' ),
-			'deps'		=> array('jquery'),
-			'in_footer'	=> false
+			'deps'		=> array('jquery', 'acf-datepicker', 'select2'),
 		);
 		$scripts[] = array(
 			'handle'	=> 'acf-datepicker',
-			'src'		=> acf_get_dir( 'fields/date_picker/jquery.ui.datepicker.js' ),
-			'deps'		=> array('jquery', 'acf-input'),
-			'in_footer'	=> false
+			'src'		=> acf_get_dir( 'inc/datepicker/jquery-ui-1.10.3.custom.min.js' ),
+			'deps'		=> array('jquery'),
 		);
 		$scripts[] = array(
-			'handle'	=> 'acf-googlemaps',
-			'src'		=> 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places',
+			'handle'	=> 'select2',
+			'src'		=> acf_get_dir( 'inc/select2/select2.min.js' ),
 			'deps'		=> array('jquery'),
-			'in_footer'	=> true
+		);
+		$scripts[] = array(
+			'handle'	=> 'acf-field-group',
+			'src'		=> acf_get_dir( 'js/field-group.js'),
+			'deps'		=> array('acf-input'),
 		);
 		
 		foreach( $scripts as $script )
 		{
-			wp_register_script( $script['handle'], $script['src'], $script['deps'], acf_get_setting('version'), $script['in_footer'] );
+			wp_register_script( $script['handle'], $script['src'], $script['deps'], acf_get_setting('version') );
 		}
 		
 		
@@ -316,23 +312,32 @@ class acf
 		$styles[] = array(
 			'handle'	=> 'acf-global',
 			'src'		=> acf_get_dir( 'css/global.css' ),
+			'deps'		=> array(),
 		);
 		$styles[] = array(
 			'handle'	=> 'acf-field-group',
 			'src'		=> acf_get_dir( 'css/field-group.css' ),
+			'deps'		=> array('select2'),
 		);
 		$styles[] = array(
 			'handle'	=> 'acf-input',
 			'src'		=> acf_get_dir( 'css/input.css' ),
+			'deps'		=> array('acf-datepicker', 'select2'),
 		);
 		$styles[] = array(
 			'handle'	=> 'acf-datepicker',
-			'src'		=> acf_get_dir( 'fields/date_picker/style.date_picker.css' ),
+			'src'		=> acf_get_dir( 'inc/datepicker/jquery-ui-1.10.3.custom.min.css' ),
+			'deps'		=> array(),
+		);
+		$styles[] = array(
+			'handle'	=> 'select2',
+			'src'		=> acf_get_dir( 'inc/select2/select2.css' ),
+			'deps'		=> array(),
 		);
 		
 		foreach( $styles as $style )
 		{
-			wp_register_style( $style['handle'], $style['src'], false, acf_get_setting('version') ); 
+			wp_register_style( $style['handle'], $style['src'], $style['deps'], acf_get_setting('version') ); 
 		}
 		
 	}
