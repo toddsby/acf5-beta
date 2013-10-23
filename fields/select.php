@@ -21,7 +21,10 @@ class acf_field_select extends acf_field
 			'multiple' 		=>	0,
 			'allow_null' 	=>	0,
 			'choices'		=>	array(),
-			'default_value'	=>	''
+			'default_value'	=>	'',
+			'ui'			=>	1,
+			'search'		=>	0,
+			'ajax'			=>	0
 		);
 		
 		
@@ -30,9 +33,9 @@ class acf_field_select extends acf_field
     	
     	
     	// extra
-		//add_filter('acf/update_field/type=select', array($this, 'update_field'), 5, 2);
-		add_filter('acf/update_field/type=checkbox', array($this, 'update_field'), 5, 2);
-		add_filter('acf/update_field/type=radio', array($this, 'update_field'), 5, 2);
+		//add_filter('acf/update_field/type=select', array($this, 'update_field'), 5, 1);
+		add_filter('acf/update_field/type=checkbox', array($this, 'update_field'), 5, 1);
+		add_filter('acf/update_field/type=radio', array($this, 'update_field'), 5, 1);
 	}
 
 	
@@ -156,11 +159,8 @@ class acf_field_select extends acf_field
 	*  @param	$field	- an array holding all the field's data
 	*/
 	
-	function render_field_options( $field )
-	{
-		$key = $field['name'];
-
-
+	function render_field_options( $field ) {
+		
 		// implode choices so they work in a textarea
 		if( is_array($field['choices']) )
 		{		
@@ -170,85 +170,109 @@ class acf_field_select extends acf_field
 			}
 			$field['choices'] = implode("\n", $field['choices']);
 		}
-
-		?>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label for=""><?php _e("Choices",'acf'); ?></label>
-		<p><?php _e("Enter each choice on a new line.",'acf'); ?></p>
-		<p><?php _e("For more control, you may specify both a value and label like this:",'acf'); ?></p>
-		<p><?php _e("red : Red",'acf'); ?><br /><?php _e("blue : Blue",'acf'); ?></p>
-	</td>
-	<td>
-		<?php
 		
-		do_action('acf/render_field', array(
-			'type'	=>	'textarea',
-			'class' => 	'textarea field_option-choices',
-			'name'	=>	'fields['.$key.'][choices]',
-			'value'	=>	$field['choices'],
+		
+		// library
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Choices','acf'),
+			'instructions'	=> __('Enter each choice on a new line.','acf') . '<br /><br />' . __('For more control, you may specify both a value and label like this:','acf'). '<br /><br />' . __('red : Red','acf'),
+			'type'			=> 'textarea',
+			'name'			=> 'choices',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['choices'],
+		));	
+		
+		
+		// default_value
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Default Value','acf'),
+			'instructions'	=> __('Enter each default value on a new line','acf'),
+			'type'			=> 'textarea',
+			'name'			=> 'default_value',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['default_value'],
 		));
 		
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Default Value",'acf'); ?></label>
-		<p class="description"><?php _e("Enter each default value on a new line",'acf'); ?></p>
-	</td>
-	<td>
-		<?php
 		
-		do_action('acf/render_field', array(
-			'type'	=>	'textarea',
-			'name'	=>	'fields['.$key.'][default_value]',
-			'value'	=>	$field['default_value'],
-		));
-		
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Allow Null?",'acf'); ?></label>
-	</td>
-	<td>
-		<?php 
-		do_action('acf/render_field', array(
-			'type'	=>	'radio',
-			'name'	=>	'fields['.$key.'][allow_null]',
-			'value'	=>	$field['allow_null'],
-			'choices'	=>	array(
-				1	=>	__("Yes",'acf'),
-				0	=>	__("No",'acf'),
+		// formatting
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Allow Null?','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'allow_null',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['allow_null'],
+			'choices'		=> array(
+				1				=> __("Yes",'acf'),
+				0				=> __("No",'acf'),
 			),
 			'layout'	=>	'horizontal',
 		));
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Select multiple values?",'acf'); ?></label>
-	</td>
-	<td>
-		<?php 
-		do_action('acf/render_field', array(
-			'type'	=>	'radio',
-			'name'	=>	'fields['.$key.'][multiple]',
-			'value'	=>	$field['multiple'],
-			'choices'	=>	array(
-				1	=>	__("Yes",'acf'),
-				0	=>	__("No",'acf'),
+		
+		
+		// formatting
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Select multiple values?','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'multiple',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['multiple'],
+			'choices'		=> array(
+				1				=> __("Yes",'acf'),
+				0				=> __("No",'acf'),
 			),
 			'layout'	=>	'horizontal',
 		));
-		?>
-	</td>
-</tr>
-<?php
 		
+		
+		// ui
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Stylised UI','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'ui',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['ui'],
+			'choices'		=> array(
+				1				=> __("Yes",'acf'),
+				0				=> __("No",'acf'),
+			),
+			'layout'	=>	'horizontal',
+		));
+		
+		
+		// search
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Allow Search?','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'search',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['search'],
+			'choices'		=> array(
+				1				=> __("Yes",'acf'),
+				0				=> __("No",'acf'),
+			),
+			'layout'	=>	'horizontal',
+		));
+		
+		
+		// ajax
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Use AJAX to lazy load choices?','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'ajax',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['ajax'],
+			'choices'		=> array(
+				1				=> __("Yes",'acf'),
+				0				=> __("No",'acf'),
+			),
+			'layout'	=>	'horizontal',
+		));
+				
 	}
 	
 	
@@ -295,7 +319,7 @@ class acf_field_select extends acf_field
 	*  @return	$field - the modified field
 	*/
 
-	function update_field( $field, $post_id )
+	function update_field( $field )
 	{
 		
 		// check if is array. Normal back end edit posts a textarea, but a user might use update_field from the front end

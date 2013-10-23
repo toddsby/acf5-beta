@@ -90,7 +90,7 @@ class acf_field_textarea extends acf_field
 		acf_render_field_option( $this->name, array(
 			'label'			=> __('Default Value','acf'),
 			'instructions'	=> __('Appears when creating a new post','acf'),
-			'type'			=> 'text',
+			'type'			=> 'textarea',
 			'name'			=> 'default_value',
 			'prefix'		=> $field['prefix'],
 			'value'			=> $field['default_value'],

@@ -58,7 +58,8 @@ class acf_field_radio extends acf_field
 			{
 				// vars
 				$i++;
-				$atts = array(
+				$li_atts = array();
+				$input_atts = array(
 					'type' => 'radio',
 					'name' => $field['name'],
 					'value' => $value,
@@ -71,22 +72,27 @@ class acf_field_radio extends acf_field
 				{
 					if( $i === 1 )
 					{
-						$atts['checked'] = 'checked';
-						$atts['data-checked'] = 'checked';
+						$input_atts['checked'] = 'checked';
+						$input_atts['data-checked'] = 'checked';
 					}
 				}
 				else
 				{
 					if( strval($value) === strval($field['value']) )
 					{
-						$atts['checked'] = 'checked';
-						$atts['data-checked'] = 'checked';
+						$input_atts['checked'] = 'checked';
+						$input_atts['data-checked'] = 'checked';
 					}
 				}
 				
 				
+				if( array_key_exists('checked', $input_atts) )
+				{
+					$li_atts['class'] = 'active';
+				}
+				
 				// HTML
-				$e .= '<li><label><input ' . acf_esc_attr( $atts ) . ' />' . $label . '</label></li>';
+				$e .= '<li ' . acf_esc_attr($li_atts) . '><label><input ' . acf_esc_attr( $input_atts ) . ' />' . $label . '</label></li>';
 			}
 		}
 		

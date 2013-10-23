@@ -19,7 +19,7 @@ class acf_field_file extends acf_field
 		$this->label = __("File",'acf');
 		$this->category = __("Content",'acf');
 		$this->defaults = array(
-			'save_format'	=>	'object',
+			'return_format'	=>	'array',
 			'library' 		=>	'all'
 		);
 		$this->l10n = array(
@@ -40,8 +40,8 @@ class acf_field_file extends acf_field
 		
 		
 		// JSON
-		add_action('wp_ajax_acf/fields/file/get_files', array($this, 'ajax_get_files'));
-		add_action('wp_ajax_nopriv_acf/fields/file/get_files', array($this, 'ajax_get_files'), 10, 1);
+		//add_action('wp_ajax_acf/fields/file/get_files', array($this, 'ajax_get_files'));
+		//add_action('wp_ajax_nopriv_acf/fields/file/get_files', array($this, 'ajax_get_files'), 10, 1);
 	}
 	
 	
@@ -95,7 +95,7 @@ class acf_field_file extends acf_field
 			<li>
 				<img class="acf-file-icon" src="<?php echo $o['icon']; ?>" alt=""/>
 				<div class="hover">
-					<ul class="bl">
+					<ul class="acf-bl">
 						<li><a href="#" class="acf-button-delete ir">Remove</a></li>
 						<li><a href="#" class="acf-button-edit ir">Edit</a></li>
 					</ul>
@@ -144,54 +144,39 @@ class acf_field_file extends acf_field
 	
 	function render_field_options( $field )
 	{
-		// vars
-		$key = $field['name'];
-		
-		?>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Return Value",'acf'); ?></label>
-	</td>
-	<td>
-		<?php
-		
-		do_action('acf/render_field', array(
-			'type'		=>	'radio',
-			'name'		=>	'fields['.$key.'][save_format]',
-			'value'		=>	$field['save_format'],
-			'layout'	=>	'horizontal',
-			'choices' 	=>	array(
-				'object'	=>	__("File Object",'acf'),
-				'url'		=>	__("File URL",'acf'),
-				'id'		=>	__("File ID",'acf')
+		// return_format
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Return Value','acf'),
+			'instructions'	=> __('Specify the returned value on front end','acf'),
+			'type'			=> 'radio',
+			'name'			=> 'return_format',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['return_format'],
+			'layout'		=> 'horizontal',
+			'choices'		=> array(
+				'array'			=> __("File Array",'acf'),
+				'url'			=> __("File URL",'acf'),
+				'id'			=> __("File ID",'acf')
 			)
 		));
 		
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Library",'acf'); ?></label>
-	</td>
-	<td>
-		<?php
 		
-		do_action('acf/render_field', array(
-			'type'		=>	'radio',
-			'name'		=>	'fields['.$key.'][library]',
-			'value'		=>	$field['library'],
-			'layout'	=>	'horizontal',
-			'choices' 	=>	array(
-				'all'			=>	__('All', 'acf'),
-				'uploadedTo'	=>	__('Uploaded to post', 'acf')
+		// library
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Library','acf'),
+			'instructions'	=> __('Limit the media library choice','acf'),
+			'type'			=> 'radio',
+			'name'			=> 'library',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['library'],
+			'layout'		=> 'horizontal',
+			'choices' 		=> array(
+				'all'			=> __('All', 'acf'),
+				'uploadedTo'	=> __('Uploaded to post', 'acf')
 			)
-		));
-
-		?>
-	</td>
-</tr>
-		<?php
+		));	
+		
+		
 		
 	}
 	

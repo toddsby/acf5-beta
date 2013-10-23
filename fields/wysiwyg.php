@@ -20,7 +20,7 @@ class acf_field_wysiwyg extends acf_field
 		$this->category = __("Content",'acf');
 		$this->defaults = array(
 			'toolbar'		=>	'full',
-			'media_upload' 	=>	'yes',
+			'media_upload' 	=>	1,
 			'default_value'	=>	'',
 		);
 		
@@ -30,7 +30,7 @@ class acf_field_wysiwyg extends acf_field
     	
     	
     	// filters
-    	add_filter( 'acf/fields/wysiwyg/toolbars', array( $this, 'toolbars'), 1, 1 );
+    	add_filter( 'acf/fields/wysiwyg/toolbars', array( $this, 'toolbars'), 0, 1 );
 	}
 	
 	
@@ -48,8 +48,8 @@ class acf_field_wysiwyg extends acf_field
 	*  @date	23/01/13
 	*/
 	
-   	function toolbars( $toolbars )
-   	{
+   	function toolbars( $toolbars ) {
+   		
    		$editor_id = 'acf_settings';
    		
    		
@@ -137,8 +137,7 @@ class acf_field_wysiwyg extends acf_field
 	*  @date	23/01/13
 	*/
 	
-	function render_field( $field )
-	{
+	function render_field( $field ) {
 		global $wp_version;
 		
 		
@@ -148,7 +147,7 @@ class acf_field_wysiwyg extends acf_field
 		
 		?>
 		<div id="wp-<?php echo $id; ?>-wrap" class="acf_wysiwyg wp-editor-wrap" data-toolbar="<?php echo $field['toolbar']; ?>" data-upload="<?php echo $field['media_upload']; ?>">
-			<?php if($field['media_upload'] == 'yes'): ?>
+			<?php if( $field['media_upload'] ): ?>
 				<div id="wp-<?php echo $id; ?>-editor-tools" class="wp-editor-tools">
 					<div id="wp-<?php echo $id; ?>-media-buttons" class="hide-if-no-js wp-media-buttons">
 						<?php do_action( 'media_buttons' ); ?>
@@ -177,34 +176,8 @@ class acf_field_wysiwyg extends acf_field
 	*  @param	$field	- an array holding all the field's data
 	*/
 	
-	function render_field_options( $field )
-	{
+	function render_field_options( $field ) {
 		// vars
-		$key = $field['name'];
-		
-		?>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Default Value",'acf'); ?></label>
-		<p><?php _e("Appears when creating a new post",'acf') ?></p>
-	</td>
-	<td>
-		<?php 
-		do_action('acf/render_field', array(
-			'type'	=>	'textarea',
-			'name'	=>	'fields['.$key.'][default_value]',
-			'value'	=>	$field['default_value'],
-		));
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Toolbar",'acf'); ?></label>
-	</td>
-	<td>
-		<?php
-		
 		$toolbars = apply_filters( 'acf/fields/wysiwyg/toolbars', array() );
 		$choices = array();
 		
@@ -220,36 +193,46 @@ class acf_field_wysiwyg extends acf_field
 			}
 		}
 		
-		do_action('acf/render_field', array(
-			'type'	=>	'radio',
-			'name'	=>	'fields['.$key.'][toolbar]',
-			'value'	=>	$field['toolbar'],
-			'layout'	=>	'horizontal',
-			'choices' => $choices
+		
+		// default_value
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Default Value','acf'),
+			'instructions'	=> __('Appears when creating a new post','acf'),
+			'type'			=> 'textarea',
+			'name'			=> 'default_value',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['default_value'],
 		));
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Show Media Upload Buttons?",'acf'); ?></label>
-	</td>
-	<td>
-		<?php 
-		do_action('acf/render_field', array(
-			'type'	=>	'radio',
-			'name'	=>	'fields['.$key.'][media_upload]',
-			'value'	=>	$field['media_upload'],
-			'layout'	=>	'horizontal',
-			'choices' => array(
-				'yes'	=>	__("Yes",'acf'),
-				'no'	=>	__("No",'acf'),
+		
+		
+		// toolbar
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Toolbar','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'toolbar',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['toolbar'],
+			'layout'		=> 'horizontal',
+			'choices'		=> $choices
+		));
+		
+		
+		// media_upload
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Show Media Upload Buttons?','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'media_upload',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['media_upload'],
+			'layout'		=> 'horizontal',
+			'choices'		=> array(
+				1				=>	__("Yes",'acf'),
+				0				=>	__("No",'acf'),
 			)
 		));
-		?>
-	</td>
-</tr>
-		<?php
+
 	}
 		
 	
@@ -269,8 +252,7 @@ class acf_field_wysiwyg extends acf_field
 	*  @return	$value	- the modified value
 	*/
 	
-	function format_value_for_api( $value, $post_id, $field )
-	{
+	function format_value_for_api( $value, $post_id, $field ) {
 		// apply filters
 		$value = apply_filters( 'acf_the_content', $value );
 		
