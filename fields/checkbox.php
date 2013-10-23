@@ -75,32 +75,38 @@ class acf_field_checkbox extends acf_field
 		
 		
 		// foreach choices
-		foreach( $field['choices'] as $key => $value )
+		foreach( $field['choices'] as $value => $label )
 		{
-			// vars
+			// increase counter
 			$i++;
-			$atts = '';
 			
 			
-			if( in_array($key, $field['value']) )
+			// vars
+			$atts = array(
+				'type'	=> 'checkbox',
+				'id'	=> $field['id'], 
+				'name'	=> $field['name'],
+				'value'	=> $value,
+			);
+			
+			
+			if( in_array($value, $field['value']) )
 			{
-				$atts = 'checked="yes"';
+				$atts['checked'] = 'checked';
 			}
-			if( isset($field['disabled']) && in_array($key, $field['disabled']) )
+			if( isset($field['disabled']) && in_array($value, $field['disabled']) )
 			{
-				$atts .= ' disabled="true"';
+				$atts['disabled'] = 'true';
 			}
 			
 			
 			// each checkbox ID is generated with the $key, however, the first checkbox must not use $key so that it matches the field's label for attribute
-			$id = $field['id'];
-			
 			if( $i > 1 )
 			{
-				$id .= '-' . $key;
+				$atts['id'] .= '-' . $value;
 			}
 			
-			$e .= '<li><label><input id="' . esc_attr($id) . '" type="checkbox" class="' . esc_attr($field['class']) . '" name="' . esc_attr($field['name']) . '" value="' . esc_attr($key) . '" ' . $atts . ' />' . $value . '</label></li>';
+			$e .= '<li><label><input ' . acf_esc_attr( $atts ) . '/>' . $label . '</label></li>';
 		}
 		
 		$e .= '</ul>';
@@ -140,66 +146,44 @@ class acf_field_checkbox extends acf_field
 			$field['choices'] = implode("\n", $field['choices']);
 		}
 		
-		?>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label for=""><?php _e("Choices",'acf'); ?></label>
-		<p><?php _e("Enter each choice on a new line.",'acf'); ?></p>
-		<p><?php _e("For more control, you may specify both a value and label like this:",'acf'); ?></p>
-		<p><?php _e("red : Red",'acf'); ?><br /><?php _e("blue : Blue",'acf'); ?></p>
-	</td>
-	<td>
-		<?php
 		
-		do_action('acf/render_field', array(
-			'type'	=>	'textarea',
-			'class' => 	'textarea field_option-choices',
-			'name'	=>	'fields['.$key.'][choices]',
-			'value'	=>	$field['choices'],
+		// choices
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Choices','acf'),
+			'instructions'	=> __('Enter each choice on a new line.','acf') . '<br /><br />' . __('For more control, you may specify both a value and label like this:','acf'). '<br /><br />' . __('red : Red','acf'),
+			'type'			=> 'textarea',
+			'name'			=> 'choices',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['choices'],
+		));	
+		
+		
+		// default_value
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Default Value','acf'),
+			'instructions'	=> __('Enter each default value on a new line','acf'),
+			'type'			=> 'textarea',
+			'name'			=> 'default_value',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['default_value'],
 		));
 		
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Default Value",'acf'); ?></label>
-		<p class="description"><?php _e("Enter each default value on a new line",'acf'); ?></p>
-	</td>
-	<td>
-		<?php
 		
-		do_action('acf/render_field', array(
-			'type'	=>	'textarea',
-			'name'	=>	'fields['.$key.'][default_value]',
-			'value'	=>	$field['default_value'],
-		));
-		
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label for=""><?php _e("Layout",'acf'); ?></label>
-	</td>
-	<td>
-		<?php
-		
-		do_action('acf/render_field', array(
-			'type'	=>	'radio',
-			'name'	=>	'fields['.$key.'][layout]',
-			'value'	=>	$field['layout'],
-			'layout' => 'horizontal', 
-			'choices' => array(
-				'vertical' => __("Vertical",'acf'), 
-				'horizontal' => __("Horizontal",'acf')
+		// layout
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Layout','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'layout',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['layout'],
+			'layout'		=> 'horizontal', 
+			'choices'		=> array(
+				'vertical'		=> __("Vertical",'acf'), 
+				'horizontal'	=> __("Horizontal",'acf')
 			)
 		));
 		
-		?>
-	</td>
-</tr>
-		<?php
 		
 	}
 	
