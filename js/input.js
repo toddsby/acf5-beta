@@ -3200,13 +3200,6 @@ var acf = {
 		
 		init : function(){
 			
-			// bail early if no $form given
-			if( !acf.get('$form') )
-			{
-				return false;
-			}
-			
-			
 			// add events
 			this.add_events();
 		},
@@ -3221,7 +3214,7 @@ var acf = {
 			$field.removeClass('error');
 		},
 		
-		run : function(){
+		run : function( $form ){
 			
 			// reference
 			var _this = this;
@@ -3232,7 +3225,7 @@ var acf = {
 			
 			
 			// loop through all fields
-			$(document).find('.acf-field.required').each(function(){
+			$form.find('.acf-field.required').each(function(){
 				
 				// run validation
 				_this.validate_field( $(this) );
@@ -3414,7 +3407,7 @@ var acf = {
 			
 			
 			// submit
-			$(document).on('submit', acf.get('$form'), function(){
+			$(document).on('submit', 'form', function(){
 				
 				// bail early if disabled
 				if( _this.disabled )
@@ -3423,15 +3416,19 @@ var acf = {
 				}
 				
 				
+				// vars
+				var $form = $(this);
+				
+				
 				// run validation
-				var result = _this.run();
+				var result = _this.run( $form );
 				
 				
 				// success
 				if( result )
 				{
 					// remove hidden postboxes (this will stop them from being posted to save)
-					$('.acf-postbox.acf-hidden').remove();
+					$form.find('.acf-postbox.acf-hidden').remove();
 					
 			
 					// submit the form
@@ -3440,14 +3437,17 @@ var acf = {
 				
 				
 				// show message
-				$(this).children('.acf-validation-error').remove();
-				$(this).prepend('<div class="acf-validation-error"><p>' + acf.l10n.validation.error + '</p></div>');
+				$form.children('.acf-validation-error').remove();
+				$form.prepend('<div class="acf-validation-error"><p>' + acf.l10n.validation.error + '</p></div>');
 				
 				
 				// hide ajax stuff on submit button
-				$('#publish').removeClass('button-primary-disabled');
-				$('#ajax-loading').attr('style','');
-				$('#publishing-action .spinner').hide();
+				if( $form.attr('id') == 'post' )
+				{
+					$('#publish').removeClass('button-primary-disabled');
+					$('#ajax-loading').attr('style','');
+					$('#publishing-action .spinner').hide();
+				}
 				
 				return false;
 				
