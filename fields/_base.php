@@ -51,7 +51,7 @@ class acf_field
 		
 		// field
 		$this->add_filter('acf/get_field/type=' . $this->name, array($this, 'get_field'), 10, 3);
-		$this->add_filter('acf/update_field/type=' . $this->name, array($this, 'update_field'), 10, 2);
+		$this->add_filter('acf/update_field/type=' . $this->name, array($this, 'update_field'), 10, 1);
 		$this->add_filter('acf/delete_field/type=' . $this->name, array($this, 'delete_field'), 10, 2);
 		$this->add_action('acf/render_field/type=' . $this->name, array($this, 'render_field'), 10, 1);
 		$this->add_action('acf/render_field_options/type=' . $this->name, array($this, 'render_field_options'), 10, 1);
