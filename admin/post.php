@@ -204,7 +204,6 @@ class acf_controller_post {
 		acf_form_data(array( 
 			'post_id'	=> $this->post_id, 
 			'nonce'		=> 'post',
-			'$form'		=> '#post',
 			'ajax'		=> true
 		));
 		

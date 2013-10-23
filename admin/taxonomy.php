@@ -141,7 +141,6 @@ class acf_controller_taxonomy {
 			acf_form_data(array( 
 				'post_id'	=> $post_id, 
 				'nonce'		=> 'taxonomy',
-				'$form'		=> '#addtag'
 			));
 			
 			foreach( $field_groups as $field_group ): 
