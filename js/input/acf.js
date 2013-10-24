@@ -151,7 +151,20 @@ var acf = {
         	
         	if( attr.name.substr(0, 5) == 'data-' )
         	{
-	        	atts[ attr.name.replace('data-', '') ] = attr.value;
+        		// vars
+        		var v = attr.value,
+        			k = attr.name.replace('data-', '');
+        		
+        		
+        		// convert ints (don't worry about floats. I doubt these would ever appear in data atts...)
+        		if( $.isNumeric(v) )
+        		{
+	        		v = parseInt(v);
+        		}
+        		
+        		
+        		// add to atts
+	        	atts[ k ] = v;
         	}
         });
         
