@@ -15,6 +15,8 @@
 		$el : null,
 		$select : null,
 		
+		o : {},
+		
 		set : function( o ){
 			
 			// merge in new option
@@ -23,6 +25,10 @@
 			
 			// find input
 			this.$select = this.$el.find('select');
+			
+			
+			// get options
+			this.o = acf.helpers.get_atts( this.$select );
 			
 			
 			// return this for chaining
@@ -38,9 +44,21 @@
 			}
 			
 			
-			this.$select.select2({
-				width	: '100%'
-			});
+			// bail early if no ui
+			if( ! this.o.ui )
+			{
+				return;
+			}
+			
+			
+			// construct args
+			var args = {
+				width	: '100%',
+			};
+			
+			
+			// add select2
+			this.$select.select2( args );
 			
 		}
 	};
