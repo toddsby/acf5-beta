@@ -1186,6 +1186,55 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 	
 	
 	/*
+	*  Post Object
+	*
+	*  The select field requies some conditional logic on it's settings
+	*
+	*  @type	function
+	*  @date	24/10/13
+	*  @since	5.0.0
+	*
+	*  @param	n/a
+	*  @return	n/a
+	*/
+	
+	function acf_render_post_object_field( $el ){
+		
+		// vars
+		var multiple	= $el.find('.acf-field[data-name="multiple"] input:checked').val();
+		
+		
+		
+		if( multiple == '1' )
+		{
+			$el.find('.acf-field[data-name="sortable"]').show();
+		}
+		else
+		{
+			$el.find('.acf-field[data-name="sortable"]').hide();
+		}
+			
+		
+	}
+	
+	acf.on('open', function( e, $el ){
+		
+		if( $el.attr('data-type') == 'post_object' )
+		{
+			acf_render_post_object_field( $el );
+		}
+		
+	});
+	
+	$(document).on('change', '.field[data-type="post_object"] input[type="radio"]', function(){
+		
+		acf_render_post_object_field( $(this).closest('.field') );
+		
+	});
+	
+	
+	
+	/*
 	*  Field: Radio
 	*
 	*  Simple toggle for the radio 'other_choice' option
