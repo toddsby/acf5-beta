@@ -321,7 +321,7 @@ function acf_render_fields( $fields, $el = 'div', $post_id = 0, $atts = array() 
 			// load value
 			if( $post_id )
 			{
-				$field['value'] = acf_get_value( $post_id, $field );
+				$field['value'] = acf_get_value( $post_id, $field, true );
 			} 
 			
 			
@@ -799,6 +799,86 @@ function acf_get_image_sizes() {
 	
 	// return
 	return $sizes;
+	
+}
+
+
+/*
+*  acf_get_taxonomies
+*
+*  This function will return an array of available taxonomies
+*
+*  @type	function
+*  @date	7/10/13
+*  @since	5.0.0
+*
+*  @param	$exclude (array)
+*  @param	$include (array)
+*  @return	(array)
+*/
+
+function acf_get_taxonomies()
+{
+	// get all taxonomies
+	$taxonomies = get_taxonomies( false, 'objects' );
+	$r = array();
+	
+	
+	// populate $r
+	foreach( $taxonomies as $taxonomy )
+	{
+		$r[ $taxonomy->name ] = "{$taxonomy->labels->singular_name} ({$taxonomy->name})";
+	}
+		
+	
+	// return
+	return $r;
+	
+}
+
+
+/*
+*  acf_get_taxonomy_terms
+*
+*  This function will return an array of available taxonomy terms
+*
+*  @type	function
+*  @date	7/10/13
+*  @since	5.0.0
+*
+*  @param	$exclude (array)
+*  @param	$include (array)
+*  @return	(array)
+*/
+
+function acf_get_taxonomy_terms()
+{
+	// get all taxonomies
+	$taxonomies = acf_get_taxonomies();
+	$r = array();
+	
+	
+	// populate $r
+	foreach( $taxonomies as $taxonomy => $label )
+	{
+		$terms = get_terms( $taxonomy, array( 'hide_empty' => false ) );
+		
+		if( !empty($terms) )
+		{
+			$r[ $label ] = array();
+			
+			foreach( $terms as $term )
+			{
+				$k = "{$taxonomy}:{$term->slug}"; 
+				$r[ $label ][ $k ] = $term->name;
+			}
+		}
+
+	}
+	
+	
+	// return
+	return $r;
 	
 }
 
