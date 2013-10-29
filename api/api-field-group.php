@@ -40,6 +40,7 @@ class acf_field_group_api {
 	
 	function get_valid_field_group( $field_group = array() ) {
 		
+		
 		// defaults
 		$defaults = array(
 			'ID'				=> 0,
@@ -51,7 +52,7 @@ class acf_field_group_api {
 			'layout'			=> 'no_box',
 			'hide_on_screen'	=> array()
 		);
-		$field_group = acf_parse_types( $field_group, $defaults );
+		$field_group = acf_parse_args( $field_group, $defaults );
 		
 		
 		// validate types
@@ -158,6 +159,7 @@ class acf_field_group_api {
 		}
 		
 		$cache = wp_cache_get( $cache_key, 'acf', false, $found );
+		
 		
 		if( $found )
 		{
