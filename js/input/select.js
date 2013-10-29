@@ -35,6 +35,7 @@
 			return this;
 			
 		},
+		
 		init : function(){
 			
 			// is clone field?
@@ -53,7 +54,8 @@
 			
 			// construct args
 			var args = {
-				width	: '100%',
+				width		: '100%',
+				allowClear	: this.o.allow_null
 			};
 			
 			

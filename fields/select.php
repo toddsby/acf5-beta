@@ -25,7 +25,8 @@ class acf_field_select extends acf_field
 			'ui'			=>	1,
 			//'search'		=>	0,
 			'ajax'			=>	0,
-			'sortable'		=>	0
+			'sortable'		=>	0,
+			'placeholder'	=>	''
 		);
 		
 		
@@ -92,15 +93,25 @@ class acf_field_select extends acf_field
 		$field['value'] = array_map('trim', $field['value']);
 		
 		
+		// placeholder
+		if( !$field['placeholder'] )
+		{
+			$field['placeholder'] = __("Select",'acf');
+		}
+		
+		
 		// vars
 		$atts = array(
-			'id'			=> $field['id'],
-			'class'			=> $field['class'],
-			'name'			=> $field['name'],
-			'data-ui'		=> $field['ui'],
-			//'data-search'	=> $field['search'],
-			'data-ajax'		=> $field['ajax'],
-			'data-sortable'	=> $field['sortable'],
+			'id'				=> $field['id'],
+			'class'				=> $field['class'],
+			'name'				=> $field['name'],
+			'data-ui'			=> $field['ui'],
+			//'data-search'		=> $field['search'],
+			'data-ajax'			=> $field['ajax'],
+			'data-multiple'		=> $field['multiple'],
+			'data-sortable'		=> $field['sortable'],
+			'data-placeholder'	=> $field['placeholder'],
+			'data-allow_null'	=> $field['allow_null']
 		);
 		
 		
@@ -125,8 +136,9 @@ class acf_field_select extends acf_field
 		// null
 		if( $field['allow_null'] )
 		{
-			echo '<option value="null">- ' . __("Select",'acf') . ' -</option>';
+			echo '<option value="">' . $atts['placeholder'] . '</option>';
 		}
+		
 		
 		// loop through values and add them as options
 		if( is_array($field['choices']) )
@@ -210,7 +222,7 @@ class acf_field_select extends acf_field
 		));
 		
 		
-		// formatting
+		// allow_null
 		acf_render_field_option( $this->name, array(
 			'label'			=> __('Allow Null?','acf'),
 			'instructions'	=> '',
@@ -226,7 +238,7 @@ class acf_field_select extends acf_field
 		));
 		
 		
-		// formatting
+		// multiple
 		acf_render_field_option( $this->name, array(
 			'label'			=> __('Select multiple values?','acf'),
 			'instructions'	=> '',
