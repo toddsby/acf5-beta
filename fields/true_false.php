@@ -44,12 +44,26 @@ class acf_field_true_false extends acf_field
 	
 	function render_field( $field )
 	{
-		// html
-		echo '<ul class="acf-checkbox-list ' . $field['class'] . '">';
-			echo '<input type="hidden" name="'.$field['name'].'" value="0" />';
-			$selected = ($field['value'] == 1) ? 'checked="yes"' : '';
-			echo '<li><label><input id="' . $field['id'] . '-1"  type="checkbox" name="'.$field['name'].'" value="1" ' . $selected . ' />' . $field['message'] . '</label></li>';
+		// vars
+		$atts = array(
+			'type'		=> 'checkbox',
+			'id'		=> "{$field['id']}-1",
+			'name'		=> $field['name'],
+			'value'		=> '1',
+		);
 		
+		
+		// checked
+		if( $field['value'] == 1 )
+		{
+			$atts['checked'] = 'checked';
+		}
+		
+		
+		// html
+		echo '<ul class="acf-checkbox-list ' . acf_esc_attr($field['class']) . '">';
+			echo '<input type="hidden" name="' . acf_esc_attr($field['name']) . '" value="0" />';
+			echo '<li><label><input ' . acf_esc_attr($atts) . '/>' . $field['message'] . '</label></li>';
 		echo '</ul>';
 	}
 	
@@ -69,43 +83,26 @@ class acf_field_true_false extends acf_field
 	
 	function render_field_options( $field )
 	{
-		// vars
-		$key = $field['name'];
-		
-		
-		?>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Message",'acf'); ?></label>
-		<p class="description"><?php _e("eg. Show extra content",'acf'); ?></a></p>
-	</td>
-	<td>
-		<?php 
-		do_action('acf/render_field', array(
-			'type'	=>	'text',
-			'name'	=>	'fields['.$key.'][message]',
-			'value'	=>	$field['message'],
-		));
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Default Value",'acf'); ?></label>
-	</td>
-	<td>
-		<?php
-		
-		do_action('acf/render_field', array(
-			'type'	=>	'true_false',
-			'name'	=>	'fields['.$key.'][default_value]',
-			'value'	=>	$field['default_value'],
+		// message
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Message','acf'),
+			'instructions'	=> __('eg. Show extra content','acf'),
+			'type'			=> 'text',
+			'name'			=> 'message',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['message'],
 		));
 		
-		?>
-	</td>
-</tr>
-		<?php
+		
+		// default_value
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Default Value','acf'),
+			'instructions'	=> '',
+			'type'			=> 'true_false',
+			'name'			=> 'default_value',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['default_value'],
+		));
 		
 	}
 	

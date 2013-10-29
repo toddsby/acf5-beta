@@ -153,9 +153,6 @@ class acf_field_radio extends acf_field
 	
 	function render_field_options( $field )
 	{
-		// vars
-		$key = $field['name'];
-		
 		// implode checkboxes so they work in a textarea
 		if( is_array($field['choices']) )
 		{		
@@ -166,94 +163,68 @@ class acf_field_radio extends acf_field
 			$field['choices'] = implode("\n", $field['choices']);
 		}
 		
-		?>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
-			<td class="label">
-				<label for=""><?php _e("Choices",'acf'); ?></label>
-				<p class="description"><?php _e("Enter your choices one per line",'acf'); ?><br />
-				<br />
-				<?php _e("Red",'acf'); ?><br />
-				<?php _e("Blue",'acf'); ?><br />
-				<br />
-				<?php _e("red : Red",'acf'); ?><br />
-				<?php _e("blue : Blue",'acf'); ?><br />
-				</p>
-			</td>
-			<td>
-				<?php
-				
-				do_action('acf/render_field', array(
-					'type'	=>	'textarea',
-					'class' => 	'textarea field_option-choices',
-					'name'	=>	'fields['.$key.'][choices]',
-					'value'	=>	$field['choices'],
-				));
-				
-				?>
-				<div class="radio-option-other_choice">
-				<?php
-				
-				do_action('acf/render_field', array(
-					'type'		=>	'true_false',
-					'name'		=>	'fields['.$key.'][other_choice]',
-					'value'		=>	$field['other_choice'],
-					'message'	=>	__("Add 'other' choice to allow for custom values", 'acf')
-				));
-				
-				?>
-				</div>
-				<div class="radio-option-save_other_choice" <?php if( !$field['other_choice'] ): ?>style="display:none"<?php endif; ?>>
-				<?php
-				
-				do_action('acf/render_field', array(
-					'type'		=>	'true_false',
-					'name'		=>	'fields['.$key.'][save_other_choice]',
-					'value'		=>	$field['save_other_choice'],
-					'message'	=>	__("Save 'other' values to the field's choices", 'acf')
-				));
-				
-				?>
-				</div>
-			</td>
-		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
-			<td class="label">
-				<label><?php _e("Default Value",'acf'); ?></label>
-			</td>
-			<td>
-				<?php
-				
-				do_action('acf/render_field', array(
-					'type'	=>	'text',
-					'name'	=>	'fields['.$key.'][default_value]',
-					'value'	=>	$field['default_value'],
-				));
-				
-				?>
-			</td>
-		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
-			<td class="label">
-				<label for=""><?php _e("Layout",'acf'); ?></label>
-			</td>
-			<td>
-				<?php
-				
-				do_action('acf/render_field', array(
-					'type'	=>	'radio',
-					'name'	=>	'fields['.$key.'][layout]',
-					'value'	=>	$field['layout'],
-					'layout' => 'horizontal', 
-					'choices' => array(
-						'vertical' => __("Vertical",'acf'), 
-						'horizontal' => __("Horizontal",'acf')
-					)
-				));
-				
-				?>
-			</td>
-		</tr>
-		<?php
+		
+		// choices
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Choices','acf'),
+			'instructions'	=> __('Enter each choice on a new line.','acf') . '<br /><br />' . __('For more control, you may specify both a value and label like this:','acf'). '<br /><br />' . __('red : Red','acf'),
+			'type'			=> 'textarea',
+			'name'			=> 'choices',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['choices'],
+		));
+		
+		
+		// other_choice
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Other','acf'),
+			'instructions'	=> '',
+			'type'			=> 'true_false',
+			'name'			=> 'other_choice',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['other_choice'],
+			'message'		=> __("Add 'other' choice to allow for custom values", 'acf')
+		));
+		
+		
+		// save_other_choice
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Save Other','acf'),
+			'instructions'	=> '',
+			'type'			=> 'true_false',
+			'name'			=> 'save_other_choice',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['save_other_choice'],
+			'message'		=> __("Save 'other' values to the field's choices", 'acf')
+		));
+		
+		
+		// default_value
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Default Value','acf'),
+			'instructions'	=> __('Enter each default value on a new line','acf'),
+			'type'			=> 'textarea',
+			'name'			=> 'default_value',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['default_value'],
+		));
+		
+		
+		// layout
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Layout','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'layout',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['layout'],
+			'layout'		=> 'horizontal', 
+			'choices'		=> array(
+				'vertical'		=> __("Vertical",'acf'), 
+				'horizontal'	=> __("Horizontal",'acf')
+			)
+		));
+		
 		
 	}
 	

@@ -132,10 +132,6 @@ class acf_field_checkbox extends acf_field
 	
 	function render_field_options( $field )
 	{
-		// vars
-		$key = $field['name'];
-		
-		
 		// implode checkboxes so they work in a textarea
 		if( is_array($field['choices']) )
 		{		
