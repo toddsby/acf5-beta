@@ -658,28 +658,29 @@ function acf_verify_nonce( $nonce, $post_id = 0 ) {
 	{
 		$r = true;
 		
+		
 		// remove potential for inifinite loops
-		$_POST['_acfnonce'] = false;	
-	}
-	
-	
-	// if we are currently saving a revision, allow it's parent to bypass this validation
-	if( $post_id )
-	{
-		if( $parent = wp_is_post_revision($post_id) )
+		$_POST['_acfnonce'] = false;
+		
+		
+		// if we are currently saving a revision, allow it's parent to bypass this validation
+		if( $post_id )
 		{
-			// revision: set parent post_id
-			$_POST['_acfnonce'] = $parent;
-		}
-		else
-		{
-			// parent: compare parent post_id
-			if( $_POST['_acfnonce'] === $post_id )
+			if( $parent = wp_is_post_revision($post_id) )
 			{
-				$r = true;
-				
-				// remove potential for inifinite loops
-				$_POST['_acfnonce'] = false;
+				// revision: set parent post_id
+				$_POST['_acfnonce'] = $parent;
+			}
+			else
+			{
+				// parent: compare parent post_id
+				if( $_POST['_acfnonce'] === $post_id )
+				{
+					$r = true;
+					
+					// remove potential for inifinite loops
+					$_POST['_acfnonce'] = false;
+				}
 			}
 		}
 	}
