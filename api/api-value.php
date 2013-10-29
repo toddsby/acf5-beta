@@ -18,11 +18,11 @@ class acf_value_api
 	
 	function __construct() {
 		
-		add_filter('acf/load_value',				array( $this, 'load_value' ), 5, 3);
-		add_action('acf/update_value',				array( $this, 'update_value' ), 5, 3);
-		//add_action('acf/delete_value',			array( $this, 'delete_value' ), 5, 2);
-		//add_action('acf/format_value',			array( $this, 'format_value' ), 5, 3);
-		//add_action('acf/format_value_for_api',	array( $this, 'format_value_for_api' ), 5, 3);
+		add_filter('acf/load_value',			array( $this, 'load_value' ), 5, 3);
+		add_action('acf/update_value',			array( $this, 'update_value' ), 5, 3);
+		//add_action('acf/delete_value',		array( $this, 'delete_value' ), 5, 2);
+		add_action('acf/format_value',			array( $this, 'format_value' ), 5, 3);
+		add_action('acf/format_value_api',		array( $this, 'format_value_api' ), 5, 3);
 	}
 	
 	
@@ -145,6 +145,34 @@ class acf_value_api
 	
 	
 	/*
+	*  format_value
+	*
+	*  @description: uses the basic value and allows the field type to format it
+	*  @since: 3.6
+	*  @created: 26/01/13
+	*/
+	
+	function format_value( $value, $post_id, $field )
+	{
+		return apply_filters('acf/format_value/type=' . $field['type'], $value, $post_id, $field);
+	}
+	
+	
+	/*
+	*  format_value_for_api
+	*
+	*  @description: uses the basic value and allows the field type to format it or the api functions
+	*  @since: 3.6
+	*  @created: 26/01/13
+	*/
+	
+	function format_value_for_api( $value, $post_id, $field )
+	{
+		return apply_filters('acf/format_value_for_api/type=' . $field['type'], $value, $post_id, $field);
+	}
+	
+	
+	/*
 	*  update_value
 	*
 	*  updates a value into the db
@@ -178,7 +206,10 @@ class acf_value_api
 		}
 		
 		
-		// if $post_id is a string, then it is used in the everything fields and can be found in the options table
+		// note:
+		// attempted to save values as individual rows for better WP_Query compatibility. Issues are clear that order would not work.
+		
+		
 		if( is_numeric($post_id) )
 		{
 			// allow ACF to save to revision!
@@ -236,9 +267,24 @@ new acf_value_api();
 *  @return	$field (array)
 */
 
-function acf_get_value( $post_id, $field ) {
+function acf_get_value( $post_id, $field, $format = false, $format_api = false ) {
 	
-	return apply_filters('acf/load_value', null, $post_id, $field);
+	$value = apply_filters('acf/load_value', null, $post_id, $field);
+	
+	
+	if( $format )
+	{
+		$value = apply_filters('acf/format_value', $value, $post_id, $field );
+	}
+	
+	
+	if( $format_api )
+	{
+		$value = apply_filters('acf/format_value_api', $value, $post_id, $field );
+	}
+	
+	
+	return $value;
 }
 
 
