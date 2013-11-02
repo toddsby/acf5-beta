@@ -18,9 +18,11 @@ class acf_field_user extends acf_field
 		$this->label = __("User",'acf');
 		$this->category = __("Relational",'acf');
 		$this->defaults = array(
-			'role' 			=> 'all',
-			'field_type' 	=> 'select',
+			'role' 			=> '',
+			'multiple' 		=> 0,
 			'allow_null' 	=> 0,
+			'ui'			=> 0,
+			'sortable'		=> 0,
 		);
 		
 		
@@ -149,11 +151,10 @@ class acf_field_user extends acf_field
 
 
 		// roles
-		if( !$field['role'] || !is_array( $field['role'] ) || $field['role'][0] == 'all' )
+		if( empty($field['role']) )
 		{
 			$field['role'] = array();
 			
-
 			foreach( $editable_roles as $role => $details )
 			{			
 				// only translate the output not the value
@@ -186,16 +187,9 @@ class acf_field_user extends acf_field
 		
 		
 		// modify field
-		if( $field['field_type'] == 'multi_select' )
-		{
-			$field['multiple'] = 1;
-		}
-		
-		
 		$field['type'] = 'select';
 		
-		
-		do_action('acf/render_field', $field);			
+		acf_render_field( $field );		
 		
 	}
 	
@@ -215,81 +209,95 @@ class acf_field_user extends acf_field
 	
 	function render_field_options( $field )
 	{
-		// vars
-		$key = $field['name'];
-		
-		?>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e( "Filter by role", 'acf' ); ?></label>
-	</td>
-	<td>
-		<?php 
-		
-		$choices = array('all' => __('All', 'acf'));
+		// role
+		$choices = array();
 		$editable_roles = get_editable_roles();
 
 		foreach( $editable_roles as $role => $details )
 		{			
 			// only translate the output not the value
-			$choices[$role] = translate_user_role( $details['name'] );
+			$choices[ $role ] = translate_user_role( $details['name'] );
 		}
-
-		do_action('acf/render_field', array(
-			'type' => 'select',
-			'name' => 'fields[' . $key . '][role]',
-			'value'	=> $field['role'],
-			'choices' => $choices,
-			'multiple' => '1',
+		
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Filter by role','acf'),
+			'instructions'	=> '',
+			'type'			=> 'select',
+			'name'			=> 'role',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['role'],
+			'choices'		=> $choices,
+			'multiple'		=> 1,
+			'ui'			=> 1,
+			'allow_null'	=> 1,
+			'placeholder'	=> 'All user roles',
 		));
 		
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Field Type",'acf'); ?></label>
-	</td>
-	<td>
-		<?php	
-		do_action('acf/render_field', array(
-			'type'	=>	'select',
-			'name'	=>	'fields['.$key.'][field_type]',
-			'value'	=>	$field['field_type'],
-			'choices' => array(
-				__("Multiple Values",'acf') => array(
-					//'checkbox' => __('Checkbox', 'acf'),
-					'multi_select' => __('Multi Select', 'acf')
-				),
-				__("Single Value",'acf') => array(
-					//'radio' => __('Radio Buttons', 'acf'),
-					'select' => __('Select', 'acf')
-				)
-			)
-		));
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Allow Null?",'acf'); ?></label>
-	</td>
-	<td>
-		<?php 
-		do_action('acf/render_field', array(
-			'type'	=>	'radio',
-			'name'	=>	'fields['.$key.'][allow_null]',
-			'value'	=>	$field['allow_null'],
-			'choices'	=>	array(
-				1	=>	__("Yes",'acf'),
-				0	=>	__("No",'acf'),
+		
+		
+		// allow_null
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Allow Null?','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'allow_null',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['allow_null'],
+			'choices'		=> array(
+				1				=> __("Yes",'acf'),
+				0				=> __("No",'acf'),
 			),
 			'layout'	=>	'horizontal',
 		));
-		?>
-	</td>
-</tr>
-		<?php
+		
+		
+		// multiple
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Select multiple values?','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'multiple',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['multiple'],
+			'choices'		=> array(
+				1				=> __("Yes",'acf'),
+				0				=> __("No",'acf'),
+			),
+			'layout'	=>	'horizontal',
+		));
+		
+		
+		// ui
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Stylised UI','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'ui',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['ui'],
+			'choices'		=> array(
+				1				=> __("Yes",'acf'),
+				0				=> __("No",'acf'),
+			),
+			'layout'	=>	'horizontal',
+		));
+		
+		
+		// sortable
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Allow values to be sortable','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'sortable',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['sortable'],
+			'choices'		=> array(
+				1				=> __("Yes",'acf'),
+				0				=> __("No",'acf'),
+			),
+			'layout'	=>	'horizontal',
+		));
+		
 		
 	}
 	

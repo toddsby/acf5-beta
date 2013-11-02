@@ -41,22 +41,23 @@ class acf_field_color_picker extends acf_field
 	*  @date	23/01/13
 	*/
 	
-	function render_field( $field )
-	{
+	function render_field( $field ) {
+		
 		// vars
-		$o = array( 'id', 'class', 'name', 'value' );
+		$atts = array();
 		$e = '';
 		
 		
-		$e .= '<div class="acf-color_picker">';
-		$e .= '<input type="text"';
-		
-		foreach( $o as $k )
+		// populate atts
+		foreach( array( 'id', 'class', 'name', 'value' ) as $k )
 		{
-			$e .= ' ' . $k . '="' . esc_attr( $field[ $k ] ) . '"';	
+			$atts[ $k ] = $field[ $k ];
 		}
 		
-		$e .= ' />';
+		
+		// render
+		$e .= '<div class="acf-color_picker">';
+		$e .= '<input type="text" ' . acf_esc_attr($atts) . ' />';
 		$e .= '</div>';
 		
 		
@@ -78,28 +79,18 @@ class acf_field_color_picker extends acf_field
 	*  @param	$field	- an array holding all the field's data
 	*/
 	
-	function render_field_options( $field )
-	{
-		// vars
-		$key = $field['name'];
+	function render_field_options( $field ) {
 		
-		?>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Default Value",'acf'); ?></label>
-	</td>
-	<td>
-		<?php 
-		do_action('acf/render_field', array(
-			'type'			=>	'text',
-			'name'			=>	'fields[' .$key.'][default_value]',
-			'value'			=>	$field['default_value'],
-			'placeholder'	=>	'#ffffff'
+		// display_format
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Default Value','acf'),
+			'instructions'	=> '',
+			'type'			=> 'text',
+			'name'			=> 'default_value',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['default_value'],
+			'placeholder'	=> '#FFFFFF'
 		));
-		?>
-	</td>
-</tr>
-		<?php
 		
 	}
 	

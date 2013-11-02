@@ -32,7 +32,7 @@ class acf_field_post_object extends acf_field
     	
     	
     	// extra
-		add_action('wp_ajax_acf/fields/post_object/query',		array($this, 'ajax_query'));
+		add_action('wp_ajax_acf/fields/post_object/query',			array($this, 'ajax_query'));
 		add_action('wp_ajax_nopriv_acf/fields/post_object/query',	array($this, 'ajax_query'));
 		
 	}
@@ -348,8 +348,6 @@ $choices = array_merge(acf_get_post_types(), array(
 			'all' => __("All",'acf')
 		));
 */
-		$choices = acf_get_post_types();
-		
 		acf_render_field_option( $this->name, array(
 			'label'			=> __('Filter by Post Type','acf'),
 			'instructions'	=> '',
@@ -357,8 +355,11 @@ $choices = array_merge(acf_get_post_types(), array(
 			'name'			=> 'post_type',
 			'prefix'		=> $field['prefix'],
 			'value'			=> $field['post_type'],
-			'choices'		=>	$choices,
-			'multiple'		=>	1,
+			'choices'		=> acf_get_post_types(),
+			'multiple'		=> 1,
+			'ui'			=> 1,
+			'allow_null'	=> 1,
+			'placeholder'	=> 'All post types',
 		));
 		
 		
@@ -368,8 +369,6 @@ $choices = wp_parse_args(acf_get_taxonomy_terms(), array(
 			'all' => __("All",'acf')
 		));
 */
-		$choices = acf_get_taxonomy_terms();
-		
 		acf_render_field_option( $this->name, array(
 			'label'			=> __('Filter by Taxonomy','acf'),
 			'instructions'	=> '',
@@ -377,14 +376,16 @@ $choices = wp_parse_args(acf_get_taxonomy_terms(), array(
 			'name'			=> 'taxonomy',
 			'prefix'		=> $field['prefix'],
 			'value'			=> $field['taxonomy'],
-			'choices'		=>	$choices,
-			'multiple'		=>	1,
+			'choices'		=> acf_get_taxonomy_terms(),
+			'multiple'		=> 1,
+			'ui'			=> 1,
+			'allow_null'	=> 1,
+			'placeholder'	=> 'No taxonomy filter',
 		));
 		
 		
 		// allow_null
-		/*
-acf_render_field_option( $this->name, array(
+		acf_render_field_option( $this->name, array(
 			'label'			=> __('Allow Null?','acf'),
 			'instructions'	=> '',
 			'type'			=> 'radio',
@@ -397,7 +398,6 @@ acf_render_field_option( $this->name, array(
 			),
 			'layout'	=>	'horizontal',
 		));
-*/
 		
 		
 		// multiple
@@ -408,6 +408,22 @@ acf_render_field_option( $this->name, array(
 			'name'			=> 'multiple',
 			'prefix'		=> $field['prefix'],
 			'value'			=> $field['multiple'],
+			'choices'		=> array(
+				1				=> __("Yes",'acf'),
+				0				=> __("No",'acf'),
+			),
+			'layout'	=>	'horizontal',
+		));
+		
+		
+		// sortable
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Allow values to be sortable','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'sortable',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['sortable'],
 			'choices'		=> array(
 				1				=> __("Yes",'acf'),
 				0				=> __("No",'acf'),
@@ -448,22 +464,6 @@ acf_render_field_option( $this->name, array(
 			'layout'	=>	'horizontal',
 		));
 */
-		
-		
-		// sortable
-		acf_render_field_option( $this->name, array(
-			'label'			=> __('Allow values to be sortable','acf'),
-			'instructions'	=> '',
-			'type'			=> 'radio',
-			'name'			=> 'sortable',
-			'prefix'		=> $field['prefix'],
-			'value'			=> $field['sortable'],
-			'choices'		=> array(
-				1				=> __("Yes",'acf'),
-				0				=> __("No",'acf'),
-			),
-			'layout'	=>	'horizontal',
-		));
 		
 	}
 	

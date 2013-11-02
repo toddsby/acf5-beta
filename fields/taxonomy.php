@@ -98,7 +98,7 @@ class acf_field_taxonomy extends acf_field
 		if( $field['load_save_terms'] )
 		{
 			// Parse values
-			$value = apply_filters( 'acf/parse_types', $value );
+			$value = acf_parse_types( $value );
 		
 			wp_set_object_terms( $post_id, $value, $field['taxonomy'], false );
 		}
@@ -269,52 +269,27 @@ class acf_field_taxonomy extends acf_field
 	
 	function render_field_options( $field )
 	{
-		// vars
-		$key = $field['name'];
-		
-		?>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Taxonomy",'acf'); ?></label>
-	</td>
-	<td>
-		<?php
-		
-		$choices = array();
-		$taxonomies = get_taxonomies( array('public' => true), 'objects' );
-		
-		foreach($taxonomies as $taxonomy)
-		{
-			$choices[ $taxonomy->name ] = $taxonomy->labels->name;
-		}
-		
-		// unset post_format (why is this a public taxonomy?)
-		if( isset($choices['post_format']) )
-		{
-			unset( $choices['post_format']) ;
-		}
-				
-		do_action('acf/render_field', array(
-			'type'	=>	'select',
-			'name'	=>	'fields['.$key.'][taxonomy]',
-			'value'	=>	$field['taxonomy'],
-			'choices' => $choices,
+		// default_value
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Taxonomy','acf'),
+			'type'			=> 'select',
+			'name'			=> 'taxonomy',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['taxonomy'],
+			'choices'		=> acf_get_taxonomies(),
 		));
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Field Type",'acf'); ?></label>
-	</td>
-	<td>
-		<?php	
-		do_action('acf/render_field', array(
-			'type'	=>	'select',
-			'name'	=>	'fields['.$key.'][field_type]',
-			'value'	=>	$field['field_type'],
-			'optgroup' => true,
-			'choices' => array(
+		
+		
+		// field_type
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Field Type','acf'),
+			'instructions'	=> '',
+			'type'			=> 'select',
+			'name'			=> 'field_type',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['field_type'],
+			'optgroup'		=> true,
+			'choices'		=> array(
 				__("Multiple Values",'acf') => array(
 					'checkbox' => __('Checkbox', 'acf'),
 					'multi_select' => __('Multi Select', 'acf')
@@ -325,63 +300,50 @@ class acf_field_taxonomy extends acf_field
 				)
 			)
 		));
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Allow Null?",'acf'); ?></label>
-	</td>
-	<td>
-		<?php 
-		do_action('acf/render_field', array(
-			'type'	=>	'radio',
-			'name'	=>	'fields['.$key.'][allow_null]',
-			'value'	=>	$field['allow_null'],
-			'choices'	=>	array(
-				1	=>	__("Yes",'acf'),
-				0	=>	__("No",'acf'),
+		
+		
+		// allow_null
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Allow Null?','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'allow_null',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['allow_null'],
+			'choices'		=> array(
+				1				=> __("Yes",'acf'),
+				0				=> __("No",'acf'),
 			),
 			'layout'	=>	'horizontal',
 		));
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Load & Save Terms to Post",'acf'); ?></label>
-	</td>
-	<td>
-		<?php	
-		do_action('acf/render_field', array(
-			'type'	=>	'true_false',
-			'name'	=>	'fields['.$key.'][load_save_terms]',
-			'value'	=>	$field['load_save_terms'],
-			'message' => __("Load value based on the post's terms and update the post's terms on save",'acf')
+		
+		
+		// allow_null
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Load & Save Terms to Post','acf'),
+			'instructions'	=> '',
+			'type'			=> 'true_false',
+			'name'			=> 'load_save_terms',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['load_save_terms'],
+			'message'		=> __("Load value based on the post's terms and update the post's terms on save",'acf')
 		));
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Return Value",'acf'); ?></label>
-	</td>
-	<td>
-		<?php
-		do_action('acf/render_field', array(
-			'type'		=>	'radio',
-			'name'		=>	'fields['.$key.'][return_format]',
-			'value'		=>	$field['return_format'],
+		
+		
+		// return_format
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Return Value','acf'),
+			'instructions'	=> '',
+			'type'			=> 'radio',
+			'name'			=> 'return_format',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['return_format'],
+			'choices'		=> array(
+				'object'		=>	__("Term Object",'acf'),
+				'id'			=>	__("Term ID",'acf')
+			),
 			'layout'	=>	'horizontal',
-			'choices'	=> array(
-				'object'	=>	__("Term Object",'acf'),
-				'id'		=>	__("Term ID",'acf')
-			)
 		));
-		?>
-	</td>
-</tr>
-		<?php
 		
 	}
 	

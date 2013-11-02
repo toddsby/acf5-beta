@@ -19,9 +19,13 @@ class acf_field_date_picker extends acf_field
 		$this->label = __("Date Picker",'acf');
 		$this->category = __("jQuery",'acf');
 		$this->defaults = array(
-			'date_format' => 'yymmdd',
-			'display_format' => 'dd/mm/yy',
-			'first_day' => 1, // monday
+			'date_format'		=> '',
+			'display_format'	=> '',
+			'first_day'			=> 1
+		);
+		$this->default_values = array(
+			'date_format'		=> 'yymmdd',
+			'display_format'	=> 'dd/mm/yy',
 		);
 		
 		
@@ -77,24 +81,45 @@ class acf_field_date_picker extends acf_field
 	*  @date	23/01/13
 	*/
 	
-	function render_field( $field )
-	{
-		// make sure it's not blank
-		if( !$field['date_format'] )
+	function render_field( $field ) {
+		
+		
+		// default options
+		foreach( $this->default_values as $k => $v )
 		{
-			$field['date_format'] = 'yymmdd';
+			if( empty($field[ $k ]) )
+			{
+				$field[ $k ] = $v;
+			}	
 		}
-		if( !$field['display_format'] )
-		{
-			$field['display_format'] = 'dd/mm/yy';
-		}
+		
+		
+		// vars
+		$e = '';
+		$el_atts = array(
+			'class'					=> 'acf-date_picker',
+			'data-save_format'		=> $field['date_format'],
+			'data-display_format'	=> $field['display_format'],
+			'data-first_day'		=> $field['first_day'],
+		);
+		$input_atts = array(
+			'id'					=> $field['id'],
+			'class' 				=> 'input-alt',
+			'type'					=> 'hidden',
+			'name'					=> $field['name'],
+			'value'					=> $field['value'],
+		);
 		
 
 		// html
-		echo '<div class="acf-date_picker" data-save_format="' . $field['date_format'] . '" data-display_format="' . $field['display_format'] . '" data-first_day="' . $field['first_day'] . '">';
-			echo '<input type="hidden" value="' . $field['value'] . '" name="' . $field['name'] . '" class="input-alt" />';
-			echo '<input type="text" value="" class="input"  />';
-		echo '</div>';
+		$e .= '<div ' . acf_esc_attr($el_atts) . '>';
+			$e .= '<input ' . acf_esc_attr($input_atts). '/>';
+			$e .= '<input type="text" value="" class="input" />';
+		$e .= '</div>';
+		
+		
+		// return
+		echo $e;
 	}
 	
 	
@@ -117,62 +142,47 @@ class acf_field_date_picker extends acf_field
 		global $wp_locale;
 		
 		
-		// vars
-		$key = $field['name'];
-	    
-	    ?>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Save format",'acf'); ?></label>
-		<p class="description"><?php _e("This format will determin the value saved to the database and returned via the API",'acf'); ?></p>
-		<p><?php _e("\"yymmdd\" is the most versatile save format. Read more about",'acf'); ?> <a href="http://docs.jquery.com/UI/Datepicker/formatDate"><?php _e("jQuery date formats",'acf'); ?></a></p>
-	</td>
-	<td>
-		<?php 
-		do_action('acf/render_field', array(
-			'type'	=>	'text',
-			'name'	=>	'fields[' .$key.'][date_format]',
-			'value'	=>	$field['date_format'],
-		));
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label><?php _e("Display format",'acf'); ?></label>
-		<p class="description"><?php _e("This format will be seen by the user when entering a value",'acf'); ?></p>
-		<p><?php _e("\"dd/mm/yy\" or \"mm/dd/yy\" are the most used display formats. Read more about",'acf'); ?> <a href="http://docs.jquery.com/UI/Datepicker/formatDate" target="_blank"><?php _e("jQuery date formats",'acf'); ?></a></p>
-	</td>
-	<td>
-		<?php 
-		do_action('acf/render_field', array(
-			'type'	=>	'text',
-			'name'	=>	'fields[' .$key.'][display_format]',
-			'value'	=>	$field['display_format'],
-		));
-		?>
-	</td>
-</tr>
-<tr class="field_option field_option_<?php echo $this->name; ?>">
-	<td class="label">
-		<label for=""><?php _e("Week Starts On",'acf'); ?></label>
-	</td>
-	<td>
-		<?php 
-		
-		$choices = array_values( $wp_locale->weekday );
-		
-		do_action('acf/render_field', array(
-			'type'	=>	'select',
-			'name'	=>	'fields['.$key.'][first_day]',
-			'value'	=>	$field['first_day'],
-			'choices'	=>	$choices,
+		// center_lat
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Save format','acf'),
+			'instructions'	=> __('This format will determine the value saved to the database and returned via the API','acf')
+							   . '<br /><br />' .
+							   __('"yymmdd" is the most versatile save format. Read more about','acf')
+							   . '<a href="http://docs.jquery.com/UI/Datepicker/formatDate"> '. __('jQuery date formats','acf') . '</a>',
+			'type'			=> 'text',
+			'name'			=> 'date_format',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['date_format'],
+			'placeholder'	=> $this->default_values['date_format']
 		));
 		
-		?>
-	</td>
-</tr>
-		<?php
+		
+		// display_format
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Display format','acf'),
+			'instructions'	=> __('This format will be seen by the user when entering a value','acf')
+							   . '<br /><br />' .
+							   __('"dd/mm/yy" or "mm/dd/yy" are the most common display formats. Read more about','acf')
+							   . '<a href="http://docs.jquery.com/UI/Datepicker/formatDate"> '. __('jQuery date formats','acf') . '</a>',
+			'type'			=> 'text',
+			'name'			=> 'display_format',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['display_format'],
+			'placeholder'	=> $this->default_values['display_format']
+		));
+		
+		
+		// first_day
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Week Starts On','acf'),
+			'instructions'	=> '',
+			'type'			=> 'select',
+			'name'			=> 'first_day',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['first_day'],
+			'choices'		=> array_values( $wp_locale->weekday )
+		));
+		
 		
 	}
 	

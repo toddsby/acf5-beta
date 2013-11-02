@@ -22,7 +22,7 @@ class acf_field_select extends acf_field
 			'allow_null' 	=>	0,
 			'choices'		=>	array(),
 			'default_value'	=>	'',
-			'ui'			=>	1,
+			'ui'			=>	0,
 			//'search'		=>	0,
 			'ajax'			=>	0,
 			'sortable'		=>	0,
@@ -93,13 +93,6 @@ class acf_field_select extends acf_field
 		$field['value'] = array_map('trim', $field['value']);
 		
 		
-		// placeholder
-		if( !$field['placeholder'] )
-		{
-			$field['placeholder'] = __("Select",'acf');
-		}
-		
-		
 		// vars
 		$atts = array(
 			'id'				=> $field['id'],
@@ -113,6 +106,14 @@ class acf_field_select extends acf_field
 			'data-placeholder'	=> $field['placeholder'],
 			'data-allow_null'	=> $field['allow_null']
 		);
+		
+		
+		// placeholder
+		if( !$field['placeholder'] )
+		{
+			$field['placeholder'] = __("- Select -",'acf');
+			$atts['data-placeholder'] = __("Select",'acf');
+		}
 		
 		
 		// multiple
@@ -136,7 +137,7 @@ class acf_field_select extends acf_field
 		// null
 		if( $field['allow_null'] )
 		{
-			echo '<option value="">' . $atts['placeholder'] . '</option>';
+			echo '<option value="">' . $field['placeholder'] . '</option>';
 		}
 		
 		
