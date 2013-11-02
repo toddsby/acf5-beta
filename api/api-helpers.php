@@ -99,6 +99,13 @@ function acf_get_dir( $path )
 
 function acf_parse_args( $args, $defaults = array() ) {
 	
+	// $args may not be na array!
+	if( !is_array($args) )
+	{
+		$args = array();
+	}
+	
+	
 	// parse args
 	$args = wp_parse_args( $args, $defaults );
 	
@@ -218,42 +225,46 @@ function acf_get_view( $view_name = '', $args = array() )
 *  @date	28/09/13
 *  @since	5.0.0
 *
-*  @param	$field (array)
+*  @param	$field (array) must be a valid ACF field array
+*  @param	$el (string) modifys the rendered wrapping elements. Default to 'div', but can be 'tr', 'ul', 'ol', 'dt' or custom
+*  @param	$instruction (string) specifys the placement of the instructions. Default to 'label', but can be 'field'
+*  @param	$atts (array) an array of custom attributes to render on the $el
 *  @return	N/A
 */
 
-function acf_render_field_wrap( $field, $el = 'div', $atts = array() ) {
+function acf_render_field_wrap( $field, $el = 'div', $instruction = 'label', $atts = array() ) {
 	
 	// get valid field
 	$field = acf_get_valid_field( $field );
 	
 	
-	// vars
-	$outer_el = 'div';
-	$inner_el = 'div';
+	// el
+	$elements = apply_filters('acf/render_field_wrap/elements', array(
+		'div'	=> 'div',
+		'tr'	=> 'td',
+		'ul'	=> 'li',
+		'ol'	=> 'li',
+		'dl'	=> 'dt',
+	));
 	
-	if( $el == 'tr' )
+	
+	// validate $el
+	if( !array_key_exists($el, $elements) )
 	{
-		$outer_el = 'tr';
-		$inner_el = 'td';
+		$el = 'div';
 	}
 	
 	
 	// atts
-	$atts = wp_parse_args($atts, array(
+	$atts = acf_parse_args($atts, array(
 		'class'		=> '',
-		'compat'	=> false
+		'data-name'	=> $field['field_name'],
+		'data-type'	=> $field['type'],
 	));
 	
 	
-	// extract vars
-	$compat = acf_extract_var( $atts, 'compat' );
-	
-	
 	// add to atts
-	$atts['class'] .= "acf-field field_type-{$field['type']}";
-	$atts['data-name'] = $field['field_name'];
-	$atts['data-type'] = $field['type'];
+	$atts['class'] .= " acf-field field_type-{$field['type']}";
 	
 	
 	// add key
@@ -270,30 +281,31 @@ function acf_render_field_wrap( $field, $el = 'div', $atts = array() ) {
 		$atts['class'] .= ' required';
 	}
 	
+	
 	?>
-	<<?php echo $outer_el; ?> <?php echo acf_esc_attr($atts); ?>>
-		<<?php echo $inner_el; ?> class="acf-label">
+	<<?php echo $el; ?> <?php echo acf_esc_attr($atts); ?>>
+		<<?php echo $elements[ $el ]; ?> class="acf-label">
 			
 			<label for="<?php echo $field['id']; ?>">
 				<?php echo $field['label']; ?>
 				<?php if( $field['required'] ): ?><span class="acf-required">*</span><?php endif; ?>
 			</label>
 			
-			<?php if( !$compat && $field['instructions'] ): ?>
+			<?php if( $instruction == 'label' && $field['instructions'] ): ?>
 				<p class="description"><?php echo $field['instructions']; ?></p>
 			<?php endif; ?>
 			
-		</<?php echo $inner_el; ?>>
-		<<?php echo $inner_el; ?> class="acf-input">
+		</<?php echo $elements[ $el ]; ?>>
+		<<?php echo $elements[ $el ]; ?> class="acf-input">
 		
 			<?php acf_render_field( $field ); ?>
 			
-			<?php if( $compat && $field['instructions'] ): ?>
+			<?php if( $instruction == 'field' && $field['instructions'] ): ?>
 				<p class="description"><?php echo $field['instructions']; ?></p>
 			<?php endif; ?>
 			
-		</<?php echo $inner_el; ?>>
-	</<?php echo $outer_el; ?>>
+		</<?php echo $elements[ $el ]; ?>>
+	</<?php echo $el; ?>>
 	<?php
 }
 
@@ -312,7 +324,7 @@ function acf_render_field_wrap( $field, $el = 'div', $atts = array() ) {
 *  @return	$post_id (int)
 */
 
-function acf_render_fields( $fields, $el = 'div', $post_id = 0, $atts = array() ) {
+function acf_render_fields( $post_id = 0, $fields, $el = 'div', $instruction = 'label' ) {
 		
 	if( !empty($fields) )
 	{
@@ -330,7 +342,7 @@ function acf_render_fields( $fields, $el = 'div', $post_id = 0, $atts = array() 
 			
 			
 			// render
-			acf_render_field_wrap( $field, $el, $atts );
+			acf_render_field_wrap( $field, $el, $instruction );
 		}
 	}
 		
@@ -393,13 +405,13 @@ function acf_render_option( $field, $options = array() )
 function acf_render_field_option( $type, $field )
 {
 	// vars
-	$options = array( 
+	$atts = array( 
 		'data-option' => $type
 	);
 	
 	
 	// render
-	acf_render_field_wrap( $field, 'tr', $options );
+	acf_render_field_wrap( $field, 'tr', 'label', $atts );
 }
 
 
@@ -818,8 +830,8 @@ function acf_get_image_sizes() {
 *  @return	(array)
 */
 
-function acf_get_taxonomies()
-{
+function acf_get_taxonomies() {
+
 	// get all taxonomies
 	$taxonomies = get_taxonomies( false, 'objects' );
 	$r = array();
@@ -828,9 +840,13 @@ function acf_get_taxonomies()
 	// populate $r
 	foreach( $taxonomies as $taxonomy )
 	{
-		$r[ $taxonomy->name ] = "{$taxonomy->labels->singular_name} ({$taxonomy->name})";
+		$r[ $taxonomy->name ] = "{$taxonomy->labels->singular_name}"; // ({$taxonomy->name})
 	}
 		
+	
+	// remove
+	unset($r['post_format']);
+	
 	
 	// return
 	return $r;
@@ -852,10 +868,16 @@ function acf_get_taxonomies()
 *  @return	(array)
 */
 
-function acf_get_taxonomy_terms()
-{
-	// get all taxonomies
-	$taxonomies = acf_get_taxonomies();
+function acf_get_taxonomy_terms( $taxonomies = false ) {
+
+	// load all taxonomies if not specified in args
+	if( !$taxonomies )
+	{
+		$taxonomies = acf_get_taxonomies();
+	}
+	
+	
+	// vars
 	$r = array();
 	
 	
@@ -882,5 +904,43 @@ function acf_get_taxonomy_terms()
 	return $r;
 	
 }
+
+
+function acf_decode_taxonomy_terms( $terms = false ) {
+	
+	// load all taxonomies if not specified in args
+	if( !$terms )
+	{
+		$terms = acf_get_taxonomy_terms();
+	}
+	
+	
+	// vars
+	$r = array();
+	
+	
+	foreach( $terms as $term )
+	{
+		// vars
+		$term = explode(':', $term);
+		
+		
+		// create empty array
+		if( !array_key_exists($term[0], $r) )
+		{
+			$r[ $term[0] ] = array();
+		}
+		
+		
+		// append to taxonomy
+		$r[ $term[0] ][] = $term[1];
+	}
+	
+	
+	// return
+	return $r;
+	
+}
+
 
 ?>

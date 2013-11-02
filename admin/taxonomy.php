@@ -126,9 +126,6 @@ class acf_controller_taxonomy {
 		$args = array(
 			'taxonomy' => $taxonomy
 		);
-		$options = array(
-			'compat' => true
-		);
 		
 		
 		// get field groups
@@ -147,7 +144,7 @@ class acf_controller_taxonomy {
 				
 				$fields = acf_get_fields( array('field_group' => $field_group['ID']) );
 
-				acf_render_fields( $fields, 'div', $post_id, $options );
+				acf_render_fields( $post_id, $fields, 'div', 'field' );
 				
 			endforeach; 
 		
@@ -176,9 +173,6 @@ class acf_controller_taxonomy {
 		$args = array(
 			'taxonomy' => $taxonomy
 		);
-		$options = array(
-			'compat' => true
-		);
 		
 		
 		// get field groups
@@ -201,7 +195,7 @@ class acf_controller_taxonomy {
 				<h3><?php echo $field_group['title']; ?></h3>
 				<table class="form-table">
 					<tbody>
-						<?php acf_render_fields( $fields, 'tr', $post_id, $options ); ?>
+						<?php acf_render_fields( $post_id, $fields, 'tr', 'field' ); ?>
 					</tbody>
 				</table>
 				<?php 

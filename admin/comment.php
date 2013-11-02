@@ -65,12 +65,6 @@ class acf_controller_comment {
 		));
 		
 		
-		// render
-		$options = array(
-			'compat' => true
-		);
-		
-		
 		if( !empty($field_groups) ):
 			
 			foreach( $field_groups as $field_group ): 
@@ -80,7 +74,7 @@ class acf_controller_comment {
 				?>
 				<table class="form-table">
 					<tbody>
-						<?php acf_render_fields( $fields, 'tr', $post_id, $options ); ?>
+						<?php acf_render_fields( $post_id, $fields, 'tr', 'field' ); ?>
 					</tbody>
 				</table>
 				<?php
@@ -222,9 +216,6 @@ class acf_controller_comment {
 		
 		// vars
 		$post_id = "comment_{$comment->comment_ID}";
-		$options = array(
-			'compat' => true
-		);
 		
 		
 		// load fields
@@ -236,7 +227,7 @@ class acf_controller_comment {
 			<div class="inside">
 				<table class="form-table">
 					<tbody>
-						<?php acf_render_fields( $fields, 'tr', $post_id, $options ); ?>
+						<?php acf_render_fields( $post_id, $fields, 'tr', 'field' ); ?>
 					</tbody>
 				</table>
 			</div>

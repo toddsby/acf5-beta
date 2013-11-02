@@ -186,9 +186,6 @@ class acf_controller_user {
 		$args = array(
 			'user' => 'all'
 		);
-		$options = array(
-			'compat' => true
-		);
 		
 		
 		if( $user_id )
@@ -218,7 +215,7 @@ class acf_controller_user {
 				<h3><?php echo $field_group['title']; ?></h3>
 				<table class="form-table">
 					<tbody>
-						<?php acf_render_fields( $fields, 'tr', $post_id, $options ); ?>
+						<?php acf_render_fields( $post_id, $fields, 'tr', 'field' ); ?>
 					</tbody>
 				</table>
 				<?php 
