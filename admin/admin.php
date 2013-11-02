@@ -59,6 +59,7 @@ class acf_admin {
 	function admin_enqueue_scripts() {
 		
 		wp_enqueue_style( 'acf-global' );
+		wp_enqueue_style( 'acf-input' );
 	}
 	
 	
