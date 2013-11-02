@@ -67,8 +67,6 @@
 }
 
 
-
-
 /*---------------------------------------------------------------------------------------------
 *
 *  Postbox: Fields
@@ -304,9 +302,9 @@ table.conditional-logic-rules tbody td {
 *	
 *---------------------------------------------------------------------------------------------*/
 
-#acf_fields .fields .field_type-tab tr.field_name,
-#acf_fields .fields .field_type-tab tr.field_instructions,
-#acf_fields .fields .field_type-tab tr.required {
+.acf-field-list .field_type-tab tr[data-name="name"],
+.acf-field-list .field_type-tab tr[data-name="instructions"],
+.acf-field-list .field_type-tab tr[data-name="required"] {
 	display: none;
 }
 
@@ -317,13 +315,13 @@ table.conditional-logic-rules tbody td {
 *	
 *---------------------------------------------------------------------------------------------*/
 
-#acf_fields .fields .field_type-message tr.field_name,
-#acf_fields .fields .field_type-message tr.field_instructions,
-#acf_fields .fields .field_type-message tr.required {
+.acf-field-list .field_type-message tr[data-name="name"],
+.acf-field-list .field_type-message tr[data-name="instructions"],
+.acf-field-list .field_type-message tr[data-name="required"] {
 	display: none;
 }
 
-#acf_fields .fields .field_type-message textarea {
+.acf-field-list .field_type-message textarea {
 	height: 175px;
 }
 
@@ -335,7 +333,7 @@ table.conditional-logic-rules tbody td {
 *---------------------------------------------------------------------------------------------*/
 
 @-moz-document url-prefix() {
-    #acf_fields .fields .field .field_meta .circle {
-	    line-height: 21px;
+    .acf-field-list .field .li-field_order .acf-icon {
+	    line-height: 23px;
     }
 }

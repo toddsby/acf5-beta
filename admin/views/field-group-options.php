@@ -26,7 +26,7 @@ $field_group = acf_get_field_group( $post );
 		acf_render_field_wrap(array(
 			'label'			=> __('Position','acf'),
 			'instructions'	=> '',
-			'type'			=> 'radio',
+			'type'			=> 'select',
 			'name'			=> 'acf_field_group[position]',
 			'value'			=> $field_group['position'],
 			'choices' 		=> array(
@@ -42,12 +42,40 @@ $field_group = acf_get_field_group( $post );
 		acf_render_field_wrap(array(
 			'label'			=> __('Style','acf'),
 			'instructions'	=> '',
-			'type'			=> 'radio',
-			'name'			=> 'acf_field_group[layout]',
-			'value'			=> $field_group['layout'],
+			'type'			=> 'select',
+			'name'			=> 'acf_field_group[style]',
+			'value'			=> $field_group['style'],
 			'choices' 		=> array(
-				'seamless'			=>	__("No Metabox",'acf'),
-				'default'			=>	__("Standard Metabox",'acf'),
+				'seamless'			=>	__("Seamless (no metabox)",'acf'),
+				'default'			=>	__("Standard (WP metabox)",'acf'),
+			)
+		), 'tr');
+		
+		
+		// label_placement
+		acf_render_field_wrap(array(
+			'label'			=> __('Label placement','acf'),
+			'instructions'	=> '',
+			'type'			=> 'select',
+			'name'			=> 'acf_field_group[label_placement]',
+			'value'			=> $field_group['label_placement'],
+			'choices' 		=> array(
+				'top'			=>	__("Top aligned",'acf'),
+				'left'			=>	__("Left Aligned",'acf'),
+			)
+		), 'tr');
+		
+		
+		// instruction_placement
+		acf_render_field_wrap(array(
+			'label'			=> __('Instruction placement','acf'),
+			'instructions'	=> '',
+			'type'			=> 'select',
+			'name'			=> 'acf_field_group[instruction_placement]',
+			'value'			=> $field_group['instruction_placement'],
+			'choices' 		=> array(
+				'label'		=>	__("Below labels",'acf'),
+				'field'		=>	__("Below fields",'acf'),
 			)
 		), 'tr');
 		

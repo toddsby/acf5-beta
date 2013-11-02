@@ -11,12 +11,14 @@
 
 
 /* Horizontal List: Clearfix */
-.acf-hl:before, .acf-hl:after {
+.acf-hl:before, .acf-hl:after,
+.acf-cf:before, .acf-cf:after {
     content: "";
     display: table;
     line-height: 0;
 }
-.acf-hl:after {
+.acf-hl:after,
+.acf-cf:after {
     clear: both;
 }
 
@@ -82,6 +84,75 @@ img.acf-fw {
 
 /*--------------------------------------------------------------------------------------------
 *
+*	Sprite
+*
+*--------------------------------------------------------------------------------------------*/
+
+/* add */
+.acf-sprite-add {
+	background-position: 0 0;
+}
+
+.acf-sprite-add:hover,
+.acf-icon:hover .acf-sprite-add {
+	background-position: 0 -50px;
+}
+
+
+/* remove */
+.acf-sprite-remove {
+	background-position: -50px 0;
+}
+
+.acf-sprite-remove:hover,
+.acf-icon:hover .acf-sprite-remove {
+	background-position: -50px -50px;
+}
+
+
+/* delete */
+.acf-sprite-delete {
+	background-position: -100px 0;
+}
+
+.acf-sprite-delete:hover,
+.acf-icon:hover .acf-sprite-delete {
+	background-position: -100px -50px;
+}
+
+
+/* edit */
+.acf-sprite-edit {
+	background-position: -150px 0;
+}
+
+.acf-sprite-edit:hover,
+.acf-icon:hover .acf-sprite-edit {
+	background-position: -150px -50px;
+}
+
+
+/* edit */
+.acf-sprite-locate {
+	background-position: -200px 0;
+}
+
+.acf-sprite-locate:hover,
+.acf-icon:hover .acf-sprite-locate {
+	background-position: -200px -50px;
+}
+
+
+/* arrow */
+.acf-sprite-arrow {
+	background-position: 0 -100px;
+	margin: 4px 5px 0 10px;
+}
+
+
+
+/*--------------------------------------------------------------------------------------------
+*
 *	acf-box
 *
 *--------------------------------------------------------------------------------------------*/
@@ -140,6 +211,7 @@ img.acf-fw {
 .acf-input {
 	vertical-align: top;	
 }
+
 
 /*--------------------------------------------------------------------------------------------
 *
@@ -361,6 +433,7 @@ img.acf-fw {
 	font-size: 12px;
 	line-height: 22px;
 	text-align: center;
+	background: #fff;
 }
 
 .acf-icon:hover {
@@ -376,29 +449,12 @@ img.acf-fw {
 /* add */
 .acf-icon .acf-sprite-add {
 	margin: 7px 0 0 7px;
-	background-position: 0 0;
-}
-
-.acf-icon:hover .acf-sprite-add {
-	background-position: 0 -50px;
 }
 
 
 /* remove */
 .acf-icon .acf-sprite-remove {
 	margin: 10px 0 0 7px;
-	background-position: -50px 0;
-}
-
-.acf-icon:hover .acf-sprite-remove {
-	background-position: -50px -50px;
-}
-
-
-/* arrow */
-.acf-sprite-arrow {
-	background-position: 0 -100px;
-	margin: 4px 5px 0 10px;
 }
 
 
@@ -416,14 +472,14 @@ img.acf-fw {
 	
 }
 
-/* settings */
-.acf-postbox.settings {
+/* no-padding */
+.acf-postbox.no-padding {
 	border-radius: 0;
 	background: #fff;
 	border-radius: 0;
 }
 
-.acf-postbox.settings > .inside {
+.acf-postbox.no-padding > .inside {
 	margin: 0 !important;
 	padding: 0 !important;
 }
@@ -444,161 +500,6 @@ img.acf-fw {
 	margin: 0 !important;
 	padding: 0 !important;
 }
-
-
-/*---------------------------------------------------------------------------------------------
-*
-*  Basic Field Styles
-*
-*---------------------------------------------------------------------------------------------*/
-
-.acf-field input[type="text"], 
-.acf-field input[type="password"], 
-.acf-field input[type="number"], 
-.acf-field input[type="search"], 
-.acf-field input[type="email"], 
-.acf-field input[type="url"], 
-.acf-field textarea,
-.acf-field select {
-    width: 100%;
-	padding: 5px;
-	resize: none;
-	margin: 0;
-    box-sizing: border-box;
-}
-
-.acf-field textarea {
-	resize: vertical;
-	min-height: 150px;
-}
-
-
-/* select */
-.acf-field select {
-	padding: 2px;
-}
-
-.acf-field select optgroup {
-	padding: 5px;
-	background: #fff;
-}
-
-.acf-field select option {
-	padding: 3px;
-}
-
-.acf-field select optgroup option {
-	padding-left: 5px;
-}
-
-.acf-field select optgroup:nth-child(2n) {
-    background: #F9F9F9;
-}
-
-
-/* radio */
-ul.acf-radio-list,
-ul.acf-checkbox-list {
-	background: transparent !important;
-	position: relative;
-	display: block;
-	padding: 1px;
-	margin: 0;
-}
-
-ul.acf-radio-list.horizontal,
-ul.acf-checkbox-list.horizontal {
-	overflow: hidden;
-}
-
-ul.acf-radio-list.horizontal li,
-ul.acf-checkbox-list.horizontal li {
-	float: left;
-	margin-right: 20px;
-}
-
-ul.acf-radio-list li input,
-ul.acf-checkbox-list li input {
-	margin-top: 0;
-	margin-right: 5px !important;
-	width: auto !important;
-}
-
-ul.acf-radio-list.pill {
-	overflow: hidden;
-}
-
-ul.acf-radio-list.pill li {
-	float: left;
-}
-
-ul.acf-radio-list.pill li label {
-	display: block;
-	overflow: hidden;
-	position: relative;
-	
-	border-radius: 0;
-	height: 21px;
-	padding: 0 11px 1px 7px;
-    cursor: pointer;
-	
-    color: #333;
-    font-weight: normal;
-    font-size: 12px;
-    line-height: 23px;
-    text-align: center;
-	
-	background: #F9F9F9;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#FEFEFE), to(#F4F4F4)); /* Safari 4+, Chrome */
-	background-image: -webkit-linear-gradient(top, #FEFEFE, #F4F4F4); /* Chrome 10+, Safari 5.1+, iOS 5+ */
-	background-image:    -moz-linear-gradient(top, #FEFEFE, #F4F4F4); /* Firefox 3.6-15 */
-	background-image:      -o-linear-gradient(top, #FEFEFE, #F4F4F4); /* Opera 11.10+ */
-	background-image:         linear-gradient(to bottom, #FEFEFE, #F4F4F4); /* Firefox 16+ */
-	
-	border: #BBBBBB solid 1px;
-	text-shadow: #fff 0 1px 0;
-	box-shadow: inset #fff 0 1px 0 0;
-}
-
-ul.acf-radio-list.pill li label:hover {
-	color: #333;
-	border-color: #999;
-	z-index: 1;
-}
-
-ul.acf-radio-list.pill li.active label {
-	background: #3595BC;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#46AFDB), to(#3199C5)); /* Safari 4+, Chrome */
-	background-image: -webkit-linear-gradient(top, #46AFDB, #3199C5); /* Chrome 10+, Safari 5.1+, iOS 5+ */
-	background-image:    -moz-linear-gradient(top, #46AFDB, #3199C5); /* Firefox 3.6-15 */
-	background-image:      -o-linear-gradient(top, #46AFDB, #3199C5); /* Opera 11.10+ */
-	background-image:         linear-gradient(to bottom, #46AFDB, #3199C5); /* Firefox 16+ */
-	
-	z-index: 1;
-	color: #fff;
-	border: #268FBB solid 1px;
-	text-shadow: #268FBB 0 1px 0;
-	box-shadow: inset #5FC8F4 0 1px 0 0;
-}
-
-ul.acf-radio-list.pill li:first-child label {
-	border-radius: 5px 0 0 5px;
-}
-
-ul.acf-radio-list.pill li:last-child label {
-	border-radius: 0 5px 5px 0;
-}
-
-ul.acf-radio-list.pill li + li label {
-	margin-left: -1px;
-}
-
-/*
-ul.acf-radio-list.pill li label input {
-	margin: 0 0 0 -999px;
-	position: absolute;
-}
-*/
 
 
 /*---------------------------------------------------------------------------------------------
@@ -728,6 +629,30 @@ ul.acf-radio-list.pill li label input {
 .acf-tfoot > li.comic-sans {
 	font-family: Comic Sans MS, sans-serif;
 	font-size: 11px;
+}
+
+
+/*--------------------------------------------------------------------------------------------
+*
+*	User
+*
+*--------------------------------------------------------------------------------------------*/
+
+.form-table .acf-label {
+	padding: 10px;
+    width: 200px;
+}
+
+
+/*--------------------------------------------------------------------------------------------
+*
+*	Comment
+*
+*--------------------------------------------------------------------------------------------*/
+
+.editcomment td:first-child {
+    white-space: nowrap;
+    width: 81px;
 }
 
 

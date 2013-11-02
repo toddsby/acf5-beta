@@ -375,25 +375,26 @@
 	*  @return	N/A
 	*/
 	
-	$(document).on('acf/setup_fields', function(e, el){
-		
+	acf.on('ready append', function(e, el){
 		
 		if( $(el).find('.acf-google-map').exists() )
 		{
 			// validate google
 			if( typeof google === 'undefined' )
 			{
-				$.getScript('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places', function(){
-					
-					alert('getscript');
-					$(el).find('.acf-google-map').each(function(){
-					
-						acf.fields.location.set({ $el : $(this) }).init();
+				$.getScript('https://www.google.com/jsapi', function(){
+				
+				    google.load('maps', '3', { other_params: 'sensor=false&libraries=places', callback: function(){
+				    
+				        $(el).find('.acf-google-map').each(function(){
 						
-					});
-					
-					
+							acf.fields.location.set({ $el : $(this) }).init();
+							
+						});
+				        
+				    }});
 				});
+				
 			}
 			else
 			{
@@ -405,9 +406,6 @@
 				
 			}
 		}
-		
-		
-		
 		
 	});
 	

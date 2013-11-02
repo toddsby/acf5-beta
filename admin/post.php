@@ -246,16 +246,36 @@ class acf_controller_post {
 		
 		
 		// classes
-		$class = 'acf-postbox ' . $field_group['layout'];
+		$class = 'acf-postbox ' . $field_group['style'];
 		$toggle_class = 'acf-postbox-toggle';
 		
 		
+		// render fields, or render a replace-me div
 		if( $visibility )
 		{
 			// load fields
 			$fields = acf_get_fields( array('field_group' => $field_group['ID']) );
-		
-			acf_render_fields( $fields, 'div', $this->post_id );
+			
+			
+			// render
+			if( $field_group['label_placement'] == 'left' )
+			{
+				$class .= ' no-padding';
+				
+				?>
+				<table class="acf-table">
+					<tbody>
+						<?php acf_render_fields( $this->post_id, $fields, 'tr', $field_group['instruction_placement'] ); ?>
+					</tbody>
+				</table>
+				<?php
+			}
+			else
+			{
+				acf_render_fields( $this->post_id, $fields, 'div', $field_group['instruction_placement'] );
+			}
+			
+			
 		}
 		else
 		{
@@ -347,6 +367,10 @@ class acf_controller_post {
 		{
 			foreach( $field_groups as $field_group )
 			{
+				// vars
+				$class = 'acf-postbox ' . $field_group['style'];
+				
+				
 				// load fields
 				$fields = acf_get_fields( array('field_group' => $field_group['ID']) );
 
@@ -354,7 +378,25 @@ class acf_controller_post {
 				// get field HTML
 				ob_start();
 				
-				acf_render_fields( $fields, 'div', $options['post_id'] );
+				
+				// render
+				if( $field_group['label_placement'] == 'left' )
+				{
+					$class .= 'no-padding';
+					
+					?>
+					<table class="acf-table">
+						<tbody>
+							<?php acf_render_fields( $options['post_id'], $fields, 'tr', $field_group['instruction_placement'] ); ?>
+						</tbody>
+					</table>
+					<?php
+				}
+				else
+				{
+					acf_render_fields( $options['post_id'], $fields, 'div', $field_group['instruction_placement'] );
+				}
+				
 				
 				$html = ob_get_clean();
 				
@@ -367,7 +409,8 @@ class acf_controller_post {
 				$r[] = array(
 					'ID'	=> $field_group['ID'],
 					'html'	=> $html,
-					'style' => $style
+					'style' => $style,
+					'class'	=> $class
 				);
 			}
 		}

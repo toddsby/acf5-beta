@@ -43,14 +43,16 @@ class acf_field_group_api {
 		
 		// defaults
 		$defaults = array(
-			'ID'				=> 0,
-			'title'				=> '',
-			'fields'			=> array(),
-			'location'			=> array(),
-			'menu_order'		=> 0,
-			'position'			=> 'normal',
-			'layout'			=> 'no_box',
-			'hide_on_screen'	=> array()
+			'ID'					=> 0,
+			'title'					=> '',
+			'fields'				=> array(),
+			'location'				=> array(),
+			'menu_order'			=> 0,
+			'position'				=> 'normal',
+			'style'					=> 'seamless',
+			'label_placement'		=> 'top',
+			'instruction_placement'	=> 'label',
+			'hide_on_screen'		=> array()
 		);
 		$field_group = acf_parse_args( $field_group, $defaults );
 		

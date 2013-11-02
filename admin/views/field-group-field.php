@@ -62,7 +62,6 @@ $atts = array(
 					'instructions'	=> __('This is the name which will appear on the EDIT page','acf'),
 					'required'		=> 1,
 					'type'			=> 'text',
-					'class'			=> 'field-label-input',
 					'name'			=> 'label',
 					'prefix'		=> $field['prefix'],
 					'value'			=> $field['label'],
@@ -87,11 +86,11 @@ $atts = array(
 					'instructions'	=> '',
 					'required'		=> 1,
 					'type'			=> 'select',
-					'class'			=> 'acf-field-type',
 					'name'			=> 'type',
 					'prefix'		=> $field['prefix'],
 					'value'			=> $field['type'],
 					'choices' 		=> acf_get_field_types(),
+					'ui'			=> 1
 				), 'tr');
 				
 				

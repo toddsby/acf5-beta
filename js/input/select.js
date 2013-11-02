@@ -55,8 +55,16 @@
 			// construct args
 			var args = {
 				width		: '100%',
-				allowClear	: this.o.allow_null
+				allowClear	: this.o.allow_null,
+				placeholder	: this.o.placeholder
 			};
+			
+			
+			// remove the blank option as we have a clear all button!
+			if( this.o.allow_null )
+			{
+				this.$select.find('option[value=""]').remove();
+			}
 			
 			
 			// add select2
@@ -82,6 +90,18 @@
 	acf.on('ready append', function(e, el){
 		
 		$(el).find('.acf-field.field_type-select').each(function(){
+			
+			acf.fields.select.set({ $el : $(this) }).init();
+			
+		});
+		
+	});
+	
+	
+	// move to user
+	acf.on('ready append', function(e, el){
+		
+		$(el).find('.acf-field.field_type-user').each(function(){
 			
 			acf.fields.select.set({ $el : $(this) }).init();
 			

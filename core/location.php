@@ -61,7 +61,8 @@ class acf_location {
 	*  @created: 3/01/13
 	*/
 	
-	function match_field_groups_ajax()
+	/*
+function match_field_groups_ajax()
 	{
 		
 		// vars
@@ -93,6 +94,7 @@ class acf_location {
 		die();	
 	}
 	
+*/
 	
 	/*
 	*  get_field_groups
@@ -114,35 +116,6 @@ class acf_location {
 		if( empty($args) )
 		{
 			return $field_groups;
-		}
-		
-		
-		// vars
-		$args = acf_parse_args($args, array(
-			'post_id'		=> 0,
-			'post_type'		=> 0,
-			'page_template'	=> 0,
-			'page_parent'	=> 0,
-			'page_type'		=> 0,
-			'post_category'	=> array(),
-			'post_format'	=> 0,
-			'post_taxonomy'	=> array(),
-			'taxonomy'		=> 0,
-			'user'			=> 0,
-			'attachment'	=> 0,
-			'comment'		=> 0,
-			'lang'			=> 0,
-			'ajax'			=> false
-		));
-		
-		
-		// WPML
-		if( defined('ICL_LANGUAGE_CODE') )
-		{
-			$args['lang'] = ICL_LANGUAGE_CODE;
-			
-			//global $sitepress;
-			//$sitepress->switch_lang( $options['lang'] );
 		}
 		
 		
@@ -473,9 +446,10 @@ class acf_location {
 		}
 		
 		
+		
 		// vars
 		$taxonomies = get_object_taxonomies( $options['post_type'] );
-		$terms = $options['post_category'];
+		$terms = $options['post_taxonomy'];
 		
 		
 		// not AJAX 
@@ -986,8 +960,37 @@ new acf_location();
 *  @return	(boolean)
 */
 
-function acf_get_field_group_visibility( $field_group, $args )
+function acf_get_field_group_visibility( $field_group, $args = array() )
 {
+	// vars
+	$args = acf_parse_args($args, array(
+		'post_id'		=> 0,
+		'post_type'		=> 0,
+		'page_template'	=> 0,
+		'page_parent'	=> 0,
+		'page_type'		=> 0,
+		'post_category'	=> array(),
+		'post_format'	=> 0,
+		'post_taxonomy'	=> array(),
+		'taxonomy'		=> 0,
+		'user'			=> 0,
+		'attachment'	=> 0,
+		'comment'		=> 0,
+		'lang'			=> 0,
+		'ajax'			=> false
+	));
+	
+	
+	// WPML
+	if( defined('ICL_LANGUAGE_CODE') )
+	{
+		$args['lang'] = ICL_LANGUAGE_CODE;
+		
+		//global $sitepress;
+		//$sitepress->switch_lang( $options['lang'] );
+	}
+	
+	
 	// vars
 	$visibility = false;
 	

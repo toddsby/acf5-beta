@@ -18,6 +18,7 @@ var acf = {
 	
 	update				:	null,
 	get					:	null,
+	_e					:	null,
 	on					:	null,
 	trigger				:	null,
 	
@@ -92,6 +93,28 @@ var acf = {
 			
 			$(this).trigger(event, args);
 			
+		},
+		
+		_e : function( context, string ){
+			
+			// defaults
+			string = string || false;
+			
+			
+			// get context
+			var r = this.l10n[ context ] || false;
+			
+			
+			// get string
+			if( string )
+			{
+				r = r[ string ] || false;
+			}
+			
+			
+			// return
+			return r || '';
+			
 		}
 		
 	});
@@ -126,6 +149,7 @@ var acf = {
 	        }
 	        i++;
 	    }
+	    
 	    return true;
 			
 	};

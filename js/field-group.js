@@ -73,7 +73,7 @@ var acf_field_group = {};
 	$(document).on('ready', function(){
 		
 		// update postbox classes
-		$('#submitdiv, #acf-field-group-fields, #acf-field-group-locations, #acf-field-group-options').addClass('acf-postbox settings');
+		$('#submitdiv, #acf-field-group-fields, #acf-field-group-locations, #acf-field-group-options').addClass('acf-postbox no-padding');
 		
 		
 		// custom Publish metabox
@@ -154,19 +154,24 @@ var acf_field_group = {};
 				
 			});
 			
-			this.$el.on('change', '.acf-field-type', function(){
+			this.$el.on('change', 'tr[data-name="type"] select', function(){
 				
 				_this.change_type( $(this) );
 				
 			});
 			
-			this.$el.on('change', '.field-label-input', function( e ){
-				
-				e.preventDefault();
+			this.$el.on('change', 'tr[data-name="label"] input', function( e ){
 				
 				_this.change_label( $(this).closest('.field') );
 				
 			});
+			
+			this.$el.on('keyup', 'tr[data-name="label"] input, tr[data-name="name"] input', function( e ){
+				
+				_this.render_meta( $(this).closest('.field') );
+				
+			});
+			
 			
 			acf.on('open', function(e, $el){
 				
@@ -175,6 +180,28 @@ var acf_field_group = {};
 			});
 			
 		},
+		
+		
+		render_meta : function( $el ){
+			
+			// vars
+			var label = $el.find('tr[data-name="label"] input').val(),
+				name = $el.find('tr[data-name="name"] input').val(),
+				type = $el.attr('data-type');
+			
+			
+			
+			// update label
+			$el.find('> .acf-tbody > .li-field_label > strong > a').text( label );
+			
+			// update name
+			$el.find('> .acf-tbody > .li-field_name').text( name );
+			
+			// update type
+			$el.find('> .acf-tbody > .li-field_type').text( type );
+			
+		},
+		
 		
 		edit : function( $el ){
 			
@@ -225,7 +252,11 @@ var acf_field_group = {};
 			// hide and disable current options
 			$tbody.children('tr[data-option]').hide().find('[name]').attr('disabled', 'true');
 				
-				
+			
+			// render meta
+			this.render_meta( $select.closest('.field') );
+			
+			
 			// show field options if they already exist
 			if( $tbody.children('tr[data-option="' + new_type + '"]').exists() )
 			{
@@ -499,6 +530,10 @@ var acf_field_group = {};
 				val = val.toLowerCase();
 				$name.val( val ).trigger('change');
 			}
+			
+			
+			// render meta
+			this.render_meta( $el );
 			
 		}
 		
@@ -1201,8 +1236,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 	function acf_render_post_object_field( $el ){
 		
 		// vars
-		var multiple	= $el.find('.acf-field[data-name="multiple"] input:checked').val();
-		
+		var multiple = $el.find('.acf-field[data-name="multiple"] input:checked').val();
 		
 		
 		if( multiple == '1' )
@@ -1214,10 +1248,9 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			$el.find('.acf-field[data-name="sortable"]').hide();
 		}
 			
-		
 	}
 	
-	acf.on('open', function( e, $el ){
+	acf.on('open change', function( e, $el ){
 		
 		if( $el.attr('data-type') == 'post_object' )
 		{
@@ -1261,7 +1294,58 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 		}
 		
 	});
-
+	
+	
+	/*
+	*  Google Maps
+	*
+	*  Modify the HTML markup
+	*
+	*  @type	function
+	*  @date	31/10/2013
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	acf.on('open change', function( e, $el ){
+		
+		// validate
+		if( $el.attr('data-type') != 'google_map' )
+		{
+			return;
+		}
+		
+		
+		// vars
+		$lat = $el.find('tr[data-name="center_lat"]');
+		$lng = $el.find('tr[data-name="center_lng"]');
+		tmpl = '<ul class="acf-hl"><li style="width:48%;">$lat</li><li style="width:48%; margin-left:4%;">$lng</li></ul>';
+		
+		
+		// validate
+		if( !$lng.exists() )
+		{
+			return;
+		}
+		
+		
+		// update tmpl
+		tmpl = tmpl.replace( '$lat', $lat.find('.acf-input').html() );
+		tmpl = tmpl.replace( '$lng', $lng.find('.acf-input').html() );
+		
+		
+		// update $lat
+		$lat.find('.acf-input').html( tmpl );
+		
+		
+		// remove $lng
+		$lng.remove();
+		
+	});
+	
+	
 	
 
 })(jQuery);
