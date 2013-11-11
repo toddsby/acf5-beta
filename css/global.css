@@ -35,11 +35,10 @@ img.acf-fw {
 
 
 /* icon */
-[class^="acf-sprite-"], 
-[class*=" acf-sprite-"] {
+[class^="acf-sprite-"] {
 	display: block;
-	width: 16px;
-	height: 16px;
+	width: 8px;
+	height: 8px;
 	float: left;
 	background: url(../images/sprite.png);
 	margin: 0;
@@ -91,6 +90,8 @@ img.acf-fw {
 /* add */
 .acf-sprite-add {
 	background-position: 0 0;
+	width: 8px;
+	height: 8px;
 }
 
 .acf-sprite-add:hover,
@@ -102,6 +103,8 @@ img.acf-fw {
 /* remove */
 .acf-sprite-remove {
 	background-position: -50px 0;
+	width: 8px;
+	height: 8px;
 }
 
 .acf-sprite-remove:hover,
@@ -445,16 +448,24 @@ img.acf-fw {
 	outline: none;
 }
 
-
-/* add */
-.acf-icon .acf-sprite-add {
-	margin: 7px 0 0 7px;
+.acf-icon.small {
+	width: 18px;
+	height: 18px;
+	line-height: 18px;
 }
 
 
+/* add */
+.acf-icon [class^="acf-sprite-"] {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -4px 0 0 -4px;
+}
+
 /* remove */
 .acf-icon .acf-sprite-remove {
-	margin: 10px 0 0 7px;
+	
 }
 
 
@@ -629,6 +640,144 @@ img.acf-fw {
 .acf-tfoot > li.comic-sans {
 	font-family: Comic Sans MS, sans-serif;
 	font-size: 11px;
+}
+
+
+/*---------------------------------------------------------------------------------------------
+*
+*  Input Table
+*
+*---------------------------------------------------------------------------------------------*/
+
+.acf-input-table {
+	table-layout: fixed;
+	border: #DFDFDF solid 1px;
+}
+
+.acf-input-table > thead {
+	
+}
+
+.acf-input-table > thead th {
+	
+	font-size: 14px;
+	line-height: 1.3em;
+	
+	padding: 8px;
+	text-align: left;
+	font-weight: normal;
+	font-family: Georgia, "Times New Roman", "Bitstream Charter", Times, serif;
+	color: #333333;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+	
+	background: #F2F2F2;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC)); /* Safari 4+, Chrome */
+	background-image: -webkit-linear-gradient(top, #F9F9F9, #ECECEC); /* Chrome 10+, Safari 5.1+, iOS 5+ */
+	background-image:    -moz-linear-gradient(top, #F9F9F9, #ECECEC); /* Firefox 3.6-15 */
+	background-image:      -o-linear-gradient(top, #F9F9F9, #ECECEC); /* Opera 11.10+ */
+	background-image:         linear-gradient(to bottom, #F9F9F9, #ECECEC); /* Firefox 16+ */
+	
+	border-style: solid;
+	border-width: 1px 0 1px 1px;
+	border-color: #FFFFFF #FFFFFF #DFDFDF #DFDFDF;
+
+}
+
+.acf-input-table > tbody > tr {
+	z-index: 1;
+}
+
+.acf-input-table > tbody > tr > td {
+	padding: 8px;
+	text-align: left;
+	border-color: #EDEDED;
+}
+
+
+/* order */
+.acf-input-table > thead > tr > th.order,
+.acf-input-table > tbody > tr > td.order{
+	width: 16px !important;
+	text-align: center !important;
+	vertical-align: middle;
+}
+
+.acf-input-table > tbody > tr > td.order {
+	border-right-color: #E1E1E1;
+	background: #f4f4f4;
+	cursor: move;
+	
+	color: #aaa;
+	text-shadow: #fff 0 1px 0;
+}
+
+.acf-input-table > tbody > tr > td.order:hover {
+	color: #666;
+}
+
+.acf-input-table > tbody > tr > td.order + td {
+	border-left-color: #DFDFDF;
+}
+
+
+/* remove */
+.acf-input-table > thead > tr > th.remove,
+.acf-input-table > tbody > tr > td.remove{
+	width: 16px !important;
+	vertical-align: middle;
+}
+
+.acf-input-table > tbody > tr > td.remove {
+	background: #F9F9F9;
+}
+
+
+/* border limits */
+.acf-input-table > thead > tr > th:first-child,
+.acf-input-table > tbody > tr > td:first-child {
+	border-left-width: 0;
+}
+
+
+
+
+/* remove buttons */
+.acf-input-table > tbody > tr > td.remove > .acf-icon {
+	-webkit-transition: opacity 0.25s 0s ease-in-out, visibility 0s linear 0.25s;
+	-moz-transition: opacity 0.25s 0s ease-in-out, visibility 0s linear 0.25s;
+	-o-transition: opacity 0.25s 0s ease-in-out, visibility 0s linear 0.25s; 	
+	transition: opacity 0.25s 0s ease-in-out, visibility 0s linear 0.25s; 
+	
+	visibility: hidden;
+	opacity: 0;
+}
+
+.acf-input-table > tbody > tr:hover > td.remove > .acf-icon {
+	-webkit-transition-delay:0s;
+	-moz-transition-delay:0s;
+	-o-transition-delay:0s;
+	transition-delay:0s;
+	
+	visibility: visible;
+	opacity: 1;
+}
+
+
+/* media fix */
+.media-item .describe .acf-input-table > thead > tr > th {
+	width: auto;
+}
+
+
+/* remove tr */
+.acf-remove-element {
+	-webkit-transition: all 0.25s ease-out;
+	-moz-transition: all 0.25s ease-out;
+	-o-transition: all 0.25s ease-out;
+	transition: all 0.25s ease-out;
+	
+	transform: translate(50px, 0);
+	opacity: 0;
 }
 
 
