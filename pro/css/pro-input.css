@@ -1,0 +1,65 @@
+/*---------------------------------------------------------------------------------------------
+*
+*  Repeater
+*
+*---------------------------------------------------------------------------------------------*/
+
+.acf-repeater {
+	
+}
+
+.acf-repeater .acf-input-table {
+	margin: 0 0 8px;
+}
+
+.acf-repeater .acf-row[data-id="acfcloneindex"] {
+	display: none !important;
+}
+
+.acf-repeater .acf-input-table > tbody > tr.ui-sortable-helper {
+	box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+}
+
+.acf-repeater .acf-input-table > tbody > tr.ui-sortable-placeholder {
+	visibility: visible !important;
+}
+
+.acf-repeater .acf-input-table > tbody > tr.ui-sortable-placeholder td {
+	border: 0 none !important;
+	box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+	background: rgba(0,0,0,0.075);
+}
+
+.acf-repeater .acf-input-table td.remove .acf-icon {
+	position: relative;
+	margin-left: -1px;
+}
+
+.acf-repeater .acf-input-table td.remove .acf-repeater-add-row {
+	position: absolute;
+	margin-top: -22px;
+}
+
+
+/*
+*  Empty
+*/
+
+.acf-repeater.empty table thead th {
+	border-bottom: 0 none;
+}
+
+.acf-repeater.empty table.row_layout {
+	box-shadow: none;
+	border: 0 none;
+	margin: 0;
+}
+
+
+/*
+*  Conditiona Logic
+*/
+
+
+
+
