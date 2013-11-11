@@ -204,14 +204,14 @@ function acf_parse_types( $var )
 *  @return	n/a
 */
 
-function acf_get_view( $view_name = '', $args = array() )
-{
+function acf_get_view( $view_name = '', $args = array() ) {
+
 	// vars
 	$path = acf_get_path("admin/views/{$view_name}.php");
 	
 	if( file_exists($path) )
 	{
-		require( $path );
+		include( $path );
 	}
 }
 
@@ -245,6 +245,7 @@ function acf_render_field_wrap( $field, $el = 'div', $instruction = 'label', $at
 		'ul'	=> 'li',
 		'ol'	=> 'li',
 		'dl'	=> 'dt',
+		'td'	=> 'div' // special case for sub field!
 	));
 	
 	
@@ -282,20 +283,28 @@ function acf_render_field_wrap( $field, $el = 'div', $instruction = 'label', $at
 	}
 	
 	
+	// vars
+	$show_label = true;
+	
+	if( $el == 'td' )
+	{
+		$show_label = false;
+	}
+	
+	
 	?>
 	<<?php echo $el; ?> <?php echo acf_esc_attr($atts); ?>>
+		<?php if( $show_label ): ?>
 		<<?php echo $elements[ $el ]; ?> class="acf-label">
 			
-			<label for="<?php echo $field['id']; ?>">
-				<?php echo $field['label']; ?>
-				<?php if( $field['required'] ): ?><span class="acf-required">*</span><?php endif; ?>
-			</label>
+			<label for="<?php echo $field['id']; ?>"><?php echo acf_get_field_label($field); ?></label>
 			
 			<?php if( $instruction == 'label' && $field['instructions'] ): ?>
 				<p class="description"><?php echo $field['instructions']; ?></p>
 			<?php endif; ?>
 			
 		</<?php echo $elements[ $el ]; ?>>
+		<?php endif; ?>
 		<<?php echo $elements[ $el ]; ?> class="acf-input">
 		
 			<?php acf_render_field( $field ); ?>
@@ -348,6 +357,42 @@ function acf_render_fields( $post_id = 0, $fields, $el = 'div', $instruction = '
 		
 }
 
+
+/*
+*  acf_get_field_label
+*
+*  This function will return the field label with appropriate required label
+*
+*  @type	function
+*  @date	4/11/2013
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_get_field_label( $field ) {
+	
+	// vars
+	$r = $field['label'];
+	
+	
+	if( $field['required'] )
+	{
+		$r . ' <span class="acf-required">*</span>'; 
+	}
+	
+	
+	// return
+	return $r;
+
+}
+
+function acf_the_field_label( $field ) {
+
+	echo acf_get_field_label( $field );
+	
+}
 
 /*
 *  acf_render_option
