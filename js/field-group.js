@@ -75,6 +75,8 @@ var acf_field_group = {};
 		// update postbox classes
 		$('#submitdiv, #acf-field-group-fields, #acf-field-group-locations, #acf-field-group-options').addClass('acf-postbox no-padding');
 		
+		$('#acf-field-group-fields').addClass('seamless');
+		
 		
 		// custom Publish metabox
 		$('#submitdiv #publish').attr('class', 'acf-button blue large');
@@ -118,10 +120,18 @@ var acf_field_group = {};
 			
 			
 			// sortable
-			this.$el.find('> .inside > .acf-field-list').sortable({
+			this.$el.find('.acf-field-list').sortable({
+				connectWith: '.acf-field-list',
 				update: function(event, ui){
-				
+					
+					// vars
+					var $el = ui.item;
+					
+					
 					_this.render();
+					
+			
+					acf.trigger('sortstop', [ $el ]);
 					
 				},
 				handle: '.acf-icon'
@@ -146,11 +156,11 @@ var acf_field_group = {};
 				
 			});
 			
-			this.$el.on('click', '#add-field', function( e ){
+			this.$el.on('click', '.acf-add-field', function( e ){
 				
 				e.preventDefault();
 				
-				_this.add();
+				_this.add( $(this).closest('.acf-field-list-wrap').children('.acf-field-list') );
 				
 			});
 			
@@ -168,7 +178,7 @@ var acf_field_group = {};
 			
 			this.$el.on('keyup', 'tr[data-name="label"] input, tr[data-name="name"] input', function( e ){
 				
-				_this.render_meta( $(this).closest('.field') );
+				_this.render_field( $(this).closest('.field') );
 				
 			});
 			
@@ -182,13 +192,12 @@ var acf_field_group = {};
 		},
 		
 		
-		render_meta : function( $el ){
+		render_field : function( $el ){
 			
 			// vars
 			var label = $el.find('tr[data-name="label"] input').val(),
 				name = $el.find('tr[data-name="name"] input').val(),
 				type = $el.attr('data-type');
-			
 			
 			
 			// update label
@@ -254,7 +263,7 @@ var acf_field_group = {};
 				
 			
 			// render meta
-			this.render_meta( $select.closest('.field') );
+			this.render_field( $select.closest('.field') );
 			
 			
 			// show field options if they already exist
@@ -319,11 +328,10 @@ var acf_field_group = {};
 		},
 		
 		
-		add : function(){
+		add : function( $field_list ){
 			
 			// clone last tr
-			var $field_list = this.$el.find('> .inside > .acf-field-list'),
-				$el			= $field_list.children('.field[data-key="acfcloneindex"]').clone();
+			var $el = $field_list.children('.field[data-key="acfcloneindex"]').clone();
 			
 			
 			// update names
@@ -358,6 +366,7 @@ var acf_field_group = {};
 			
 			// update order numbers
 			this.render();
+			this.render_field( $el );
 			
 			
 			// trigger append
@@ -385,7 +394,7 @@ var acf_field_group = {};
 			
 			
 			// vars
-			var $field	= $el.closest('.acf-field-list');
+			var $field_list	= $el.closest('.acf-field-list');
 			
 			
 			// set layout
@@ -407,9 +416,9 @@ var acf_field_group = {};
 			// close field
 			var end_height = 0;
 			
-			if( $field.children('.field').length == 1 )
+			if( $field_list.children('.field').length == 1 )
 			{
-				end_height = $field.children('.no-fields-message').height();
+				end_height = $field_list.children('.no-fields-message').height();
 			}
 			
 			$el.parent('.temp-field-wrap').animate({ height : end_height }, 250, function(){
@@ -472,8 +481,9 @@ var acf_field_group = {};
 			this.$el.find('.acf-field-list').each(function(){
 			
 				$(this).children('.field').each(function( i ){
-				
+					
 					$(this).find('.li-field_order:first .acf-icon').html( i+1 );
+					$(this).find('> .acf-hidden > .input-changed').val( 1 );
 					$(this).find('> .acf-hidden > .input-menu_order').val( i );
 					
 				});
@@ -533,7 +543,7 @@ var acf_field_group = {};
 			
 			
 			// render meta
-			this.render_meta( $el );
+			this.render_field( $el );
 			
 		}
 		
@@ -803,7 +813,6 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 	
 	
 
-	
 	/*
 	*  Conditional Logic
 	*
@@ -818,9 +827,13 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 	
 	acf_field_group.conditional_logic = {
 		
-		triggers : null,
+		$el : null,
 		
 		init : function(){
+			
+			
+			// vars
+			this.$el = acf_field_group.fields.$el;
 			
 			
 			// reference
@@ -830,16 +843,23 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			// events
 			acf.on('open', function(e, $field){
 				
-				// populate the triggers
-				_this.sync();
-				
-				
 				// render select elements
 				_this.render( $field );
 			
 			});
 			
-			$(document).on('change', 'tr.conditional-logic input[type="radio"]', function( e ){
+			this.$el.on('change', 'tr[data-name="label"] input', function(){
+				
+				// render all open fields
+				_this.$el.find('.field.open').each(function(){
+					
+					_this.render( $(this) );
+					
+				});
+				
+			});
+			
+			this.$el.on('change', 'tr.conditional-logic input[type="radio"]', function( e ){
 				
 				e.preventDefault();
 				
@@ -847,7 +867,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 				
 			});
 	
-			$(document).on('change', 'select.conditional-logic-field', function( e ){
+			this.$el.on('change', 'select.conditional-logic-field', function( e ){
 				
 				e.preventDefault();
 				
@@ -855,7 +875,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 				
 			});
 			
-			$(document).on('click', 'tr.conditional-logic .acf-button-add', function( e ){
+			this.$el.on('click', 'tr.conditional-logic .acf-button-add', function( e ){
 		
 				e.preventDefault();
 				
@@ -863,7 +883,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 				
 			});
 			
-			$(document).on('click', 'tr.conditional-logic .acf-button-remove', function( e ){
+			this.$el.on('click', 'tr.conditional-logic .acf-button-remove', function( e ){
 		
 				e.preventDefault();
 				
@@ -871,67 +891,6 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 				
 			});
 			
-		},
-		
-		sync : function(){
-			
-			// reference
-			var _this = this;
-			
-			
-			// reset
-			this.triggers = {
-				0 : []
-			};
-			
-			
-			// loop through fields
-			$('#acf_fields .field').each(function(){
-				
-				// vars
-				var $field	= $(this),
-					id		= $field.attr('data-id'),
-					type	= $field.attr('data-type'),
-					label	= $field.find('tr.field_label input').val(),
-					parent	= 0;
-				
-				
-				// validate
-				if( id == 'acfcloneindex' )
-				{
-					return;
-				}
-				
-				
-				// parent
-				var $parent = $field.parent().closest('.field');
-				
-				if( $parent.exists() )
-				{
-					parent = $parent.attr('data-id');
-					
-					// add placeholder
-					if( _this.triggers[ parent ] === undefined )
-					{
-						_this.triggers[ parent ] = [];
-					}
-				}
-				
-				
-				// add this field to available triggers
-				if( type == 'select' || type == 'checkbox' || type == 'true_false' || type == 'radio' )
-				{
-					_this.triggers[ parent ].push({
-						id		: id,
-						type	: type,
-						label	: label
-					});
-				}
-				
-				
-			});
-			
-
 		},
 		
 		render : function( $field ){
@@ -942,50 +901,51 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			
 			// vars
 			var choices		= [],
-				$ancestors	= $field.parent().parents('.field'),
+				key			= $field.attr('data-id'),
+				$ancestors	= $field.parents('.fields'),
 				$tr			= $field.find('> .field_form_mask > .field_form > table > tbody > tr.conditional-logic');
 				
 			
-			// populate choices
-			$.each( this.triggers[ 0 ], function(k, v){
+			$.each( $ancestors, function( i ){
 				
-				choices.push({
-					value : v.id,
-					label : v.label
+				var group = (i == 0) ? acf.l10n.sibling_fields : acf.l10n.parent_fields;
+				
+				$(this).children('.field').each(function(){
+					
+					
+					// vars
+					var $this_field	= $(this),
+						this_id		= $this_field.attr('data-id'),
+						this_type	= $this_field.attr('data-type'),
+						this_label	= $this_field.find('tr.field_label input').val();
+					
+					
+					// validate
+					if( this_id == 'field_clone' )
+					{
+						return;
+					}
+					
+					if( this_id == key )
+					{
+						return;
+					}
+										
+					
+					// add this field to available triggers
+					if( this_type == 'select' || this_type == 'checkbox' || this_type == 'true_false' || this_type == 'radio' )
+					{
+						choices.push({
+							value	: this_id,
+							label	: this_label,
+							group	: group
+						});
+					}
+					
+					
 				});
 				
 			});
-			
-			
-			// add ancestors
-			if( $ancestors.exists() )
-			{
-				// add group to current options
-				$.each( choices, function(k, v){
-						
-					choices[ k ].group = acf.l10n.fields;
-					
-				});
-				
-				
-				$ancestors.each(function( k ){
-					
-					var id = $(this).attr('data-id'),
-						group = (k == 0) ? acf.l10n.sibling_fields : acf.l10n.parent_fields;
-					
-					// populate choices
-					$.each( _this.triggers[ id ], function(k, v){
-						
-						choices.push({
-							value : v.id,
-							label : v.label,
-							group : group
-						});
-						
-					});
-					
-				});
-			}
 				
 			
 			// empty?
@@ -1006,7 +966,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 				
 				
 				// create select
-				var $select = acf.helpers.render_field({
+				var $select = acf.helpers.create_field({
 					'type'		: 'select',
 					'classname'	: 'conditional-logic-field',
 					'name'		: name,
@@ -1090,7 +1050,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			
 			
 			// create select
-			var $select = acf.helpers.render_field({
+			var $select = acf.helpers.create_field({
 				'type'		: 'select',
 				'classname'	: 'conditional-logic-value',
 				'name'		: $value.attr('name'),
@@ -1115,8 +1075,12 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			// update names
 			$new_tr.find('[name]').each(function(){
 				
-				$(this).attr('name', $(this).attr('name').replace('[' + old_i + ']', '[' + new_i + ']') );
-				$(this).attr('id', $(this).attr('id').replace('[' + old_i + ']', '[' + new_i + ']') );
+				// flexible content uses [0], [1] as the layout index. To avoid conflict, make sure we search for the entire conditional logic string in the name and id
+				var find = '[conditional_logic][rules][' + old_i + ']',
+					replace = '[conditional_logic][rules][' + new_i + ']';
+				
+				$(this).attr('name', $(this).attr('name').replace(find, replace) );
+				$(this).attr('id', $(this).attr('id').replace(find, replace) );
 				
 			});
 				
@@ -1155,10 +1119,11 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 				$table.addClass('remove-disabled');
 			}
 			
-		}
+		},
 		
 	};
 	
+		
 	
 	
 	/*

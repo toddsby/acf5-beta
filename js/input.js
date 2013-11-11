@@ -37,7 +37,8 @@ var acf = {
 		sortable		:	null,
 		add_message		:	null,
 		is_clone_field	:	null,
-		url_to_object	:	null
+		url_to_object	:	null,
+		remove_tr		:	null
 	},
 	
 	
@@ -125,6 +126,58 @@ var acf = {
 		
 	});
 	
+	
+	/*
+	*  helpers
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	5/11/2013
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	$.extend(acf.helpers, {
+		
+		remove_tr : function( $tr, callback ){
+			
+			// vars
+			var height = $tr.height(),
+				children = $tr.children().length;
+			
+			
+			// add class
+			$tr.addClass('acf-remove-element');
+			
+			
+			// after animation
+			setTimeout(function(){
+				
+				// remove class
+				$tr.removeClass('acf-remove-element');
+				
+				
+				// vars
+				$tr.html('<td style="padding:0; height:' + height + 'px" colspan="' + children + '"></td>');
+				
+				
+				$tr.children('td').animate({ height : 0}, 250, function(){
+					
+					$tr.remove();
+					
+					callback();
+					
+				});
+				
+					
+			}, 250);
+			
+		}
+		
+	});
 	
 	/*
 	*  acf.helpers.isset
