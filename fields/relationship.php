@@ -736,7 +736,8 @@ function load_field( $field )
 				'search'		=> __("Search",'acf'),
 				'post_type'		=> __("Post Type",'acf'),
 				'taxonomy'		=> __("Taxonomy",'acf'),
-			),		));
+			),
+		));
 		
 		
 		// filters
