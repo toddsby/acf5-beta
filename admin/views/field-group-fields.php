@@ -1,11 +1,22 @@
 <?php 
 
-// global
-global $post;
-
-
 // vars
-$fields = acf_get_fields(array( 'field_group' => $post->ID ));
+// Note: $args is always passed to this view from above
+$fields = array();
+
+if( !empty($args) )
+{
+	// use fields if passed in
+	if( array_key_exists('fields', $args) )
+	{
+		$fields = acf_extract_var( $args, 'fields');
+	}
+	else
+	{
+		$fields = acf_get_fields( $args );
+	}
+	
+}
 
 
 // add clone
@@ -18,37 +29,47 @@ $fields[] = acf_get_valid_field(array(
 ));
 
 ?>
-<div class="acf-hidden">
-	<input type="hidden" name="_acfnonce" value="<?php echo wp_create_nonce( 'field_group' ); ?>" />
-	<input id="input-delete-fields" type="hidden" name="_acf_delete_fields" value="0" />
-</div>
 
-<ul class="acf-hl acf-clearfix acf-thead">
-	<li class="li-field_order"><?php _e('Order','acf'); ?></li>
-	<li class="li-field_label"><?php _e('Label','acf'); ?></li>
-	<li class="li-field_name"><?php _e('Name','acf'); ?></li>
-	<li class="li-field_type"><?php _e('Type','acf'); ?></li>
-</ul>
+<?php 
 
-<div class="acf-field-list">
+// Form data for field group only
+if( array_key_exists('field_group', $args) ): ?>
+	<div class="acf-hidden">
+		<input type="hidden" name="_acfnonce" value="<?php echo wp_create_nonce( 'field_group' ); ?>" />
+		<input id="input-delete-fields" type="hidden" name="_acf_delete_fields" value="0" />
+	</div>
+<?php endif; ?>
+
+<div class="acf-field-list-wrap">
+
+	<ul class="acf-hl acf-clearfix acf-thead">
+		<li class="li-field_order"><?php _e('Order','acf'); ?></li>
+		<li class="li-field_label"><?php _e('Label','acf'); ?></li>
+		<li class="li-field_name"><?php _e('Name','acf'); ?></li>
+		<li class="li-field_type"><?php _e('Type','acf'); ?></li>
+	</ul>
 	
-	<div class="no-fields-message" <?php if(count($fields) > 1){ echo 'style="display:none;"'; } ?>>
-		<?php _e("No fields. Click the <strong>+ Add Field</strong> button to create your first field.",'acf'); ?>
+	<div class="acf-field-list">
+		
+		<div class="no-fields-message" <?php if(count($fields) > 1){ echo 'style="display:none;"'; } ?>>
+			<?php _e("No fields. Click the <strong>+ Add Field</strong> button to create your first field.",'acf'); ?>
+		</div>
+		
+		<?php foreach( $fields as $field ): ?>
+			
+			<?php acf_get_view('field-group-field', array( 'field' => $field )); ?>
+			
+		<?php endforeach; ?>
+		
 	</div>
 	
-	<?php foreach( $fields as $field ): ?>
-		
-		<?php acf_get_view('field-group-field', array( 'field' => $field )); ?>
-		
-	<?php endforeach; ?>
-	
-</div>
+	<ul class="acf-hl acf-clearfix acf-tfoot">
+		<li class="comic-sans">
+			<i class="acf-sprite-arrow"></i><?php _e('Drag and drop to reorder','acf'); ?>
+		</li>
+		<li class="acf-fr">
+			<a href="#" class="acf-button blue acf-add-field"><?php _e('+ Add Field','acf'); ?></a>
+		</li>
+	</ul>
 
-<ul class="acf-hl acf-clearfix acf-tfoot">
-	<li class="comic-sans">
-		<i class="acf-sprite-arrow"></i><?php _e('Drag and drop to reorder','acf'); ?>
-	</li>
-	<li class="acf-fr">
-		<a href="#" id="add-field" class="acf-button blue"><?php _e('+ Add Field','acf'); ?></a>
-	</li>
-</ul>
+</div>
