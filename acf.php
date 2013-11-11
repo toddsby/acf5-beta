@@ -74,6 +74,7 @@ class acf
 		$this->include_api();
 		$this->include_core();
 		$this->include_fields();
+		$this->include_pro();
 		
 		
 		// actions (admin only)
@@ -107,11 +108,11 @@ class acf
 	
 	function include_api()
 	{
-		require('api/api-helpers.php');
-		require('api/api-value.php');
-		require('api/api-field.php');
-		require('api/api-field-group.php');
-		require('api/api-template.php');
+		include_once('api/api-helpers.php');
+		include_once('api/api-value.php');
+		include_once('api/api-field.php');
+		include_once('api/api-field-group.php');
+		include_once('api/api-template.php');
 	}
 	
 	
@@ -130,10 +131,10 @@ class acf
 	
 	function include_core()
 	{
-		require('core/input.php');
-		require('core/location.php');
+		include_once('core/input.php');
+		include_once('core/location.php');
 		
-		require('admin/comment.php');
+		include_once('admin/comment.php');
 	}
 	
 	
@@ -181,6 +182,28 @@ class acf
 		
 		include_once('fields/message.php');
 		include_once('fields/tab.php');
+	}
+	
+	
+	/*
+	*  include_pro
+	*
+	*  This function will include all pro files
+	*
+	*  @type	function
+	*  @date	28/09/13
+	*  @since	5.0.0
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	function include_pro() {
+		
+		if( file_exists( acf_get_path('pro/acf-pro.php') ) )
+		{
+			include_once( acf_get_path('pro/acf-pro.php') );
+		}
 	}
 	
 	
