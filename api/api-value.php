@@ -20,9 +20,9 @@ class acf_value_api
 		
 		add_filter('acf/load_value',			array( $this, 'load_value' ), 5, 3);
 		add_action('acf/update_value',			array( $this, 'update_value' ), 5, 3);
-		//add_action('acf/delete_value',		array( $this, 'delete_value' ), 5, 2);
-		add_action('acf/format_value',			array( $this, 'format_value' ), 5, 3);
-		add_action('acf/format_value_api',		array( $this, 'format_value_api' ), 5, 3);
+		add_action('acf/delete_value',			array( $this, 'delete_value' ), 5, 2);
+		add_filter('acf/format_value',			array( $this, 'format_value' ), 5, 3);
+		add_filter('acf/format_value_api',		array( $this, 'format_value_api' ), 5, 3);
 	}
 	
 	
@@ -248,6 +248,54 @@ class acf_value_api
 		return $value;
 	}
 	
+	
+	/*
+	*  delete_value
+	*
+	*  updates a value into the db
+	*
+	*  @type	action
+	*  @date	23/01/13
+	*
+	*  @param	{mixed}		$value		the value to be saved
+	*  @param	{int}		$post_id 	the post ID to save the value to
+	*  @param	{array}		$field		the field array
+	*  @param	{boolean}	$exact		allows the update_value filter to be skipped
+	*  @return	N/A
+	*/
+	
+	
+	function delete_value( $post_id, $key ) {
+		
+		// if $post_id is a string, then it is used in the everything fields and can be found in the options table
+		if( is_numeric($post_id) )
+		{
+			delete_metadata('post', $post_id, $key );
+			delete_metadata('post', $post_id, '_' . $key );
+		}
+		elseif( strpos($post_id, 'user_') !== false )
+		{
+			$user_id = str_replace('user_', '', $post_id);
+			delete_metadata('user', $user_id, $key);
+			delete_metadata('user', $user_id, '_' . $key);
+		}
+		elseif( strpos($post_id, 'comment_') !== false )
+		{
+			$comment_id = str_replace('comment_', '', $post_id);
+			delete_metadata('comment', $comment_id, $key);
+			delete_metadata('comment', $comment_id, '_' . $key);
+		}
+		else
+		{
+			delete_option( $post_id . '_' . $key );
+			delete_option( '_' . $post_id . '_' . $key );
+		}
+		
+		
+		//update cache
+		wp_cache_delete( "load_value/post_id={$post_id}/name={$key}", 'acf' );
+	}
+	
 }
 
 new acf_value_api();
@@ -304,6 +352,25 @@ function acf_get_value( $post_id, $field, $format = false, $format_api = false )
 function acf_update_value( $value = null, $post_id = 0, $field ) {
 
 	return apply_filters('acf/update_value', $value, $post_id, $field);
+}
+
+
+/*
+*  acf_delete_value
+*
+*  
+*
+*  @type	function
+*  @date	28/09/13
+*  @since	5.0.0
+*
+*  @param	$field (array)
+*  @return	$field (array)
+*/
+
+function acf_delete_value( $post_id = 0, $key = '' ) {
+
+	return do_action('acf/delete_value', $post_id, $key);
 }
 
 
