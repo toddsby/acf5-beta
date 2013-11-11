@@ -19,8 +19,8 @@ class acf_field_api
 	function __construct()
 	{
 		// field
-		add_filter( 'acf/load_field',			array( $this, 'load_field'), 5, 3 );
-		add_filter( 'acf/update_field',			array( $this, 'update_field'), 5, 2 );
+		add_filter( 'acf/load_field',			array( $this, 'load_field'), 5, 2 );
+		add_filter( 'acf/update_field',			array( $this, 'update_field'), 5, 1 );
 		add_action( 'acf/delete_field',			array( $this, 'delete_field'), 5, 1 );
 		add_action( 'acf/render_field',			array( $this, 'render_field'), 5, 1 );
 		add_action( 'acf/render_field_options',	array( $this, 'render_field_options'), 5, 1 );
@@ -29,6 +29,11 @@ class acf_field_api
 		// helpers
 		add_filter( 'acf/get_fields',			array( $this, 'get_fields'), 5, 2 );
 		add_filter( 'acf/get_valid_field',		array( $this, 'get_valid_field'), 5, 1 );
+		
+		
+		// WP filters
+		// Note: find out why this is needed
+		add_filter( 'wp_unique_post_slug',		array( $this, 'wp_unique_post_slug'), 5, 6 ); 
 	}
 	
 	
@@ -130,11 +135,17 @@ class acf_field_api
 		// $field['name'] has been used so far as a nice name for element attributes such as css.
 		// now, however, the name is more useful as the $_POST name
 		// this allows a plugin dev to use the field name for $_POST data, whilst ACF can use the field key
-		if( $field['key'] )
+		if( $field['ID'] )
 		{
-			$field['name'] = $field['key'];
+			$field['name'] = $field['ID'];
 		}
+		elseif( $field['key'] )
+		{
+			$field['name'] = "field_{$field['key']}";
+		}
+
 		
+		// prefix
 		if( $field['prefix'] )
 		{
 			$field['name'] = "{$field['prefix']}[{$field['name']}]";
@@ -346,6 +357,13 @@ class acf_field_api
 					$post = get_post( $selector );
 				}
 				
+				if( !is_object($post) )
+				{
+					echo '<pre>';
+						print_r($selector);
+					echo '</pre>';
+					die;
+				}
 				
 				// get data
 				$data = maybe_unserialize( $post->post_content );
@@ -375,11 +393,15 @@ class acf_field_api
 		}
 		
 		
-		// apply filters
-		foreach( array('type', 'name', 'key') as $key )
+		// If a field has been found, apply filters
+		if( ! empty($field) )
 		{
-			// run filters
-			$field = apply_filters('acf/load_field/' . $key . '=' . $field[ $key ], $field);
+			// apply filters
+			foreach( array('type', 'name', 'key') as $key )
+			{
+				// run filters
+				$field = apply_filters('acf/load_field/' . $key . '=' . $field[ $key ], $field);
+			}
 		}
 		
 	
@@ -579,16 +601,8 @@ class acf_field_api
 	    );
 	    
 	    
-	    if( $save['ID'] )
-	    {
-	    	// update
-	    	wp_update_post( $save );
-	    }
-	    else
-	    {
-	    	// insert
-		    $return['ID'] = wp_insert_post( $save );
-	    }
+	    // update the field and update the ID
+	    $return['ID'] = wp_update_post( $save );
 	    
 	    
 	    // return
@@ -614,6 +628,30 @@ class acf_field_api
 	
 		return wp_delete_post( $id, true );
 		
+	}
+	
+	
+	/*
+	*  wp_unique_post_slug
+	*
+	*  This filter will allow ACF to save fields with the same post_name ( bypass wp_unique_post_slug() )
+	*
+	*  @type	function
+	*  @date	4/11/2013
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function wp_unique_post_slug( $slug, $post_ID, $post_status, $post_type, $post_parent, $original_slug ) {
+		
+		if( $post_type == 'acf-field' )
+		{
+			$slug = $original_slug;
+		}
+		
+		return $slug;
 	}
 	
 	
