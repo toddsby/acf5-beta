@@ -173,7 +173,8 @@ class acf_field_group {
 		
 		// 3rd party hook
 		do_action('acf/field_group/admin_head');
-	}
+		
+		}
 	
 	
 	/*
@@ -199,13 +200,6 @@ class acf_field_group {
 		}
 		
 		
-		// verify nonce
-		if( !isset($_POST['_acfnonce']) || !wp_verify_nonce($_POST['_acfnonce'], 'field_group') )
-		{
-			return $post_id;
-		}
-		
-		
 		// only save once! WordPress save's a revision as well.
 		if( wp_is_post_revision($post_id) )
 		{
@@ -213,8 +207,11 @@ class acf_field_group {
         }
         
         
-        // remove potential for inifinite loops
-        $_POST['_acfnonce'] = false;
+		// verify nonce
+		if( !acf_verify_nonce('field_group') )
+		{
+			return $post_id;
+		}
         
         
         // add args
@@ -287,7 +284,12 @@ class acf_field_group {
 	
 	function mb_fields() {
 		
-		require( acf_get_path('admin/views/field-group-fields.php') );
+		// vars
+		$args = array(
+			'field_group' => get_the_ID()
+		);
+		
+		acf_get_view('field-group-fields', $args);
 		
 	}
 	
@@ -307,7 +309,7 @@ class acf_field_group {
 	
 	function mb_options() {
 		
-		require( acf_get_path('admin/views/field-group-options.php') );
+		include( acf_get_path('admin/views/field-group-options.php') );
 		
 	}
 	
@@ -327,7 +329,7 @@ class acf_field_group {
 	
 	function mb_locations() {
 		
-		require( acf_get_path('admin/views/field-group-locations.php') );
+		include( acf_get_path('admin/views/field-group-locations.php') );
 		
 	}
 	
