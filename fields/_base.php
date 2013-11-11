@@ -42,7 +42,7 @@ class acf_field
 		
 		
 		// value
-		$this->add_filter('acf/get_value/type=' . $this->name, array($this, 'get_value'), 10, 3);
+		$this->add_filter('acf/load_value/type=' . $this->name, array($this, 'load_value'), 10, 3);
 		$this->add_filter('acf/update_value/type=' . $this->name, array($this, 'update_value'), 10, 3);
 		$this->add_filter('acf/delete_value/type=' . $this->name, array($this, 'delete_value'), 10, 3);
 		$this->add_filter('acf/format_value/type=' . $this->name, array($this, 'format_value'), 10, 3);
@@ -50,7 +50,7 @@ class acf_field
 		
 		
 		// field
-		$this->add_filter('acf/get_field/type=' . $this->name, array($this, 'get_field'), 10, 3);
+		$this->add_filter('acf/load_field/type=' . $this->name, array($this, 'load_field'), 10, 3);
 		$this->add_filter('acf/update_field/type=' . $this->name, array($this, 'update_field'), 10, 1);
 		$this->add_filter('acf/delete_field/type=' . $this->name, array($this, 'delete_field'), 10, 2);
 		$this->add_action('acf/render_field/type=' . $this->name, array($this, 'render_field'), 10, 1);
