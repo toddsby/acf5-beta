@@ -174,7 +174,36 @@ class acf_field_group {
 		// 3rd party hook
 		do_action('acf/field_group/admin_head');
 		
-		}
+		
+		// hidden $_POST data
+		add_action( 'edit_form_after_title', array($this, 'edit_form_after_title') );
+		
+	}
+	
+	
+	/*
+	*  edit_form_after_title
+	*
+	*  This action will allow ACF to render metaboxes after the title
+	*
+	*  @type	action
+	*  @date	17/08/13
+	*
+	*  @param	n/a
+	*  @return	n/a
+	*/
+	
+	function edit_form_after_title() {
+		
+		?>
+		<div id="acf-form-data" class="acf-hidden">
+			<input type="hidden" name="_acfnonce" value="<?php echo wp_create_nonce( 'field_group' ); ?>" />
+			<input id="input-delete-fields" type="hidden" name="_acf_delete_fields" value="0" />
+			<?php do_action('acf/field_group/form_data'); ?>
+		</div>
+		<?php
+
+	}
 	
 	
 	/*
@@ -289,7 +318,15 @@ class acf_field_group {
 			'field_group' => get_the_ID()
 		);
 		
-		acf_get_view('field-group-fields', $args);
+		
+		// get fields
+		$view = array(
+			'fields' => acf_get_fields( $args )
+		);
+		
+		
+		// load view
+		acf_get_view('field-group-fields', $view);
 		
 	}
 	
@@ -373,7 +410,7 @@ class acf_field_group {
 		
 		switch( $options['param'] )
 		{
-			case "post_type":
+			case "post_type" :
 				
 				// all post types except attachment
 				$choices = acf_get_post_types();
@@ -381,7 +418,7 @@ class acf_field_group {
 				break;
 			
 			
-			case "page":
+			case "page" :
 				
 				$post_types = get_post_types( array('capability_type'  => 'page') );
 				unset( $post_types['attachment'], $post_types['revision'] , $post_types['nav_menu_item'], $post_types['acf-field'], $post_types['acf-field-group']  );
@@ -612,15 +649,6 @@ class acf_field_group {
 			
 								
 				break;
-			
-			case "user" :
-				
-				global $wp_roles;
-				
-				$choices = array_merge( array('all' => __('All', 'acf')), $wp_roles->get_names() );
-			
-				break;
-				
 				
 			case "media" :
 				
@@ -634,7 +662,26 @@ class acf_field_group {
 				$choices = array('all' => __('All', 'acf'));
 			
 				break;
+			
+			
+			case "user_role" :
 				
+				global $wp_roles;
+				
+				$choices = array_merge( array('all' => __('All', 'acf')), $wp_roles->get_names() );
+			
+				break;
+				
+				
+			case "user_form" :
+				
+				$choices = array(
+					'all' 		=> __('All', 'acf'),
+					'add' 		=> __('Add / Edit', 'acf'),
+					'register' 	=> __('Register', 'acf')
+				);
+			
+				break;
 		}
 		
 		

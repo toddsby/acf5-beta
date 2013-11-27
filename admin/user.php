@@ -24,6 +24,8 @@ class acf_controller_user {
 		// render
 		add_action( 'show_user_profile', 			array( $this, 'edit_profile' ) );
 		add_action( 'edit_user_profile',			array( $this, 'edit_user' ) );
+		add_action( 'user_new_form',				array( $this, 'user_new_form' ) );
+		
 		//add_action( 'register_form',				array( $this, 'register_user' ) );
 		
 		// save
@@ -137,7 +139,12 @@ class acf_controller_user {
 	
 	function register_user()
 	{
+		// vars
+		$user_id = "user_{$user_id}";
 		
+		
+		// redner
+		$this->render( $user_id );
 	}
 	
 	
@@ -167,6 +174,30 @@ class acf_controller_user {
 	
 	
 	/*
+	*  user_new_form
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	8/10/13
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function user_new_form()
+	{
+		// vars
+		$user_id = 0;
+		
+		
+		// redner
+		$this->render( $user_id );
+	}
+	
+	
+	/*
 	*  html
 	*
 	*  description
@@ -184,7 +215,7 @@ class acf_controller_user {
 		// vars
 		$post_id = 0;
 		$args = array(
-			'user' => 'all'
+			'user' => get_option('default_role')
 		);
 		
 		
@@ -212,7 +243,9 @@ class acf_controller_user {
 				$fields = acf_get_fields( array('field_group' => $field_group['ID']) );
 
 				?>
-				<h3><?php echo $field_group['title']; ?></h3>
+				<?php if( $field_group['style'] == 'default' ): ?>
+					<h3><?php echo $field_group['title']; ?></h3>
+				<?php endif; ?>
 				<table class="form-table">
 					<tbody>
 						<?php acf_render_fields( $post_id, $fields, 'tr', 'field' ); ?>

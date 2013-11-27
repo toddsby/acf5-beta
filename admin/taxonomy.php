@@ -190,9 +190,11 @@ class acf_controller_taxonomy {
 			foreach( $field_groups as $field_group ): 
 				
 				$fields = acf_get_fields( array('field_group' => $field_group['ID']) );
-
+				
 				?>
-				<h3><?php echo $field_group['title']; ?></h3>
+				<?php if( $field_group['style'] == 'default' ): ?>
+					<h3><?php echo $field_group['title']; ?></h3>
+				<?php endif; ?>
 				<table class="form-table">
 					<tbody>
 						<?php acf_render_fields( $post_id, $fields, 'tr', 'field' ); ?>

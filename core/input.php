@@ -18,13 +18,15 @@ class acf_input {
 	
 	function __construct() {
 		
-		add_action('acf/input/admin_enqueue_scripts', 	array($this, 'admin_enqueue_scripts'), 0, 0);
-		add_action('acf/input/admin_head', 				array($this, 'admin_head'), 0, 0);
-		add_action('acf/input/admin_footer', 			array($this, 'admin_footer'), 0, 0);
-		add_action('acf/input/form_data', 				array($this, 'form_data'), 0, 1);
+		add_action('acf/input/admin_enqueue_scripts', 			array($this, 'admin_enqueue_scripts'), 0, 0);
+		add_action('acf/input/admin_head', 						array($this, 'admin_head'), 0, 0);
+		add_action('acf/input/admin_footer', 					array($this, 'admin_footer'), 0, 0);
+		add_action('acf/input/form_data', 						array($this, 'form_data'), 0, 1);
 		
-		add_action('acf/save_post', 					array($this, 'save_post'), 0, 1);	
 		
+		// ajax
+		add_action( 'wp_ajax_acf/validate_save_post',			array($this, 'ajax_validate_save_post') );
+		add_action( 'wp_ajax_nopriv_acf/validate_save_post',	array($this, 'ajax_validate_save_post') );
 	}
 	
 	
@@ -107,7 +109,8 @@ class acf_input {
 	*/
 	
 	function form_data( $args ) {
-	
+		
+		
 		// global
 		global $wp_version;
 		
@@ -149,13 +152,6 @@ class acf_input {
 		<input type="hidden" name="_acfchanged" value="0" />
 		<?php
 		
-		/*
-			Notes:
-			
-			_acfchanged is a JS hack to force WP to create a revision apon save
-			// http://support.advancedcustomfields.com/forums/topic/preview-solution/#post-4106
-		*/
-		
 	}
 	
 	
@@ -173,6 +169,8 @@ class acf_input {
 	*/
 	
 	function admin_footer() {
+		
+		
 		
 	}
 	
@@ -193,26 +191,67 @@ class acf_input {
 	function save_post( $post_id ) {
 		
 		
-		// loop through and save
-		if( !empty($_POST['acf']) )
+	}
+	
+	
+	function ajax_validate_save_post() {
+		
+		// vars
+		/*
+$json = array(
+			'result'	=> 0,
+			'message'	=> __('Validation failed', 'acf'),
+			'errors'	=> 0
+		);
+*/
+		
+		 
+		// defaults
+   		/*
+	   	$_POST = acf_parse_args( $_POST, array(
+			'post_ID'	=> 0,
+			'_acfnonce'	=> '',
+		));
+		*/
+   		
+		
+		// validate
+		if( !isset($_POST['_acfnonce']) )
 		{
-			// loop through and save $_POST data
-			foreach( $_POST['acf'] as $key => $value )
-			{
-				// get field
-				$field = acf_get_field( $key );
-				
-				// update field
-				acf_update_value( $value, $post_id, $field );
-				
-			}
-			// foreach($fields as $key => $value)
+			// ignore validation, this form $_POST was not correctly configured
+			die();
 		}
-		// if($fields)
 		
 		
-		return $post_id;
+		// success
+		if( acf_validate_save_post() )
+		{
+			$json = array(
+				'result'	=> 1,
+				'message'	=> __('Validation successful', 'acf'),
+				'errors'	=> 0
+			);
+			
+			die( json_encode($json) );
+		}
+		
+		
+		// fail
+		$json = array(
+			'result'	=> 0,
+			'message'	=> __('Validation failed', 'acf'),
+			'errors'	=> acf_get_validation_errors()
+		);
 
+		
+		// update message
+		$i = count( $json['errors'] );
+		$json['message'] .= '. ' . sprintf( _n( '1 field below is empty', '%s fields below are empty', $i, 'acf' ), $i );
+		
+
+		die( json_encode($json) );
+		
+		
 	}
 	
 }
@@ -312,6 +351,11 @@ function acf_enqueue_scripts() {
 
 function acf_form_data( $args = array() ) {
 	
+	// make sure scripts and styles have been included
+	// case: front end bbPress edit user
+	acf_enqueue_scripts();
+	
+	
 	// defaults
 	$args = acf_parse_args($args, array(
 		'post_id'	=> 0,
@@ -344,7 +388,158 @@ function acf_form_data( $args = array() ) {
 
 function acf_save_post( $post_id = 0 ) {
 	
-	return do_action('acf/save_post', $post_id);
+	// loop through and save
+	if( !empty($_POST['acf']) )
+	{
+		// loop through and save $_POST data
+		foreach( $_POST['acf'] as $key => $value )
+		{
+			// get field
+			$field = acf_get_field( $key );
+			
+			// update field
+			acf_update_value( $value, $post_id, $field );
+			
+		}
+		// foreach($fields as $key => $value)
+	}
+	// if($fields)
+	
+	
+	// hook for 3rd party customization
+	do_action('acf/save_post', $post_id);
+	
+	
+	return $post_id;
+
+}
+
+
+/*
+*  acf_validate_save_post
+*
+*  This function is run to validate post data
+*
+*  @type	function
+*  @date	25/11/2013
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_validate_save_post( $show_errors = false ) {
+	
+	// validate required fields
+	if( !empty($_POST['acf']) )
+	{
+		// loop through and save $_POST data
+		foreach( $_POST['acf'] as $key => $value )
+		{
+			// get field
+			$field = acf_get_field( $key );
+			
+			
+			// check required
+			if( $field['required'] && empty($value) )
+			{
+				acf_add_validation_error( $field['key'], "{$field['label']} value is empty" );
+			}
+			
+			
+			// hook for 3rd party customization
+			foreach( array('type', 'name', 'key') as $key )
+			{
+				do_action('acf/validate_field/' . $key . '=' . $field[ $key ], $field, $value);
+			}
+			
+		}
+		// foreach($fields as $key => $value)
+	}
+	// if($fields)
+	
+	
+	// hook for 3rd party customization
+	do_action('acf/validate_save_post');
+	
+	
+	// check errors
+	if( $errors = acf_get_validation_errors() )
+	{
+		if( $show_errors )
+		{
+			$message = '<h2>Validation failed</h2><ul>';
+			
+			foreach( $errors as $error )
+			{
+				$message .= '<li>' . $error . '</li>';
+			}
+			
+			$message .= '</ul>';
+			
+			wp_die( $message, 'Validation failed' );
+		}
+		
+		return false;
+		
+	}
+	
+	
+	// return
+	return true;
+}
+
+
+/*
+*  acf_add_validation_error
+*
+*  This function will add an error message for a field
+*
+*  @type	function
+*  @date	25/11/2013
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_add_validation_error( $key, $message = '' ) {
+	
+	// instantiate array if empty
+	if( empty($GLOBALS['acf_validation_errors']) )
+	{
+		$GLOBALS['acf_validation_errors'] = array();
+	}
+	
+	
+	// add to array
+	$GLOBALS['acf_validation_errors'][ $key ] = $message;
+	
+}
+
+
+/*
+*  acf_add_validation_error
+*
+*  description
+*
+*  @type	function
+*  @date	25/11/2013
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_get_validation_errors( $delete = false ) {
+	
+	if( empty($GLOBALS['acf_validation_errors']) )
+	{
+		return false;
+	}
+	
+	return $GLOBALS['acf_validation_errors'];
+	
 }
 
 

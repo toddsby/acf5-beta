@@ -149,7 +149,9 @@ img.acf-fw {
 /* arrow */
 .acf-sprite-arrow {
 	background-position: 0 -100px;
-	margin: 4px 5px 0 10px;
+	margin: 4px 5px 0 7px;
+	width: 16px;
+	height: 16px;
 }
 
 
@@ -214,6 +216,76 @@ img.acf-fw {
 .acf-input {
 	vertical-align: top;	
 }
+
+
+/* error */
+.acf-validation-error {
+	position: relative;
+	display: block;
+	
+	background: #F55E4F;
+	border: #DD4232 solid 1px;
+	border-radius: 3px;
+	margin: 5px 0 15px;
+	padding: 0 9px;
+}
+
+.acf-validation-error p {
+	font-size: 12px;
+	line-height: 14px;
+	margin: 10px 0;
+	text-shadow: none;
+	color: #fff;
+	text-shadow: 0 1px 0 #DD4232;
+}
+
+
+/* field error */
+.acf-field .acf-validation-error {
+	background: #F55E4F;
+	color: #fff;
+	margin: 0 0 10px;
+	padding: 0 8px !important;
+}
+
+.acf-field .acf-validation-error p {
+	margin: 6px 0 !important;
+}
+
+.acf-field .acf-validation-error p:before {
+	content: "";
+	display: block;
+	
+	width: 0;
+	height: 0;
+	border: transparent 5px solid;
+	border-top-color: #DD4232;
+	
+	display: block;
+	position: absolute;
+	bottom: -11px;
+	left: 8px;
+	
+}
+
+.acf-field .acf-validation-error p:after {
+	content: "";
+	display: block;
+	
+	width: 0;
+	height: 0;
+	border: transparent 5px solid;
+	border-top-color: #F55E4F;
+	
+	display: block;
+	position: absolute;
+	bottom: -10px;
+	left: 8px;
+	
+}
+
+
+
 
 
 /*--------------------------------------------------------------------------------------------
@@ -287,7 +359,6 @@ img.acf-fw {
 
 
 /* clear table */
-
 .acf-clear-table td,
 .acf-clear-table th {
 	border: 0 none;
@@ -296,10 +367,9 @@ img.acf-fw {
 
 
 /* input table */
-
 .acf-input-table {
-	table-layout: fixed;
 	border: 1px solid #F5F5F5;
+	background: #F9F9F9;
 }
 
 
@@ -691,6 +761,12 @@ img.acf-fw {
 	padding: 8px;
 	text-align: left;
 	border-color: #EDEDED;
+	background: #fff;
+}
+
+/* nested tables */
+.acf-input-table > tbody > tr > td.acf-table-wrap {
+	padding: 0;
 }
 
 
@@ -737,8 +813,6 @@ img.acf-fw {
 .acf-input-table > tbody > tr > td:first-child {
 	border-left-width: 0;
 }
-
-
 
 
 /* remove buttons */

@@ -24,14 +24,15 @@ class acf_pro {
 		if( class_exists('acf_field') )
 		{
 			include_once('repeater/repeater.php');
+			include_once('flexible-content/flexible-content.php');
 		}
 		
 		
 		// actions
-		add_action( 'init',										array($this, 'wp_init') );
-		add_action( 'acf/input/admin_enqueue_scripts',			array($this, 'input_admin_enqueue_scripts') );
-		add_action( 'acf/field_group/admin_enqueue_scripts',	array($this, 'field_group_admin_enqueue_scripts') );
-		add_filter( 'acf/update_field',							array( $this, 'update_field'), 2, 2 );
+		add_action( 'init',										array( $this, 'wp_init') );
+		add_action( 'acf/input/admin_enqueue_scripts',			array( $this, 'input_admin_enqueue_scripts') );
+		add_action( 'acf/field_group/admin_enqueue_scripts',	array( $this, 'field_group_admin_enqueue_scripts') );
+		add_filter( 'acf/update_field',							array( $this, 'update_field'), 1, 1 );
 	}
 	
 	
@@ -168,9 +169,8 @@ new acf_pro();
 // update setting
 acf_update_setting( 'pro', true );
 
+
+// end class
 endif;
-
-
-
 
 ?>

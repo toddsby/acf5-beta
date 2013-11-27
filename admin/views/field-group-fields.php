@@ -11,11 +11,6 @@ if( !empty($args) )
 	{
 		$fields = acf_extract_var( $args, 'fields');
 	}
-	else
-	{
-		$fields = acf_get_fields( $args );
-	}
-	
 }
 
 
@@ -29,17 +24,6 @@ $fields[] = acf_get_valid_field(array(
 ));
 
 ?>
-
-<?php 
-
-// Form data for field group only
-if( array_key_exists('field_group', $args) ): ?>
-	<div class="acf-hidden">
-		<input type="hidden" name="_acfnonce" value="<?php echo wp_create_nonce( 'field_group' ); ?>" />
-		<input id="input-delete-fields" type="hidden" name="_acf_delete_fields" value="0" />
-	</div>
-<?php endif; ?>
-
 <div class="acf-field-list-wrap">
 
 	<ul class="acf-hl acf-clearfix acf-thead">

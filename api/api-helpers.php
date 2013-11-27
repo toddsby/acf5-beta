@@ -379,7 +379,7 @@ function acf_get_field_label( $field ) {
 	
 	if( $field['required'] )
 	{
-		$r . ' <span class="acf-required">*</span>'; 
+		$r .= ' <span class="acf-required">*</span>'; 
 	}
 	
 	

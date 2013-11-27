@@ -366,7 +366,6 @@ var acf_field_group = {};
 			
 			// update order numbers
 			this.render();
-			this.render_field( $el );
 			
 			
 			// trigger append

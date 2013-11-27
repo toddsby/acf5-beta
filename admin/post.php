@@ -453,8 +453,23 @@ class acf_controller_post {
 		}
 		
 		
-		// save data
-		acf_save_post( $post_id );
+		// validate and save
+		if( get_post_status($post_id) == 'publish' )
+		{
+			if( acf_validate_save_post(true) )
+			{
+				acf_save_post( $post_id );
+			}
+		}
+		else
+		{
+			acf_save_post( $post_id );
+		}
+		
+		
+		// return
+		return $post_id;
+		
         
 	}
 	

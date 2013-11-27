@@ -1,195 +1,148 @@
 (function($){
-	
+        
 	acf.validation = {
 		
-		status		: true,
-		disabled	: false,
+		active	: 1,
+		ignore	: 0,
+		
+		$trigger : null,
 		
 		init : function(){
+			
+			// bail early if disabled
+			if( this.active == 0 )
+			{
+				return;
+			}
+			
 			
 			// add events
 			this.add_events();
 		},
 		
-		show_error : function( $field ){
+		add_error : function( $field, message ){
 			
+			// add class
 			$field.addClass('error');
+			
+			
+			// add message
+			if( message !== undefined )
+			{
+				$field.children('.acf-input').children('.acf-validation-error').remove();
+				$field.children('.acf-input').prepend('<div class="acf-validation-error"><p>' + message + '</p></div>');
+			}
+			
+			
+			// hook for 3rd party customization
+			acf.trigger('add_field_error', [ $field ]);
 		},
 		
 		remove_error : function( $field ){
 			
+			// remove class
 			$field.removeClass('error');
+			
+			
+			// remove message
+			setTimeout(function(){
+				
+				acf.helpers.remove_el( $field.children('.acf-input').children('.acf-validation-error') );
+				
+			}, 250);
+			
+			
+			// hook for 3rd party customization
+			acf.trigger('remove_field_error', [ $field ]);
 		},
 		
-		run : function( $form ){
+		fetch : function( $form ){
 			
 			// reference
 			var _this = this;
 			
 			
-			// reset
-			this.status = true;
-			
-			
-			// loop through all fields
-			$form.find('.acf-field.required').each(function(){
+			// vars
+			var data = acf.helpers.serialize_form( $form );
 				
-				// run validation
-				_this.validate_field( $(this) );
+			
+			// append AJAX action		
+			data.action = 'acf/validate_save_post';
+			
 				
-	
+			// ajax
+			$.ajax({
+				url			: acf.get('ajaxurl'),
+				data		: data,
+				type		: 'post',
+				dataType	: 'json',
+				success		: function( json ){
+					
+					_this.complete( $form, json );
+					
+				}
 			});
 			
-			
-			// return
-			return this.status;
 		},
 		
-		validate_field : function( $field ){
+		complete : function( $form, json ){
 			
-			// set validation data
-			$field.data('validation', true);
+			// reference
+			var _this = this;
 			
 			
-			// not visible
-			if( $field.is(':hidden') )
+			// validate json
+			if( !json || json.result == 1)
 			{
+				// remove hidden postboxes (this will stop them from being posted to save)
+				$form.find('.acf-postbox:hidden').remove();
+					
+					
+				// bypass JS and submit form
+				this.active = 0;
+				
+				
+				// submit form again
+				if( this.$trigger )
+				{
+					this.$trigger.click();
+				}
+				else
+				{
+					$form.submit();
+				}
+				
+				
+				// end function
 				return;
 			}
 			
-			// if is hidden by conditional logic, ignore
-			if( $field.hasClass('acf-conditional_logic-hide') )
+			
+			// hide ajax stuff on submit button
+			if( $('#submitdiv').exists() )
 			{
-				return;
+				$('#save-post').removeClass('button-disabled');
+				$('#publish').removeClass('button-primary-disabled');
+				$('#ajax-loading').removeAttr('style');
+				$('#publishing-action .spinner').hide();
 			}
 			
 			
-			// if is hidden by conditional logic on a parent tab, ignore
-			if( $field.hasClass('acf-tab_group-hide') )
-			{
-				if( $field.prevAll('.field_type-tab:first').hasClass('acf-conditional_logic-hide') )
-				{
-					return;
-				}
-			}
+			// show error message
+			$form.children('.acf-validation-error').remove();
+			$form.prepend('<div class="acf-validation-error"><p>' + json.message + '</p></div>');
 			
 			
-			// text / textarea
-			if( $field.find('input[type="text"], input[type="email"], input[type="number"], input[type="hidden"], textarea').val() == "" )
-			{
-				$field.data('validation', false);
-			}
-			
-			
-			// wysiwyg
-			if( $field.find('.acf_wysiwyg').exists() && typeof(tinyMCE) == "object")
-			{
-				$field.data('validation', true);
+			// show field error messages
+			$.each( json.errors, function( k, v ){
 				
-				var id = $field.find('.wp-editor-area').attr('id'),
-					editor = tinyMCE.get( id );
-
-
-				if( editor && !editor.getContent() )
-				{
-					$field.data('validation', false);
-				}
-			}
-			
-			
-			// select
-			if( $field.find('select').exists() )
-			{
-				$field.data('validation', true);
-
-				if( $field.find('select').val() == "null" || ! $field.find('select').val() )
-				{
-					$field.data('validation', false);
-				}
-			}
-
-			
-			// radio
-			if( $field.find('input[type="radio"]').exists() )
-			{
-				$field.data('validation', false);
-
-				if( $field.find('input[type="radio"]:checked').exists() )
-				{
-					$field.data('validation', true);
-				}
-			}
-			
-			
-			// checkbox
-			if( $field.find('input[type="checkbox"]').exists() )
-			{
-				$field.data('validation', false);
-
-				if( $field.find('input[type="checkbox"]:checked').exists() )
-				{
-					$field.data('validation', true);
-				}
-			}
-
-			
-			// relationship
-			if( $field.find('.acf_relationship').exists() )
-			{
-				$field.data('validation', false);
+				var $field = $('.acf-field[data-key="' + k + '"]');
 				
-				if( $field.find('.acf_relationship .relationship_right input').exists() )
-				{
-					$field.data('validation', true);
-				}
-			}
-			
-			
-			// repeater
-			if( $field.find('.repeater').exists() )
-			{
-				$field.data('validation', false);
+				_this.add_error( $field, v );
 				
-				if( $field.find('.repeater tr.row').exists() )
-				{
-					$field.data('validation', true);
-				}			
-			}
+			});
+						
 			
-			
-			// flexible content
-			if( $field.find('.acf_flexible_content').exists() )
-			{
-				$field.data('validation', false);
-				if( $field.find('.acf_flexible_content .values table').exists() )
-				{
-					$field.data('validation', true);
-				}	
-			}
-			
-			
-			// gallery
-			if( $field.find('.acf-gallery').exists() )
-			{
-				$field.data('validation', false);
-				
-				if( $field.find('.acf-gallery .thumbnail').exists())
-				{
-					$field.data('validation', true);
-				}
-			}
-			
-			
-			// hook for custom validation
-			$(document).trigger('acf/validate_field', [ $field ] );
-			
-			
-			// set validation
-			if( ! $field.data('validation') )
-			{
-				this.status = false;
-				this.show_error( $field );
-			}
 		},
 		
 		add_events : function(){
@@ -205,64 +158,67 @@
 			});
 			
 			
-			// save draft
+			// click save
 			$(document).on('click', '#save-post', function(){
 				
-				_this.disabled = true;
+				_this.ignore = 1;
+				_this.$trigger = $(this);
+				
+			});
+			
+			
+			// click publish
+			$(document).on('click', '#publish', function(){
+				
+				_this.$trigger = $(this);
 				
 			});
 			
 			
 			// submit
-			$(document).on('submit', 'form', function(){
+			$(document).on('submit', 'form', function( e ){
 				
-				// bail early if disabled
-				if( _this.disabled )
+				// bail early if this form does not contain ACF data
+				if( ! $(this).find('#acf-form-data').exists() )
 				{
 					return true;
 				}
 				
 				
-				// vars
-				var $form = $(this);
+				// ignore this submit?
+				if( _this.ignore == 1 )
+				{
+					_this.ignore = 0;
+					return true;
+				}
+				
+				
+				// bail early if disabled
+				if( _this.active == 0 )
+				{
+					return true;
+				}
+				
+				
+				// prevent default
+				e.preventDefault();
 				
 				
 				// run validation
-				var result = _this.run( $form );
-				
-				
-				// success
-				if( result )
-				{
-					// remove hidden postboxes (this will stop them from being posted to save)
-					$form.find('.acf-postbox.acf-hidden').remove();
-					
-			
-					// submit the form
-					return true;
-				}
-				
-				
-				// show message
-				$form.children('.acf-validation-error').remove();
-				$form.prepend('<div class="acf-validation-error"><p>' + acf.l10n.validation.error + '</p></div>');
-				
-				
-				// hide ajax stuff on submit button
-				if( $form.attr('id') == 'post' )
-				{
-					$('#publish').removeClass('button-primary-disabled');
-					$('#ajax-loading').attr('style','');
-					$('#publishing-action .spinner').hide();
-				}
-				
-				return false;
-				
+				_this.fetch( $(this) );
+								
 			});
 			
 		}
 		
 	};
+	
+	
+	acf.on('ready', function(){
+		
+		acf.validation.init();
+		
+	});
 	
 
 })(jQuery);

@@ -19,8 +19,8 @@
 var acf = {
 	
 	// vars
-	l10n				:	null,
-	o					:	null,
+	l10n				:	{},
+	o					:	{},
 	
 	update				:	null,
 	get					:	null,
@@ -168,17 +168,180 @@ var acf = {
 					
 					$tr.remove();
 					
-					callback();
+					if( typeof(callback) == 'function' )
+					{
+						callback();
+					}
+					
 					
 				});
 				
 					
 			}, 250);
 			
+		},
+		
+		
+		remove_el : function( $el, callback ){
+			
+			// set layout
+			$el.css({
+				height		: $el.height(),
+				width		: $el.width(),
+				position	: 'absolute',
+				padding		: 0
+			});
+			
+			
+			// wrap field
+			$el.wrap( '<div class="acf-temp-wrap" style="height:' + $el.outerHeight(true) + 'px"></div>' );
+			
+			
+			// fade $el
+			$el.animate({ opacity : 0 }, 250);
+			
+			
+			// remove
+			$el.parent('.acf-temp-wrap').animate({ height : 0 }, 250, function(){
+				
+				$(this).remove();
+				
+				if( typeof(callback) == 'function' )
+				{
+					callback();
+				}
+				
+			});
+			
+			
+		},
+		
+		get_atts : function( $el ){
+		
+			var atts = {};
+			
+			$.each( $el[0].attributes, function( index, attr ) {
+	        	
+	        	if( attr.name.substr(0, 5) == 'data-' )
+	        	{
+	        		// vars
+	        		var v = attr.value,
+	        			k = attr.name.replace('data-', '');
+	        		
+	        		
+	        		// convert ints (don't worry about floats. I doubt these would ever appear in data atts...)
+	        		if( $.isNumeric(v) )
+	        		{
+		        		v = parseInt(v);
+	        		}
+	        		
+	        		
+	        		// add to atts
+		        	atts[ k ] = v;
+	        	}
+	        });
+	        
+	        return atts;
+				
+		},
+		
+		uniqid : function( prefix, more_entropy ){
+		
+			// + original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+			// + revised by: Kankrelune (http://www.webfaktory.info/)
+			// % note 1: Uses an internal counter (in php_js global) to avoid collision
+			// * example 1: uniqid();
+			// * returns 1: 'a30285b160c14'
+			// * example 2: uniqid('foo');
+			// * returns 2: 'fooa30285b1cd361'
+			// * example 3: uniqid('bar', true);
+			// * returns 3: 'bara20285b23dfd1.31879087'
+			if (typeof prefix === 'undefined') {
+				prefix = "";
+			}
+			
+			var retId;
+			var formatSeed = function (seed, reqWidth) {
+				seed = parseInt(seed, 10).toString(16); // to hex str
+				if (reqWidth < seed.length) { // so long we split
+					return seed.slice(seed.length - reqWidth);
+				}
+				if (reqWidth > seed.length) { // so short we pad
+					return Array(1 + (reqWidth - seed.length)).join('0') + seed;
+				}
+				return seed;
+			};
+			
+			// BEGIN REDUNDANT
+			if (!this.php_js) {
+				this.php_js = {};
+			}
+			// END REDUNDANT
+			if (!this.php_js.uniqidSeed) { // init seed with big random int
+				this.php_js.uniqidSeed = Math.floor(Math.random() * 0x75bcd15);
+			}
+			this.php_js.uniqidSeed++;
+			
+			retId = prefix; // start with prefix, add current milliseconds hex string
+			retId += formatSeed(parseInt(new Date().getTime() / 1000, 10), 8);
+			retId += formatSeed(this.php_js.uniqidSeed, 5); // add seed hex string
+			if (more_entropy) {
+				// for more entropy we add a float lower to 10
+				retId += (Math.random() * 10).toFixed(8).toString();
+			}
+			
+			return retId;
+			
+		},
+		
+		serialize_form : function( $form ){
+			
+			// vars
+			var data = {},
+				names = {};
+			
+			
+			// populate data
+			$.each( $form.serializeArray(), function( i, pair ) {
+				
+				// initiate name
+				if( pair.name.slice(-2) === '[]' )
+				{
+					// remove []
+					pair.name = pair.name.replace('[]', '');
+					
+					
+					// initiate counter
+					if( typeof names[ pair.name ] === 'undefined'){
+						
+						names[ pair.name ] = -1;
+					}
+					
+					
+					// increase counter
+					names[ pair.name ]++;
+					
+					
+					// add key
+					pair.name += '[' + names[ pair.name ] +']';
+					
+					
+				}
+				
+				
+				// append to data
+				data[ pair.name ] = pair.value;
+				
+			});
+			
+			
+			// return
+			return data;
 		}
 		
 	});
 	
+		
 	/*
 	*  acf.helpers.isset
 	*
@@ -212,107 +375,6 @@ var acf = {
 	    return true;
 			
 	};
-	
-	
-	/*
-	*  acf.helpers.get_atts
-	*
-	*  description
-	*
-	*  @type	function
-	*  @date	1/06/13
-	*
-	*  @param	{el}		$el
-	*  @return	{object}	atts
-	*/
-	
-	acf.helpers.get_atts = function( $el ){
-		
-		var atts = {};
-		
-		$.each( $el[0].attributes, function( index, attr ) {
-        	
-        	if( attr.name.substr(0, 5) == 'data-' )
-        	{
-        		// vars
-        		var v = attr.value,
-        			k = attr.name.replace('data-', '');
-        		
-        		
-        		// convert ints (don't worry about floats. I doubt these would ever appear in data atts...)
-        		if( $.isNumeric(v) )
-        		{
-	        		v = parseInt(v);
-        		}
-        		
-        		
-        		// add to atts
-	        	atts[ k ] = v;
-        	}
-        });
-        
-        return atts;
-			
-	};
-        
-           
-	/**
-	 * Simply compares two string version values.
-	 * 
-	 * Example:
-	 * versionCompare('1.1', '1.2') => -1
-	 * versionCompare('1.1', '1.1') =>  0
-	 * versionCompare('1.2', '1.1') =>  1
-	 * versionCompare('2.23.3', '2.22.3') => 1
-	 * 
-	 * Returns:
-	 * -1 = left is LOWER than right
-	 *  0 = they are equal
-	 *  1 = left is GREATER = right is LOWER
-	 *  And FALSE if one of input versions are not valid
-	 *
-	 * @function
-	 * @param {String} left  Version #1
-	 * @param {String} right Version #2
-	 * @return {Integer|Boolean}
-	 * @author Alexey Bass (albass)
-	 * @since 2011-07-14
-	 */
-	 
-	acf.helpers.version_compare = function(left, right)
-	{
-	    if (typeof left + typeof right != 'stringstring')
-	        return false;
-	    
-	    var a = left.split('.')
-	    ,   b = right.split('.')
-	    ,   i = 0, len = Math.max(a.length, b.length);
-	        
-	    for (; i < len; i++) {
-	        if ((a[i] && !b[i] && parseInt(a[i]) > 0) || (parseInt(a[i]) > parseInt(b[i]))) {
-	            return 1;
-	        } else if ((b[i] && !a[i] && parseInt(b[i]) > 0) || (parseInt(a[i]) < parseInt(b[i]))) {
-	            return -1;
-	        }
-	    }
-	    
-	    return 0;
-	};
-	
-	
-	/*
-	*  Helper: uniqid
-	*
-	*  @description: 
-	*  @since: 3.5.8
-	*  @created: 17/01/13
-	*/
-	
-	acf.helpers.uniqid = function()
-    {
-    	var newDate = new Date;
-    	return newDate.getTime();
-    };
     
     
     /*
@@ -340,24 +402,6 @@ var acf = {
 	    
     };
     
-	
-	/*
-	*  Sortable Helper
-	*
-	*  @description: keeps widths of td's inside a tr
-	*  @since 3.5.1
-	*  @created: 10/11/12
-	*/
-	
-	acf.helpers.sortable = function(e, ui)
-	{
-		ui.children().each(function(){
-			$(this).width($(this).width());
-		});
-		return ui;
-	};
-	
-	
 	/*
 	*  is_clone_field
 	*
@@ -415,6 +459,26 @@ var acf = {
 	{
 		return $(this).length>0;
 	};
+	
+	
+	/*
+	*  outerHTML
+	*
+	*  This function will return a string containing the HTML of the selected element
+	*
+	*  @type	function
+	*  @date	19/11/2013
+	*  @since	5.0.0
+	*
+	*  @param	$.fn
+	*  @return	(string)
+	*/
+	
+	$.fn.outerHTML = function() {
+	    
+	    return $(this).clone().wrap('<div>').parent().html();
+	    
+	}
 	
 	
 	/*
@@ -874,11 +938,6 @@ var acf = {
 		// conditional logic
 		acf.conditional_logic.init();
 		
-		
-		// Remove 'field_123' from native custom field metabox
-		//$('#metakeyselect option[value^="field_"]').remove();
-		
-	
 	});
 	
 	
@@ -921,6 +980,47 @@ var acf = {
 			//$(document).trigger('acf/setup_fields', [ $(document) ]);
 			
 		}, 10);
+		
+	});
+	
+	
+	/*
+	*  Sortable
+	*
+	*  These functions will hook into the start and stop of a jQuery sortable event and modify the item and placeholder to look seamless
+	*
+	*  @type	function
+	*  @date	12/11/2013
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	acf.on('sortstart', function( e, $item, $placeholder ){
+		
+		// if $item is a tr, apply some css to the elements
+		if( $item.is('tr') )
+		{
+			// temp set as relative to find widths
+			$item.css('position', 'relative');
+			
+			
+			// set widths for td children		
+			$item.children().each(function(){
+			
+				$(this).width($(this).width());
+				
+			});
+			
+			
+			// revert postision css
+			$item.css('position', 'absolute');
+			
+			
+			// add markup to the placeholder
+			$placeholder.html('<td style="height:' + $item.height() + 'px; padding:0;" colspan="' + $item.children('td').length + '"></td>');
+		}
 		
 	});
 	
@@ -3645,197 +3745,150 @@ acf.on('ready append', function(e, el){
 ********************************************** */
 
 (function($){
-	
+        
 	acf.validation = {
 		
-		status		: true,
-		disabled	: false,
+		active	: 1,
+		ignore	: 0,
+		
+		$trigger : null,
 		
 		init : function(){
+			
+			// bail early if disabled
+			if( this.active == 0 )
+			{
+				return;
+			}
+			
 			
 			// add events
 			this.add_events();
 		},
 		
-		show_error : function( $field ){
+		add_error : function( $field, message ){
 			
+			// add class
 			$field.addClass('error');
+			
+			
+			// add message
+			if( message !== undefined )
+			{
+				$field.children('.acf-input').children('.acf-validation-error').remove();
+				$field.children('.acf-input').prepend('<div class="acf-validation-error"><p>' + message + '</p></div>');
+			}
+			
+			
+			// hook for 3rd party customization
+			acf.trigger('add_field_error', [ $field ]);
 		},
 		
 		remove_error : function( $field ){
 			
+			// remove class
 			$field.removeClass('error');
+			
+			
+			// remove message
+			setTimeout(function(){
+				
+				acf.helpers.remove_el( $field.children('.acf-input').children('.acf-validation-error') );
+				
+			}, 250);
+			
+			
+			// hook for 3rd party customization
+			acf.trigger('remove_field_error', [ $field ]);
 		},
 		
-		run : function( $form ){
+		fetch : function( $form ){
 			
 			// reference
 			var _this = this;
 			
 			
-			// reset
-			this.status = true;
-			
-			
-			// loop through all fields
-			$form.find('.acf-field.required').each(function(){
+			// vars
+			var data = acf.helpers.serialize_form( $form );
 				
-				// run validation
-				_this.validate_field( $(this) );
+			
+			// append AJAX action		
+			data.action = 'acf/validate_save_post';
+			
 				
-	
+			// ajax
+			$.ajax({
+				url			: acf.get('ajaxurl'),
+				data		: data,
+				type		: 'post',
+				dataType	: 'json',
+				success		: function( json ){
+					
+					_this.complete( $form, json );
+					
+				}
 			});
 			
-			
-			// return
-			return this.status;
 		},
 		
-		validate_field : function( $field ){
+		complete : function( $form, json ){
 			
-			// set validation data
-			$field.data('validation', true);
+			// reference
+			var _this = this;
 			
 			
-			// not visible
-			if( $field.is(':hidden') )
+			// validate json
+			if( !json || json.result == 1)
 			{
+				// remove hidden postboxes (this will stop them from being posted to save)
+				$form.find('.acf-postbox:hidden').remove();
+					
+					
+				// bypass JS and submit form
+				this.active = 0;
+				
+				
+				// submit form again
+				if( this.$trigger )
+				{
+					this.$trigger.click();
+				}
+				else
+				{
+					$form.submit();
+				}
+				
+				
+				// end function
 				return;
 			}
 			
-			// if is hidden by conditional logic, ignore
-			if( $field.hasClass('acf-conditional_logic-hide') )
+			
+			// hide ajax stuff on submit button
+			if( $('#submitdiv').exists() )
 			{
-				return;
+				$('#save-post').removeClass('button-disabled');
+				$('#publish').removeClass('button-primary-disabled');
+				$('#ajax-loading').removeAttr('style');
+				$('#publishing-action .spinner').hide();
 			}
 			
 			
-			// if is hidden by conditional logic on a parent tab, ignore
-			if( $field.hasClass('acf-tab_group-hide') )
-			{
-				if( $field.prevAll('.field_type-tab:first').hasClass('acf-conditional_logic-hide') )
-				{
-					return;
-				}
-			}
+			// show error message
+			$form.children('.acf-validation-error').remove();
+			$form.prepend('<div class="acf-validation-error"><p>' + json.message + '</p></div>');
 			
 			
-			// text / textarea
-			if( $field.find('input[type="text"], input[type="email"], input[type="number"], input[type="hidden"], textarea').val() == "" )
-			{
-				$field.data('validation', false);
-			}
-			
-			
-			// wysiwyg
-			if( $field.find('.acf_wysiwyg').exists() && typeof(tinyMCE) == "object")
-			{
-				$field.data('validation', true);
+			// show field error messages
+			$.each( json.errors, function( k, v ){
 				
-				var id = $field.find('.wp-editor-area').attr('id'),
-					editor = tinyMCE.get( id );
-
-
-				if( editor && !editor.getContent() )
-				{
-					$field.data('validation', false);
-				}
-			}
-			
-			
-			// select
-			if( $field.find('select').exists() )
-			{
-				$field.data('validation', true);
-
-				if( $field.find('select').val() == "null" || ! $field.find('select').val() )
-				{
-					$field.data('validation', false);
-				}
-			}
-
-			
-			// radio
-			if( $field.find('input[type="radio"]').exists() )
-			{
-				$field.data('validation', false);
-
-				if( $field.find('input[type="radio"]:checked').exists() )
-				{
-					$field.data('validation', true);
-				}
-			}
-			
-			
-			// checkbox
-			if( $field.find('input[type="checkbox"]').exists() )
-			{
-				$field.data('validation', false);
-
-				if( $field.find('input[type="checkbox"]:checked').exists() )
-				{
-					$field.data('validation', true);
-				}
-			}
-
-			
-			// relationship
-			if( $field.find('.acf_relationship').exists() )
-			{
-				$field.data('validation', false);
+				var $field = $('.acf-field[data-key="' + k + '"]');
 				
-				if( $field.find('.acf_relationship .relationship_right input').exists() )
-				{
-					$field.data('validation', true);
-				}
-			}
-			
-			
-			// repeater
-			if( $field.find('.repeater').exists() )
-			{
-				$field.data('validation', false);
+				_this.add_error( $field, v );
 				
-				if( $field.find('.repeater tr.row').exists() )
-				{
-					$field.data('validation', true);
-				}			
-			}
+			});
+						
 			
-			
-			// flexible content
-			if( $field.find('.acf_flexible_content').exists() )
-			{
-				$field.data('validation', false);
-				if( $field.find('.acf_flexible_content .values table').exists() )
-				{
-					$field.data('validation', true);
-				}	
-			}
-			
-			
-			// gallery
-			if( $field.find('.acf-gallery').exists() )
-			{
-				$field.data('validation', false);
-				
-				if( $field.find('.acf-gallery .thumbnail').exists())
-				{
-					$field.data('validation', true);
-				}
-			}
-			
-			
-			// hook for custom validation
-			$(document).trigger('acf/validate_field', [ $field ] );
-			
-			
-			// set validation
-			if( ! $field.data('validation') )
-			{
-				this.status = false;
-				this.show_error( $field );
-			}
 		},
 		
 		add_events : function(){
@@ -3851,64 +3904,67 @@ acf.on('ready append', function(e, el){
 			});
 			
 			
-			// save draft
+			// click save
 			$(document).on('click', '#save-post', function(){
 				
-				_this.disabled = true;
+				_this.ignore = 1;
+				_this.$trigger = $(this);
+				
+			});
+			
+			
+			// click publish
+			$(document).on('click', '#publish', function(){
+				
+				_this.$trigger = $(this);
 				
 			});
 			
 			
 			// submit
-			$(document).on('submit', 'form', function(){
+			$(document).on('submit', 'form', function( e ){
 				
-				// bail early if disabled
-				if( _this.disabled )
+				// bail early if this form does not contain ACF data
+				if( ! $(this).find('#acf-form-data').exists() )
 				{
 					return true;
 				}
 				
 				
-				// vars
-				var $form = $(this);
+				// ignore this submit?
+				if( _this.ignore == 1 )
+				{
+					_this.ignore = 0;
+					return true;
+				}
+				
+				
+				// bail early if disabled
+				if( _this.active == 0 )
+				{
+					return true;
+				}
+				
+				
+				// prevent default
+				e.preventDefault();
 				
 				
 				// run validation
-				var result = _this.run( $form );
-				
-				
-				// success
-				if( result )
-				{
-					// remove hidden postboxes (this will stop them from being posted to save)
-					$form.find('.acf-postbox.acf-hidden').remove();
-					
-			
-					// submit the form
-					return true;
-				}
-				
-				
-				// show message
-				$form.children('.acf-validation-error').remove();
-				$form.prepend('<div class="acf-validation-error"><p>' + acf.l10n.validation.error + '</p></div>');
-				
-				
-				// hide ajax stuff on submit button
-				if( $form.attr('id') == 'post' )
-				{
-					$('#publish').removeClass('button-primary-disabled');
-					$('#ajax-loading').attr('style','');
-					$('#publishing-action .spinner').hide();
-				}
-				
-				return false;
-				
+				_this.fetch( $(this) );
+								
 			});
 			
 		}
 		
 	};
+	
+	
+	acf.on('ready', function(){
+		
+		acf.validation.init();
+		
+	});
 	
 
 })(jQuery);

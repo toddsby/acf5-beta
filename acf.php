@@ -66,6 +66,7 @@ class acf
 			
 			// options
 			'show_admin'	=> apply_filters( 'acf/settings/hide_admin', true ),
+			'stripslashes'	=> apply_filters( 'acf/settings/stripslashes', true ),
 			
 		);
 		
@@ -135,6 +136,7 @@ class acf
 		include_once('core/location.php');
 		
 		include_once('admin/comment.php');
+		include_once('admin/user.php');
 	}
 	
 	
@@ -222,13 +224,12 @@ class acf
 	
 	function include_admin()
 	{
-		require('admin/admin.php');
-		require('admin/field-group.php');
-		require('admin/field-groups.php');
+		include_once('admin/admin.php');
+		include_once('admin/field-group.php');
+		include_once('admin/field-groups.php');
 		
-		require('admin/post.php');
-		require('admin/user.php');
-		require('admin/taxonomy.php');
+		include_once('admin/post.php');
+		include_once('admin/taxonomy.php');
 		
 	}
 	

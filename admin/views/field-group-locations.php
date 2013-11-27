@@ -58,7 +58,7 @@ if( empty($field_group['location']) )
 							<table class="acf-table acf-clear-table">
 								<tbody>
 									<?php foreach( $group as $rule_id => $rule ): 
-									
+																			
 										// $group_id must be completely different to $rule_id to avoid JS issues
 										$rule_id = "rule_{$rule_id}";
 										
@@ -85,10 +85,13 @@ if( empty($field_group['location']) )
 													'post_status'	=>	__("Post Status",'acf'),
 													'post_taxonomy'	=>	__("Post Taxonomy",'acf'),
 												),
+												__("User",'acf') => array(
+													'user_form'		=>	__("User Form",'acf'),
+													'user_role'		=>	__("User Role",'acf'),
+												),
 												__("Forms",'acf') => array(
 													'media'			=>	__("Attachment",'acf'),
-													'taxonomy'		=>	__("Taxonomy",'acf'),
-													'user'			=>	__("User",'acf'),
+													'taxonomy'		=>	__("Taxonomy Term",'acf'),
 													'comment'		=>	__("Comment",'acf'),
 												)
 											);
