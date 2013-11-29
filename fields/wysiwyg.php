@@ -74,7 +74,7 @@ class acf_field_wysiwyg extends acf_field
    	
    	
    	/*
-	*  form_data
+	*  input_admin_footer
 	*
 	*  This function will render acf hidden data such as inputs, js and css
 	*
@@ -86,7 +86,10 @@ class acf_field_wysiwyg extends acf_field
 	*  @return	n/a
 	*/
 	
-	function form_data( $args ) {
+	function input_admin_footer( $args ) {
+		
+		// add some validation to check for a setting which will prevent the hidden WYWSIWYG + scripts from being registered
+		
 		
 		// vars
 		$t = array();
@@ -117,11 +120,10 @@ class acf_field_wysiwyg extends acf_field
 		
 		})(jQuery);	
 		</script>
+		<div class="acf-hidden" style="display:none;">
+			<?php wp_editor( '', 'acf_settings' ); ?>
+		</div>
 		<?php
-		
-		
-		// hidden wysiwyg
-		wp_editor( '', 'acf_settings' );
 	}
 	   	
    	
@@ -138,6 +140,8 @@ class acf_field_wysiwyg extends acf_field
 	*/
 	
 	function render_field( $field ) {
+	
+		// global
 		global $wp_version;
 		
 		

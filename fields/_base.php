@@ -61,7 +61,7 @@ class acf_field
 		$this->add_action('acf/input/admin_enqueue_scripts', array($this, 'input_admin_enqueue_scripts'), 10, 0);
 		$this->add_action('acf/input/admin_head', array($this, 'input_admin_head'), 10, 0);
 		$this->add_filter('acf/input/admin_l10n', array($this, 'input_admin_l10n'), 10, 1);
-		$this->add_action('acf/input/form_data', array($this, 'form_data'), 10, 1);
+		$this->add_action('acf/input/admin_footer', array($this, 'input_admin_footer'), 10, 1);
 		
 		
 		// field group actions
