@@ -682,6 +682,26 @@ class acf_field_group {
 				);
 			
 				break;
+			
+			case "widget" :
+				
+				global $wp_widget_factory;
+				
+				$choices = array(
+					'all' 		=> __('All', 'acf'),
+				);
+				
+				
+				if( !empty( $wp_widget_factory->widgets ) )
+				{
+					foreach( $wp_widget_factory->widgets as $widget )
+					{
+						$choices[ $widget->id_base ] = $widget->name;
+					}
+					
+				}
+								
+				break;
 		}
 		
 		

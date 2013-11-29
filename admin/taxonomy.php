@@ -290,8 +290,10 @@ class acf_controller_taxonomy {
 		
 	    
 	    // save data
-		acf_save_post( "{$taxonomy}_{$term_id}" );	
-		
+	    if( acf_validate_save_post(true) )
+		{
+			acf_save_post( "{$taxonomy}_{$term_id}" );
+		}
 			
 	}
 	

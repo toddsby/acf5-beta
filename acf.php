@@ -136,6 +136,7 @@ class acf
 		include_once('core/location.php');
 		
 		include_once('admin/comment.php');
+		include_once('admin/widget.php');
 		include_once('admin/user.php');
 	}
 	

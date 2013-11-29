@@ -23,7 +23,7 @@ class acf_location {
 		
 		// filters
 		//add_filter('acf/location/match_field_groups', array($this, 'match_field_groups'), 10, 2);
-		add_filter( 'acf/get_field_groups',						array( $this, 'get_field_groups'), 999, 2 );
+		//add_filter( 'acf/get_field_groups',						array( $this, 'get_field_groups'), 999, 2 );
 		
 		// Basic
 		add_filter( 'acf/location/rule_match/post_type',		array($this, 'rule_match_post_type'), 10, 3 );
@@ -51,6 +51,8 @@ class acf_location {
 		add_filter( 'acf/location/rule_match/taxonomy',			array($this, 'rule_match_taxonomy'), 10, 3 );
 		add_filter( 'acf/location/rule_match/attachment',		array($this, 'rule_match_attachment'), 10, 3 );
 		add_filter( 'acf/location/rule_match/comment',			array($this, 'rule_match_comment'), 10, 3 );
+		add_filter( 'acf/location/rule_match/widget',			array($this, 'rule_match_widget'), 10, 3 );
+		
 		
 		// Options Page
 		add_filter( 'acf/location/rule_match/options_page',		array($this, 'rule_match_options_page'), 10, 3 );
@@ -99,51 +101,6 @@ function match_field_groups_ajax()
 	}
 	
 */
-	
-	/*
-	*  get_field_groups
-	*
-	*  This function will filter the $field_groups based on the $args param.
-	*  Take note that this function is run well after the core / exported field groups have been added to the array
-	*
-	*  @type	function
-	*  @date	7/10/13
-	*  @since	5.0.0
-	*
-	*  @param	$post_id (int)
-	*  @return	$post_id (int)
-	*/
-
-	function get_field_groups( $field_groups = array(), $args = array() ) {
-		
-		// bail early if no options
-		if( empty($args) )
-		{
-			return $field_groups;
-		}
-		
-		
-		if( $field_groups )
-		{
-			$keys = array_keys( $field_groups );
-			
-			foreach( $keys as $key )
-			{
-				$visibility = acf_get_field_group_visibility( $field_groups[ $key ], $args );
-				
-				if( !$visibility )
-				{
-					unset($field_groups[ $key ]);
-				}
-			}
-			
-			$field_groups = array_values( $field_groups );
-		}
-		
-	
-		return $field_groups;
-		
-	}
 	
 	
 	/*
@@ -1023,6 +980,58 @@ function match_field_groups_ajax()
         return $match;
         
     }
+    
+    
+    /*
+    *  rule_match_widget
+    *
+    *  description
+    *
+    *  @type	function
+    *  @date	28/11/2013
+    *  @since	5.0.0
+    *
+    *  @param	$post_id (int)
+    *  @return	$post_id (int)
+    */
+    
+    function rule_match_widget( $match, $rule, $options ) {
+		
+		// vars
+		$widget = $options['widget'];
+		
+		
+		// compare
+		if( $widget )
+		{
+			if($rule['operator'] == "==")
+	        {
+	        	$match = ( $widget == $rule['value'] );
+	        	
+	        	
+	        	// override for "all"
+		        if( $rule['value'] === 'all' )
+				{
+					$match = true;
+				}
+	        }
+	        elseif($rule['operator'] == "!=")
+	        {
+	        	$match = ( $widget != $rule['value'] );
+	        	
+	        	
+	        	// override for "all"
+		        if( $rule['value'] === 'all' )
+				{
+					$match = false;
+				}
+	        }
+		}
+		
+        
+        // return
+        return $match;
+    }
 			
 }
 
@@ -1061,6 +1070,7 @@ function acf_get_field_group_visibility( $field_group, $args = array() )
 		'user_form'		=> 0,
 		'attachment'	=> 0,
 		'comment'		=> 0,
+		'widget'		=> 0,
 		'lang'			=> 0,
 		'ajax'			=> false
 	));

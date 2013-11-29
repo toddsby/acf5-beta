@@ -260,7 +260,10 @@ class acf_controller_comment {
 		
 	    
 	    // save data
-		acf_save_post( "comment_{$comment_id}" );		
+	    if( acf_validate_save_post(true) )
+		{
+			acf_save_post( "comment_{$comment_id}" );		
+		}
 		
 	}
 			

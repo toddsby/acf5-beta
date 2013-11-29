@@ -93,6 +93,7 @@ if( empty($field_group['location']) )
 													'media'			=>	__("Attachment",'acf'),
 													'taxonomy'		=>	__("Taxonomy Term",'acf'),
 													'comment'		=>	__("Comment",'acf'),
+													'widget'		=>	__("Widget",'acf'),
 												)
 											);
 													

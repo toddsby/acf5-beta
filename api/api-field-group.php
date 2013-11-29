@@ -58,16 +58,13 @@ function acf_get_field_groups( $args = false ) {
 	$field_groups = array();
 	
 	
-	// EXPORT JSON hook needed
-	
-	
 	// cache
 	$found = false;
 	$cache = wp_cache_get( 'field_groups', 'acf', false, $found );
 	
 	if( $found )
 	{
-		return $cache;
+		return acf_filter_field_groups( $cache, $args );
 	}
 	
 	
@@ -93,8 +90,11 @@ function acf_get_field_groups( $args = false ) {
 	}
 	
 	
+	// EXPORT JSON hook needed
+	
+	
 	// filter
-	$field_groups = apply_filters('acf/get_field_groups', $field_groups, $args);
+	$field_groups = apply_filters('acf/get_field_groups', $field_groups);
 	
 	
 	// set cache
@@ -102,8 +102,54 @@ function acf_get_field_groups( $args = false ) {
 			
 	
 	// return		
-	return $field_groups;
+	return acf_filter_field_groups( $field_groups, $args );
 }
+
+
+/*
+*  acf_filter_field_groups
+*
+*  This function is used by acf_get_field_groups to filter out fields groups based on location rules
+*
+*  @type	function
+*  @date	29/11/2013
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_filter_field_groups( $field_groups, $args = false ) {
+	
+	// bail early if no options
+	if( empty($args) )
+	{
+		return $field_groups;
+	}
+	
+	
+	if( !empty($field_groups) )
+	{
+		$keys = array_keys( $field_groups );
+		
+		foreach( $keys as $key )
+		{
+			$visibility = acf_get_field_group_visibility( $field_groups[ $key ], $args );
+			
+			if( !$visibility )
+			{
+				unset($field_groups[ $key ]);
+			}
+		}
+		
+		$field_groups = array_values( $field_groups );
+	}
+	
+
+	return $field_groups;
+	
+}
+
 
 
 /*
