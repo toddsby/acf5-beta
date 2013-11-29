@@ -42,9 +42,13 @@ class acf_location {
 		add_filter( 'acf/location/rule_match/post_status',		array($this, 'rule_match_post_status'), 10, 3 );
 		add_filter( 'acf/location/rule_match/post_taxonomy',	array($this, 'rule_match_post_taxonomy'), 10, 3 );
 		
+		// User
+		add_filter( 'acf/location/rule_match/user_form',		array($this, 'rule_match_user_form'), 10, 3 );
+		add_filter( 'acf/location/rule_match/user_role',		array($this, 'rule_match_user_role'), 10, 3 );
+		
+		
 		// Form
 		add_filter( 'acf/location/rule_match/taxonomy',			array($this, 'rule_match_taxonomy'), 10, 3 );
-		add_filter( 'acf/location/rule_match/user',				array($this, 'rule_match_user'), 10, 3 );
 		add_filter( 'acf/location/rule_match/attachment',		array($this, 'rule_match_attachment'), 10, 3 );
 		add_filter( 'acf/location/rule_match/comment',			array($this, 'rule_match_comment'), 10, 3 );
 		
@@ -852,46 +856,126 @@ function match_field_groups_ajax()
     
     
     /*
-	*  rule_match_user
+	*  rule_match_user_role
 	*
 	*  @description: 
 	*  @since: 3.5.7
 	*  @created: 3/01/13
 	*/
 	
-	function rule_match_user( $match, $rule, $options )
-	{
-		$user = $options['user'];
+	function rule_match_user_role( $match, $rule, $options ) {
 		
-		if( $user )
+		// vars
+		$user_id = $options['user_id'];
+		
+		
+		if( $user_id )
 		{
 			if($rule['operator'] == "==")
 	        {
-	        	$match = ( user_can($user, $rule['value']) );
+	        	if( $user_id === 'new' )
+	        	{
+	        		// case: add user
+		        	$match = ( $rule['value'] == get_option('default_role') );
+	        	}
+	        	else
+	        	{
+	        		// case: edit user
+		        	$match = ( user_can($user_id, $rule['value']) );
+	        	}
+	        	
 	        	
 	        	// override for "all"
-		        if( $rule['value'] === "all" )
+		        if( $rule['value'] === 'all' )
 				{
 					$match = true;
 				}
 	        }
 	        elseif($rule['operator'] == "!=")
 	        {
-	        	$match = ( !user_can($user, $rule['value']) );
+	        	if( $user_id === 'new' )
+	        	{
+	        		// case: add user
+		        	$match = ( $rule['value'] != get_option('default_role') );
+	        	}
+	        	else
+	        	{
+	        		// case: edit user
+		        	$match = ( !user_can($user_id, $rule['value']) );
+	        	}
+	        	
 	        	
 	        	// override for "all"
-		        if( $rule['value'] === "all" )
+		        if( $rule['value'] === 'all' )
 				{
 					$match = false;
 				}
 	        }
-
 		}
 		
         
         return $match;
         
-    }	
+    }
+    
+    
+    /*
+    *  rule_match_user_form
+    *
+    *  description
+    *
+    *  @type	function
+    *  @date	28/11/2013
+    *  @since	5.0.0
+    *
+    *  @param	$post_id (int)
+    *  @return	$post_id (int)
+    */
+    
+    function rule_match_user_form( $match, $rule, $options ) {
+		
+		// vars
+		$user_form = $options['user_form'];
+		
+		
+		// add is treated the same as edit
+		if( $user_form === 'add' )
+		{
+			$user_form = 'edit';
+		}
+		
+		
+		// compare
+		if( $user_form )
+		{
+			if($rule['operator'] == "==")
+	        {
+	        	$match = ( $user_form == $rule['value'] );
+	        	
+	        	
+	        	// override for "all"
+		        if( $rule['value'] === 'all' )
+				{
+					$match = true;
+				}
+	        }
+	        elseif($rule['operator'] == "!=")
+	        {
+	        	$match = ( $user_form != $rule['value'] );
+	        	
+	        	
+	        	// override for "all"
+		        if( $rule['value'] === 'all' )
+				{
+					$match = false;
+				}
+	        }
+		}
+		
+        
+        // return
+        return $match;
+    }
     
     
     /*
@@ -973,7 +1057,8 @@ function acf_get_field_group_visibility( $field_group, $args = array() )
 		'post_format'	=> 0,
 		'post_taxonomy'	=> array(),
 		'taxonomy'		=> 0,
-		'user'			=> 0,
+		'user_id'		=> 0,
+		'user_form'		=> 0,
 		'attachment'	=> 0,
 		'comment'		=> 0,
 		'lang'			=> 0,

@@ -677,7 +677,7 @@ class acf_field_group {
 				
 				$choices = array(
 					'all' 		=> __('All', 'acf'),
-					'add' 		=> __('Add / Edit', 'acf'),
+					'edit' 		=> __('Add / Edit', 'acf'),
 					'register' 	=> __('Register', 'acf')
 				);
 			
