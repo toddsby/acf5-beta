@@ -234,6 +234,7 @@ img.acf-fw {
 	font-size: 12px;
 	line-height: 14px;
 	margin: 10px 0;
+	padding: 0;
 	text-shadow: none;
 	color: #fff;
 	text-shadow: 0 1px 0 #DD4232;
@@ -288,8 +289,19 @@ img.acf-fw {
 /* add term */
 #addtag div.acf-field.error {
 	border: 0 none;
-	padding: 8px 0;
-	
+	padding: 8px 0;	
+}
+
+/* widget */
+.widget .widget-inside .acf-error-message p {
+	margin: 10px 0;
+}
+
+.widget .widget-inside div.acf-field.error {
+	border: 0 none;
+	background: transparent;
+	margin: 0 0 20px;
+	padding: 0;
 }
 
 
