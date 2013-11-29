@@ -50,6 +50,10 @@
 		
 		remove_error : function( $field ){
 			
+			// var
+			$message = $field.children('.acf-input').children('.' + this.message_class);
+			
+			
 			// remove class
 			$field.removeClass(this.error_class);
 			
@@ -57,7 +61,7 @@
 			// remove message
 			setTimeout(function(){
 				
-				acf.helpers.remove_el( $field.children('.acf-input').children('.' + this.message_class) );
+				acf.helpers.remove_el( $message );
 				
 			}, 250);
 			
@@ -164,7 +168,7 @@
 			
 			
 			// focus
-			$(document).on('focus click', '.acf-field.required input, .acf-field.required textarea, .acf-field.required select', function( e ){
+			$(document).on('focus click change', '.acf-field.required input, .acf-field.required textarea, .acf-field.required select', function( e ){
 				
 				_this.remove_error( $(this).closest('.acf-field') );
 				
@@ -230,6 +234,7 @@
 	acf.on('ready', function(){
 		
 		acf.validation.init();
+		
 		
 	});
 	
