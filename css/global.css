@@ -219,7 +219,7 @@ img.acf-fw {
 
 
 /* error */
-.acf-validation-error {
+.acf-error-message {
 	position: relative;
 	display: block;
 	
@@ -230,7 +230,7 @@ img.acf-fw {
 	padding: 0 9px;
 }
 
-.acf-validation-error p {
+.acf-error-message p {
 	font-size: 12px;
 	line-height: 14px;
 	margin: 10px 0;
@@ -241,18 +241,18 @@ img.acf-fw {
 
 
 /* field error */
-.acf-field .acf-validation-error {
+.acf-field .acf-error-message {
 	background: #F55E4F;
 	color: #fff;
 	margin: 0 0 10px;
 	padding: 0 8px !important;
 }
 
-.acf-field .acf-validation-error p {
+.acf-field .acf-error-message p {
 	margin: 6px 0 !important;
 }
 
-.acf-field .acf-validation-error p:before {
+.acf-field .acf-error-message p:before {
 	content: "";
 	display: block;
 	
@@ -268,7 +268,7 @@ img.acf-fw {
 	
 }
 
-.acf-field .acf-validation-error p:after {
+.acf-field .acf-error-message p:after {
 	content: "";
 	display: block;
 	
@@ -285,6 +285,12 @@ img.acf-fw {
 }
 
 
+/* add term */
+#addtag div.acf-field.error {
+	border: 0 none;
+	padding: 8px 0;
+	
+}
 
 
 

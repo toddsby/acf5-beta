@@ -254,7 +254,7 @@ $json = array(
 		
 		// update message
 		$i = count( $json['errors'] );
-		$json['message'] .= '. ' . sprintf( _n( '1 field below is empty', '%s fields below are empty', $i, 'acf' ), $i );
+		$json['message'] .= '. ' . sprintf( _n( '1 required field below is empty', '%s required fields below are empty', $i, 'acf' ), $i );
 		
 
 		die( json_encode($json) );
@@ -371,8 +371,10 @@ function acf_form_data( $args = array() ) {
 	
 	// defaults
 	$args = acf_parse_args($args, array(
-		'post_id'	=> 0,
-		'nonce'		=> 'post',
+		'post_id'		=> 0,		// ID of current post
+		'nonce'			=> 'post',	// nonce used for $_POST validation
+		'validation'	=> 1,		// runs AJAX validation
+		'ajax'			=> 0,		// fetches new field groups via AJAX
 	));
 	
 	

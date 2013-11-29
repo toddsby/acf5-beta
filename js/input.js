@@ -3748,11 +3748,21 @@ acf.on('ready append', function(e, el){
         
 	acf.validation = {
 		
+		// vars
 		active	: 1,
 		ignore	: 0,
 		
+		
+		// classes
+		error_class : 'error',
+		message_class : 'acf-error-message',
+		
+		
+		// el
 		$trigger : null,
 		
+		
+		// functions
 		init : function(){
 			
 			// bail early if disabled
@@ -3769,14 +3779,14 @@ acf.on('ready append', function(e, el){
 		add_error : function( $field, message ){
 			
 			// add class
-			$field.addClass('error');
+			$field.addClass(this.error_class);
 			
 			
 			// add message
 			if( message !== undefined )
 			{
-				$field.children('.acf-input').children('.acf-validation-error').remove();
-				$field.children('.acf-input').prepend('<div class="acf-validation-error"><p>' + message + '</p></div>');
+				$field.children('.acf-input').children('.' + this.message_class).remove();
+				$field.children('.acf-input').prepend('<div class="' + this.message_class + '"><p>' + message + '</p></div>');
 			}
 			
 			
@@ -3787,13 +3797,13 @@ acf.on('ready append', function(e, el){
 		remove_error : function( $field ){
 			
 			// remove class
-			$field.removeClass('error');
+			$field.removeClass(this.error_class);
 			
 			
 			// remove message
 			setTimeout(function(){
 				
-				acf.helpers.remove_el( $field.children('.acf-input').children('.acf-validation-error') );
+				acf.helpers.remove_el( $field.children('.acf-input').children('.' + this.message_class) );
 				
 			}, 250);
 			
@@ -3837,6 +3847,10 @@ acf.on('ready append', function(e, el){
 			var _this = this;
 			
 			
+			// remove previous error message
+			$form.children('.' + this.message_class).remove();
+			
+			
 			// validate json
 			if( !json || json.result == 1)
 			{
@@ -3845,7 +3859,7 @@ acf.on('ready append', function(e, el){
 					
 					
 				// bypass JS and submit form
-				this.active = 0;
+				this.ignore = 1;
 				
 				
 				// submit form again
@@ -3874,9 +3888,8 @@ acf.on('ready append', function(e, el){
 			}
 			
 			
-			// show error message
-			$form.children('.acf-validation-error').remove();
-			$form.prepend('<div class="acf-validation-error"><p>' + json.message + '</p></div>');
+			// show error message	
+			$form.prepend('<div class="' + this.message_class + '"><p>' + json.message + '</p></div>');
 			
 			
 			// show field error messages
