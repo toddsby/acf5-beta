@@ -406,10 +406,19 @@ var acf = {
 	
 	acf.helpers.is_clone_field = function( input )
 	{
+		// sub field
 		if( input.attr('name') && input.attr('name').indexOf('[acfcloneindex]') != -1 )
 		{
 			return true;
 		}
+		
+		
+		// widget
+		if( input.parents('#available-widgets').exists() )
+		{
+			return true;
+		}
+		
 		
 		return false;
 	};

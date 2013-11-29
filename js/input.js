@@ -412,10 +412,19 @@ var acf = {
 	
 	acf.helpers.is_clone_field = function( input )
 	{
+		// sub field
 		if( input.attr('name') && input.attr('name').indexOf('[acfcloneindex]') != -1 )
 		{
 			return true;
 		}
+		
+		
+		// widget
+		if( input.parents('#available-widgets').exists() )
+		{
+			return true;
+		}
+		
 		
 		return false;
 	};
@@ -3796,6 +3805,10 @@ acf.on('ready append', function(e, el){
 		
 		remove_error : function( $field ){
 			
+			// var
+			$message = $field.children('.acf-input').children('.' + this.message_class);
+			
+			
 			// remove class
 			$field.removeClass(this.error_class);
 			
@@ -3803,7 +3816,7 @@ acf.on('ready append', function(e, el){
 			// remove message
 			setTimeout(function(){
 				
-				acf.helpers.remove_el( $field.children('.acf-input').children('.' + this.message_class) );
+				acf.helpers.remove_el( $message );
 				
 			}, 250);
 			
@@ -3910,7 +3923,7 @@ acf.on('ready append', function(e, el){
 			
 			
 			// focus
-			$(document).on('focus click', '.acf-field.required input, .acf-field.required textarea, .acf-field.required select', function( e ){
+			$(document).on('focus click change', '.acf-field.required input, .acf-field.required textarea, .acf-field.required select', function( e ){
 				
 				_this.remove_error( $(this).closest('.acf-field') );
 				
@@ -3976,6 +3989,7 @@ acf.on('ready append', function(e, el){
 	acf.on('ready', function(){
 		
 		acf.validation.init();
+		
 		
 	});
 	
