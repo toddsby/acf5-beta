@@ -19,14 +19,13 @@ class acf_controller_user {
 	{
 		// actions
 		add_action( 'admin_enqueue_scripts',		array( $this, 'admin_enqueue_scripts' ) );
-		
+		add_action( 'login_form_register', 			array( $this, 'admin_enqueue_scripts' ) );
 		
 		// render
 		add_action( 'show_user_profile', 			array( $this, 'edit_profile' ) );
 		add_action( 'edit_user_profile',			array( $this, 'edit_user' ) );
 		add_action( 'user_new_form',				array( $this, 'user_new_form' ) );
-		
-		//add_action( 'register_form',				array( $this, 'register_user' ) );
+		add_action( 'register_form',				array( $this, 'register_user' ) );
 		
 		// save
 		add_action('edit_user_profile_update',		array($this, 'save_user'));
@@ -60,7 +59,7 @@ class acf_controller_user {
 		
 		
 		// validate page
-		if( in_array( $pagenow, array('profile.php', 'user-edit.php', 'user-new.php') ) )
+		if( in_array( $pagenow, array('profile.php', 'user-edit.php', 'user-new.php', 'wp-login.php') ) )
 		{
 			$return = true;
 		}
@@ -119,7 +118,7 @@ class acf_controller_user {
 		
 		
 		// redner
-		$this->render( $user_id );
+		$this->render( $user_id, 'edit' );
 		
 	}
 	
@@ -137,14 +136,14 @@ class acf_controller_user {
 	*  @return	$post_id (int)
 	*/
 	
-	function register_user()
-	{
+	function register_user() {
+		
 		// vars
-		$user_id = "user_{$user_id}";
+		$user_id = 0;
 		
 		
 		// redner
-		$this->render( $user_id );
+		$this->render( $user_id, 'register' );
 	}
 	
 	
@@ -168,7 +167,7 @@ class acf_controller_user {
 		
 		
 		// redner
-		$this->render( $user_id );
+		$this->render( $user_id, 'edit' );
 		
 	}
 	
@@ -193,7 +192,7 @@ class acf_controller_user {
 		
 		
 		// redner
-		$this->render( $user_id );
+		$this->render( $user_id, 'add' );
 	}
 	
 	
@@ -210,21 +209,30 @@ class acf_controller_user {
 	*  @return	$post_id (int)
 	*/
 	
-	function render( $user_id = 0 ) {
+	function render( $user_id = 0, $user_form = '' ) {
 		
 		// vars
+		$el = 'tr';
 		$post_id = 0;
 		$args = array(
-			'user' => get_option('default_role')
+			'user_id'	=> 'new',
+			'user_form'	=> $user_form
 		);
 		
 		
 		if( $user_id )
 		{
-			$args['user'] = $user_id;
+			$args['user_id'] = $user_id;
 			$post_id = "user_{$user_id}";
 		}
-			
+		
+		
+		// el
+		if( $user_form == 'register' )
+		{
+			$el = 'div';
+		}
+		
 		
 		// get field groups
 		$field_groups = acf_get_field_groups( $args );
@@ -248,7 +256,7 @@ class acf_controller_user {
 				<?php endif; ?>
 				<table class="form-table">
 					<tbody>
-						<?php acf_render_fields( $post_id, $fields, 'tr', 'field' ); ?>
+						<?php acf_render_fields( $post_id, $fields, $el, 'field' ); ?>
 					</tbody>
 				</table>
 				<?php 
@@ -283,7 +291,10 @@ class acf_controller_user {
 		
 	    
 	    // save data
-		acf_save_post( "user_{$user_id}" );		
+	    if( acf_validate_save_post(true) )
+		{
+			acf_save_post( "user_{$user_id}" );
+		}	
 	}
 			
 }

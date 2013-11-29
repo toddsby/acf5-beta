@@ -92,6 +92,8 @@ class acf_input {
 	
 	function admin_head() {
 		
+		
+		
 	}
 	
 	
@@ -111,6 +113,36 @@ class acf_input {
 	function form_data( $args ) {
 		
 		
+		
+	}
+	
+	
+	/*
+	*  admin_footer
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	7/10/13
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function admin_footer() {
+		
+		// vars
+		$args = acf_get_setting('form_data');
+		
+		
+		// validate
+		if( empty($args) )
+		{
+			return;
+		}
+		
+		
 		// global
 		global $wp_version;
 		
@@ -122,8 +154,6 @@ class acf_input {
 			'admin_url'		=> admin_url(),
 			'ajaxurl'		=> admin_url( 'admin-ajax.php' ),
 			'wp_version'	=> $wp_version,
-			'$form'			=> $args['$form'],
-			'ajax'			=> $args['ajax']
 		);
 		
 		
@@ -148,29 +178,7 @@ class acf_input {
 		
 		})(jQuery);	
 		</script>
-		<input type="hidden" name="_acfnonce" value="<?php echo wp_create_nonce( $args['nonce'] ); ?>" />
-		<input type="hidden" name="_acfchanged" value="0" />
 		<?php
-		
-	}
-	
-	
-	/*
-	*  admin_footer
-	*
-	*  description
-	*
-	*  @type	function
-	*  @date	7/10/13
-	*  @since	5.0.0
-	*
-	*  @param	$post_id (int)
-	*  @return	$post_id (int)
-	*/
-	
-	function admin_footer() {
-		
-		
 		
 	}
 	
@@ -282,13 +290,18 @@ class acf_input_listener {
 		
 		if( is_admin() )
 		{
-			add_action('admin_head', 			array( $this, 'admin_head') );
-			add_action('admin_footer', 			array( $this, 'admin_footer') );
+			add_action('admin_head', 			array( $this, 'admin_head'), 20 );
+			add_action('admin_footer', 			array( $this, 'admin_footer'), 20 );
 		}
 		else
 		{
-			add_action('wp_head', 				array( $this, 'admin_head') );
-			add_action('wp_footer', 			array( $this, 'admin_footer') );	
+			add_action('wp_head', 				array( $this, 'admin_head'), 20 );
+			add_action('wp_footer', 			array( $this, 'admin_footer'), 20 );
+			
+			
+			// wp-login.php
+			add_action('login_head', 			array( $this, 'admin_head'), 20 );
+			add_action('login_footer', 			array( $this, 'admin_footer'), 20 );
 		}
 	}
 	
@@ -360,13 +373,17 @@ function acf_form_data( $args = array() ) {
 	$args = acf_parse_args($args, array(
 		'post_id'	=> 0,
 		'nonce'		=> 'post',
-		'$form'		=> '#post',
-		'ajax'		=> false
 	));
+	
+	
+	// save form_data for later actions
+	acf_update_setting('form_data', $args);
 	
 	
 	?>
 	<div id="acf-form-data" class="acf-hidden">
+		<input type="hidden" name="_acfnonce" value="<?php echo wp_create_nonce( $args['nonce'] ); ?>" />
+		<input type="hidden" name="_acfchanged" value="0" />
 		<?php do_action('acf/input/form_data', $args); ?>
 	</div>
 	<?php
