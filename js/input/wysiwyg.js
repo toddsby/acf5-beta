@@ -12,7 +12,7 @@
 	*  @return	N/A
 	*/
 	
-	var _wysiwyg = acf.fields.wysiwyg = {
+	acf.fields.wysiwyg = {
 		
 		$el : null,
 		$textarea : null,
@@ -30,7 +30,7 @@
 			
 			
 			// get options
-			this.o = acf.helpers.get_atts( this.$el );
+			this.o = acf.get_atts( this.$el );
 			
 			
 			// add ID
@@ -55,15 +55,8 @@
 		},
 		init : function(){
 			
-			// is clone field?
-			if( acf.helpers.is_clone_field( this.$textarea ) )
-			{
-				return;
-			}
-			
-			
 			// temp store tinyMCE.settings
-			var tinyMCE_settings = $.extend( {}, tinyMCE.settings );
+			var backup = $.extend( {}, tinyMCE.settings );
 			
 			
 			// reset tinyMCE settings
@@ -72,20 +65,20 @@
 			tinyMCE.settings.theme_advanced_buttons3 = '';
 			tinyMCE.settings.theme_advanced_buttons4 = '';
 			
-			if( acf.helpers.isset( this.toolbars[ this.o.toolbar ] ) )
+			if( acf.isset_object( this.toolbars, this.o.toolbar ) )
 			{
 				$.each( this.toolbars[ this.o.toolbar ], function( k, v ){
 					tinyMCE.settings[ k ] = v;
 				})
 			}
 				
-				
+			
+			// hook for 3rd party customization
+			tinyMCE.settings = acf.apply_filters('wysiwyg_tinymce_settings', tinyMCE.settings, this.o.id);
+			
+			
 			// add functionality back in
 			tinyMCE.execCommand("mceAddControl", false, this.o.id);
-			
-			
-			// events - load
-			$(document).trigger('acf/wysiwyg/load', this.o.id);
 				
 				
 			// add events (click, focus, blur) for inserting image into correct editor
@@ -93,7 +86,7 @@
 				
 			
 			// restore tinyMCE.settings
-			tinyMCE.settings = tinyMCE_settings;
+			tinyMCE.settings = backup;
 			
 			
 			// set active editor to null
@@ -116,25 +109,38 @@
 			
 			// vars
 			var	$container = $('#wp-' + id + '-wrap'),
-				$body = $( editor.getBody() );
+				$body = $( editor.getBody() ),
+				$textarea = $( editor.getElement() );
 	
 			
 			// events
 			$container.on('click', function(){
-			
-				$(document).trigger('acf/wysiwyg/click', id);
+				
+				acf.validation.remove_error( $container.closest('.acf-field') );
 				
 			});
 			
 			$body.on('focus', function(){
 			
-				$(document).trigger('acf/wysiwyg/focus', id);
+				wpActiveEditor = id;
+		
+				acf.validation.remove_error( $container.closest('.acf-field') );
 				
 			});
 			
 			$body.on('blur', function(){
 			
-				$(document).trigger('acf/wysiwyg/blur', id);
+				wpActiveEditor = null;
+				
+				// update the hidden textarea
+				// - This fixes a but when adding a taxonomy term as the form is not posted and the hidden tetarea is never populated!
+
+				// save to textarea	
+				editor.save();
+				
+				
+				// trigger change on textarea
+				$textarea.trigger('change');
 				
 			});
 			
@@ -181,278 +187,118 @@
 	*  @return	N/A
 	*/
 	
-	$(document).on('acf/setup_fields', function(e, el){
+	acf.add_action('ready', function( $el ){
 		
 		// validate
-		if( ! _wysiwyg.has_tinymce() )
+		if( ! acf.fields.wysiwyg.has_tinymce() )
 		{
 			return;
 		}
 		
 		
-		// Destory all WYSIWYG fields
-		// This hack will fix a problem when the WP popup is created and hidden, then the ACF popup (image/file field) is opened
-		$(el).find('.acf_wysiwyg').each(function(){
-			
-			_wysiwyg.set({ $el : $(this) }).destroy();
-			
-		});
+		// events
+		acf.add_action('remove', function( $el ){
 		
-		
-		// Add WYSIWYG fields
-		setTimeout(function(){
-			
-			$(el).find('.acf_wysiwyg').each(function(){
-			
-				_wysiwyg.set({ $el : $(this) }).init();
+			acf.get_fields( $el, 'wysiwyg' ).each(function(){
+				
+				acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).destroy();
 				
 			});
 			
-		}, 0);
+		}).add_action('sortstart', function( $el ){
 		
-	});
-	
-	
-	/*
-	*  acf/remove_fields
-	*
-	*  This action is called when the $el is being removed from the DOM
-	*
-	*  @type	event
-	*  @date	20/07/13
-	*
-	*  @param	{object}	e		event object
-	*  @param	{object}	$el		jQuery element being removed
-	*  @return	N/A
-	*/
-	
-	$(document).on('acf/remove_fields', function(e, $el){
-		
-		// validate
-		if( ! _wysiwyg.has_tinymce() )
-		{
-			return;
-		}
-		
-		
-		$el.find('.acf_wysiwyg').each(function(){
+			acf.get_fields( $el, 'wysiwyg' ).each(function(){
+				
+				acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).destroy();
+				
+			});
 			
-			_wysiwyg.set({ $el : $(this) }).destroy();
+		}).add_action('sortstop', function( $el ){
+		
+			acf.get_fields( $el, 'wysiwyg' ).each(function(){
+				
+				acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).init();
+				
+			});
+			
+		}).add_action('load', function( $el ){
+		
+			// vars
+			var wp_content = $('#wp-content-wrap').exists(),
+				wp_acf_settings = $('#wp-acf_settings-wrap').exists()
+				mode = 'tmce';
+			
+			
+			// has_editor
+			if( wp_acf_settings )
+			{
+				// html_mode
+				if( $('#wp-acf_settings-wrap').hasClass('html-active') )
+				{
+					mode = 'html';
+				}
+			}
+			
+			
+			setTimeout(function(){
+				
+				// trigger click on hidden wysiwyg (to get in HTML mode)
+				if( wp_acf_settings && mode == 'html' )
+				{
+					$('#acf_settings-tmce').trigger('click');
+				}
+				
+			}, 1);
+			
+			
+			setTimeout(function(){
+				
+				// vars
+				var $fields = acf.get_fields( $el, 'wysiwyg' );
+				
+				
+				// Destory all WYSIWYG fields
+				// This hack will fix a problem when the WP popup is created and hidden, then the ACF popup (image/file field) is opened
+				$fields.each(function(){
+					
+					acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).destroy();
+					
+				});
+				
+				
+				// Add WYSIWYG fields
+				setTimeout(function(){
+					
+					$fields.each(function(){
+					
+						acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).init();
+						
+					});
+					
+				}, 0);
+				
+			}, 10);
+			
+			
+			setTimeout(function(){
+				
+				// trigger html mode for people who want to stay in HTML mode
+				if( wp_acf_settings && mode == 'html' )
+				{
+					$('#acf_settings-html').trigger('click');
+				}
+				
+				// Add events to content editor
+				if( wp_content )
+				{
+					acf.fields.wysiwyg.set({ $el : $('#wp-content-wrap') }).add_events();
+				}
+				
+				
+			}, 11);
 			
 		});
 		
-	});
-		
-	
-	/*
-	*  acf/wysiwyg/click
-	*
-	*  this event is run when a user clicks on a WYSIWYG field
-	*
-	*  @type	event
-	*  @date	17/01/13
-	*
-	*  @param	{object}	e		event object
-	*  @param	{int}		id		WYSIWYG ID
-	*  @return	N/A
-	*/
-	
-	$(document).on('acf/wysiwyg/click', function(e, id){
-		
-		wpActiveEditor = id;
-		
-		container = $('#wp-' + id + '-wrap').closest('.field').removeClass('error');
-		
-	});
-	
-	
-	/*
-	*  acf/wysiwyg/focus
-	*
-	*  this event is run when a user focuses on a WYSIWYG field body
-	*
-	*  @type	event
-	*  @date	17/01/13
-	*
-	*  @param	{object}	e		event object
-	*  @param	{int}		id		WYSIWYG ID
-	*  @return	N/A
-	*/
-	
-	$(document).on('acf/wysiwyg/focus', function(e, id){
-		
-		wpActiveEditor = id;
-		
-		container = $('#wp-' + id + '-wrap').closest('.field').removeClass('error');
-		
-	});
-	
-	
-	/*
-	*  acf/wysiwyg/blur
-	*
-	*  this event is run when a user loses focus on a WYSIWYG field body
-	*
-	*  @type	event
-	*  @date	17/01/13
-	*
-	*  @param	{object}	e		event object
-	*  @param	{int}		id		WYSIWYG ID
-	*  @return	N/A
-	*/
-	
-	$(document).on('acf/wysiwyg/blur', function(e, id){
-		
-		wpActiveEditor = null;
-		
-		// update the hidden textarea
-		// - This fixes a but when adding a taxonomy term as the form is not posted and the hidden tetarea is never populated!
-		var editor = tinyMCE.get( id );
-		
-		
-		// validate
-		if( !editor )
-		{
-			return;
-		}
-		
-		
-		var el = editor.getElement();
-		
-			
-		// save to textarea	
-		editor.save();
-		
-		
-		// trigger change on textarea
-		$( el ).trigger('change');
-		
-	});
-
-	
-	/*
-	*  acf/sortable_start
-	*
-	*  this event is run when a element is being drag / dropped
-	*
-	*  @type	event
-	*  @date	10/11/12
-	*
-	*  @param	{object}	e		event object
-	*  @param	{object}	el		DOM object which may contain new ACF elements
-	*  @return	N/A
-	*/
-	
-	$(document).on('acf/sortable_start', function(e, el) {
-		
-		// validate
-		if( ! _wysiwyg.has_tinymce() )
-		{
-			return;
-		}
-		
-		
-		$(el).find('.acf_wysiwyg').each(function(){
-			
-			_wysiwyg.set({ $el : $(this) }).destroy();
-			
-		});
-		
-	});
-	
-	
-	/*
-	*  acf/sortable_stop
-	*
-	*  this event is run when a element has finnished being drag / dropped
-	*
-	*  @type	event
-	*  @date	10/11/12
-	*
-	*  @param	{object}	e		event object
-	*  @param	{object}	el		DOM object which may contain new ACF elements
-	*  @return	N/A
-	*/
-	
-	$(document).on('acf/sortable_stop', function(e, el) {
-		
-		// validate
-		if( ! _wysiwyg.has_tinymce() )
-		{
-			return;
-		}
-		
-		
-		$(el).find('.acf_wysiwyg').each(function(){
-			
-			_wysiwyg.set({ $el : $(this) }).init();
-			
-		});
-		
-	});
-	
-	
-	/*
-	*  window load
-	*
-	*  @description: 
-	*  @since: 3.5.5
-	*  @created: 22/12/12
-	*/
-	
-	$(window).load(function(){
-		
-		// validate
-		if( ! _wysiwyg.has_tinymce() )
-		{
-			return;
-		}
-		
-		
-		// vars
-		var wp_content = $('#wp-content-wrap').exists(),
-			wp_acf_settings = $('#wp-acf_settings-wrap').exists()
-			mode = 'tmce';
-		
-		
-		// has_editor
-		if( wp_acf_settings )
-		{
-			// html_mode
-			if( $('#wp-acf_settings-wrap').hasClass('html-active') )
-			{
-				mode = 'html';
-			}
-		}
-		
-		
-		setTimeout(function(){
-			
-			// trigger click on hidden wysiwyg (to get in HTML mode)
-			if( wp_acf_settings && mode == 'html' )
-			{
-				$('#acf_settings-tmce').trigger('click');
-			}
-			
-		}, 1);
-		
-		
-		setTimeout(function(){
-			
-			// trigger html mode for people who want to stay in HTML mode
-			if( wp_acf_settings && mode == 'html' )
-			{
-				$('#acf_settings-html').trigger('click');
-			}
-			
-			// Add events to content editor
-			if( wp_content )
-			{
-				_wysiwyg.set({ $el : $('#wp-content-wrap') }).add_events();
-			}
-			
-			
-		}, 11);
 		
 	});
 	
@@ -465,10 +311,10 @@
 	*  @created: 26/02/13
 	*/
 	
-	$(document).on('click', '.acf_wysiwyg a.mce_fullscreen', function(){
+	$(document).on('click', '.acfacf.fields.wysiwyg a.mce_fullscreen', function(){
 		
 		// vars
-		var wysiwyg = $(this).closest('.acf_wysiwyg'),
+		var wysiwyg = $(this).closest('.acfacf.fields.wysiwyg'),
 			upload = wysiwyg.attr('data-upload');
 		
 		if( upload == 'no' )

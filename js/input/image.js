@@ -33,7 +33,7 @@
 			
 			
 			// get options
-			this.o = acf.helpers.get_atts( this.$el );
+			this.o = acf.get_atts( this.$el );
 			
 			
 			// multiple?
@@ -56,15 +56,6 @@
 			// return this for chaining
 			return this;
 			
-		},
-		init : function(){
-
-			// is clone field?
-			if( acf.helpers.is_clone_field(this.$input) )
-			{
-				return;
-			}
-					
 		},
 		add : function( image ){
 			

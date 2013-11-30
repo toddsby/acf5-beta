@@ -30,7 +30,7 @@
 			
 			
 			// get options
-			this.o = acf.helpers.get_atts( this.$el );
+			this.o = acf.get_atts( this.$el );
 			
 			
 			// return this for chaining
@@ -38,20 +38,13 @@
 			
 		},
 		init : function(){
-
-			// is clone field?
-			if( acf.helpers.is_clone_field(this.$hidden) )
-			{
-				return;
-			}
-			
 			
 			// get and set value from alt field
 			this.$input.val( this.$hidden.val() );
 			
 			
 			// create options
-			var options = $.extend( {}, acf.l10n.date_picker, { 
+			var args = $.extend( {}, acf.l10n.date_picker, { 
 				dateFormat		:	this.o.save_format,
 				altField		:	this.$hidden,
 				altFormat		:	this.o.save_format,
@@ -63,8 +56,12 @@
 			});
 			
 			
+			// filter for 3rd party customization
+			args = acf.apply_filters('date_picker_args', args);
+			
+			
 			// add date picker
-			this.$input.addClass('active').datepicker( options );
+			this.$input.addClass('active').datepicker( args );
 			
 			
 			// now change the format back to how it should be.
@@ -103,16 +100,16 @@
 	*  @return	N/A
 	*/
 	
-	$(document).on('acf/setup_fields', function(e, el){
+	acf.add_action('ready append', function( $el ){
 		
-		$(el).find('.acf-date_picker').each(function(){
+		acf.get_fields( $el, 'date_picker' ).each(function(){
 			
 			acf.fields.date_picker.set({ $el : $(this) }).init();
 			
 		});
 		
 	});
-	
+		
 	
 	/*
 	*  Events
@@ -126,7 +123,7 @@
 	
 	$(document).on('blur', '.acf-date_picker input[type="text"]', function( e ){
 		
-		acf.fields.date_picker.set({ $el : $(this).parent() }).blur();
+		acf.fields.date_picker.set({ $el : $(this).closest('.acf-field') }).blur();
 					
 	});
 	

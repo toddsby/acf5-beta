@@ -8,7 +8,7 @@
 	    	var _this = this;
 	    	
 	    	
-	    	acf.on('append sortstop', function( e, $el ){
+	    	acf.add_action('append sortstop', function( $el ){
 			    
 			    if( $el.is('.field') )
 			    {
@@ -83,7 +83,7 @@
 			
 			
 			// 3rd party hook
-			acf.trigger('render_field', [ $el ]);
+			acf.do_action('render_field', $el);
 	    	
     	},
     	
@@ -144,7 +144,7 @@
 			
 			
 			// events
-			acf.on('render_field', function( e, $el ){
+			acf.add_action('render_field', function( $el ){
 				
 				// validate
 				if( $el.attr('data-type') == 'repeater' )
@@ -299,13 +299,14 @@
 					scroll					: true,
 					start : function (event, ui) {
 						
-						acf.trigger('sortstart', [ui.item, ui.placeholder]);
+						acf.do_action('sortstart', ui.item, ui.placeholder);
 						
 		   			},
 		   			
 		   			stop : function (event, ui) {
 					
-						acf.trigger('sortstop', [ui.item, ui.placeholder]);
+						acf.do_action('sortstop', ui.item, ui.placeholder);
+						
 						
 		   			}
 				});
@@ -452,7 +453,7 @@
 			
 			// vars
 			var old_key = $tr.attr('data-key'),
-				new_key = acf.helpers.uniqid();
+				new_key = acf.get_uniqid();
 			
 			
 			// give field a new id

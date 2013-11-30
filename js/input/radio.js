@@ -54,33 +54,6 @@
 	
 	
 	/*
-	*  acf/setup_fields
-	*
-	*  run init function on all elements for this field
-	*
-	*  @type	event
-	*  @date	20/07/13
-	*
-	*  @param	{object}	e		event object
-	*  @param	{object}	el		DOM object which may contain new ACF elements
-	*  @return	N/A
-	*/
-	
-	/*
-acf.on('ready append', function(e, el){
-		
-		$(el).find('.acf-radio-list').each(function(){
-			
-			acf.fields.radio.set({ $el : $(this) }).init();
-			
-		});
-		
-	});
-*/
-	
-	
-	
-	/*
 	*  Events
 	*
 	*  jQuery events for this field

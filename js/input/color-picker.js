@@ -12,7 +12,7 @@
 	*  @return	N/A
 	*/
 	
-	var _cp = acf.fields.color_picker = {
+	acf.fields.color_picker = {
 		
 		$el : null,
 		$input : null,
@@ -31,18 +31,10 @@
 			return this;
 			
 		},
+		
 		init : function(){
 			
-			// is clone field?
-			if( acf.helpers.is_clone_field(this.$input) )
-			{
-				return;
-			}
-			
-			
 			this.$input.wpColorPicker();
-			
-			
 			
 		}
 	};
@@ -61,15 +53,15 @@
 	*  @return	N/A
 	*/
 	
-	$(document).on('acf/setup_fields', function(e, el){
+	acf.add_action('ready append', function( $el ){
 		
-		$(el).find('.acf-color_picker').each(function(){
+		acf.get_fields( $el, 'color_picker' ).each(function(){
 			
-			_cp.set({ $el : $(this) }).init();
+			acf.fields.color_picker.set({ $el : $(this) }).init();
 			
 		});
 		
 	});
-		
+	
 
 })(jQuery);

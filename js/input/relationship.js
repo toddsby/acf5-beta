@@ -35,7 +35,7 @@
 			
 			
 			// get options
-			this.o = acf.helpers.get_atts( this.$wrap );
+			this.o = acf.get_atts( this.$wrap );
 			
 			
 			// return this for chaining
@@ -47,13 +47,6 @@
 			
 			// reference
 			var _this = this;
-			
-			
-			// is clone field?
-			if( acf.helpers.is_clone_field(this.$input) )
-			{
-				return;
-			}
 			
 			
 			// right sortable
@@ -289,16 +282,15 @@
 	*  @return	N/A
 	*/
 	
-	acf.on('ready append', function(e, el){
+	acf.add_action('ready append', function( $el ){
 		
-		$(el).find('.acf-field.field_type-relationship').each(function(){
+		acf.get_fields( $el, 'relationship' ).each(function(){
 			
 			acf.fields.relationship.set({ $el : $(this) }).init();
 			
 		});
 		
 	});
-	
 	
 	
 	/*

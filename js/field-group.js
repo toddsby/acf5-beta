@@ -130,8 +130,8 @@ var acf_field_group = {};
 					
 					_this.render();
 					
-			
-					acf.trigger('sortstop', [ $el ]);
+					
+					acf.do_action('sortstop', $el);
 					
 				},
 				handle: '.acf-icon'
@@ -182,13 +182,6 @@ var acf_field_group = {};
 				
 			});
 			
-			
-			acf.on('open', function(e, $el){
-				
-				
-				
-			});
-			
 		},
 		
 		
@@ -218,12 +211,12 @@ var acf_field_group = {};
 			if( $el.hasClass('open') )
 			{
 				$el.removeClass('open');
-				acf.trigger('close', [ $el ]);
+				acf.do_action('close', $el);
 			}
 			else
 			{
 				$el.addClass('open');
-				acf.trigger('open', [ $el ]);
+				acf.do_action('open', $el);
 			}
 			
 			
@@ -274,7 +267,7 @@ var acf_field_group = {};
 				
 				
 				// trigger event
-				acf.trigger('change', [ $el ]);
+				acf.do_action('change', $el);
 			}
 			else
 			{
@@ -317,8 +310,9 @@ var acf_field_group = {};
 						
 						
 						// trigger event
-						acf.trigger('append', [ $new_tr ]);
-						acf.trigger('change', [ $el ]);
+						acf.do_action('append', $new_tr);
+						acf.do_action('change', $el);
+
 						
 					}
 				});
@@ -369,7 +363,7 @@ var acf_field_group = {};
 			
 			
 			// trigger append
-			acf.trigger('append', [ $el ]);
+			acf.do_action('append', $el);
 			
 			
 			// open up form
@@ -444,7 +438,7 @@ var acf_field_group = {};
 			
 			// vars
 			var old_id = $el.attr('data-id'),
-				new_id = acf.helpers.uniqid('field_');
+				new_id = acf.get_uniqid('field_');
 			
 			
 			// give field a new id
@@ -702,7 +696,7 @@ var acf_field_group = {};
 			// vars
 			var $tr2 = $tr.clone(),
 				old_id = $tr2.attr('data-id'),
-				new_id = acf.helpers.uniqid();
+				new_id = acf.get_uniqid();
 			
 			
 			// update names
@@ -749,7 +743,7 @@ var acf_field_group = {};
 			var $group = this.$el.find('.location-group:last'),
 				$group2 = $group.clone(),
 				old_id = $group2.attr('data-id'),
-				new_id = acf.helpers.uniqid();
+				new_id = acf.get_uniqid();
 			
 			
 			// update names
@@ -840,7 +834,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			
 			
 			// events
-			acf.on('open', function(e, $field){
+			acf.add_action('open', function($field){
 				
 				// render select elements
 				_this.render( $field );
@@ -1168,7 +1162,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 		
 	}
 	
-	acf.on('open', function( e, $el ){
+	acf.add_action('open', function( $el ){
 		
 		if( $el.attr('data-type') == 'select' )
 		{
@@ -1214,7 +1208,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			
 	}
 	
-	acf.on('open change', function( e, $el ){
+	acf.add_action('open change', function( $el ){
 		
 		if( $el.attr('data-type') == 'post_object' )
 		{
@@ -1273,7 +1267,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 	*  @return	$post_id (int)
 	*/
 	
-	acf.on('open change', function( e, $el ){
+	acf.add_action('open change', function( $el ){
 		
 		// validate
 		if( $el.attr('data-type') != 'google_map' )

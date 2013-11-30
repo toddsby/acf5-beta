@@ -33,7 +33,7 @@
 			
 			
 			// get options
-			this.o = acf.helpers.get_atts( this.$el );
+			this.o = acf.get_atts( this.$el );
 			
 			
 			// add row_count
@@ -64,13 +64,13 @@
 					
 					start : function (event, ui) {
 						
-						acf.trigger('sortstart', [ui.item, ui.placeholder]);
+						acf.do_action('sortstart', ui.item, ui.placeholder);
 						
 		   			},
 		   			
 		   			stop : function (event, ui) {
 					
-						acf.trigger('sortstop', [ui.item, ui.placeholder]);
+						acf.do_action('sortstop', ui.item, ui.placeholder);
 						
 						
 						// render
@@ -134,7 +134,7 @@
 			
 		
 			// create and add the new field
-			var new_id = acf.helpers.uniqid(),
+			var new_id = acf.get_uniqid(),
 				new_field_html = this.$el.find('> table > tbody > tr[data-id="acfcloneindex"]').html().replace(/(=["]*[\w-\[\]]*?)(acfcloneindex)/g, '$1' + new_id),
 				$tr = $('<tr class="acf-row" data-id="' + new_id + '"></tr>').append( new_field_html );
 			
@@ -157,7 +157,7 @@
 			
 			
 			// setup fields
-			acf.trigger('append', [ $tr ]);
+			acf.do_action('append', $tr);
 	
 			
 			// validation
@@ -179,7 +179,7 @@
 			
 			
 			// animate out tr
-			acf.helpers.remove_tr( $tr, function(){
+			acf.remove_tr( $tr, function(){
 				
 				// trigger mouseenter on parent repeater to work out css margin on add-row button
 				_this.$el.closest('tr').trigger('mouseenter');
@@ -209,11 +209,11 @@
 	*  @return	N/A
 	*/
 	
-	acf.on('ready append', function(e, $el){
+	acf.add_action('ready append', function( $el ){
 		
-		$el.find('.acf-repeater').each(function(){
+		acf.get_fields( $el, 'repeater' ).each(function(){
 			
-			acf.fields.repeater.set({ $el : $(this) }).init();
+			acf.fields.repeater.set({ $el : $(this).find('.acf-repeater') }).init();
 			
 		});
 		
@@ -305,7 +305,7 @@
 			
 			
 			// get options
-			this.o = acf.helpers.get_atts( this.$el );
+			this.o = acf.get_atts( this.$el );
 			
 			
 			// add layout_count
@@ -336,12 +336,12 @@
 					
 					start : function (event, ui) {
 					
-						acf.trigger('sortstart', [ui.item, ui.placeholder]);
+						acf.do_action('sortstart', ui.item, ui.placeholder);
 		        		
 		   			},
 		   			stop : function (event, ui) {
-					
-						acf.trigger('sortstop', [ui.item, ui.placeholder]);
+						
+						acf.do_action('sortstop', ui.item, ui.placeholder);
 						
 						
 						// render
@@ -538,7 +538,7 @@
 			
 			
 			// vars
-			var new_id = acf.helpers.uniqid(),
+			var new_id = acf.get_uniqid(),
 				new_field_html = this.$el.find('> .clones > .layout[data-layout="' + layout + '"]').html().replace(/(=["]*[\w-\[\]]*?)(acfcloneindex)/g, '$1' + new_id),
 				new_field = $('<div class="layout" data-layout="' + layout + '"></div>').append( new_field_html );
 				
@@ -770,12 +770,12 @@
 	*  @return	N/A
 	*/
 	
-	acf.on('ready append', function(e, $el){
+	acf.add_action('ready append', function( $el ){
 		
-		$el.find('.acf-flexible-content').each(function(){
+		acf.get_fields( $el, 'flexible_content' ).each(function(){
 			
-			acf.fields.flexible_content.set({ $el : $(this) }).init();
-						
+			acf.fields.flexible_content.set({ $el : $(this).find('.acf-flexible-content') }).init();
+			
 		});
 		
 	});

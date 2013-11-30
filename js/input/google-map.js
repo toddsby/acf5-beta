@@ -32,7 +32,7 @@
 			
 			
 			// get options
-			this.o = acf.helpers.get_atts( this.$el );
+			this.o = acf.get_atts( this.$el );
 			
 			
 			// get map
@@ -52,12 +52,6 @@
 		},
 		init : function(){
 
-			// is clone field?
-			if( acf.helpers.is_clone_field(this.$input) )
-			{
-				return;
-			}
-			
 			this.render();
 					
 		},
@@ -230,7 +224,7 @@
 	        
 	        
 	        // validation
-			this.$el.closest('.field').removeClass('error');
+			this.$el.closest('.acf-field').removeClass('error');
 			
 			
 	        // return for chaining
@@ -375,37 +369,46 @@
 	*  @return	N/A
 	*/
 	
-	acf.on('ready append', function(e, el){
+	acf.add_action('ready append', function( $el ){
 		
-		if( $(el).find('.acf-google-map').exists() )
+		//vars
+		var $fields = acf.get_fields( $el, 'google_map' );
+		
+		
+		// validate
+		if( !$fields.exists() )
 		{
-			// validate google
-			if( typeof google === 'undefined' )
-			{
-				$.getScript('https://www.google.com/jsapi', function(){
-				
-				    google.load('maps', '3', { other_params: 'sensor=false&libraries=places', callback: function(){
-				    
-				        $(el).find('.acf-google-map').each(function(){
-						
-							acf.fields.location.set({ $el : $(this) }).init();
-							
-						});
-				        
-				    }});
-				});
-				
-			}
-			else
-			{
-				$(el).find('.acf-google-map').each(function(){
-					
-					acf.fields.location.set({ $el : $(this) }).init();
-					
-				});
-				
-			}
+			return;
 		}
+		
+		
+		// validate google
+		if( typeof google === 'undefined' )
+		{
+			$.getScript('https://www.google.com/jsapi', function(){
+			
+			    google.load('maps', '3', { other_params: 'sensor=false&libraries=places', callback: function(){
+			    
+			        $fields.each(function(){
+					
+						acf.fields.location.set({ $el : $(this).find('.acf-google-map') }).init();
+						
+					});
+			        
+			    }});
+			});
+			
+		}
+		else
+		{
+			$fields.each(function(){
+				
+				acf.fields.location.set({ $el : $(this).find('.acf-google-map') }).init();
+				
+			});
+			
+		}
+		
 		
 	});
 	

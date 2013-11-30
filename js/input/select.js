@@ -28,7 +28,7 @@
 			
 			
 			// get options
-			this.o = acf.helpers.get_atts( this.$select );
+			this.o = acf.get_atts( this.$select );
 			
 			
 			// return this for chaining
@@ -37,13 +37,6 @@
 		},
 		
 		init : function(){
-			
-			// is clone field?
-			if( acf.helpers.is_clone_field( this.$select ) )
-			{
-				return;
-			}
-			
 			
 			// bail early if no ui
 			if( ! this.o.ui )
@@ -87,9 +80,15 @@
 	*  @return	N/A
 	*/
 	
-	acf.on('ready append', function(e, el){
+	acf.add_action('ready append', function( $el ){
 		
-		$(el).find('.acf-field.field_type-select').each(function(){
+		acf.get_fields( $el, 'select' ).each(function(){
+			
+			acf.fields.select.set({ $el : $(this) }).init();
+			
+		});
+		
+		acf.get_fields( $el, 'user' ).each(function(){
 			
 			acf.fields.select.set({ $el : $(this) }).init();
 			
@@ -97,17 +96,6 @@
 		
 	});
 	
-	
-	// move to user
-	acf.on('ready append', function(e, el){
-		
-		$(el).find('.acf-field.field_type-user').each(function(){
-			
-			acf.fields.select.set({ $el : $(this) }).init();
-			
-		});
-		
-	});
 	
 
 })(jQuery);

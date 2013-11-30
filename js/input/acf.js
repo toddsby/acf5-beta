@@ -13,26 +13,32 @@
 var acf = {
 	
 	// vars
-	l10n				:	{},
-	o					:	{},
+	l10n				: {},
+	o					: {},
 	
-	update				:	null,
-	get					:	null,
-	_e					:	null,
-	on					:	null,
-	trigger				:	null,
+	
+	// functions
+	get					: null,
+	update				: null,
+	_e					: null,
+	get_atts			: null,
+	get_fields			: null,
+	get_uniqid			: null,
+	serialize_form		: null,
+	
+	
+	// hooks
+	add_action			: null,
+	remove_action		: null,
+	do_action			: null,
+	add_filter			: null,
+	remove_filtern		: null,
+	apply_filters		: null,
 	
 	
 	// helper functions
 	helpers				:	{
-		get_atts		: 	null,
-		version_compare	:	null,
-		uniqid			:	null,
-		sortable		:	null,
-		add_message		:	null,
 		is_clone_field	:	null,
-		url_to_object	:	null,
-		remove_tr		:	null
 	},
 	
 	
@@ -58,7 +64,7 @@ var acf = {
 	
 	
 	/*
-	*  Basic Object Functions
+	*  Functions
 	*
 	*  These functions interact with the o object, and events
 	*
@@ -84,18 +90,6 @@ var acf = {
 			
 		},
 		
-		on : function( event, callback ){
-			
-			$(this).on(event, callback);
-			
-		},
-		
-		trigger : function( event, args ){
-			
-			$(this).trigger(event, args);
-			
-		},
-		
 		_e : function( context, string ){
 			
 			// defaults
@@ -116,130 +110,80 @@ var acf = {
 			// return
 			return r || '';
 			
-		}
-		
-	});
-	
-	
-	/*
-	*  helpers
-	*
-	*  description
-	*
-	*  @type	function
-	*  @date	5/11/2013
-	*  @since	5.0.0
-	*
-	*  @param	$post_id (int)
-	*  @return	$post_id (int)
-	*/
-	
-	$.extend(acf.helpers, {
-		
-		remove_tr : function( $tr, callback ){
-			
-			// vars
-			var height = $tr.height(),
-				children = $tr.children().length;
-			
-			
-			// add class
-			$tr.addClass('acf-remove-element');
-			
-			
-			// after animation
-			setTimeout(function(){
-				
-				// remove class
-				$tr.removeClass('acf-remove-element');
-				
-				
-				// vars
-				$tr.html('<td style="padding:0; height:' + height + 'px" colspan="' + children + '"></td>');
-				
-				
-				$tr.children('td').animate({ height : 0}, 250, function(){
-					
-					$tr.remove();
-					
-					if( typeof(callback) == 'function' )
-					{
-						callback();
-					}
-					
-					
-				});
-				
-					
-			}, 250);
-			
-		},
-		
-		
-		remove_el : function( $el, callback ){
-			
-			// set layout
-			$el.css({
-				height		: $el.height(),
-				width		: $el.width(),
-				position	: 'absolute',
-				padding		: 0
-			});
-			
-			
-			// wrap field
-			$el.wrap( '<div class="acf-temp-wrap" style="height:' + $el.outerHeight(true) + 'px"></div>' );
-			
-			
-			// fade $el
-			$el.animate({ opacity : 0 }, 250);
-			
-			
-			// remove
-			$el.parent('.acf-temp-wrap').animate({ height : 0 }, 250, function(){
-				
-				$(this).remove();
-				
-				if( typeof(callback) == 'function' )
-				{
-					callback();
-				}
-				
-			});
-			
-			
 		},
 		
 		get_atts : function( $el ){
 		
 			var atts = {};
 			
-			$.each( $el[0].attributes, function( index, attr ) {
-	        	
-	        	if( attr.name.substr(0, 5) == 'data-' )
-	        	{
-	        		// vars
-	        		var v = attr.value,
-	        			k = attr.name.replace('data-', '');
-	        		
-	        		
-	        		// convert ints (don't worry about floats. I doubt these would ever appear in data atts...)
-	        		if( $.isNumeric(v) )
-	        		{
-		        		v = parseInt(v);
-	        		}
-	        		
-	        		
-	        		// add to atts
-		        	atts[ k ] = v;
-	        	}
-	        });
+			if( $el.exists() )
+			{
+				$.each( $el[0].attributes, function( index, attr ) {
+		        	
+		        	if( attr.name.substr(0, 5) == 'data-' )
+		        	{
+		        		// vars
+		        		var v = attr.value,
+		        			k = attr.name.replace('data-', '');
+		        		
+		        		
+		        		// convert ints (don't worry about floats. I doubt these would ever appear in data atts...)
+		        		if( $.isNumeric(v) )
+		        		{
+			        		v = parseInt(v);
+		        		}
+		        		
+		        		
+		        		// add to atts
+			        	atts[ k ] = v;
+		        	}
+		        });
+	        }
 	        
 	        return atts;
 				
 		},
 		
-		uniqid : function( prefix, more_entropy ){
+		get_fields : function( $el, field_type, allow_filter ){
+			
+			// defaults
+			$el = $el || $('body');
+			field_type = field_type || false;
+			allow_filter = allow_filter || true;
+			
+			
+			// vars
+			var selector = '.acf-field';
+			
+			
+			// add field type
+			if( field_type )
+			{
+				selector += '[data-type="' + field_type + '"]';
+			}
+			
+			
+			// get fields
+			var $fields = $el.find(selector);
+			
+			
+			// filter out fields
+			if( allow_filter )
+			{
+				$fields.filter(function(){
+					
+					return acf.apply_filters('is_field_ready_for_js', $(this));			
+					
+				});
+			}
+			
+			
+			// return
+			return $fields;
+							
+		},
+		
+		get_uniqid : function( prefix, more_entropy ){
 		
 			// + original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
 			// + revised by: Kankrelune (http://www.webfaktory.info/)
@@ -318,8 +262,6 @@ var acf = {
 					
 					// add key
 					pair.name += '[' + names[ pair.name ] +']';
-					
-					
 				}
 				
 				
@@ -331,70 +273,213 @@ var acf = {
 			
 			// return
 			return data;
+		},
+		
+		remove_tr : function( $tr, callback ){
+			
+			// vars
+			var height = $tr.height(),
+				children = $tr.children().length;
+			
+			
+			// add class
+			$tr.addClass('acf-remove-element');
+			
+			
+			// after animation
+			setTimeout(function(){
+				
+				// remove class
+				$tr.removeClass('acf-remove-element');
+				
+				
+				// vars
+				$tr.html('<td style="padding:0; height:' + height + 'px" colspan="' + children + '"></td>');
+				
+				
+				$tr.children('td').animate({ height : 0}, 250, function(){
+					
+					$tr.remove();
+					
+					if( typeof(callback) == 'function' )
+					{
+						callback();
+					}
+					
+					
+				});
+				
+					
+			}, 250);
+			
+		},
+		
+		remove_el : function( $el, callback ){
+			
+			// set layout
+			$el.css({
+				height		: $el.height(),
+				width		: $el.width(),
+				position	: 'absolute',
+				padding		: 0
+			});
+			
+			
+			// wrap field
+			$el.wrap( '<div class="acf-temp-wrap" style="height:' + $el.outerHeight(true) + 'px"></div>' );
+			
+			
+			// fade $el
+			$el.animate({ opacity : 0 }, 250);
+			
+			
+			// remove
+			$el.parent('.acf-temp-wrap').animate({ height : 0 }, 250, function(){
+				
+				$(this).remove();
+				
+				if( typeof(callback) == 'function' )
+				{
+					callback();
+				}
+				
+			});
+			
+			
+		},
+		
+		isset_object : function(){
+			
+			var args = Array.prototype.slice.call(arguments),
+				obj = args.shift();
+			
+			for (var i = 0; i < args.length; i++) {
+				if (!obj.hasOwnProperty(args[i])) {
+					return false;
+				}
+				obj = obj[args[i]];
+			}
+			
+			return true;
+				
 		}
 		
 	});
 	
-		
+	
 	/*
-	*  acf.helpers.isset
+	*  Hooks
 	*
-	*  http://phpjs.org/functions/isset
+	*  These functions act as wrapper functions for the included event-manajer JS library
+	*  Wrapper functions will ensure that future changes to event-manager do not distrupt
+	*  any custom actions / filter code written by users
 	*
-	*  @type	function
-	*  @date	20/07/13
+	*  @type	functions
+	*  @date	30/11/2013
+	*  @since	5.0.0
 	*
-	*  @param	{mixed}		arguments
-	*  @return	{boolean}	
+	*  @param	n/a
+	*  @return	n/a
 	*/
 	
-	acf.helpers.isset = function(){
+	$.extend(acf, {
 		
-		var a = arguments,
-	        l = a.length,
-	        i = 0,
-	        undef;
-	
-	    if (l === 0) {
-	        throw new Error('Empty isset');
-	    }
-	
-	    while (i !== l) {
-	        if (a[i] === undef || a[i] === null) {
-	            return false;
-	        }
-	        i++;
-	    }
-	    
-	    return true;
+		add_action : function() {
 			
-	};
-    
-    
-    /*
-	*  Helper: url_to_object
-	*
-	*  @description: 
-	*  @since: 4.0.0
-	*  @created: 17/01/13
-	*/
-	
-    acf.helpers.url_to_object = function( url ){
-	    
-	    // vars
-	    var obj = {},
-	    	pairs = url.split('&');
-	    
-	    
-		for( i in pairs )
-		{
-		    var split = pairs[i].split('=');
-		    obj[decodeURIComponent(split[0])] = decodeURIComponent(split[1]);
+			// allow multiple action parameters such as 'ready append'
+			var actions = arguments[0].split(' ');
+			
+			for( k in actions )
+			{
+				// prefix action
+				arguments[0] = 'acf.' + actions[ k ];
+				
+				wp.hooks.addAction.apply(this, arguments);
+			}
+			
+			return this;
+		},
+		
+		remove_action : function() {
+			
+			// prefix action
+			arguments[0] = 'acf.' + arguments[0];
+			
+			wp.hooks.removeAction.apply(this, arguments);
+			
+			return this;
+		},
+		
+		do_action : function() {
+			
+			// prefix action
+			arguments[0] = 'acf.' + arguments[0];
+			
+			wp.hooks.doAction.apply(this, arguments);
+			
+			return this;
+		},
+		
+		add_filter : function() {
+			
+			// prefix action
+			arguments[0] = 'acf.' + arguments[0];
+			
+			wp.hooks.addFilter.apply(this, arguments);
+			
+			return this;
+		},
+		
+		remove_filter : function() {
+			
+			// prefix action
+			arguments[0] = 'acf.' + arguments[0];
+			
+			wp.hooks.removeFilter.apply(this, arguments);
+			
+			return this;
+		},
+		
+		apply_filters : function() {
+			
+			// prefix action
+			arguments[0] = 'acf.' + arguments[0];
+			
+			return wp.hooks.applyFilters.apply(this, arguments);
 		}
 		
-		return obj;
+	});
+    
+    
+    acf.add_filter('is_field_ready_for_js', function( $field ){
+		
+		// vars
+		var r = true;
+		
+		
+		// repeater sub field
+		if( $field.parents('.acf-row[data-id="acfcloneindex"]').exists() )
+		{
+			r = false;
+		}
+		
+		
+		// widget
+		if( $field.parents('#available-widgets').exists() )
+		{
+			r = false;
+		}
+		
+		
+		// debug
+		console.log('is_field_ready_for_js %o, %b', $field, r);
+		
+		
+		// return
+		return r;
 	    
-    };
+    });
+    
     
 	/*
 	*  is_clone_field
@@ -412,42 +497,8 @@ var acf = {
 			return true;
 		}
 		
-		
-		// widget
-		if( input.parents('#available-widgets').exists() )
-		{
-			return true;
-		}
-		
-		
+
 		return false;
-	};
-	
-	
-	/*
-	*  acf.helpers.add_message
-	*
-	*  @description: 
-	*  @since: 3.2.7
-	*  @created: 10/07/2012
-	*/
-	
-	acf.helpers.add_message = function( message, div ){
-		
-		var message = $('<div class="acf-message-wrapper"><div class="message updated"><p>' + message + '</p></div></div>');
-		
-		div.prepend( message );
-		
-		setTimeout(function(){
-			
-			message.animate({
-				opacity : 0
-			}, 250, function(){
-				message.remove();
-			});
-			
-		}, 1500);
-			
 	};
 	
 	
@@ -927,15 +978,12 @@ var acf = {
 			
 		}
 		
-	};
-	
-	
-	
+	}; 
 	
 	
 	$(document).ready(function(){
 		
-		acf.trigger('ready', [ $(document) ]);
+		acf.do_action('ready', $('body'));
 		
 		
 		// conditional logic
@@ -954,7 +1002,7 @@ var acf = {
 	
 	$(window).load(function(){
 		
-		acf.trigger('load', [ $(document) ]);
+		acf.do_action('load', $('body'));
 		
 		
 		// init
@@ -1000,7 +1048,7 @@ var acf = {
 	*  @return	$post_id (int)
 	*/
 	
-	acf.on('sortstart', function( e, $item, $placeholder ){
+	acf.add_action('sortstart', function( $item, $placeholder ){
 		
 		// if $item is a tr, apply some css to the elements
 		if( $item.is('tr') )

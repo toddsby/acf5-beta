@@ -150,7 +150,7 @@ class acf_field_wysiwyg extends acf_field
 		
 		
 		?>
-		<div id="wp-<?php echo $id; ?>-wrap" class="acf_wysiwyg wp-editor-wrap" data-toolbar="<?php echo $field['toolbar']; ?>" data-upload="<?php echo $field['media_upload']; ?>">
+		<div id="wp-<?php echo $id; ?>-wrap" class="acf-wysiwyg-wrap wp-editor-wrap" data-toolbar="<?php echo $field['toolbar']; ?>" data-upload="<?php echo $field['media_upload']; ?>">
 			<?php if( $field['media_upload'] ): ?>
 				<div id="wp-<?php echo $id; ?>-editor-tools" class="wp-editor-tools">
 					<div id="wp-<?php echo $id; ?>-media-buttons" class="hide-if-no-js wp-media-buttons">

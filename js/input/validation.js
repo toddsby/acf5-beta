@@ -45,7 +45,7 @@
 			
 			
 			// hook for 3rd party customization
-			acf.trigger('add_field_error', [ $field ]);
+			acf.do_action('add_field_error', $field);
 		},
 		
 		remove_error : function( $field ){
@@ -61,13 +61,13 @@
 			// remove message
 			setTimeout(function(){
 				
-				acf.helpers.remove_el( $message );
+				acf.remove_el( $message );
 				
 			}, 250);
 			
 			
 			// hook for 3rd party customization
-			acf.trigger('remove_field_error', [ $field ]);
+			acf.do_action('remove_field_error', $field);
 		},
 		
 		fetch : function( $form ){
@@ -77,7 +77,7 @@
 			
 			
 			// vars
-			var data = acf.helpers.serialize_form( $form );
+			var data = acf.serialize_form( $form );
 				
 			
 			// append AJAX action		
@@ -231,10 +231,9 @@
 	};
 	
 	
-	acf.on('ready', function(){
+	acf.add_action('ready', function(){
 		
 		acf.validation.init();
-		
 		
 	});
 	

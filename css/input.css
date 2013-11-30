@@ -441,3 +441,39 @@ ul.acf-radio-list.pill li label input {
 }
 
 
+/*--------------------------------------------------------------------------
+*
+*	WYSIWYG
+*	
+*-------------------------------------------------------------------------*/
+
+.acf-wysiwyg-wrap {
+	
+}
+
+.acf-wysiwyg-wrap .wp_themeSkin table.mceToolbarRow1 {
+    margin-top: 2px !important;
+}
+
+.acf-wysiwyg-wrap iframe{ 
+	min-height: 250px;
+}
+
+#post-body .acf-wysiwyg-wrap .wp_themeSkin .mceStatusbar a.mceResize {
+	top: -2px !important;
+}
+
+.acf-wysiwyg-wrap .wp-editor-container {
+	background: #fff;
+	border-color: #CCCCCC #CCCCCC #DFDFDF;
+    border-style: solid;
+    border-radius: 3px 3px 0 0;
+    border-width: 1px;
+}
+
+#mce_fullscreen_container {
+	z-index: 150005 !important;
+}
+
+
+

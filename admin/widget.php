@@ -137,7 +137,7 @@ class acf_controller_widget {
 					// vars
 					$widget = $('[id^="widget"][id$="<?php echo $widget->id; ?>"]');
 					
-					acf.trigger('append', [ $widget ]);
+					acf.do_action('append', $widget );
 					
 				})(jQuery);	
 				</script>
@@ -175,7 +175,7 @@ class acf_controller_widget {
 <script type="text/javascript">
 (function($) {
 	
-	acf.on('ready', function(){
+	acf.add_action('ready', function(){
 		
 		$('#widgets-right').on('click', '.widget-control-save', function( e ){
 		
@@ -224,7 +224,7 @@ class acf_controller_widget {
 		
 	});
 	
-	acf.on('load', function(){
+	acf.add_action('load', function(){
 		
 		$('div.widgets-sortables').on('sortstop', function(e, ui){
 			
@@ -240,7 +240,7 @@ class acf_controller_widget {
 				setTimeout(function(){
 					
 					// this is a newly dragged in widget
-					acf.trigger('append', [ ui.item ]);
+					acf.do_action('append', ui.item );
 					
 				}, 250);
 			}

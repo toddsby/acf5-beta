@@ -29,7 +29,7 @@
 			
 			
 			// get options
-			this.o = acf.helpers.get_atts( this.$select );
+			this.o = acf.get_atts( this.$select );
 			
 			
 			// return this for chaining
@@ -37,13 +37,6 @@
 			
 		},
 		init : function(){
-			
-			// is clone field?
-			if( acf.helpers.is_clone_field( this.$select ) )
-			{
-				return;
-			}
-			
 			
 			// read choices
 			var choices = [],
@@ -181,9 +174,9 @@ console.log('-- results --')
 	*  @return	N/A
 	*/
 	
-	acf.on('ready append', function(e, el){
+	acf.add_action('ready append', function( $el ){
 		
-		$(el).find('.acf-field.field_type-post_object').each(function(){
+		acf.get_fields( $el, 'post_object' ).each(function(){
 			
 			acf.fields.post_object.set({ $el : $(this) }).init();
 			
