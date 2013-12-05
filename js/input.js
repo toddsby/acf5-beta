@@ -426,14 +426,17 @@ var acf = {
 			// get fields
 			var $fields = $el.find(selector);
 			
+			console.log('get_fields(%o, %s, %b). selector = %s', $el, field_type, allow_filter, selector);
+			//console.log( $el );
+			//console.log( $fields );
 			
 			// filter out fields
 			if( allow_filter )
 			{
-				$fields.filter(function(){
+				$fields = $fields.filter(function(){
 					
-					return acf.apply_filters('is_field_ready_for_js', $(this));			
-					
+					return acf.apply_filters('is_field_ready_for_js', true, $(this));			
+
 				});
 			}
 			
@@ -711,32 +714,28 @@ var acf = {
 	});
     
     
-    acf.add_filter('is_field_ready_for_js', function( $field ){
-		
-		// vars
-		var r = true;
-		
+    acf.add_filter('is_field_ready_for_js', function( ready, $field ){
 		
 		// repeater sub field
 		if( $field.parents('.acf-row[data-id="acfcloneindex"]').exists() )
 		{
-			r = false;
+			ready = false;
 		}
 		
 		
 		// widget
 		if( $field.parents('#available-widgets').exists() )
 		{
-			r = false;
+			ready = false;
 		}
 		
 		
 		// debug
-		console.log('is_field_ready_for_js %o, %b', $field, r);
+		//console.log('is_field_ready_for_js %o, %b', $field, ready);
 		
 		
 		// return
-		return r;
+		return ready;
 	    
     });
     
@@ -3423,6 +3422,7 @@ console.log('-- results --')
 	*/
 	
 	acf.add_action('ready append', function( $el ){
+		
 		
 		acf.get_fields( $el, 'select' ).each(function(){
 			
