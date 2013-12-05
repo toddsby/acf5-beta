@@ -94,6 +94,7 @@ class acf {
 		
 		// actions
 		add_action('init', array($this, 'wp_init'), 1);
+		add_filter('posts_where', array($this, 'wp_posts_where'), 0, 2 );
 	}
 	
 	
@@ -368,6 +369,52 @@ class acf {
 			wp_register_style( $style['handle'], $style['src'], $style['deps'], acf_get_setting('version') ); 
 		}
 		
+	}
+	
+	
+	/*
+	*  wp_posts_where
+	*
+	*  This function will add in some new parameters to the WP_Query args
+	*
+	*  @type	filter
+	*  @date	5/12/2013
+	*  @since	5.0.0
+	*
+	*  @param	$where (string)
+	*  @param	$wp_query (object)
+	*  @return	$where (string)
+	*/
+	
+	function wp_posts_where( $where, $wp_query )
+	{
+		// global
+		global $wpdb;
+		
+		
+		// acf_field_key
+		if( $field_key = $wp_query->get('acf_field_key') )
+		{
+			$where .= $wpdb->prepare(" AND {$wpdb->posts}.post_name = %s", $field_key );
+	    }
+	    
+	    
+	    // acf_field_name
+	    if( $field_name = $wp_query->get('acf_field_name') )
+		{
+			$where .= $wpdb->prepare(" AND {$wpdb->posts}.post_excerpt = %s", $field_name );
+	    }
+	    
+	    
+	    // acf_group_key
+		if( $group_key = $wp_query->get('acf_group_key') )
+		{
+			$where .= $wpdb->prepare(" AND {$wpdb->posts}.post_name = %s", $group_key );
+	    }
+	    
+	    
+	    return $where;
+	    
 	}
 	
 }
