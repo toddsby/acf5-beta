@@ -18,6 +18,7 @@ function acf_get_valid_field_group( $field_group = false ) {
 	// parse in defaults
 	$field_group = acf_parse_args( $field_group, array(
 		'ID'					=> 0,
+		'key'					=> '',
 		'title'					=> '',
 		'fields'				=> array(),
 		'location'				=> array(),
@@ -88,9 +89,6 @@ function acf_get_field_groups( $args = false ) {
 			$field_groups[] = acf_get_field_group( $post );
 		}
 	}
-	
-	
-	// EXPORT JSON hook needed
 	
 	
 	// filter
@@ -169,66 +167,58 @@ function acf_filter_field_groups( $field_groups, $args = false ) {
 function acf_get_field_group( $selector = false ) {
 	
 	// vars
-	$field_group = array();
-	$post = false;
-	$cache_key = '';
-	$found = false;
+	$field_group = false;
+	$k = 'ID';
+	$v = 0;
 	
 	
-	// EXPORT JSON hook needed
-	
-	
-	// calculate $cache_key and $post
-	if( !$selector )
+	// $post_id or $key
+	if( is_numeric($selector) )
 	{
-		global $post;
-		$cache_key = "get_field_group/ID={$post->ID}";
+		$v = $selector;
+	}
+	elseif( is_string($selector) )
+	{
+		$k = 'key';
+		$v = $selector;
 	}
 	elseif( is_object($selector) )
 	{
-		$post = $selector;
-		$cache_key = "get_field_group/ID={$post->ID}";
+		$v = $selector->ID;
 	}
-	elseif( is_numeric($selector) )
+	else
 	{
-		$post = get_post( $selector );
-		$cache_key = "get_field_group/ID={$selector}";
+		$v = get_the_ID();
 	}
 	
 	
-	// try cache
+	// get cache key
+	$cache_key = "get_field_group/{$k}={$v}";
+	
+
+	// get cache
+	$found = false;
 	$cache = wp_cache_get( $cache_key, 'acf', false, $found );
 	
 	if( $found )
 	{
 		return $cache;
 	}
-
 	
-	// validate
-	if( empty($post) || !isset($post->post_content) )
+	
+	// get field group from ID or key
+	if( $k == 'ID' )
 	{
-		return false;
+		$field_group = _acf_get_field_group_by_id( $v );
 	}
-	
-		
-	// get data
-	$data = maybe_unserialize( $post->post_content );
-	
-	if( is_array($data) )
+	else
 	{
-		$field_group = $data;
+		$field_group = _acf_get_field_group_by_key( $v );
 	}
 	
 	
-	// update attributes
-	$field_group['ID'] = $post->ID;
-	$field_group['title'] = $post->post_title;
-	$field_group['menu_order'] = $post->menu_order;
-	
-	
-	// validate
-	$field_group = acf_get_valid_field_group( $field_group );
+	// filter for 3rd party customization
+	$field_group = apply_filters('acf/get_field_group', $field_group);
 	
 	
 	// set cache
@@ -238,6 +228,110 @@ function acf_get_field_group( $selector = false ) {
 	// return
 	return $field_group;
 }
+
+
+function _acf_get_field_group_by_id( $post_id = 0 ) {
+	
+	// vars
+	$field_group = false;
+	
+	
+	// get post
+	$post = get_post( $post_id );
+	
+	
+	// validate
+	if( empty($post) )
+	{
+		return $field_group;	
+	}
+	
+	
+	// unserialize
+	$data = maybe_unserialize( $post->post_content );
+	
+	
+	// update $field_group
+	if( is_array($data) )
+	{
+		$field_group = $data;
+	}
+	
+	
+	// update attributes
+	$field_group['ID'] = $post->ID;
+	$field_group['title'] = $post->post_title;
+	$field_group['key'] = $post->post_name;
+	$field_group['menu_order'] = $post->menu_order;
+	
+	
+	// override with JSON
+	if( acf_is_json_field_group( $field_group['key'] ) )
+	{
+		$field_group = acf_get_json_field_group( $field_group['key'] );
+	}
+	
+	
+	// validate
+	$field_group = acf_get_valid_field_group( $field_group );
+	
+	
+	// return
+	return $field_group;
+	
+}
+
+
+function _acf_get_field_group_by_key( $key = '' ) {
+	
+	// vars
+	$field_group = false;
+		
+	
+	// try JSON before DB to save query time
+	if( acf_is_json_field_group( $key ) )
+	{
+		$field_group = acf_get_json_field_group( $key );
+		
+		// validate
+		$field_group = acf_get_valid_field_group( $field_group );
+	
+		// return
+		return $field_group;
+	}
+
+	
+	// vars
+	$args = array(
+		'posts_per_page'	=> 1,
+		'post_type'			=> 'acf-field-group',
+		'orderby' 			=> 'menu_order title',
+		'order'				=> 'ASC',
+		'suppress_filters'	=> false,
+		'acf_group_key'		=> $key
+	);
+	
+	
+	// load posts
+	$posts = get_posts( $args );
+	
+	
+	// validate
+	if( empty($post[0]) )
+	{
+		return $field_group;	
+	}
+	
+	
+	// load from ID
+	$field_group = _acf_get_field_group_by_id( $posts[0]->ID );
+	
+	
+	// return
+	return $field_group;
+	
+}
+
 
 
 /*
@@ -279,6 +373,7 @@ function acf_update_field_group( $field_group = array() ) {
 	// extract some args
 	$extract = acf_extract_vars($data, array(
 		'ID',
+		'key',
 		'title',
 		'menu_order',
 		'fields',
@@ -294,7 +389,7 @@ function acf_update_field_group( $field_group = array() ) {
     	'ID'			=> $extract['ID'],
     	'post_type'		=> 'acf-field-group',
     	'post_title'	=> $extract['title'],
-    	'post_name'		=> "acf-field-group-{$extract['ID']}",
+    	'post_name'		=> $extract['key'],
     	'post_content'	=> $data,
     	'menu_order'	=> $extract['menu_order'],
     );
@@ -346,6 +441,7 @@ function acf_duplicate_field_group( $selector = 0 ) {
 	
 	// update ID
 	$field_group['ID'] = false;
+	$field_group['key'] = uniqid('group_');
 	
 	
 	// save
@@ -412,6 +508,26 @@ function acf_get_field_count( $field_group_id ) {
 	return apply_filters('acf/get_field_count', count( $posts ), $field_group_id);
 	
 }
+
+/*
+*  acf_delete_field_group
+*
+*  description
+*
+*  @type	function
+*  @date	5/12/2013
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_delete_field_group( $field_group_id = 0 ) {
+	
+	
+	
+}
+
 
 
 /*

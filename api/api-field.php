@@ -223,7 +223,7 @@ function acf_get_fields( $options = false ) {
 	if( $options['field_key'] )
 	{
 		$args['acf_field_key'] = $options['field_key'];
-		add_filter('posts_where', 'acf_get_fields_posts_where', 0, 2 );
+		
 		$cache_key = "get_fields/field_key={$options['field_key']}";
 	}
 	
@@ -233,7 +233,7 @@ function acf_get_fields( $options = false ) {
 	
 	if( $found )
 	{
-		return $cache;
+		//return $cache;
 	}
 	
 	
@@ -257,23 +257,7 @@ function acf_get_fields( $options = false ) {
 	
 }
 
-function acf_get_fields_posts_where( $where, $wp_query )
-{
-	// global
-	global $wpdb;
-	
-	if( $field_key = $wp_query->get('acf_field_key') )
-	{
-		$where .= $wpdb->prepare(" AND {$wpdb->posts}.post_name = %s", $field_key );
-    }
-    elseif( $field_name = $wp_query->get('acf_field_name') )
-	{
-		$where .= $wpdb->prepare(" AND {$wpdb->posts}.post_excerpt = %s", $field_name );
-    }
-    
-    return $where;
-    
-}
+
 
 
 /*
@@ -292,38 +276,37 @@ function acf_get_fields_posts_where( $where, $wp_query )
 function acf_get_field( $selector = null ) {
 	
 	// vars
-	$field = array();
-	$post = false;
-	$cache_key = '';
-	$found = false;
+	$field = false;
+	$k = 'ID';
+	$v = 0;
 	
 	
-	// EXPORT JSON hook needed
-	
-	
-	// calculate $cache_key and $post
-	if( !$selector )
+	// $post_id or $key
+	if( is_numeric($selector) )
 	{
-		global $post;
-		$cache_key = "load_field/ID={$post->ID}";
-	}
-	elseif( is_object($selector) )
-	{
-		$post = $selector;
-		$cache_key = "load_field/ID={$post->ID}";
-	}
-	elseif( is_numeric($selector) )
-	{
-		$post = get_post( $selector );
-		$cache_key = "load_field/ID={$selector}";
+		$v = $selector;
 	}
 	elseif( is_string($selector) )
 	{
-		$cache_key = "load_field/key={$selector}";
+		$k = 'key';
+		$v = $selector;
+	}
+	elseif( is_object($selector) )
+	{
+		$v = $selector->ID;
+	}
+	else
+	{
+		$v = get_the_ID();
 	}
 	
 	
-	// try cache
+	// get cache key
+	$cache_key = "load_field/{$k}={$v}";
+	
+	
+	// get cache
+	$found = false;
 	$cache = wp_cache_get( $cache_key, 'acf', false, $found );
 	
 	if( $found )
@@ -332,43 +315,17 @@ function acf_get_field( $selector = null ) {
 	}
 	
 	
-	// $post = 'field_123'
-	if( is_string($selector) )
+	// get field group from ID or key
+	if( $k == 'ID' )
 	{
-		$posts = acf_get_fields(array( 'field_key' => $selector ));
-		if( !empty($posts) )
-		{
-			$field = array_pop($posts);
-		}
+		$field = _acf_get_field_by_id( $v );
 	}
-	elseif( $post )
+	else
 	{
-		// get data
-		$data = maybe_unserialize( $post->post_content );
-		
-		if( is_array($data) )
-		{
-			$field = $data;
-		}
-		
-		
-		// update attributes
-		$field['ID'] = $post->ID;
-		$field['key'] = $post->post_name;
-		$field['label'] = $post->post_title;
-		$field['name'] = $post->post_excerpt;
-		$field['menu_order'] = $post->menu_order;
-		$field['ancestors'] = get_post_ancestors( $post );
-		$field['parent'] = $post->post_parent;
-		$field['field_group'] = end( $field['ancestors'] );
-		
-		
-		// validate
-		$field = acf_get_valid_field( $field );
-		
+		$field = _acf_get_field_by_key( $v );
 	}
 	
-	
+		
 	// filter for 3rd party customization
 	$field = apply_filters('acf/load_field', $field);
 	
@@ -376,23 +333,128 @@ function acf_get_field( $selector = null ) {
 	// If a field has been found, apply filters
 	if( $field )
 	{
-		// apply filters
-		foreach( array('type', 'name', 'key') as $key )
-		{
-			// run filters
-			$field = apply_filters('acf/load_field/' . $key . '=' . $field[ $key ], $field);
-		}
+		$field = apply_filters( "acf/load_field/type={$field['type']}", $field );
+		$field = apply_filters( "acf/load_field/name={$field['name']}", $field );
+		$field = apply_filters( "acf/load_field/key={$field['key']}", $field );
 	}
 	
 
 	// set cache
 	wp_cache_set( $cache_key, $field, 'acf' );
+		
+	
+	// return
+	return $field;
+	
+}
+
+
+function _acf_get_field_by_id( $post_id = 0 ) {
+	
+	// vars
+	$field = false;
+	
+	
+	// get post
+	$post = get_post( $post_id );
+	
+	
+	// validate
+	if( empty($post) )
+	{
+		return $field;	
+	}
+	
+	
+	// unserialize
+	$data = maybe_unserialize( $post->post_content );
+	
+	
+	// update $field
+	if( is_array($data) )
+	{
+		$field = $data;
+	}
+	
+	
+	// update attributes
+	$field['ID'] = $post->ID;
+	$field['key'] = $post->post_name;
+	$field['label'] = $post->post_title;
+	$field['name'] = $post->post_excerpt;
+	$field['menu_order'] = $post->menu_order;
+	$field['ancestors'] = get_post_ancestors( $post );
+	$field['parent'] = $post->post_parent;
+	$field['field_group'] = end( $field['ancestors'] );
+
+
+	// override with JSON
+	if( acf_is_json_field( $field['key'] ) )
+	{
+		$field = acf_get_json_field( $field['key'] );
+	}
+	
+	
+	// validate
+	$field = acf_get_valid_field( $field );
 	
 	
 	// return
 	return $field;
 	
 }
+
+
+function _acf_get_field_by_key( $key = '' ) {
+	
+	// vars
+	$field = false;	
+	
+	
+	// try JSON before DB to save query time
+	if( acf_is_json_field( $key ) )
+	{
+		$field = acf_get_json_field( $key );
+		
+		// validate
+		$field = acf_get_valid_field( $field );
+	
+		// return
+		return $field;
+	}
+	
+	
+	// vars
+	$args = array(
+		'posts_per_page'	=> 1,
+		'post_type'			=> 'acf-field',
+		'orderby' 			=> 'menu_order title',
+		'order'				=> 'ASC',
+		'suppress_filters'	=> false,
+		'acf_field_key'		=> $key
+	);
+	
+	
+	// load posts
+	$posts = get_posts( $args );
+	
+	
+	// validate
+	if( empty($post[0]) )
+	{
+		return $field;	
+	}
+	
+	
+	// load from ID
+	$field = _acf_get_field_by_id( $posts[0]->ID );
+	
+		
+	// return
+	return $field;
+	
+}
+
 
 
 /*
@@ -487,6 +549,10 @@ function acf_update_field( $field = false ) {
     $field['ID'] = wp_update_post( $save );
     
     
+    // update cache
+	wp_cache_set( "load_field/ID={$field['ID']}", $field, 'acf' );
+	
+	
     // return
     return $field;
 	
