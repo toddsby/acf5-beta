@@ -70,7 +70,7 @@ var acf_field_group = {};
 	*  @return	n/a
 	*/
 	
-	$(document).on('ready', function(){
+	 acf.add_action('ready', function(){
 		
 		// update postbox classes
 		$('#submitdiv, #acf-field-group-fields, #acf-field-group-locations, #acf-field-group-options').addClass('acf-postbox no-padding');
@@ -540,10 +540,24 @@ var acf_field_group = {};
 			
 		}
 		
-		
-		
-		
 	};
+	
+	
+	// filter for new_field
+	acf.add_filter('is_field_ready_for_js', function( ready, $field ){
+		
+		// repeater sub field
+		if( $field.parents('.field[data-key="acfcloneindex"]').exists() )
+		{
+			//console.log( $field );
+			ready = false;
+		}
+		
+		
+		// return
+		return ready;
+	    
+    }, 99);
 	
 	
 	/*
