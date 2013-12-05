@@ -13,15 +13,24 @@
 *  @return	(mixed)
 */
 
-function acf_get_setting( $name )
-{
+function acf_get_setting( $name ) {
+	
+	// vars
 	$r = null;
 	
+	
+	// load from ACF if available
 	if( isset( acf()->settings[ $name ] ) )
 	{
 		$r = acf()->settings[ $name ];
 	}
 	
+	
+	// filter for 3rd party customization
+	$r = apply_filters( "acf/settings/{$name}", $r );
+	
+	
+	// return
 	return $r;
 }
 
@@ -292,8 +301,7 @@ function acf_render_field_wrap( $field, $el = 'div', $instruction = 'label', $at
 	}
 	
 	
-	?>
-	<<?php echo $el; ?> <?php echo acf_esc_attr($atts); ?>>
+	?><<?php echo $el; ?> <?php echo acf_esc_attr($atts); ?>>
 		<?php if( $show_label ): ?>
 		<<?php echo $elements[ $el ]; ?> class="acf-label">
 			
@@ -314,8 +322,7 @@ function acf_render_field_wrap( $field, $el = 'div', $instruction = 'label', $at
 			<?php endif; ?>
 			
 		</<?php echo $elements[ $el ]; ?>>
-	</<?php echo $el; ?>>
-	<?php
+	</<?php echo $el; ?>><?php
 }
 
 
@@ -986,6 +993,51 @@ function acf_decode_taxonomy_terms( $terms = false ) {
 	return $r;
 	
 }
+
+
+/*
+*  acf_cache_get
+*
+*  This function is a wrapper for the wp_cache_get to allow for 3rd party customization
+*
+*  @type	function
+*  @date	4/12/2013
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_cache_get( $key, &$found ) {
+	
+	// vars
+	$group = 'acf';
+	$force = false;
+	
+	
+	// load from cache
+	$cache = wp_cache_get( $key, $group, $force, $found );
+	
+	
+	// allow 3rd party customization if cache was not found
+	if( !$found )
+	{
+		$custom = apply_filters("acf/get_cache/{$key}", $cache);
+		
+		if( $custom !== $cache )
+		{
+			$cache = $custom;
+			$found = true;
+		}
+	}
+	
+	
+	// return
+	return $cache;
+	
+}
+
+
 
 
 ?>

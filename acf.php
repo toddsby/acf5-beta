@@ -12,8 +12,8 @@ Copyright: Elliot Condon
 
 if( !class_exists('acf') ):
 
-class acf
-{
+class acf {
+	
 	// vars
 	var $settings;
 		
@@ -60,14 +60,17 @@ class acf
 			'upgrade'		=> '5.0.0',
 			
 			// urls
-			'basename'		=> apply_filters( 'acf/settings/basename', plugin_basename( __FILE__ ) ),
-			'path'			=> apply_filters( 'acf/settings/path', plugin_dir_path( __FILE__ ) ),
-			'dir'			=> apply_filters( 'acf/settings/dir', plugin_dir_url( __FILE__ ) ),
+			'basename'		=> plugin_basename( __FILE__ ),
+			'path'			=> plugin_dir_path( __FILE__ ),
+			'dir'			=> plugin_dir_url( __FILE__ ),
 			
 			// options
-			'show_admin'	=> apply_filters( 'acf/settings/hide_admin', true ),
-			'stripslashes'	=> apply_filters( 'acf/settings/stripslashes', true ),
-			
+			'show_admin'	=> true,
+			'stripslashes'	=> true,
+			'load_db'		=> true,
+			'json'			=> true,
+			'save_json'		=> '',
+			'load_json'		=> array()
 		);
 		
 		
@@ -134,6 +137,7 @@ class acf
 	{
 		include_once('core/input.php');
 		include_once('core/location.php');
+		include_once('core/json.php');
 		
 		include_once('admin/comment.php');
 		include_once('admin/widget.php');
@@ -365,7 +369,6 @@ class acf
 		}
 		
 	}
-	
 	
 }
 

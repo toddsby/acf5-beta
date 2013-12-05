@@ -243,15 +243,6 @@ class acf_field_group {
 		}
         
         
-        // add args
-        $_POST['acf_field_group']['ID'] = $post_id;
-        $_POST['acf_field_group']['title'] = $_POST['post_title'];
-        
-        
-        // save field group
-        acf_update_field_group( $_POST['acf_field_group'] );
-        
-        
         // delete fields
         if( $_POST['_acf_delete_fields'] )
         {
@@ -291,6 +282,14 @@ class acf_field_group {
 			}
 		}
 		
+		
+		// add args
+        $_POST['acf_field_group']['ID'] = $post_id;
+        $_POST['acf_field_group']['title'] = $_POST['post_title'];
+        
+        
+		// save field group
+        acf_update_field_group( $_POST['acf_field_group'] );
 		
 		
         // return

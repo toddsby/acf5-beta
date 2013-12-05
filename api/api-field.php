@@ -181,6 +181,8 @@ function acf_get_fields( $options = false ) {
 	
 	// vars
 	$fields = array();
+	$cache_key = '';
+	$found = false;
 	
 	
 	// defaults
@@ -205,6 +207,7 @@ function acf_get_fields( $options = false ) {
 	if( $options['field_group'] )
 	{
 		$args['post_parent'] = $options['field_group'];
+		$cache_key = "get_fields/field_group={$options['field_group']}";
 	}
 	
 	
@@ -212,6 +215,7 @@ function acf_get_fields( $options = false ) {
 	if( $options['parent'] )
 	{
 		$args['post_parent'] = $options['parent'];
+		$cache_key = "get_fields/parent={$options['parent']}";
 	}
 	
 	
@@ -220,6 +224,16 @@ function acf_get_fields( $options = false ) {
 	{
 		$args['acf_field_key'] = $options['field_key'];
 		add_filter('posts_where', 'acf_get_fields_posts_where', 0, 2 );
+		$cache_key = "get_fields/field_key={$options['field_key']}";
+	}
+	
+	
+	// try cache
+	$cache = wp_cache_get( $cache_key, 'acf', false, $found );
+	
+	if( $found )
+	{
+		return $cache;
 	}
 	
 	
