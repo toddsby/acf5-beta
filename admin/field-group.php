@@ -198,7 +198,7 @@ class acf_field_group {
 		?>
 		<div id="acf-form-data" class="acf-hidden">
 			<input type="hidden" name="_acfnonce" value="<?php echo wp_create_nonce( 'field_group' ); ?>" />
-			<input id="input-delete-fields" type="hidden" name="_acf_delete_fields" value="0" />
+			<input type="hidden" name="_acf_delete_fields" value="0" id="input-delete-fields" />
 			<?php do_action('acf/field_group/form_data'); ?>
 		</div>
 		<?php
