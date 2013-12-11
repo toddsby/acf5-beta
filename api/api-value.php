@@ -106,18 +106,15 @@ function acf_get_value( $post_id, $field, $format = false, $format_api = false )
 	
 	
 	// format
-	if( $format )
+	if( $format_api )
 	{
-		if( $format_api )
-		{
-			$value = apply_filters( "acf/format_value_api", $value, $post_id, $field );
-			$value = apply_filters( "acf/format_value_api/type={$field['type']}", $value, $post_id, $field );
-		}
-		else
-		{
-			$value = apply_filters( "acf/format_value", $value, $post_id, $field );
-			$value = apply_filters( "acf/format_value/type={$field['type']}", $value, $post_id, $field );
-		}
+		$value = apply_filters( "acf/format_value_api", $value, $post_id, $field );
+		$value = apply_filters( "acf/format_value_api/type={$field['type']}", $value, $post_id, $field );
+	}
+	elseif( $format )
+	{
+		$value = apply_filters( "acf/format_value", $value, $post_id, $field );
+		$value = apply_filters( "acf/format_value/type={$field['type']}", $value, $post_id, $field );
 	}
 	
 	
