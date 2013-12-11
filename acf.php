@@ -95,6 +95,8 @@ class acf {
 		// actions
 		add_action('init', array($this, 'wp_init'), 1);
 		add_filter('posts_where', array($this, 'wp_posts_where'), 0, 2 );
+		//add_filter('posts_join', array($this, 'wp_posts_join'), 0, 2 );
+		//add_filter('posts_request', array($this, 'posts_request'), 0, 1 );
 	}
 	
 	
@@ -386,8 +388,8 @@ class acf {
 	*  @return	$where (string)
 	*/
 	
-	function wp_posts_where( $where, $wp_query )
-	{
+	function wp_posts_where( $where, $wp_query ) {
+		
 		// global
 		global $wpdb;
 		
@@ -403,7 +405,19 @@ class acf {
 	    if( $field_name = $wp_query->get('acf_field_name') )
 		{
 			$where .= $wpdb->prepare(" AND {$wpdb->posts}.post_excerpt = %s", $field_name );
+			
+			 // acf_post_id
+		    if( $post_id = $wp_query->get('acf_post_id') )
+			{
+				$where .= $wpdb->prepare(" AND {$wpdb->postmeta}.post_id = %d", $post_id );
+			}
+		    
+		
+		    
 	    }
+	    
+	    
+	    
 	    
 	    
 	    // acf_group_key
@@ -415,6 +429,35 @@ class acf {
 	    
 	    return $where;
 	    
+	}
+	
+	function wp_posts_join( $join, $wp_query ) {
+		
+		/*
+// acf_field_name
+		if( $post_id = $wp_query->get('acf_post_id') )
+		{
+			$join = str_replace('.ID', '.post_name', $join);
+			$join = str_replace('.post_id', '.meta_value', $join);
+	   }
+*/
+	   
+	   return $join;
+	    
+	    
+	}
+	
+	
+	function posts_request( $thing ) {
+		/*
+
+		echo '<pre>';
+			print_r($thing );
+		echo '</pre>';
+		die;
+*/
+		
+		return $thing;
 	}
 	
 }
@@ -456,5 +499,6 @@ acf();
 
 
 endif; // class_exists check
+
 
 ?>
