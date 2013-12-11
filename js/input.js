@@ -426,7 +426,7 @@ var acf = {
 			// get fields
 			var $fields = $el.find(selector);
 			
-			console.log('get_fields(%o, %s, %b). selector = %s', $el, field_type, allow_filter, selector);
+			//console.log('get_fields(%o, %s, %b). selector = %s', $el, field_type, allow_filter, selector);
 			//console.log( $el );
 			//console.log( $fields );
 			
@@ -3423,7 +3423,6 @@ console.log('-- results --')
 	
 	acf.add_action('ready append', function( $el ){
 		
-		
 		acf.get_fields( $el, 'select' ).each(function(){
 			
 			acf.fields.select.set({ $el : $(this) }).init();
@@ -4210,7 +4209,7 @@ console.log('-- results --')
 	
 	acf.add_action('ready', function(){
 		
-		acf.validation.init();
+		//acf.validation.init();
 		
 	});
 	

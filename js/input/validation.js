@@ -233,7 +233,7 @@
 	
 	acf.add_action('ready', function(){
 		
-		acf.validation.init();
+		//acf.validation.init();
 		
 	});
 	
