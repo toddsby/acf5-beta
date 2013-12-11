@@ -167,75 +167,69 @@ function acf_render_field_options( $field ) {
 /*
 *  acf_get_fields
 *
-*  This function will return an array of fields for the given options. Similar to the WP get_posts function
+*  This function will return an array of fields for the given $parent
 *
 *  @type	function
 *  @date	30/09/13
 *  @since	5.0.0
 *
-*  @param	$options (array)
+*  @param	$parent (array)
 *  @return	(array)
 */
 
-function acf_get_fields( $options = false ) {
+function acf_get_fields( $parent = false ) {
+
+	
+	// allow $parent to be a field group ID
+	if( !is_array($parent) )
+	{
+		$parent = acf_get_field_group( $parent );
+	}
+	
+	
+	// validate
+	if( !$parent )
+	{
+		return false;
+	}
+	
 	
 	// vars
 	$fields = array();
-	$cache_key = '';
-	$found = false;
 	
 	
-	// defaults
-	$options = wp_parse_args($options, array(
-		'field_group'	=> 0,
-		'parent'		=> 0,
-		'field_key'		=> '',
-	));
+	// try JSON before DB to save query time
+	if( acf_has_json_fields( $parent['key'] ) )
+	{
+		$fields = acf_get_json_fields( $parent['key'] );
+	}
+	else
+	{
+		$fields = acf_get_fields_by_id( $parent['ID'] );
+	}
 	
+	
+	// return
+	return apply_filters('acf/get_fields', $fields, $parent);
+	
+}
+
+function acf_get_fields_by_id( $id ) {
 	
 	// vars
+	$fields = array();
+	
+	
+	// args
 	$args = array(
 		'posts_per_page'	=> -1,
 		'post_type'			=> 'acf-field',
 		'orderby'			=> 'menu_order',
 		'order'				=> 'ASC',
-		'suppress_filters'	=> false
+		'suppress_filters'	=> false,
+		'post_parent'		=> $id
 	);
-	
-	
-	// field_group
-	if( $options['field_group'] )
-	{
-		$args['post_parent'] = $options['field_group'];
-		$cache_key = "get_fields/field_group={$options['field_group']}";
-	}
-	
-	
-	// sub_field
-	if( $options['parent'] )
-	{
-		$args['post_parent'] = $options['parent'];
-		$cache_key = "get_fields/parent={$options['parent']}";
-	}
-	
-	
-	// field key lookup
-	if( $options['field_key'] )
-	{
-		$args['acf_field_key'] = $options['field_key'];
 		
-		$cache_key = "get_fields/field_key={$options['field_key']}";
-	}
-	
-	
-	// try cache
-	$cache = wp_cache_get( $cache_key, 'acf', false, $found );
-	
-	if( $found )
-	{
-		//return $cache;
-	}
-	
 	
 	// load fields
 	//if( acf->get_setting('alow_db') )
@@ -246,18 +240,16 @@ function acf_get_fields( $options = false ) {
 	{
 		foreach( $posts as $post )
 		{
-			$fields[] = acf_get_field( $post );
+			$fields[] = acf_get_field( $post->ID );
 		}	
 	}
 	//}
 	
 	
 	// return
-	return apply_filters('acf/get_fields', $fields, $options);
+	return $fields;
 	
 }
-
-
 
 
 /*
@@ -383,15 +375,29 @@ function _acf_get_field_by_id( $post_id = 0 ) {
 	$field['label'] = $post->post_title;
 	$field['name'] = $post->post_excerpt;
 	$field['menu_order'] = $post->menu_order;
-	$field['ancestors'] = get_post_ancestors( $post );
 	$field['parent'] = $post->post_parent;
+	$field['ancestors'] = get_post_ancestors( $post );
 	$field['field_group'] = end( $field['ancestors'] );
 
 
 	// override with JSON
 	if( acf_is_json_field( $field['key'] ) )
 	{
+		// extract some args
+		$backup = acf_extract_vars($field, array(
+			'ID',
+			'parent',
+			'ancestors',
+			'field_group',
+		));
+		
+
+		// load JSON field
 		$field = acf_get_json_field( $field['key'] );
+		
+		
+		// merge in backup
+		$field = array_merge($field, $backup);
 	}
 	
 	
@@ -487,6 +493,13 @@ function acf_update_field( $field = false ) {
 	$field = wp_unslash( $field );
 	
 	
+	// configure parent / field_group
+	if( !$field['parent'] )
+	{
+		$field['parent'] = $field['field_group'];
+	}
+	
+	
 	// filter for 3rd party customization
 	$field = apply_filters( "acf/update_field", $field);
 	$field = apply_filters( "acf/update_field/type={$field['type']}", $field );
@@ -514,13 +527,6 @@ function acf_update_field( $field = false ) {
 		'field_name',
 		'prefix',
 	));
-	
-	
-	// configure parent / field_group
-	if( !$extract['parent'] )
-	{
-		$extract['parent'] = $extract['field_group'];
-	}
 	
 	
 	// serialize for DB

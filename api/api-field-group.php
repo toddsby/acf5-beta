@@ -268,7 +268,19 @@ function _acf_get_field_group_by_id( $post_id = 0 ) {
 	// override with JSON
 	if( acf_is_json_field_group( $field_group['key'] ) )
 	{
+		// extract some args
+		$backup = acf_extract_vars($field_group, array(
+			'ID',
+		));
+		
+		
 		$field_group = acf_get_json_field_group( $field_group['key'] );
+		
+		
+		// merge in backup
+		$field_group = array_merge($field_group, $backup);
+		
+		
 	}
 	
 	
@@ -449,9 +461,7 @@ function acf_duplicate_field_group( $selector = 0 ) {
 	
 	
 	// get fields
-	$fields = acf_get_fields(array(
-		'field_group' => $orig_field_group['ID']
-	));
+	$fields = acf_get_fields($orig_field_group);
 	
 	
 	if( !empty($fields) )

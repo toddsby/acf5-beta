@@ -243,6 +243,10 @@ class acf_field_group {
 		}
         
         
+        // disable JSON to avoid conflicts between DB and JSON
+		acf_update_setting('json', false);
+		
+        
         // delete fields
         if( $_POST['_acf_delete_fields'] )
         {
@@ -313,14 +317,12 @@ class acf_field_group {
 	function mb_fields() {
 		
 		// vars
-		$args = array(
-			'field_group' => get_the_ID()
-		);
+		$field_group = acf_get_field_group();
 		
 		
 		// get fields
 		$view = array(
-			'fields' => acf_get_fields( $args )
+			'fields' => acf_get_fields_by_id( $field_group['ID'] )
 		);
 		
 		

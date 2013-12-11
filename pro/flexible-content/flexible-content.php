@@ -59,18 +59,7 @@ class acf_field_flexible_content extends acf_field
 	function load_field( $field ) {
 		
 		// vars
-		$sub_fields = array();
-		
-		
-		// If field has ID, load it's sub fields
-		if( $field['ID'] )
-		{
-			// vars
-			$sub_fields = acf_get_fields(array(
-				'parent' => $field['ID']
-			));
-			
-		}
+		$sub_fields = acf_get_fields($field);
 		
 			
 		// loop through layouts, sub fields and swap out the field key with the real field

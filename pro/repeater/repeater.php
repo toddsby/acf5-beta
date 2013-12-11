@@ -52,15 +52,7 @@ class acf_field_repeater extends acf_field
 	
 	function load_field( $field ) {
 		
-		// If field has ID, load it's sub fields
-		if( $field['ID'] )
-		{
-			$args = array(
-				'parent' => $field['ID']
-			);
-			
-			$field['sub_fields'] = acf_get_fields( $args );
-		}
+		$field['sub_fields'] = acf_get_fields( $field );
 		
 		
 		// return

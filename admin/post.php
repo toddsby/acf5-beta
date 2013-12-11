@@ -147,7 +147,7 @@ class acf_controller_post {
 			foreach( $field_groups as $i => $field_group )
 			{
 				// vars
-				$id = "acf-{$field_group['ID']}";
+				$id = "acf-{$field_group['key']}";
 				$title = $field_group['title'];
 				$context = $field_group['position'];
 				$priority = 'high';
@@ -254,7 +254,7 @@ class acf_controller_post {
 		if( $visibility )
 		{
 			// load fields
-			$fields = acf_get_fields( array('field_group' => $field_group['ID']) );
+			$fields = acf_get_fields( $field_group );
 			
 			
 			// render
@@ -372,7 +372,7 @@ class acf_controller_post {
 				
 				
 				// load fields
-				$fields = acf_get_fields( array('field_group' => $field_group['ID']) );
+				$fields = acf_get_fields( $field_group );
 
 
 				// get field HTML

@@ -142,7 +142,7 @@ class acf_controller_taxonomy {
 			
 			foreach( $field_groups as $field_group ): 
 				
-				$fields = acf_get_fields( array('field_group' => $field_group['ID']) );
+				$fields = acf_get_fields( $field_group );
 
 				acf_render_fields( $post_id, $fields, 'div', 'field' );
 				
@@ -247,7 +247,7 @@ class acf_controller_taxonomy {
 			
 			foreach( $field_groups as $field_group ): 
 				
-				$fields = acf_get_fields( array('field_group' => $field_group['ID']) );
+				$fields = acf_get_fields( $field_group );
 				
 				?>
 				<?php if( $field_group['style'] == 'default' ): ?>

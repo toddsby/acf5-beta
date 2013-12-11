@@ -28,9 +28,10 @@ class acf_controller_user {
 		add_action( 'register_form',				array( $this, 'register_user' ) );
 		
 		// save
-		add_action('edit_user_profile_update',		array($this, 'save_user'));
-		add_action('personal_options_update',		array($this, 'save_user'));
+		//add_action('edit_user_profile_update',	array($this, 'save_user'));
+		//add_action('personal_options_update',		array($this, 'save_user'));
 		add_action('user_register',					array($this, 'save_user'));
+		add_action('profile_update',				array($this, 'save_user'));
 		
 	}
 	
@@ -111,8 +112,8 @@ class acf_controller_user {
 	*  @return	$post_id (int)
 	*/
 	
-	function edit_profile( $profileuser )
-	{
+	function edit_profile( $profileuser ) {
+		
 		// vars
 		$user_id = $profileuser->ID;
 		
@@ -248,7 +249,7 @@ class acf_controller_user {
 			
 			foreach( $field_groups as $field_group ): 
 				
-				$fields = acf_get_fields( array('field_group' => $field_group['ID']) );
+				$fields = acf_get_fields( $field_group );
 
 				?>
 				<?php if( $field_group['style'] == 'default' ): ?>

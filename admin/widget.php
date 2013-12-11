@@ -126,7 +126,7 @@ class acf_controller_widget {
 			
 			foreach( $field_groups as $field_group ): 
 				
-				$fields = acf_get_fields( array('field_group' => $field_group['ID']) );
+				$fields = acf_get_fields( $field_group );
 				
 				acf_render_fields( $post_id, $fields, 'div', 'field' );
 				
