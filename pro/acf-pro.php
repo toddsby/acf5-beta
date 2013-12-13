@@ -23,8 +23,9 @@ class acf_pro {
 		// includes
 		if( class_exists('acf_field') )
 		{
-			include_once('repeater/repeater.php');
-			include_once('flexible-content/flexible-content.php');
+			include_once('fields/repeater.php');
+			include_once('fields/flexible-content.php');
+			include_once('fields/gallery.php');
 		}
 		
 		

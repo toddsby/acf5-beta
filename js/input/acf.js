@@ -235,15 +235,19 @@ var acf = {
 			
 		},
 		
-		serialize_form : function( $form ){
+		serialize_form : function( $el ){
 			
 			// vars
 			var data = {},
 				names = {};
 			
 			
+			// selector
+			$selector = $el.find('select, textarea, input');
+			
+			
 			// populate data
-			$.each( $form.serializeArray(), function( i, pair ) {
+			$.each( $selector.serializeArray(), function( i, pair ) {
 				
 				// initiate name
 				if( pair.name.slice(-2) === '[]' )

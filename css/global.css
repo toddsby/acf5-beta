@@ -64,14 +64,15 @@ img.acf-fw {
 
 /* loading */
 .acf-loading {
-	display: block;
-	height: 22px;
-	width: 22px;
-	border: #BBBBBB solid 1px;
-	border-radius: 12px;
-	
-	background: #EAEAEA url(../images/wpspin_light.gif) no-repeat 50% 50%;
-    margin: 0 auto;
+	display: inline-block;
+	height: 16px;
+	width: 16px;
+	vertical-align: text-top;
+	background: transparent url(../images/wpspin_light.gif) no-repeat 50% 50%;
+}
+
+.acf-loading + .acf-button {
+	margin-left: 3px;
 }
 
 
@@ -400,8 +401,8 @@ img.acf-fw {
 .acf-button {
 	position: relative;
 	display: inline-block;
-	border-radius: 2px;
-	height: 24px;
+	border-radius: 3px;
+	height: 28px;
 	padding: 0 11px 1px;
     cursor: pointer;
     
@@ -411,36 +412,39 @@ img.acf-fw {
 	
     color: #333;
     font-weight: normal;
-    font-size: 12px;
-    line-height: 23px;
+    font-size: 13px;
+    line-height: 26px;
     text-align: center;
 	text-decoration: none;
 	
 	background: #F9F9F9;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#FEFEFE), to(#F4F4F4)); /* Safari 4+, Chrome */
-	background-image: -webkit-linear-gradient(top, #FEFEFE, #F4F4F4); /* Chrome 10+, Safari 5.1+, iOS 5+ */
-	background-image:    -moz-linear-gradient(top, #FEFEFE, #F4F4F4); /* Firefox 3.6-15 */
-	background-image:      -o-linear-gradient(top, #FEFEFE, #F4F4F4); /* Opera 11.10+ */
-	background-image:         linear-gradient(to bottom, #FEFEFE, #F4F4F4); /* Firefox 16+ */
 	
 	border: #BBBBBB solid 1px;
-	text-shadow: #fff 0 1px 0;
-	box-shadow: inset #fff 0 1px 0 0;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset;
 	
 }
 
 .acf-button:hover {
-	color: #333;
 	border-color: #999;
+	color: #333;
 }
 
 .acf-button:focus,
 .acf-button:active {
 	outline: none;
+	line-height: 28px;
 }
 
 .acf-button:active {
-	top: 1px;
+	box-shadow: none;
+}
+
+.acf-button[disabled] {
+	background: #F7F7F7 !important;
+    border-color: #DDDDDD !important;
+    box-shadow: none !important;
+    color: #AAAAAA !important;
+    cursor: default !important;
 }
 
 
@@ -462,17 +466,21 @@ img.acf-fw {
 
 /* blue */
 .acf-button.blue {
-	background: #3595BC;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#46AFDB), to(#3199C5)); /* Safari 4+, Chrome */
-	background-image: -webkit-linear-gradient(top, #46AFDB, #3199C5); /* Chrome 10+, Safari 5.1+, iOS 5+ */
-	background-image:    -moz-linear-gradient(top, #46AFDB, #3199C5); /* Firefox 3.6-15 */
-	background-image:      -o-linear-gradient(top, #46AFDB, #3199C5); /* Opera 11.10+ */
-	background-image:         linear-gradient(to bottom, #46AFDB, #3199C5); /* Firefox 16+ */
-	
-	border: #268FBB solid 1px;
-	text-shadow: #268FBB 0 1px 0;
-	box-shadow: inset #5FC8F4 0 1px 0 0;
+	background-color: #2EA2CC;
+	border-color: #0074A2;
 }
+
+.acf-button.blue:hover {
+	background-color: #298CBA;
+}
+
+.acf-button.blue[disabled] {
+	background: #298CBA !important;
+    border-color: #1B607F !important;
+    box-shadow: none !important;
+    color: #94CDE7 !important;
+}
+
 
 
 /* orange */

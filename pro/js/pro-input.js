@@ -970,5 +970,550 @@
 	});
 	
 	
+	
+	/*
+	*  Gallery
+	*
+	*  static model for this field
+	*
+	*  @type	event
+	*  @date	18/08/13
+	*
+	*/
+	
+	acf.fields.gallery = {
+		
+		get_field : function( $el ){
+			
+			return $el.closest('.acf-gallery');
+			
+		},
+		
+		get_field_wrap : function( $el ){
+			
+			return $el.closest('.acf-field');
+			
+		},
+		
+		get_id : function( $attachment ){
+			
+			return $attachment.attr('data-id');
+			
+		},
+		
+		init : function( $gallery ){
+			
+			$gallery.find('.acf-gallery-attachments').unbind('sortable').sortable({
+				
+				items					: '.acf-gallery-attachment',
+				//handle					: '.acf-gallery-attachment',
+				forceHelperSize			: true,
+				forcePlaceholderSize	: true,
+				scroll					: true,
+				
+				start : function (event, ui) {
+					
+					acf.do_action('sortstart', ui.item, ui.placeholder);
+					
+	   			},
+	   			
+	   			stop : function (event, ui) {
+				
+					acf.do_action('sortstop', ui.item, ui.placeholder);
+					
+	   			}
+			});
+			
+					
+		},
+		
+		sort : function( $select ){
+			
+			// vars
+			var $gallery = this.get_field( $select ),
+				sort = $select.val();
+			
+			
+			// validate
+			if( !sort )
+			{
+				return;	
+			}
+			
+			
+			// vars
+			var data = {
+				action		: 'acf/fields/gallery/get_sort_order',
+				field_key	: this.get_field_wrap( $gallery ).attr('data-key'),
+				nonce		: acf.get('nonce'),
+				post_id		: acf.get('post_id'),
+				ids			: [],
+				sort		: sort
+			};
+			
+			
+			$gallery.find('.acf-gallery-attachment').each(function(){
+				
+				data.ids.push( $(this).attr('data-id') );
+				
+			});
+			
+			
+			// get results
+		    var xhr = $.ajax({
+		    	url			: acf.get('ajaxurl'),
+				dataType	: 'json',
+				type		: 'get',
+				cache		: false,
+				data		: data,
+				success		: function( json ){
+					
+					// validate
+					if( !json.success )
+					{
+						return;
+					}
+					
+					
+					// reverse order
+					json.data.reverse();
+					
+					
+					_.each( json.data, function( id ) {
+						
+						var $el = $gallery.find('.acf-gallery-attachment[data-id="' + id  + '"]');
+						
+						$gallery.find('.acf-gallery-attachments').prepend( $el );
+						
+					});
+					
+				}
+			});
+			
+		},
+		
+		clear_selection : function( $gallery ){
+			
+			$gallery.find('.acf-gallery-attachment.active').removeClass('active');
+		},
+		
+		select : function( $attachment ){
+			
+			// vars
+			var $gallery = this.get_field( $attachment ),
+				id = this.get_id( $attachment );
+			
+			
+			// clear selection
+			this.clear_selection( $gallery );
+			
+			
+			// add selection
+			$attachment.addClass('active');
+			
+			
+			// fetch
+			this.fetch( id, $gallery );
+			
+			
+			// open sidebar
+			this.open_sidebar( $gallery );
+			
+		},
+		
+		open_sidebar : function( $gallery ){
+			
+			$gallery.find('.acf-gallery-main').animate({ right : 300 }, 250);
+			$gallery.find('.acf-gallery-side').animate({ width : 299 }, 250);
+			
+		},
+		
+		close_sidebar : function( $gallery ){
+			
+			// deselect attachmnet
+			this.clear_selection( $gallery );
+			
+			
+			// animate
+			$gallery.find('.acf-gallery-main').animate({ right : 0 }, 250);
+			$gallery.find('.acf-gallery-side').animate({ width : 0 }, 250, function(){
+				
+				$gallery.find('.acf-gallery-side-data').html( '' );
+				
+			});
+			
+		},
+		
+		close : function( $a ){
+			
+			// vars
+			var $gallery = this.get_field( $a );
+			
+			
+			this.close_sidebar( $gallery );
+		},
+		
+		fetch : function( id, $gallery ){
+		
+		
+			// add loading class, stops scroll loading
+			
+			
+			// vars
+			var data = {
+				action		: 'acf/fields/gallery/get_attachment',
+				field_key	: this.get_field_wrap( $gallery ).attr('data-key'),
+				nonce		: acf.get('nonce'),
+				post_id		: acf.get('post_id'),
+				id			: id
+			};
+			
+			
+			// abort XHR if this field is already loading AJAX data
+			if( $gallery.data('xhr') )
+			{
+				$gallery.data('xhr').abort();
+			}
+			
+			
+			// get results
+		    var xhr = $.ajax({
+		    	url			: acf.get('ajaxurl'),
+				dataType	: 'html',
+				type		: 'get',
+				cache		: false,
+				data		: data,
+				success		: function( html ){
+					
+					// render
+					$gallery.find('.acf-gallery-side-data').html( html );
+					
+				}
+			});
+			
+			
+			// update el data
+			$gallery.data('xhr', xhr);
+			
+		},
+		
+		save : function( $a ){
+			
+			// validate
+			if( $a.attr('disabled') )
+			{
+				return false;
+			}
+			
+			
+			// vars
+			var $gallery = this.get_field( $a ),
+				$form = $gallery.find('.acf-gallery-side-data'),
+				data = acf.serialize_form( $form );
+				
+			
+			// add attr
+			$a.attr('disabled', 'true');
+			$a.before('<i class="acf-loading"></i>');
+			
+			
+			// append AJAX action		
+			data.action = 'acf/fields/gallery/update_attachment';
+			data.nonce = acf.get('nonce');
+			
+				
+			// ajax
+			$.ajax({
+				url			: acf.get('ajaxurl'),
+				data		: data,
+				type		: 'post',
+				dataType	: 'json',
+				success		: function( json ){
+					
+					$a.removeAttr('disabled');
+					$a.prev('.acf-loading').remove();
+					
+				}
+			});
+			
+		},
+		
+		add : function( image, $gallery ){
+			
+			// template
+			var data = {
+					id		:	image.id,
+					url		:	image.url,
+					name	:	$gallery.children('input').attr('name')
+				},
+				tmpl = acf._e('gallery', 'tmpl'),
+				html = _.template(tmpl, data);
+			
+			
+			$gallery.find('.acf-gallery-attachments').append( html );
+			
+		},
+		
+		remove : function( $a ){
+			
+			// vars
+			var id = $a.attr('data-id'),
+				$gallery = this.get_field( $a );
+			
+			
+			// deselect attachmnet
+			this.clear_selection( $gallery );
+			
+			
+			// update sidebar
+			$gallery.find('.acf-gallery-side-data').html('');
+			
+			
+			// remove image
+			$gallery.find('.acf-gallery-attachment[data-id="' + id  + '"]').remove();
+			
+		},
+		
+		popup : function( $a ){
+			
+			// reference
+			var _this = this;
+			
+			
+			// vars
+			var $gallery = this.get_field( $a ),
+				atts = acf.get_atts( $gallery );
+			
+			
+			
+			// clear the frame
+			acf.media.clear_frame();
+			
+			
+			// Create the media frame
+			acf.media.frame = wp.media({
+				states : [
+					new wp.media.controller.Library({
+						//library		:	wp.media.query( this.o.query ),
+						multiple	:	true,
+						title		:	acf._e('gallery', 'select'),
+						priority	:	20,
+						filterable	:	'all'
+					})
+				]
+			});
+			
+			
+			// customize model / view
+			acf.media.frame.on('content:activate', function(){
+				
+				// vars
+				var toolbar = null,
+					filters = null;
+					
+				
+				// populate above vars making sure to allow for failure
+				try
+				{
+					toolbar = acf.media.frame.content.get().toolbar;
+					filters = toolbar.get('filters');
+				} 
+				catch(e)
+				{
+					// one of the objects was 'undefined'... perhaps the frame open is Upload Files
+					//console.log( e );
+				}
+				
+				
+				// validate
+				if( !filters )
+				{
+					return false;
+				}
+				
+				
+				// no need for 'uploaded' filter
+				if( atts.library == 'uploadedTo' )
+				{
+					filters.$el.find('option[value="uploaded"]').remove();
+					filters.$el.after('<span>' + acf._e('gallery', 'uploadedTo') + '</span>')
+					
+					$.each( filters.filters, function( k, v ){
+						
+						v.props.uploadedTo = acf.get('post_id');
+						
+					});
+				}
+				
+				
+				/*
+// hide selected items from the library
+				_this.render_collection();
+				 
+				acf.media.frame.content.get().collection.on( 'reset add', function(){
+				    
+					_this.render_collection();
+				    
+			    });
+*/
+			    
+								
+			});
+			
+			
+			// When an image is selected, run a callback.
+			acf.media.frame.on( 'select', function() {
+				
+				// get selected images
+				selection = acf.media.frame.state().get('selection');
+				
+				if( selection )
+				{
+					selection.each(function(attachment){
+	
+						
+						/*
+// is image already in gallery?
+						if( _this.$el.find('.thumbnails .thumbnail[data-id="' + attachment.id + '"]').exists() )
+						{
+							return;
+						}
+*/
+											
+						
+				    	// vars
+				    	var image = {
+					    	id			:	attachment.id,
+					    	url			:	attachment.attributes.url
+				    	};
+				    	
+				    	
+				    	// file?
+					    if( attachment.attributes.type != 'image' )
+					    {
+						    image.url = attachment.attributes.icon;
+					    }
+					    
+					    
+					    // is preview size available?
+				    	if( attachment.attributes.sizes && attachment.attributes.sizes[ atts.preview_size ] )
+				    	{
+					    	image.url = attachment.attributes.sizes[ atts.preview_size ].url;
+				    	}
+					    
+					    
+				    	// add file to field
+				        _this.add( image, $gallery );
+				        
+						
+				    });
+				    // selection.each(function(attachment){
+				}
+				// if( selection )
+				
+				
+			});
+			// acf.media.frame.on( 'select', function() {
+					 
+			
+			// Finally, open the modal
+			acf.media.frame.open();
+				
+			
+			return false;
+		}
+		
+	};
+	
+	
+	/*
+	*  acf/setup_fields
+	*
+	*  run init function on all elements for this field
+	*
+	*  @type	event
+	*  @date	20/07/13
+	*
+	*  @param	{object}	e		event object
+	*  @param	{object}	el		DOM object which may contain new ACF elements
+	*  @return	N/A
+	*/
+	
+	acf.add_action('ready append', function( $el ){
+		
+		acf.get_fields( $el, 'gallery' ).each(function(){
+			
+			acf.fields.gallery.init( $(this).find('.acf-gallery') );
+			
+		});
+		
+	});
+	
+	
+	
+	/*
+	*  Events
+	*
+	*  jQuery events for this field
+	*
+	*  @type	function
+	*  @date	1/03/2011
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	$(document).on('click', '.acf-gallery .acf-gallery-attachment', function( e ){
+		
+		acf.fields.gallery.select( $(this) );
+		
+	});
+	
+	$(document).on('click', '.acf-gallery .close-attachment', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.gallery.close( $(this) );
+		
+	});	
+	
+	$(document).on('click', '.acf-gallery .save-attachment', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.gallery.save( $(this) );
+		
+	});
+	
+	$(document).on('click', '.acf-gallery .remove-attachment', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.gallery.remove( $(this) );
+		
+	});
+	
+	$(document).on('click', '.acf-gallery .add-attachment', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.gallery.popup( $(this) );
+		
+	});
+	
+	$(document).on('change', '.acf-gallery .bulk-actions-select', function( e ){
+		
+		if( ! $(this).val() )
+		{
+			return false;
+		}
+		
+		acf.fields.gallery.sort( $(this) );
+		
+		$(this).val('');
+		
+	});
+	
+	
 
 })(jQuery);

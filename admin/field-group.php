@@ -99,6 +99,10 @@ class acf_field_group {
 		wp_enqueue_script( 'acf-field-group' );
 		
 		
+		// disable JSON to avoid conflicts between DB and JSON
+		acf_update_setting('json', false);
+		
+		
 		// actions
 		add_action( 'admin_head', array( $this,'admin_head' ) );
 		

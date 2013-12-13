@@ -77,7 +77,7 @@
 			
 			
 			// add loading class, stops scroll loading
-			this.$choices.children('.list').html('<p>' + acf._e('relationship', 'loading') + '...</p>')
+			this.$choices.children('.list').html('<p>' + acf._e('relationship', 'loading') + '...</p>');
 			
 			
 			// vars

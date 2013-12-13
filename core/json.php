@@ -37,13 +37,13 @@ class acf_json_actions {
 		}
 		
 		
+		// load fields
+		$fields = acf_get_fields( $field_group );
+		
+		
 		// extract field group ID and add to ref
 		$id = acf_extract_var( $field_group, 'ID' );
 		$id_ref[ $id ] = $field_group['key'];
-		
-		
-		// load fields
-		$fields = acf_get_fields_by_id( $id );
 		
 		
 		// load fields from DB
