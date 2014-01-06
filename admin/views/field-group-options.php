@@ -98,6 +98,7 @@ if( !$field_group['key'] )
 			'name'			=> 'acf_field_group[hide_on_screen]',
 			'value'			=> $field_group['hide_on_screen'],
 			'choices' => array(
+				'permalink'			=>	__("Permalink"),
 				'the_content'		=>	__("Content Editor",'acf'),
 				'excerpt'			=>	__("Excerpt"),
 				'custom_fields'		=>	__("Custom Fields"),

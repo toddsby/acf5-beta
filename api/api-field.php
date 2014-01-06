@@ -500,6 +500,13 @@ function acf_update_field( $field = false ) {
 	}
 	
 	
+	// clean up conditional logic keys
+	if( is_array($field['conditional_logic']) )
+	{
+		$field['conditional_logic'] = array_values( $field['conditional_logic'] );
+	}
+	
+	
 	// filter for 3rd party customization
 	$field = apply_filters( "acf/update_field", $field);
 	$field = apply_filters( "acf/update_field/type={$field['type']}", $field );

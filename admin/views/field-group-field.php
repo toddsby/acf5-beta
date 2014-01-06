@@ -28,7 +28,7 @@ $atts = array(
 		<input type="hidden" class="input-changed" name="<?php echo $field['prefix']; ?>[changed]" value="0" />
 	</div>
 	
-	<ul class="acf-hl acf-clearfix acf-tbody">
+	<ul class="field-info acf-hl acf-tbody">
 		<li class="li-field_order"><span class="acf-icon"><?php echo ($field['menu_order'] + 1); ?></span></li>
 		<li class="li-field_label">
 			<strong>

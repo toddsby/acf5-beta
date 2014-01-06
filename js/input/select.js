@@ -82,13 +82,13 @@
 	
 	acf.add_action('ready append', function( $el ){
 		
-		acf.get_fields( $el, 'select' ).each(function(){
+		acf.get_fields({ type : 'select'}, $el).each(function(){
 			
 			acf.fields.select.set({ $el : $(this) }).init();
 			
 		});
 		
-		acf.get_fields( $el, 'user' ).each(function(){
+		acf.get_fields({ type : 'user'}, $el).each(function(){
 			
 			acf.fields.select.set({ $el : $(this) }).init();
 			

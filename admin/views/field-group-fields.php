@@ -26,7 +26,7 @@ $fields[] = acf_get_valid_field(array(
 ?>
 <div class="acf-field-list-wrap">
 
-	<ul class="acf-hl acf-clearfix acf-thead">
+	<ul class="acf-hl acf-thead">
 		<li class="li-field_order"><?php _e('Order','acf'); ?></li>
 		<li class="li-field_label"><?php _e('Label','acf'); ?></li>
 		<li class="li-field_name"><?php _e('Name','acf'); ?></li>
@@ -35,19 +35,19 @@ $fields[] = acf_get_valid_field(array(
 	
 	<div class="acf-field-list">
 		
-		<div class="no-fields-message" <?php if(count($fields) > 1){ echo 'style="display:none;"'; } ?>>
-			<?php _e("No fields. Click the <strong>+ Add Field</strong> button to create your first field.",'acf'); ?>
-		</div>
-		
 		<?php foreach( $fields as $field ): ?>
 			
 			<?php acf_get_view('field-group-field', array( 'field' => $field )); ?>
 			
 		<?php endforeach; ?>
 		
+		<div class="no-fields-message" <?php if(count($fields) > 1){ echo 'style="display:none;"'; } ?>>
+			<?php _e("No fields. Click the <strong>+ Add Field</strong> button to create your first field.",'acf'); ?>
+		</div>
+		
 	</div>
 	
-	<ul class="acf-hl acf-clearfix acf-tfoot">
+	<ul class="acf-hl acf-tfoot">
 		<li class="comic-sans">
 			<i class="acf-sprite-arrow"></i><?php _e('Drag and drop to reorder','acf'); ?>
 		</li>

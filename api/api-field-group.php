@@ -566,7 +566,12 @@ function acf_get_field_group_style( $field_group )
 	}
 	
 	
-	// add style to html 
+	// add style to html
+	if( in_array('permalink',$options['hide_on_screen']) )
+	{
+		$html .= '#edit-slug-box {display: none;} ';
+	}
+	
 	if( in_array('the_content',$field_group['hide_on_screen']) )
 	{
 		$e .= '#postdivrich {display: none;} ';

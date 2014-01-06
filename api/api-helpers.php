@@ -180,11 +180,11 @@ function acf_parse_types( $var )
 		// numbers
 		if( is_numeric($var) )
 		{
-			// float / int
-			if( strpos($var,'.') !== false )
+			// check for non numeric characters
+			if( preg_match('/[^0-9]/', $var) )
 			{
-				// leave decimal places alone
-				// $value = floatval( $value );
+				// leave value if it contains such characters: . + - e
+				//$value = floatval( $value );
 			}
 			else
 			{

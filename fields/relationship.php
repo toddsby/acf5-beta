@@ -103,7 +103,11 @@ class acf_field_relationship extends acf_field
 		if( $options['lang'] )
 		{
 			global $sitepress;
-			$sitepress->switch_lang( $options['lang'] );
+			
+			if( !empty($sitepress) )
+			{
+				$sitepress->switch_lang( $options['lang'] );
+			}
 		}
 		
 		
@@ -905,12 +909,12 @@ function load_field( $field )
 	*  @return	(array) an array of post objects
 	*/
 	
-	function get_posts( $post_ids )
-	{
+	function get_posts( $post_ids ) {
+		
 		// validate
 		if( empty($post_ids) )
 		{
-			return $post_ids;
+			return false;
 		}
 		
 		
@@ -967,8 +971,15 @@ function load_field( $field )
 	*  @return	$value - the modified value
 	*/
 	
-	function update_value( $value, $post_id, $field )
-	{
+	function update_value( $value, $post_id, $field ) {
+		
+		// validate
+		if( empty($value) )
+		{
+			return $value;
+		}
+		
+		
 		if( is_string($value) )
 		{
 			// string

@@ -17,6 +17,7 @@
 		
 		o : {},
 		
+		ready : false,
 		geocoder : false,
 		map : false,
 		maps : {},
@@ -41,17 +42,25 @@
 				this.map = this.maps[ this.o.id ];
 			}
 			
-			
-			// geocode
-			this.geocoder = new google.maps.Geocoder();
-			
 				
 			// return this for chaining
 			return this;
 			
 		},
 		init : function(){
-
+			
+			// geocode
+			if( !this.geocoder )
+			{
+				this.geocoder = new google.maps.Geocoder();
+			}
+			
+			
+			// google maps is loaded and ready
+			this.ready = true;
+			
+			
+			// render map
 			this.render();
 					
 		},
@@ -64,7 +73,7 @@
 			
 			// vars
 			var args = {
-        		zoom		: 14,
+        		zoom		: parseInt(this.o.zoom),
         		center		: new google.maps.LatLng(this.o.lat, this.o.lng),
         		mapTypeId	: google.maps.MapTypeId.ROADMAP
         	};
@@ -235,7 +244,19 @@
 			
 			// vars
 			var position = this.map.marker.getPosition(),
-				latlng = new google.maps.LatLng( position.lat(), position.lng() );
+				lat = this.o.lat,
+				lng = this.o.lng;
+			
+			
+			// if marker exists, center on the marker
+			if( position )
+			{
+				lat = position.lat();
+				lng = position.lng();
+			}
+			
+			
+			var latlng = new google.maps.LatLng( lat, lng );
 				
 			
 			// set center of map
@@ -351,7 +372,18 @@
 			
 			this.$el.find('.search').val( val ).focus();
 			
+		},
+		
+		refresh : function(){
+			
+			// trigger resize on div
+			google.maps.event.trigger(this.map, 'resize');
+			
+			// center map
+			this.center();
+			
 		}
+
 	
 	};
 	
@@ -372,7 +404,7 @@
 	acf.add_action('ready append', function( $el ){
 		
 		//vars
-		var $fields = acf.get_fields( $el, 'google_map' );
+		var $fields = acf.get_fields({ type : 'google_map'}, $el);
 		
 		
 		// validate
@@ -476,6 +508,23 @@
 			$el.addClass('active');
 		}
 			
+	});
+	
+	acf.add_action('show_field', function( $field ){
+		
+		// validate
+		if( ! acf.fields.google_map.ready )
+		{
+			return;
+		}
+		
+		
+		// validate
+		if( acf.is_field_type($field, 'google_map') )
+		{
+			acf.fields.google_map.set({ $el : $field.find('.acf-google-map') }).refresh();
+		}
+		
 	});
 	
 

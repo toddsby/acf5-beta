@@ -284,7 +284,7 @@
 	
 	acf.add_action('ready append', function( $el ){
 		
-		acf.get_fields( $el, 'relationship' ).each(function(){
+		acf.get_fields({ type : 'relationship'}, $el).each(function(){
 			
 			acf.fields.relationship.set({ $el : $(this) }).init();
 			

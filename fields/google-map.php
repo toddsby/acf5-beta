@@ -20,12 +20,14 @@ class acf_field_google_map extends acf_field
 		$this->defaults = array(
 			'height'		=> '',
 			'center_lat'	=> '',
-			'center_lng'	=> ''
+			'center_lng'	=> '',
+			'zoom'			=> ''
 		);
 		$this->default_values = array(
 			'height'		=> '400',
 			'center_lat'	=> '-37.81411',
-			'center_lng'	=> '144.96328'
+			'center_lng'	=> '144.96328',
+			'zoom'			=> '14'
 		);
 		$this->l10n = array(
 			'locating'			=>	__("Locating",'acf'),
@@ -80,7 +82,8 @@ class acf_field_google_map extends acf_field
 			'class'			=> $field['class'],
 			'data-id'		=> $field['id'], 
 			'data-lat'		=> $field['center_lat'],
-			'data-lng'		=> $field['center_lng']
+			'data-lng'		=> $field['center_lng'],
+			'data-zoom'		=> $field['zoom']
 		);
 		
 		
@@ -165,6 +168,18 @@ class acf_field_google_map extends acf_field
 			'value'			=> $field['center_lng'],
 			'prepend'		=> 'lng',
 			'placeholder'	=> $this->default_values['center_lng']
+		));
+		
+		
+		// zoom
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Zoom','acf'),
+			'instructions'	=> __('Set the initial zoom level','acf'),
+			'type'			=> 'text',
+			'name'			=> 'zoom',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['zoom'],
+			'placeholder'	=> $this->default_values['zoom']
 		));
 		
 		

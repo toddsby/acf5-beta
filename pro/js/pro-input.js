@@ -211,7 +211,7 @@
 	
 	acf.add_action('ready append', function( $el ){
 		
-		acf.get_fields( $el, 'repeater' ).each(function(){
+		acf.get_fields({ type : 'repeater'}, $el).each(function(){
 			
 			acf.fields.repeater.set({ $el : $(this).find('.acf-repeater') }).init();
 			
@@ -772,7 +772,7 @@
 	
 	acf.add_action('ready append', function( $el ){
 		
-		acf.get_fields( $el, 'flexible_content' ).each(function(){
+		acf.get_fields({ type : 'flexible_content'}, $el).each(function(){
 			
 			acf.fields.flexible_content.set({ $el : $(this).find('.acf-flexible-content') }).init();
 			
@@ -1441,7 +1441,7 @@
 	
 	acf.add_action('ready append', function( $el ){
 		
-		acf.get_fields( $el, 'gallery' ).each(function(){
+		acf.get_fields({ type : 'gallery'}, $el).each(function(){
 			
 			acf.fields.gallery.init( $(this).find('.acf-gallery') );
 			

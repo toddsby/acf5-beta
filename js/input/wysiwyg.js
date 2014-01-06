@@ -199,7 +199,7 @@
 		// events
 		acf.add_action('remove', function( $el ){
 		
-			acf.get_fields( $el, 'wysiwyg' ).each(function(){
+			acf.get_fields({ type : 'wysiwyg'}, $el).each(function(){
 				
 				acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).destroy();
 				
@@ -207,7 +207,7 @@
 			
 		}).add_action('sortstart', function( $el ){
 		
-			acf.get_fields( $el, 'wysiwyg' ).each(function(){
+			acf.get_fields({ type : 'wysiwyg'}, $el).each(function(){
 				
 				acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).destroy();
 				
@@ -215,7 +215,7 @@
 			
 		}).add_action('sortstop', function( $el ){
 		
-			acf.get_fields( $el, 'wysiwyg' ).each(function(){
+			acf.get_fields({ type : 'wysiwyg'}, $el).each(function(){
 				
 				acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).init();
 				
@@ -254,7 +254,7 @@
 			setTimeout(function(){
 				
 				// vars
-				var $fields = acf.get_fields( $el, 'wysiwyg' );
+				var $fields = acf.get_fields({ type : 'wysiwyg'}, $el);
 				
 				
 				// Destory all WYSIWYG fields

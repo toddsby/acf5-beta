@@ -4,10 +4,6 @@
 *
 *---------------------------------------------------------------------------------------------*/
 
-#titlediv {
-	margin-bottom: 20px;	
-}
-	
 #message p a {
 	display: none;
 }
@@ -51,10 +47,6 @@
 
 #submitdiv #publishing-action img {
 	display: none;
-}
-
-#major-publishing-actions {
-    border-top: 0 none;
 }
 
 #delete-action .delete-field-group {
@@ -107,38 +99,57 @@
 
 
 .acf-field-list .field {
-	border-bottom: #DFDFDF solid 1px;
+	border-top: #F0F0F0 solid 1px;
 	background: #fff;
 }
 
+.acf-field-list .field:first-child,
+.acf-field-list .field:first-child + .field.ui-sortable-placeholder {
+	border-top: 0 none;
+}
+
 .acf-field-list .field.ui-sortable-helper {
-	border: #DFDFDF solid 1px;
+	border-top-color: #fff;
+	box-shadow: 0 0 0 1px #DFDFDF, 0 1px 4px rgba(0,0,0,0.1);
 }
 
 .acf-field-list .field.ui-sortable-placeholder {
-	border-bottom: #DFDFDF solid 1px;
+	box-shadow: 0 -1px 0 0 #DFDFDF;
 	visibility: visible !important;
 	background: #F9F9F9;
 }
 
-.acf-field-list .field .li-field_order .acf-icon {
+
+
+/* info */
+.acf-field-list .field .field-info {
+	
+}
+
+.acf-field-list .field .field-info li {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.acf-field-list .field .field-info .acf-icon {
 	margin: 2px 0 0;
 	cursor: move;
 	background: transparent;
 }
 
-.acf-field-list .field .li-field_label strong {
+.acf-field-list .field .field-info strong {
 	display: block;
-	font-size: 13px;
-	margin: 0 0 3px;
+	padding-bottom: 6px;
+	font-size: 14px;
+	line-height: 14px;
 }
 
-.acf-field-list .field .row-options {
+.acf-field-list .field .field-info .row-options {
 	visibility: hidden;
 }
 
-.acf-field-list .field:hover > .acf-tbody > .li-field_label .row-options,
-.acf-field-list .field.open > .acf-tbody > .li-field_label .row-options {
+.acf-field-list .field:hover .field-info .row-options,
+.acf-field-list .field:hover .field-info .row-options {
 	visibility: visible;
 }
 
@@ -222,6 +233,7 @@
 
 #acf-field-group-locations .location-group td.remove {
 	width: 24px;
+	vertical-align: middle;
 }
 
 #acf-field-group-locations .location-group tr .location-remove-rule {
@@ -339,6 +351,6 @@ table.conditional-logic-rules tbody td {
 
 @-moz-document url-prefix() {
     .acf-field-list .field .li-field_order .acf-icon {
-	    line-height: 23px;
+	    
     }
 }

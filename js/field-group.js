@@ -1076,15 +1076,15 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			// vars
 			var $new_tr = $old_tr.clone(),
 				old_i = parseFloat( $old_tr.attr('data-i') ),
-				new_i = old_i + 1;
+				new_i = acf.helpers.uniqid();
 			
 			
 			// update names
 			$new_tr.find('[name]').each(function(){
 				
 				// flexible content uses [0], [1] as the layout index. To avoid conflict, make sure we search for the entire conditional logic string in the name and id
-				var find = '[conditional_logic][rules][' + old_i + ']',
-					replace = '[conditional_logic][rules][' + new_i + ']';
+				var find = '[conditional_logic][' + old_i + ']',
+					replace = '[conditional_logic][' + new_i + ']';
 				
 				$(this).attr('name', $(this).attr('name').replace(find, replace) );
 				$(this).attr('id', $(this).attr('id').replace(find, replace) );

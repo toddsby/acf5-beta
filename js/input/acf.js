@@ -144,11 +144,11 @@ var acf = {
 				
 		},
 		
-		get_fields : function( $el, field_type, allow_filter ){
+		get_fields : function( args, $el, allow_filter ){
 			
 			// defaults
+			args = args || {};
 			$el = $el || $('body');
-			field_type = field_type || false;
 			allow_filter = allow_filter || true;
 			
 			
@@ -156,11 +156,12 @@ var acf = {
 			var selector = '.acf-field';
 			
 			
-			// add field type
-			if( field_type )
-			{
-				selector += '[data-type="' + field_type + '"]';
-			}
+			// add selector
+			$.each( args, function( k, v ) {
+				
+				selector += '[data-' + k + '="' + v + '"]';
+				
+			});
 			
 			
 			// get fields
@@ -184,6 +185,90 @@ var acf = {
 			// return
 			return $fields;
 							
+		},
+		
+		get_field : function( field_key, $el ){
+			
+			// defaults
+			$el = $el || $('body');
+			
+			
+			// get fields
+			$fields = this.get_fields({ key : field_key }, $el);
+			
+			
+			// validate
+			if( !$fields.exists() )
+			{
+				return false;
+			}
+			
+			
+			// return
+			return $fields.first();
+			
+		},
+		
+		is_field : function( $el ){
+			
+			if( ! $el.hasClass('acf-field') )
+			{
+				return false;
+			}
+			
+			return true;
+			
+		},
+		
+		is_field_type : function( $el, type ){
+			
+			if( ! this.is_field($el) )
+			{
+				return false;
+			}
+			
+			
+			if( $el.attr('data-type') !== type )
+			{
+				return false;
+			}
+			
+			return true;
+			
+		},
+		
+		is_field_name : function( $el, name ){
+			
+			if( ! this.is_field($el) )
+			{
+				return false;
+			}
+			
+			
+			if( $el.attr('data-name') !== name )
+			{
+				return false;
+			}
+			
+			return true;
+			
+		},
+		
+		is_field_key : function( $el, key ){
+			
+			if( ! this.is_field($el) )
+			{
+				return false;
+			}
+			
+			
+			if( $el.attr('data-key') !== key )
+			{
+				return false;
+			}
+			
+			return true;
+			
 		},
 		
 		get_uniqid : function( prefix, more_entropy ){
@@ -831,8 +916,7 @@ var acf = {
 						var $toggle = $('.field_key-' + rule.field);
 						
 						
-						
-						// sub field?
+						// are any of $toggle a sub field?
 						if( $toggle.hasClass('sub_field') )
 						{
 							// toggle may be a sibling sub field.
@@ -845,10 +929,52 @@ var acf = {
 							// if so, hide the entire column
 							if( ! $toggle.exists() )
 							{
-								$toggle = $target.parents('.row').last().find('.field_key-' + rule.field);
+								// loop through all the parents that could contain sub fields
+								$target.parents('tr').each(function(){
+									
+									// attempt to update $toggle to this parent sub field
+									$toggle = $(this).find('.field_key-' + rule.field)
+									
+									// if the parent sub field actuallly exists, great! Stop the loop
+									if( $toggle.exists() )
+									{
+										return false;
+									}
+									
+								});
+
 								hide_all = true;
 							}
 							
+						}
+						
+						
+						// if this sub field is within a flexible content layout, hide the entire column because 
+						// there will never be another row added to this table
+						var parent = $target.parent('tr').parent().parent('table').parent('.layout');
+						if( parent.exists() )
+						{
+							hide_all = true;
+							
+							if( $target.is('th') && $toggle.is('th') )
+							{
+								$toggle = $target.closest('.layout').find('td.field_key-' + rule.field);
+							}
+
+						}
+						
+						// if this sub field is within a repeater field which has a max row of 1, hide the entire column because 
+						// there will never be another row added to this table
+						var parent = $target.parent('tr').parent().parent('table').parent('.repeater');
+						if( parent.exists() && parent.attr('data-max_rows') == '1' )
+						{
+							hide_all = true;
+							
+							if( $target.is('th') && $toggle.is('th') )
+							{
+								$toggle = $target.closest('table').find('td.field_key-' + rule.field);
+							}
+
 						}
 						
 						

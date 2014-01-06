@@ -265,8 +265,6 @@ class acf_field_groups {
 		<div class="footer footer-blue">
 			<ul class="acf-hl">
 				<li><?php _e("Created by",'acf'); ?> Elliot Condon</li>
-				<li class="acf-fr"><a href="http://twitter.com/elliotcondon"><?php _e("Follow",'acf'); ?></a></li>
-				<li class="acf-fr"><a href="http://wordpress.org/extend/plugins/advanced-custom-fields/"><?php _e("Vote",'acf'); ?></a></li>
 			</ul>
 		</div>
 	</div>

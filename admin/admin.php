@@ -38,8 +38,9 @@ class acf_admin {
 	*/
 	
 	function admin_menu() {
-	
-		add_utility_page(__("Custom Fields",'acf'), __("Custom Fields",'acf'), 'manage_options', 'edit.php?post_type=acf-field-group');
+		
+		add_menu_page(__("Custom Fields",'acf'), __("Custom Fields",'acf'), 'manage_options', 'edit.php?post_type=acf-field-group', false, false, '80.025');
+		
 	}
 	
 	

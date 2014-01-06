@@ -102,7 +102,7 @@
 	
 	acf.add_action('ready append', function( $el ){
 		
-		acf.get_fields( $el, 'date_picker' ).each(function(){
+		acf.get_fields({ type : 'date_picker'}, $el).each(function(){
 			
 			acf.fields.date_picker.set({ $el : $(this) }).init();
 			

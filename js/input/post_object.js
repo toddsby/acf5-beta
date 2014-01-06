@@ -176,7 +176,7 @@ console.log('-- results --')
 	
 	acf.add_action('ready append', function( $el ){
 		
-		acf.get_fields( $el, 'post_object' ).each(function(){
+		acf.get_fields({ type : 'post_object'}, $el).each(function(){
 			
 			acf.fields.post_object.set({ $el : $(this) }).init();
 			

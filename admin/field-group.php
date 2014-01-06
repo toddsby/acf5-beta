@@ -432,20 +432,27 @@ class acf_field_group {
 				{
 					foreach( $post_types as $post_type )
 					{
-						$pages = get_pages(array(
-							'numberposts' 		=> -1,
-							'post_type'			=> $post_type,
-							'sort_column'		=> 'menu_order',
-							'order'				=> 'ASC',
-							'post_status'		=> array('publish', 'private', 'draft', 'inherit', 'future'),
-							'suppress_filters'	=> false,
+						$posts = get_posts(array(
+							'posts_per_page'			=>	-1,
+							'post_type'					=> $post_type,
+							'orderby'					=> 'menu_order title',
+							'order'						=> 'ASC',
+							'post_status'				=> 'any',
+							'suppress_filters'			=> false,
+							'update_post_meta_cache'	=> false,
 						));
 						
-						if( $pages )
+						if( $posts )
 						{
+							// sort into hierachial order!
+							if( is_post_type_hierarchical( $post_type ) )
+							{
+								$posts = get_page_children( 0, $posts );
+							}
+							
 							$choices[ $post_type ] = array();
 							
-							foreach( $pages as $p )
+							foreach( $posts as $p )
 							{
 								// vars
 								$title = '';

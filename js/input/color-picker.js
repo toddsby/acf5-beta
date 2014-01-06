@@ -55,7 +55,7 @@
 	
 	acf.add_action('ready append', function( $el ){
 		
-		acf.get_fields( $el, 'color_picker' ).each(function(){
+		acf.get_fields({ type : 'color_picker'}, $el).each(function(){
 			
 			acf.fields.color_picker.set({ $el : $(this) }).init();
 			

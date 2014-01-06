@@ -151,7 +151,7 @@ class acf_field_wysiwyg extends acf_field
 		
 		?>
 		<div id="wp-<?php echo $id; ?>-wrap" class="acf-wysiwyg-wrap wp-editor-wrap" data-toolbar="<?php echo $field['toolbar']; ?>" data-upload="<?php echo $field['media_upload']; ?>">
-			<?php if( $field['media_upload'] ): ?>
+			<?php if( user_can_richedit() && $field['media_upload'] ): ?>
 				<div id="wp-<?php echo $id; ?>-editor-tools" class="wp-editor-tools">
 					<div id="wp-<?php echo $id; ?>-media-buttons" class="hide-if-no-js wp-media-buttons">
 						<?php do_action( 'media_buttons' ); ?>
@@ -159,7 +159,18 @@ class acf_field_wysiwyg extends acf_field
 				</div>
 			<?php endif; ?>
 			<div id="wp-<?php echo $id; ?>-editor-container" class="wp-editor-container">
-				<textarea id="<?php echo $id; ?>" class="wp-editor-area" name="<?php echo $field['name']; ?>" ><?php echo wp_richedit_pre($field['value']); ?></textarea>
+				<textarea id="<?php echo $id; ?>" class="wp-editor-area" name="<?php echo $field['name']; ?>" ><?php 
+				
+				if( user_can_richedit() )
+				{
+					echo wp_richedit_pre( $field['value'] );
+				} 
+				else
+				{
+					echo wp_htmledit_pre( $field['value'] );
+				}
+				
+				?></textarea>
 			</div>
 		</div>
 		

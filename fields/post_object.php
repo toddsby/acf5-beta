@@ -519,10 +519,10 @@ acf_render_field_option( $this->name, array(
 	*  @return	$value	- the modified value
 	*/
 	
-	function format_value_for_api( $value, $post_id, $field )
-	{
+	function format_value_for_api( $value, $post_id, $field ) {
+		
 		// no value?
-		if( !$value )
+		if( empty($value) )
 		{
 			return false;
 		}
@@ -597,8 +597,14 @@ acf_render_field_option( $this->name, array(
 	*  @return	$value - the modified value
 	*/
 	
-	function update_value( $value, $post_id, $field )
-	{
+	function update_value( $value, $post_id, $field ) {
+		
+		// validate
+		if( empty($value) )
+		{
+			return $value;
+		}
+		
 		
 		if( is_string($value) )
 		{
