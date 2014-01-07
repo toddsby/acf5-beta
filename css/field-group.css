@@ -162,6 +162,10 @@
 	
 }
 
+.acf-field-list .field.open + .field {
+	border-top-color: #E1E1E1;
+}
+
 .acf-field-list .field.open > .acf-tbody {
 	background: #3595BC;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#46AFDB), to(#3199C5)); /* Safari 4+, Chrome */

@@ -469,65 +469,44 @@ var acf = {
 			
 		},
 		
-		is_field : function( $el ){
+		get_field_el : function( $el ){
 			
+			return $el.closest('.acf-field');
+			
+		},
+		
+		get_field_data : function( $el, attr ){
+			
+			return $el.attr('data-' + attr);
+			
+		},
+		
+		is_field : function( $el, args ){
+			
+			// var
+			var r = true;
+			
+			
+			// check $el calss
 			if( ! $el.hasClass('acf-field') )
 			{
-				return false;
-			}
-			
-			return true;
-			
-		},
-		
-		is_field_type : function( $el, type ){
-			
-			if( ! this.is_field($el) )
-			{
-				return false;
+				r = false;
 			}
 			
 			
-			if( $el.attr('data-type') !== type )
-			{
-				return false;
-			}
-			
-			return true;
-			
-		},
-		
-		is_field_name : function( $el, name ){
-			
-			if( ! this.is_field($el) )
-			{
-				return false;
-			}
+			// check args (data attributes)
+			$.each( args, function( k, v ) {
+				
+				if( $el.attr('data-' + k) != v )
+				{
+					r = false;
+				}
+				
+			});
 			
 			
-			if( $el.attr('data-name') !== name )
-			{
-				return false;
-			}
-			
-			return true;
-			
-		},
-		
-		is_field_key : function( $el, key ){
-			
-			if( ! this.is_field($el) )
-			{
-				return false;
-			}
-			
-			
-			if( $el.attr('data-key') !== key )
-			{
-				return false;
-			}
-			
-			return true;
+			// return
+			return r;
 			
 		},
 		
@@ -2309,7 +2288,7 @@ var acf = {
 	*
 	*/
 	
-	acf.fields.location = {
+	acf.fields.google_map = {
 		
 		$el : null,
 		$input : null,
@@ -2722,7 +2701,7 @@ var acf = {
 			    
 			        $fields.each(function(){
 					
-						acf.fields.location.set({ $el : $(this).find('.acf-google-map') }).init();
+						acf.fields.google_map.set({ $el : $(this).find('.acf-google-map') }).init();
 						
 					});
 			        
@@ -2734,7 +2713,7 @@ var acf = {
 		{
 			$fields.each(function(){
 				
-				acf.fields.location.set({ $el : $(this).find('.acf-google-map') }).init();
+				acf.fields.google_map.set({ $el : $(this).find('.acf-google-map') }).init();
 				
 			});
 			
@@ -2760,7 +2739,7 @@ var acf = {
 		
 		e.preventDefault();
 		
-		acf.fields.location.set({ $el : $(this).closest('.acf-google-map') }).clear();
+		acf.fields.google_map.set({ $el : $(this).closest('.acf-google-map') }).clear();
 		
 		$(this).blur();
 		
@@ -2771,7 +2750,7 @@ var acf = {
 		
 		e.preventDefault();
 		
-		acf.fields.location.set({ $el : $(this).closest('.acf-google-map') }).locate();
+		acf.fields.google_map.set({ $el : $(this).closest('.acf-google-map') }).locate();
 		
 		$(this).blur();
 		
@@ -2781,7 +2760,7 @@ var acf = {
 		
 		e.preventDefault();
 		
-		acf.fields.location.set({ $el : $(this).closest('.acf-google-map') }).edit();
+		acf.fields.google_map.set({ $el : $(this).closest('.acf-google-map') }).edit();
 			
 	});
 	
@@ -2819,7 +2798,7 @@ var acf = {
 		
 		
 		// validate
-		if( acf.is_field_type($field, 'google_map') )
+		if( acf.is_field($field, {type : 'google_map'}) )
 		{
 			acf.fields.google_map.set({ $el : $field.find('.acf-google-map') }).refresh();
 		}
@@ -4011,26 +3990,26 @@ console.log('-- results --')
 			// generate html
 			if( $wrap.is('tbody') )
 			{
-				html = '<tr class="acf-tab-wrap"><td colspan="2"><ul class="hl clearfix acf-tab-group"></ul></td></tr>';
+				html = '<tr class="acf-tab-wrap"><td colspan="2"><ul class="acf-hl acf-tab-group"></ul></td></tr>';
 			}
 			else
 			{
-				html = '<div class="acf-tab-wrap"><ul class="hl clearfix acf-tab-group"></ul></div>';
+				html = '<div class="acf-tab-wrap"><ul class="acf-hl acf-tab-group"></ul></div>';
 			}
 			
 			
 			// append html
-			$wrap.children('.field_type-tab:first').before( html );
+			acf.get_fields({ type : 'tab'}, $wrap).first().before( html );
 			
 		},
 		
 		add_tab : function( $tab ){
 			
 			// vars
-			var $field	= $tab.closest('.field'),
+			var $field	= acf.get_field_el( $tab ),
 				$wrap	= $field.parent(),
 				
-				key		= $field.attr('data-field_key'),
+				key		= acf.get_field_data( $field, 'key'),
 				label 	= $tab.text();
 				
 				
@@ -4064,16 +4043,17 @@ console.log('-- results --')
 			acf.get_fields({ type : 'tab'}, $wrap).each(function(){
 				
 				// vars
-				var $tab = $(this),
-					show =  false;
+				var $tab = $(this);
 					
 				
-				if( acf.is_field_key( $(this), key ) )
+				if( acf.is_field( $(this), {key : key} ) )
 				{
+					console.log( 1 );
 					_this.show_tab_fields( $(this) );
 				}
 				else
 				{
+					console.log( 0 );
 					_this.hide_tab_fields( $(this) );
 				}
 				
@@ -4083,6 +4063,7 @@ console.log('-- results --')
 		
 		show_tab_fields : function( $field ) {
 			
+			//console.log('show tab fields %o', $field);
 			$field.nextUntil('.acf-field[data-type="tab"]').each(function(){
 				
 				$(this).removeClass('hidden_by_tab');
@@ -4108,9 +4089,13 @@ console.log('-- results --')
 			
 			
 			// trigger
-			$el.find('.acf-tab-group .acf-tab-button:first').each(function(){
+			$el.find('.acf-tab-group').each(function(){
 				
-				_this.toggle( $(this) );
+				$(this).find('.acf-tab-button:first').each(function(){
+					
+					_this.toggle( $(this) );
+					
+				});
 				
 			});
 			
@@ -4138,6 +4123,7 @@ console.log('-- results --')
 	*/
 	
 	acf.add_action('ready append', function( $el ){
+		
 		
 		// add tabs
 		acf.get_fields({ type : 'tab'}, $el).each(function(){
@@ -4181,7 +4167,7 @@ console.log('-- results --')
 	acf.add_action('hide_field', function( $field ){
 		
 		// validate
-		if( ! acf.is_field_type($field, 'tab') )
+		if( ! acf.is_field($field, {type : 'tab'}) )
 		{
 			return;
 		}
@@ -4208,7 +4194,7 @@ console.log('-- results --')
 	acf.add_action('show_field', function( $field ){
 		
 		// validate
-		if( ! acf.is_field_type($field, 'tab') )
+		if( ! acf.is_field($field, {type : 'tab'}) )
 		{
 			return;
 		}

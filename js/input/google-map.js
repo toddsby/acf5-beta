@@ -10,7 +10,7 @@
 	*
 	*/
 	
-	acf.fields.location = {
+	acf.fields.google_map = {
 		
 		$el : null,
 		$input : null,
@@ -423,7 +423,7 @@
 			    
 			        $fields.each(function(){
 					
-						acf.fields.location.set({ $el : $(this).find('.acf-google-map') }).init();
+						acf.fields.google_map.set({ $el : $(this).find('.acf-google-map') }).init();
 						
 					});
 			        
@@ -435,7 +435,7 @@
 		{
 			$fields.each(function(){
 				
-				acf.fields.location.set({ $el : $(this).find('.acf-google-map') }).init();
+				acf.fields.google_map.set({ $el : $(this).find('.acf-google-map') }).init();
 				
 			});
 			
@@ -461,7 +461,7 @@
 		
 		e.preventDefault();
 		
-		acf.fields.location.set({ $el : $(this).closest('.acf-google-map') }).clear();
+		acf.fields.google_map.set({ $el : $(this).closest('.acf-google-map') }).clear();
 		
 		$(this).blur();
 		
@@ -472,7 +472,7 @@
 		
 		e.preventDefault();
 		
-		acf.fields.location.set({ $el : $(this).closest('.acf-google-map') }).locate();
+		acf.fields.google_map.set({ $el : $(this).closest('.acf-google-map') }).locate();
 		
 		$(this).blur();
 		
@@ -482,7 +482,7 @@
 		
 		e.preventDefault();
 		
-		acf.fields.location.set({ $el : $(this).closest('.acf-google-map') }).edit();
+		acf.fields.google_map.set({ $el : $(this).closest('.acf-google-map') }).edit();
 			
 	});
 	
@@ -520,7 +520,7 @@
 		
 		
 		// validate
-		if( acf.is_field_type($field, 'google_map') )
+		if( acf.is_field($field, {type : 'google_map'}) )
 		{
 			acf.fields.google_map.set({ $el : $field.find('.acf-google-map') }).refresh();
 		}

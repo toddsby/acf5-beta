@@ -11,26 +11,26 @@
 			// generate html
 			if( $wrap.is('tbody') )
 			{
-				html = '<tr class="acf-tab-wrap"><td colspan="2"><ul class="hl clearfix acf-tab-group"></ul></td></tr>';
+				html = '<tr class="acf-tab-wrap"><td colspan="2"><ul class="acf-hl acf-tab-group"></ul></td></tr>';
 			}
 			else
 			{
-				html = '<div class="acf-tab-wrap"><ul class="hl clearfix acf-tab-group"></ul></div>';
+				html = '<div class="acf-tab-wrap"><ul class="acf-hl acf-tab-group"></ul></div>';
 			}
 			
 			
 			// append html
-			$wrap.children('.field_type-tab:first').before( html );
+			acf.get_fields({ type : 'tab'}, $wrap).first().before( html );
 			
 		},
 		
 		add_tab : function( $tab ){
 			
 			// vars
-			var $field	= $tab.closest('.field'),
+			var $field	= acf.get_field_el( $tab ),
 				$wrap	= $field.parent(),
 				
-				key		= $field.attr('data-field_key'),
+				key		= acf.get_field_data( $field, 'key'),
 				label 	= $tab.text();
 				
 				
@@ -64,16 +64,17 @@
 			acf.get_fields({ type : 'tab'}, $wrap).each(function(){
 				
 				// vars
-				var $tab = $(this),
-					show =  false;
+				var $tab = $(this);
 					
 				
-				if( acf.is_field_key( $(this), key ) )
+				if( acf.is_field( $(this), {key : key} ) )
 				{
+					console.log( 1 );
 					_this.show_tab_fields( $(this) );
 				}
 				else
 				{
+					console.log( 0 );
 					_this.hide_tab_fields( $(this) );
 				}
 				
@@ -83,6 +84,7 @@
 		
 		show_tab_fields : function( $field ) {
 			
+			//console.log('show tab fields %o', $field);
 			$field.nextUntil('.acf-field[data-type="tab"]').each(function(){
 				
 				$(this).removeClass('hidden_by_tab');
@@ -108,9 +110,13 @@
 			
 			
 			// trigger
-			$el.find('.acf-tab-group .acf-tab-button:first').each(function(){
+			$el.find('.acf-tab-group').each(function(){
 				
-				_this.toggle( $(this) );
+				$(this).find('.acf-tab-button:first').each(function(){
+					
+					_this.toggle( $(this) );
+					
+				});
 				
 			});
 			
@@ -138,6 +144,7 @@
 	*/
 	
 	acf.add_action('ready append', function( $el ){
+		
 		
 		// add tabs
 		acf.get_fields({ type : 'tab'}, $el).each(function(){
@@ -181,7 +188,7 @@
 	acf.add_action('hide_field', function( $field ){
 		
 		// validate
-		if( ! acf.is_field_type($field, 'tab') )
+		if( ! acf.is_field($field, {type : 'tab'}) )
 		{
 			return;
 		}
@@ -208,7 +215,7 @@
 	acf.add_action('show_field', function( $field ){
 		
 		// validate
-		if( ! acf.is_field_type($field, 'tab') )
+		if( ! acf.is_field($field, {type : 'tab'}) )
 		{
 			return;
 		}

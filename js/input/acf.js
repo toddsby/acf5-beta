@@ -209,65 +209,44 @@ var acf = {
 			
 		},
 		
-		is_field : function( $el ){
+		get_field_el : function( $el ){
 			
+			return $el.closest('.acf-field');
+			
+		},
+		
+		get_field_data : function( $el, attr ){
+			
+			return $el.attr('data-' + attr);
+			
+		},
+		
+		is_field : function( $el, args ){
+			
+			// var
+			var r = true;
+			
+			
+			// check $el calss
 			if( ! $el.hasClass('acf-field') )
 			{
-				return false;
-			}
-			
-			return true;
-			
-		},
-		
-		is_field_type : function( $el, type ){
-			
-			if( ! this.is_field($el) )
-			{
-				return false;
+				r = false;
 			}
 			
 			
-			if( $el.attr('data-type') !== type )
-			{
-				return false;
-			}
-			
-			return true;
-			
-		},
-		
-		is_field_name : function( $el, name ){
-			
-			if( ! this.is_field($el) )
-			{
-				return false;
-			}
+			// check args (data attributes)
+			$.each( args, function( k, v ) {
+				
+				if( $el.attr('data-' + k) != v )
+				{
+					r = false;
+				}
+				
+			});
 			
 			
-			if( $el.attr('data-name') !== name )
-			{
-				return false;
-			}
-			
-			return true;
-			
-		},
-		
-		is_field_key : function( $el, key ){
-			
-			if( ! this.is_field($el) )
-			{
-				return false;
-			}
-			
-			
-			if( $el.attr('data-key') !== key )
-			{
-				return false;
-			}
-			
-			return true;
+			// return
+			return r;
 			
 		},
 		

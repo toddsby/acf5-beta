@@ -476,4 +476,85 @@ ul.acf-radio-list.pill li label input {
 }
 
 
+/*---------------------------------------------------------------------------------------------
+*
+*	Tab
+*
+*---------------------------------------------------------------------------------------------*/
+
+.field_type-tab {
+	display: none !important;
+}
+
+.acf-tab-group {
+	background: transparent;
+	border-bottom: #CCCCCC solid 1px;
+	margin: 0 0 10px;
+	padding: 10px 2px 0 0;
+}
+
+.acf-tab-group li {
+	font-family: "Open Sans",sans-serif;
+	font-size: 23px;
+    line-height: 29px;
+    margin: 0 8px 0 0;
+    
+}
+
+.acf-tab-group li a {
+	padding: 6px 10px;
+	display: block;
+	
+	color: #555555;
+	font-size: 15px;
+    font-weight: 700;
+    line-height: 24px;
+    
+    border: #CCCCCC solid 1px;
+    border-bottom: 0 none;
+    text-decoration: none;
+    background: #E4E4E4;
+    
+}
+
+.acf-tab-group li a:hover, 
+.acf-tab-group li.active a {
+    background: #FFFFFF;
+    outline: none;
+}
+
+.acf-tab-group li.active a {
+	background: #F1F1F1;
+	color: #000;
+	border-color: #CCCCCC;
+    border-bottom-color: #F7F7F7;
+    padding-bottom: 7px;
+    margin-bottom: -1px;
+}
+
+.acf_postbox > .inside > .field_type-tab + .field {
+	border-top: 0 none;
+}
+
+.hidden_by_tab {
+	display: none;
+}
+
+
+/*
+*  Box
+*/
+
+.acf-postbox.default .acf-tab-group {
+	padding-left: 10px;
+	border-bottom-color: #E8E8E8;
+}
+
+.acf-postbox.default .acf-tab-group li a {
+    background: #F1F1F1;
+}
+
+.acf-postbox.default .acf-tab-group li.active a {
+	background: #FFFFFF;
+}
 
