@@ -90,7 +90,6 @@ $atts = array(
 					'prefix'		=> $field['prefix'],
 					'value'			=> $field['type'],
 					'choices' 		=> acf_get_field_types(),
-					'ui'			=> 1
 				), 'tr');
 				
 				
