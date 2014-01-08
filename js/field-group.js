@@ -147,6 +147,14 @@ var acf_field_group = {};
 				
 			});
 			
+			this.$el.on('click', '.duplicate-field', function( e ){
+				
+				e.preventDefault();
+				
+				_this.duplicate( $(this).closest('.field') );
+				
+			});
+			
 			
 			this.$el.on('click', '.delete-field', function( e ){
 				
@@ -170,7 +178,7 @@ var acf_field_group = {};
 				
 			});
 			
-			this.$el.on('change', 'tr[data-name="label"] input', function( e ){
+			this.$el.on('blur', 'tr[data-name="label"] input', function( e ){
 				
 				_this.change_label( $(this).closest('.field') );
 				
@@ -182,25 +190,52 @@ var acf_field_group = {};
 				
 			});
 			
+			this.$el.on('change', 'input, textarea, select', function( e ){
+				
+				_this.save_field( $(this).closest('.field') );
+				
+			});
+			
 		},
 		
+		get_field_meta : function( $el, data ){
+		
+			return $el.find('> .acf-hidden > .input-' + data).val();
+			
+		},
+		
+		update_field_meta : function( $el, data ){
+			
+			$.each(data, function( k, v ){
+				
+				$el.find('> .acf-hidden > .input-' + k).val( v );
+				
+			});
+			
+		},
+		
+		save_field : function( $el ){
+			
+			this.update_field_meta( $el, { changed : 1 } );
+			
+		},
 		
 		render_field : function( $el ){
 			
 			// vars
-			var label = $el.find('tr[data-name="label"] input').val(),
-				name = $el.find('tr[data-name="name"] input').val(),
+			var label = $el.find('tr[data-name="label"]:first input').val(),
+				name = $el.find('tr[data-name="name"]:first input').val(),
 				type = $el.attr('data-type');
 			
 			
 			// update label
-			$el.find('> .acf-tbody > .li-field_label > strong > a').text( label );
+			$el.find('> .field-info .li-field_label strong a').text( label );
 			
 			// update name
-			$el.find('> .acf-tbody > .li-field_name').text( name );
+			$el.find('> .field-info .li-field_name').text( name );
 			
 			// update type
-			$el.find('> .acf-tbody > .li-field_type').text( type );
+			$el.find('> .field-info .li-field_type').text( type );
 			
 		},
 		
@@ -210,23 +245,48 @@ var acf_field_group = {};
 			// class / action
 			if( $el.hasClass('open') )
 			{
-				$el.removeClass('open');
-				acf.do_action('close', $el);
+				this.close_field( $el );
 			}
 			else
 			{
-				$el.addClass('open');
-				acf.do_action('open', $el);
+				this.open_field( $el );
+			}
+			
+		},
+		
+		open_field : function( $el ){
+			
+			// already open?
+			if( $el.hasClass('open') )
+			{
+				return false;
 			}
 			
 			
-			// either way, the field has most likely changed
-			$el.find('> .acf-hidden > .input-changed').val( 1 );
+			$el.addClass('open');
+			acf.do_action('open', $el);
 			
 			
 			// animate toggle
 			$el.children('.field-options').animate({ 'height' : 'toggle' }, 250 );
 			
+		},
+		
+		close_field : function( $el ){
+			
+			// already closed?
+			if( !$el.hasClass('open') )
+			{
+				return false;
+			}
+			
+			
+			$el.removeClass('open');
+			acf.do_action('close', $el);
+			
+			
+			// animate toggle
+			$el.children('.field-options').animate({ 'height' : 'toggle' }, 250 );
 		},
 		
 		change_type : function( $select ){
@@ -429,8 +489,66 @@ var acf_field_group = {};
 			
 		},
 		
-		duplicate : function(){
+		duplicate : function( $field ){
 			
+			// vars
+			var $el = $field.clone();
+			
+			
+			// update names
+			this.wipe_field( $el );
+			
+			
+			// append to table
+			$field_list.children('.field[data-key="acfcloneindex"]').before( $el );
+			
+			
+			// clear name
+			$el.find('.field-options .tr-field-type:first select').trigger('change');	
+			$el.find('.field-options input[type="text"]').val('');
+			
+			
+			// focus after form has dropped down
+			// - this prevents a strange rendering bug in Firefox
+			setTimeout(function(){
+			
+	        	$el.find('.field_form input[type="text"]:first').focus();
+	        	
+	        }, 251);
+	        
+			
+			// update order numbers
+			this.render();
+			
+			
+			// trigger append
+			acf.do_action('append', $el);
+			
+			
+			// open up form
+			if( $field.hasClass('open') )
+			{
+				this.close_field( $field );
+			}
+			else
+			{
+				this.open_field( $el );
+			}
+			
+			
+			// update new_field label / name
+			var $label = $el.find('tr[data-name="label"]:first input'),
+				$name = $el.find('tr[data-name="name"]:first input')
+			
+			
+			var label = $el.find('tr.field_label:first input[type="text"]'),
+				name = $el.find('tr.field_name:first input[type="text"]');
+					
+			
+			$name.val('');
+			$label.val( $label.val() + ' (' + acf._e('copy') + ')' );
+			
+			this.change_label( $el );
 			
 		},
 		
@@ -447,8 +565,10 @@ var acf_field_group = {};
 			
 			
 			// update hidden inputs
-			$el.find('> .acf-hidden > .input-ID').val('');
-			$el.find('> .acf-hidden > .input-key').val( new_id );
+			this.update_field_meta($el, {
+				ID : '',
+				key : new_id
+			});
 			
 			
 			// update class
@@ -470,14 +590,35 @@ var acf_field_group = {};
 		
 		render : function(){
 			
+			// reference
+			var _this = this;
+			
+			
 			// update_order_numbers
 			this.$el.find('.acf-field-list').each(function(){
 			
 				$(this).children('.field').each(function( i ){
 					
+					// vars
+					var menu_order = _this.get_field_meta( $(this), 'menu_order' );
+					
+					
+					// bail early if no change in order
+					if( parseInt(menu_order) === i )
+					{
+						return;
+					}
+					console.log('update menu order');
+					
+					// update meta
+					_this.update_field_meta($(this), {
+						changed : 1,
+						menu_order : i
+					});
+					
+					
+					// update icon number
 					$(this).find('.li-field_order:first .acf-icon').html( i+1 );
-					$(this).find('> .acf-hidden > .input-changed').val( 1 );
-					$(this).find('> .acf-hidden > .input-menu_order').val( i );
 					
 				});
 				
@@ -487,8 +628,8 @@ var acf_field_group = {};
 		change_label : function( $el ){
 			
 			// vars
-			var $label = $el.find('tr[data-name="label"] input'),
-				$name = $el.find('tr[data-name="name"] input'),
+			var $label = $el.find('tr[data-name="label"]:first input'),
+				$name = $el.find('tr[data-name="name"]:first input'),
 				type = $el.attr('data-type');
 				
 				

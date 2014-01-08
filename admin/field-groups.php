@@ -18,7 +18,12 @@ class acf_field_groups {
 	function __construct() {
 		
 		// actions
-		add_action('admin_menu', array($this,'admin_menu'));
+		add_action('admin_menu',		array($this,'admin_menu'));
+		
+		add_action('trashed_post',		array($this,'trashed_post'));
+		add_action('untrashed_post',	array($this,'untrashed_post'));
+		add_action('deleted_post',		array($this,'deleted_post'));
+		
 	}
 	
 	
@@ -58,6 +63,103 @@ class acf_field_groups {
 		$this->check_duplicate();
 		
 	}
+	
+	
+	/*
+	*  trashed_post
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	8/01/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function trashed_post( $post_id ) {
+		
+		// validate post type
+		if( get_post_type($post_id) != 'acf-field-group' )
+		{
+			return;
+		}
+		
+		
+		// validate action run only once
+		remove_action('trashed_post', array($this, 'trashed_post'));
+		
+		
+		// trash field group
+		acf_trash_field_group( $post_id );
+		
+	}
+	
+	
+	/*
+	*  untrashed_post
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	8/01/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function untrashed_post( $post_id ) {
+		
+		// validate post type
+		if( get_post_type($post_id) != 'acf-field-group' )
+		{
+			return;
+		}
+		
+		
+		// validate action run only once
+		remove_action('untrashed_post', array($this, 'untrashed_post'));
+		
+		
+		// trash field group
+		acf_untrash_field_group( $post_id );
+		
+	}
+	
+	
+	/*
+	*  deleted_post
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	8/01/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function deleted_post( $post_id ) {
+		
+		// validate post type
+		if( get_post_type($post_id) != 'acf-field-group' )
+		{
+			return;
+		}
+		
+		
+		// validate action run only once
+		remove_action('deleted_post', array($this, 'deleted_post'));
+		
+		
+		// trash field group
+		acf_delete_field_group( $post_id );
+		
+	}
+	
 	
 	
 	/*

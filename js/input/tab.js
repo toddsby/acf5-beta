@@ -198,6 +198,10 @@
 		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + $field.attr('data-key') + '"]');
 		
 		
+		// visibility
+		$tab.hide();
+		
+		
 		if( $tab.parent().siblings(':visible').exists() )
 		{
 			// if the $target to be hidden is a tab button, lets toggle a sibling tab button
@@ -223,6 +227,10 @@
 		
 		// vars
 		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + $field.attr('data-key') + '"]');
+		
+		
+		// visibility
+		$tab.show();
 		
 		
 		// if this is the active tab

@@ -399,6 +399,7 @@ function acf_update_field_group( $field_group = array() ) {
     // save
     $save = array(
     	'ID'			=> $extract['ID'],
+    	'post_status'	=> 'publish',
     	'post_type'		=> 'acf-field-group',
     	'post_title'	=> $extract['title'],
     	'post_name'		=> $extract['key'],
@@ -407,8 +408,9 @@ function acf_update_field_group( $field_group = array() ) {
     );
     
     
+    
     // update the field group and update the ID
-	$field_group['ID'] = wp_update_post( $save );
+	$field_group['ID'] = wp_insert_post( $save );
 	
 	
 	// action for 3rd party customization
@@ -506,7 +508,8 @@ function acf_get_field_count( $field_group_id ) {
 		'order'				=> 'ASC',
 		'suppress_filters'	=> false,
 		'post_parent'		=> $field_group_id,
-		'fields'			=> 'ids'
+		'fields'			=> 'ids',
+		'post_status'		=> 'publish, trash' // 'any' won't get trashed fields
 	);
 	
 	
@@ -532,10 +535,146 @@ function acf_get_field_count( $field_group_id ) {
 *  @return	$post_id (int)
 */
 
-function acf_delete_field_group( $field_group_id = 0 ) {
+function acf_delete_field_group( $selector = 0 ) {
+	
+	// load the origional field gorup
+	$field_group = acf_get_field_group( $selector );
 	
 	
+	// bail early if field group did not load correctly
+	if( empty($field_group) )
+	{
+		return false;
+	}
 	
+	
+	// get fields
+	$fields = acf_get_fields($field_group);
+	
+	
+	if( !empty($fields) )
+	{
+		foreach( $fields as $field )
+		{
+			acf_delete_field( $field['ID'] );
+		}
+	}
+	
+	
+	// delete
+	wp_delete_post( $field_group['ID'] );
+	
+	
+	// action for 3rd party customization
+	do_action('acf/delete_field_group', $field_group);
+	
+	
+	// return
+	return true;
+}
+
+
+/*
+*  acf_trash_field_group
+*
+*  description
+*
+*  @type	function
+*  @date	5/12/2013
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_trash_field_group( $selector = 0 ) {
+	
+	// load the origional field gorup
+	$field_group = acf_get_field_group( $selector );
+	
+	
+	// bail early if field group did not load correctly
+	if( empty($field_group) )
+	{
+		return false;
+	}
+	
+	
+	// get fields
+	$fields = acf_get_fields($field_group);
+	
+	
+	if( !empty($fields) )
+	{
+		foreach( $fields as $field )
+		{
+			acf_trash_field( $field['ID'] );
+		}
+	}
+	
+	
+	// delete
+	wp_trash_post( $field_group['ID'] );
+	
+	
+	// action for 3rd party customization
+	do_action('acf/trash_field_group', $field_group);
+	
+	
+	// return
+	return true;
+}
+
+
+/*
+*  acf_untrash_field_group
+*
+*  description
+*
+*  @type	function
+*  @date	5/12/2013
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_untrash_field_group( $selector = 0 ) {
+	
+	// load the origional field gorup
+	$field_group = acf_get_field_group( $selector );
+	
+	
+	// bail early if field group did not load correctly
+	if( empty($field_group) )
+	{
+		return false;
+	}
+	
+	
+	// get fields
+	$fields = acf_get_fields($field_group);
+	
+	
+	if( !empty($fields) )
+	{
+		foreach( $fields as $field )
+		{
+			acf_untrash_field( $field['ID'] );
+		}
+	}
+	
+	
+	// delete
+	wp_untrash_post( $field_group['ID'] );
+	
+	
+	// action for 3rd party customization
+	do_action('acf/untrash_field_group', $field_group);
+	
+	
+	// return
+	return true;
 }
 
 

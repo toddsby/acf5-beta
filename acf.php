@@ -68,7 +68,7 @@ class acf {
 			'show_admin'	=> true,
 			'stripslashes'	=> true,
 			'load_db'		=> true,
-			'json'			=> true,
+			'json'			=> false,
 			'save_json'		=> '',
 			'load_json'		=> array()
 		);
@@ -142,9 +142,9 @@ class acf {
 		include_once('core/location.php');
 		include_once('core/json.php');
 		
-		include_once('admin/comment.php');
-		include_once('admin/widget.php');
-		include_once('admin/user.php');
+		include_once('core/comment.php');
+		include_once('core/widget.php');
+		include_once('core/user.php');
 	}
 	
 	
@@ -161,8 +161,8 @@ class acf {
 	*  @return	N/A
 	*/
 	
-	function include_fields()
-	{
+	function include_fields() {
+		
 		// register fields
 		include_once('fields/_base.php');
 		
@@ -230,14 +230,17 @@ class acf {
 	*  @return	N/A
 	*/
 	
-	function include_admin()
-	{
+	function include_admin() {
+		
 		include_once('admin/admin.php');
 		include_once('admin/field-group.php');
 		include_once('admin/field-groups.php');
 		
 		include_once('admin/post.php');
 		include_once('admin/taxonomy.php');
+		
+		// settings
+		include_once('admin/settings-export.php');
 		
 	}
 	

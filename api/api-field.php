@@ -227,7 +227,8 @@ function acf_get_fields_by_id( $id ) {
 		'orderby'			=> 'menu_order',
 		'order'				=> 'ASC',
 		'suppress_filters'	=> false,
-		'post_parent'		=> $id
+		'post_parent'		=> $id,
+		'post_status'		=> 'publish, trash' // 'any' won't get trashed fields
 	);
 		
 	
@@ -556,11 +557,11 @@ function acf_update_field( $field = false ) {
     
     // Note: find out why by default, ACF is adding a -2
 	add_filter( 'wp_unique_post_slug', 'acf_update_field_wp_unique_post_slug', 5, 6 ); 
-		
+	
 		
     // update the field and update the ID
-    $field['ID'] = wp_update_post( $save );
-    
+    $field['ID'] = wp_insert_post( $save );
+
     
     // update cache
 	wp_cache_set( "load_field/ID={$field['ID']}", $field, 'acf' );
@@ -579,38 +580,6 @@ function acf_update_field_wp_unique_post_slug( $slug, $post_ID, $post_status, $p
 	}
 	
 	return $slug;
-}
-
-
-/*
-*  acf_delete_field
-*
-*  This function will delete a field from the databse
-*
-*  @type	function
-*  @date	2/10/13
-*  @since	5.0.0
-*
-*  @param	$id (int)
-*  @return	(boolean)
-*/
-
-function acf_delete_field( $id ) {
-	
-	// vars
-	$return = false;
-	
-	
-	// action for 3rd party customisation
-	do_action( 'acf/delete_field', $id );
-	
-	
-	// delete field
-	$return = wp_delete_post( $id, true );
-	
-	
-	// return
-	return $return;
 }
 
 
@@ -659,5 +628,125 @@ function acf_duplicate_field( $selector = 0, $parent_id = 0 ){
 	return acf_update_field( $field );
 	
 }
+
+
+/*
+*  acf_delete_field
+*
+*  This function will delete a field from the databse
+*
+*  @type	function
+*  @date	2/10/13
+*  @since	5.0.0
+*
+*  @param	$id (int)
+*  @return	(boolean)
+*/
+
+function acf_delete_field( $selector = 0 ) {
+	
+	// load the origional field gorup
+	$field = acf_get_field( $selector );
+	
+	
+	// bail early if field did not load correctly
+	if( empty($field) )
+	{
+		return false;
+	}
+	
+	
+	// delete field
+	wp_delete_post( $field['ID'], true );
+	
+	
+	// action for 3rd party customisation
+	do_action( 'acf/delete_field', $field );
+	
+	
+	// return
+	return true;
+}
+
+
+/*
+*  acf_trash_field
+*
+*  This function will trash a field from the databse
+*
+*  @type	function
+*  @date	2/10/13
+*  @since	5.0.0
+*
+*  @param	$id (int)
+*  @return	(boolean)
+*/
+
+function acf_trash_field( $selector = 0 ) {
+	
+	// load the origional field gorup
+	$field = acf_get_field( $selector );
+	
+	
+	// bail early if field did not load correctly
+	if( empty($field) )
+	{
+		return false;
+	}
+	
+	
+	// delete field
+	wp_trash_post( $field['ID'] );
+	
+	
+	// action for 3rd party customisation
+	do_action( 'acf/trash_field', $field );
+	
+	
+	// return
+	return true;
+}
+
+
+/*
+*  acf_untrash_field
+*
+*  This function will restore a field from the trash
+*
+*  @type	function
+*  @date	2/10/13
+*  @since	5.0.0
+*
+*  @param	$id (int)
+*  @return	(boolean)
+*/
+
+function acf_untrash_field( $selector = 0 ) {
+	
+	// load the origional field gorup
+	$field = acf_get_field( $selector );
+	
+	
+	// bail early if field did not load correctly
+	if( empty($field) )
+	{
+		return false;
+	}
+	
+	
+	// delete field
+	wp_untrash_post( $field['ID'] );
+	
+	
+	// action for 3rd party customisation
+	do_action( 'acf/untrash_field', $field );
+	
+	
+	// return
+	return true;
+}
+
+
+
 
 ?>

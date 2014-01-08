@@ -16,6 +16,13 @@ class acf_json_actions {
 	
 	function update_field_group( $field_group ) {
 		
+		// validate
+		if( !acf_get_setting('json') )
+		{
+			return;
+		}
+		
+		
 		// vars
 		$path = acf_get_setting('save_json');
 		$file = $field_group['key'] . '.json';
@@ -51,7 +58,6 @@ class acf_json_actions {
 		{
 			foreach( $fields as $field )
 			{
-				
 				// extract some args
 				$extract = acf_extract_vars($field, array(
 					'ID',

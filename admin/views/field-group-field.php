@@ -20,7 +20,7 @@ $atts = array(
 ?>
 <div <?php echo acf_esc_attr( $atts ); ?>>
 	
-	<div class="acf-hidden">
+	<div class="field-meta acf-hidden">
 		<input type="hidden" class="input-ID" name="<?php echo $field['prefix']; ?>[ID]" value="<?php echo $field['ID']; ?>" />
 		<input type="hidden" class="input-key" name="<?php echo $field['prefix']; ?>[key]" value="<?php echo $field['key']; ?>" />
 		<input type="hidden" class="input-parent" name="<?php echo $field['prefix']; ?>[parent]" value="<?php echo $field['parent']; ?>" />
