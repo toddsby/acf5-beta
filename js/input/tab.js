@@ -69,12 +69,10 @@
 				
 				if( acf.is_field( $(this), {key : key} ) )
 				{
-					console.log( 1 );
 					_this.show_tab_fields( $(this) );
 				}
 				else
 				{
-					console.log( 0 );
 					_this.hide_tab_fields( $(this) );
 				}
 				
@@ -119,11 +117,6 @@
 				});
 				
 			});
-			
-			
-			// trigger conditional logic
-			// this code ( acf/setup_fields ) is run after the main acf.conditional_logic.init();
-			acf.conditional_logic.change();
 			
 		}
 		
@@ -195,11 +188,18 @@
 		
 		
 		// vars
-		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + $field.attr('data-key') + '"]');
+		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + acf.get_field_data($field, 'key') + '"]');
+		
+		
+		// if tab is already hidden, then ignore the following functiolnality
+		if( $tab.is(':hidden') )
+		{
+			return;
+		}
 		
 		
 		// visibility
-		$tab.hide();
+		$tab.parent().hide();
 		
 		
 		if( $tab.parent().siblings(':visible').exists() )
@@ -226,11 +226,18 @@
 		
 		
 		// vars
-		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + $field.attr('data-key') + '"]');
+		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + acf.get_field_data($field, 'key') + '"]');
+		
+		
+		// if tab is already visible, then ignore the following functiolnality
+		if( $tab.is(':visible') )
+		{
+			return;
+		}
 		
 		
 		// visibility
-		$tab.show();
+		$tab.parent().show();
 		
 		
 		// if this is the active tab

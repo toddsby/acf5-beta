@@ -19,13 +19,15 @@ class acf_pro {
 	
 	function __construct() {
 		
-		
 		// includes
-		if( class_exists('acf_field') )
+		$this->include_api();
+		$this->include_fields();
+		
+		
+		// includes (admin only)
+		if( is_admin() && acf_get_setting('show_admin') )
 		{
-			include_once('fields/repeater.php');
-			include_once('fields/flexible-content.php');
-			include_once('fields/gallery.php');
+			$this->include_admin();
 		}
 		
 		
@@ -34,6 +36,71 @@ class acf_pro {
 		add_action( 'acf/input/admin_enqueue_scripts',			array( $this, 'input_admin_enqueue_scripts') );
 		add_action( 'acf/field_group/admin_enqueue_scripts',	array( $this, 'field_group_admin_enqueue_scripts') );
 		add_filter( 'acf/update_field',							array( $this, 'update_field'), 1, 1 );
+	}
+	
+	
+	/*
+	*  include_api
+	*
+	*  This function will include all field files
+	*
+	*  @type	function
+	*  @date	28/09/13
+	*  @since	5.0.0
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	function include_api() {
+		
+		include_once('api-pro.php');
+		
+	}
+	
+	
+	/*
+	*  include_fields
+	*
+	*  This function will include all field files
+	*
+	*  @type	function
+	*  @date	28/09/13
+	*  @since	5.0.0
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	function include_fields() {
+		
+		include_once('fields/repeater.php');
+		include_once('fields/flexible-content.php');
+		include_once('fields/gallery.php');
+		
+	}
+	
+	
+	/*
+	*  include_admin
+	*
+	*  This function will include all admin files
+	*
+	*  @type	function
+	*  @date	28/09/13
+	*  @since	5.0.0
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	function include_admin() {
+
+		include_once('admin/connect.php');
+		
+		// settings
+		include_once('admin/settings-updates.php');
+		
 	}
 	
 	
@@ -141,16 +208,7 @@ class acf_pro {
 		{
 			if( strpos($field['parent'], 'field_') === 0 )
 			{
-				echo '<pre>';
-					print_r($field['parent']);
-				echo '</pre>';
-				die;
 				$parent = acf_get_field( $field['parent'] );
-				
-				echo '<pre>';
-					print_r($parent);
-				echo '</pre>';
-				die;
 				
 				$field['parent'] = $parent['ID'];
 			}

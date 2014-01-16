@@ -282,7 +282,7 @@ class acf_field_group {
 				
 				
 				// add args
-				$field['field_group'] = $post_id;
+				$field['parent'] = $post_id;
 				
 				
 				// save field

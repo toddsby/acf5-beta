@@ -257,7 +257,7 @@ class acf_settings_export {
 				foreach( $fields as $field )
 				{
 					// add args
-					$field['field_group'] = $field_group['ID'];
+					$field['parent'] = $field_group['ID'];
 					
 					
 					// save field

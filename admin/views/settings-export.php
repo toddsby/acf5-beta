@@ -1,12 +1,6 @@
-<div class="wrap">
+<div class="wrap acf-settings-wrap">
 	
-	<h2 class="nav-tab-wrapper">
-		<a class="nav-tab nav-tab-active" href="http://acf/wp-admin/admin.php?page=shopp-setup-core">Import / Export</a>
-		<a class="nav-tab" href="http://acf/wp-admin/admin.php?page=shopp-setup-core">Add-ons</a>
-		<a class="nav-tab" href="http://acf/wp-admin/admin.php?page=shopp-setup-core">Updates</a>
-	</h2>
-	
-	<p><br /></p>
+	<h2>Import / Export</h2>
 	
 	<div class="acf-box">
 		<div class="title">
@@ -69,8 +63,7 @@
 		
 		
 	</div>
-	
-	<p><br /></p>
+
 	
 	<div class="acf-box">
 		<div class="title">

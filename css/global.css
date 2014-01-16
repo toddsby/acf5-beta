@@ -925,6 +925,64 @@ img.acf-fw {
 }
 
 
+/*--------------------------------------------------------------------------------------------
+*
+*	Settings
+*
+*--------------------------------------------------------------------------------------------*/
+
+.acf-settings-wrap {
+	
+}
+
+.acf-settings-wrap .acf-box {
+	margin: 20px 0;
+}
+
+
+/*--------------------------------------------------------------------------------------------
+*
+*	Settings: Add-ons
+*
+*--------------------------------------------------------------------------------------------*/
+
+.add-ons-list {
+	margin: 20px 0 0 -18px;
+	max-width: 960px;
+}
+
+.add-ons-list .add-on {
+	width: 220px;
+	margin: 0 0 20px 18px;
+	float: left;
+}
+
+.add-ons-list .add-on .inner {
+	min-height: 90px;
+}
+
+.add-ons-list .add-on-acf-pro {
+	width: 940px;
+}
+
+.add-ons-list .add-on .thumbnail {
+	
+}
+
+.add-ons-list .add-on .thumbnail img {
+	display: block;
+}
+
+.add-ons-list .add-on h3 a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.add-ons-list .add-on h3 {
+	margin: 0.5em 0;
+}
+
+
 /*---------------------------------------------------------------------------------------------
 *
 *  Retina
