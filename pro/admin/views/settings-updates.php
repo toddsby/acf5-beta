@@ -9,7 +9,7 @@ $active = $license ? true : false;
 $nonce = $active ? 'deactivate_pro_licence' : 'activate_pro_licence';
 $input = $active ? 'password' : 'text';
 $button = $active ? 'Deactivate License' : 'Activate License';
-
+$readonly = $active ? 1 : 0;
 
 ?>
 <div class="wrap acf-settings-wrap">
@@ -41,6 +41,7 @@ $button = $active ? 'Deactivate License' : 'Activate License';
 								'type'		=> $input,
 								'name'		=> 'acf_pro_licence',
 								'value'		=> $license,
+								'readonly'	=> $readonly
 							));
 							
 							?>
@@ -121,3 +122,8 @@ $button = $active ? 'Deactivate License' : 'Activate License';
 	</div>
 	
 </div>
+<style type="text/css">
+	#acf-field-acf_pro_licence {
+		width: 75%;
+	}
+</style>

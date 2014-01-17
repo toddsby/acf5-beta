@@ -71,13 +71,22 @@ class acf_pro_connect {
         	return $transient;
         }
 		
-       
+		
         // create new object for update
         $obj = new stdClass();
         $obj->slug = $slug;
         $obj->new_version = $info['version'];
         $obj->url = $info['homepage'];
-        $obj->package = acf_pro_get_remote_url( 'download', array( 'license' => acf_pro_get_license() ) );
+        $obj->package = '';
+        
+        
+        // license
+		if( acf_pro_is_license_active() )
+		{
+			$obj->package = acf_pro_get_remote_url( 'download', array( 'license' => acf_pro_get_license() ) );
+		}
+		
+        
         
         
         // add to transient

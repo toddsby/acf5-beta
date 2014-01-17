@@ -79,12 +79,21 @@ class acf_settings_updates {
 		
 		// view
 		$this->view = array(
-			'license'			=> acf_pro_get_license(),
+			'license'			=> '',
+			'active'			=> 0,
 			'current_version'	=> acf_get_setting('version'),
 			'remote_version'	=> '',
 			'update_available'	=> false,
 			'changelog'			=> ''
 		);
+		
+		
+		// license
+		if( acf_pro_is_license_active() )
+		{
+			$this->view['license'] = acf_pro_get_license();
+			$this->view['active'] = 1;
+		}
 		
 		
 		// force recheck?
@@ -173,14 +182,12 @@ class acf_settings_updates {
 		// connect
 		$response = acf_pro_get_remote_response( 'activate-license', $args );
 		
-		echo '<pre>';
-			print_r( $response );
-		echo '</pre>';
-		die;
+		
 		// validate
 		if( empty($response) )
 		{
-			acf_add_admin_notice('<b>Licence key not found</b>. Make sure you have copied your licence key exactly as it appears in your receipt', 'error');
+			acf_add_admin_notice('<b>Connection Error</b>. Sorry, please try again', 'error');
+			return;
 		}
 		
 		
@@ -193,6 +200,65 @@ class acf_settings_updates {
 		if( $response['status'] == 1 )
 		{
 			acf_pro_update_license($response['license']);
+		}
+		else
+		{
+			$class = 'error';
+		}
+		
+		
+		// show message
+		if( $response['message'] )
+		{
+			acf_add_admin_notice($response['message'], $class);
+		}
+	}
+	
+	
+	/*
+	*  deactivate_pro_licence
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	16/01/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function deactivate_pro_licence() {
+		
+		// connect
+		$args = array(
+			'_nonce'		=> wp_create_nonce('deactivate_pro_licence'),
+			'acf_license'	=> acf_extract_var($_POST, 'acf_pro_licence'),
+			'wp_url'		=> get_bloginfo('url'),
+		);
+		
+		
+		// connect
+		$response = acf_pro_get_remote_response( 'deactivate-license', $args );
+		
+		
+		// validate
+		if( empty($response) )
+		{
+			acf_add_admin_notice('<b>Connection Error</b>. Sorry, please try again', 'error');
+			return;
+		}
+		
+		
+		// vars
+		$response = json_decode($response, true);
+		$class = '';
+		
+		
+		// action
+		if( $response['status'] == 1 )
+		{
+			acf_pro_update_license('');
 		}
 		else
 		{

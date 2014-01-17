@@ -79,7 +79,11 @@ function acf_pro_get_remote_response( $action = '', $post = array() ) {
 	
 	
 	// connect
-	$request = wp_remote_post( $url, $post );
+	$request = wp_remote_post( $url, array(
+		'body' => $post
+	));
+	
+
     if( !is_wp_error($request) || wp_remote_retrieve_response_code($request) === 200)
     {
         return $request['body'];
@@ -138,16 +142,67 @@ function acf_pro_get_remote_info() {
 	return $info;
 }
 
-
-function acf_pro_get_license() {
+function acf_pro_is_license_active() {
 	
-	return get_option('acf_pro_license');
+	// vars
+	$data = acf_pro_get_license( true );
+	$url = get_bloginfo('url');
+	
+	
+	if( isset($data['url'], $data['key']) && $data['url'] == $url )
+	{
+		return true;
+	}
+	
+	
+	return false;
 	
 }
 
+function acf_pro_get_license( $all = false ) {
+	
+	// get option
+	$data = get_option('acf_pro_license');
+	
+	
+	// decode
+	$data = base64_decode($data);
+	
+	
+	// attempt deserialize
+	if( is_serialized( $data ) )
+	{
+		$data = maybe_unserialize($data);
+		
+		// $all
+		if( !$all )
+		{
+			$data = $data['key'];
+		}
+		
+		return $data;
+	}
+	
+	
+	// return
+	return false;
+}
+
+
+
 function acf_pro_update_license( $license ) {
 	
-	return update_option('acf_pro_license', $license);
+	$save = array(
+		'key'	=> $license,
+		'url'	=> get_bloginfo('url')
+	);
+	
+	
+	$save = maybe_serialize($save);
+	$save = base64_encode($save);
+	
+	
+	return update_option('acf_pro_license', $save);
 	
 }
 
