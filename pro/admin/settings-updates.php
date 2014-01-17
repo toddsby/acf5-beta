@@ -255,10 +255,14 @@ class acf_settings_updates {
 		$class = '';
 		
 		
+		// allways clear DB
+		acf_pro_update_license('');
+		
+		
 		// action
 		if( $response['status'] == 1 )
 		{
-			acf_pro_update_license('');
+			
 		}
 		else
 		{
