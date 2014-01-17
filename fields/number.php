@@ -24,7 +24,9 @@ class acf_field_number extends acf_field
 			'step'			=>	'',
 			'placeholder'	=>	'',
 			'prepend'		=>	'',
-			'append'		=>	''
+			'append'		=>	'',
+			'readonly'		=>	0,
+			'disabled'		=>	0,
 		);
 		
 		
@@ -49,6 +51,7 @@ class acf_field_number extends acf_field
 	{
 		// vars
 		$o = array( 'type', 'id', 'class', 'min', 'max', 'step', 'name', 'value', 'placeholder' );
+		$s = array( 'readonly', 'disabled' );
 		$e = '';
 		
 		
@@ -79,6 +82,16 @@ class acf_field_number extends acf_field
 		foreach( $o as $k )
 		{
 			$atts[ $k ] = $field[ $k ];	
+		}
+		
+		
+		// special atts
+		foreach( $s as $k )
+		{
+			if( $field[ $k ] )
+			{
+				$atts[ $k ] = $k;
+			}
 		}
 		
 		

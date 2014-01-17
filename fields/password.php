@@ -20,7 +20,9 @@ class acf_field_password extends acf_field
 		$this->defaults = array(
 			'placeholder'	=>	'',
 			'prepend'		=>	'',
-			'append'		=>	''
+			'append'		=>	'',
+			'readonly'		=>	0,
+			'disabled'		=>	0,
 		);
 		
 		
@@ -45,6 +47,7 @@ class acf_field_password extends acf_field
 	{
 		// vars
 		$o = array( 'type', 'id', 'class', 'name', 'value', 'placeholder' );
+		$s = array( 'readonly', 'disabled' );
 		$e = '';
 		
 		
@@ -69,6 +72,16 @@ class acf_field_password extends acf_field
 		foreach( $o as $k )
 		{
 			$atts[ $k ] = $field[ $k ];	
+		}
+		
+		
+		// special atts
+		foreach( $s as $k )
+		{
+			if( $field[ $k ] )
+			{
+				$atts[ $k ] = $k;
+			}
 		}
 		
 		

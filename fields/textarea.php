@@ -22,6 +22,8 @@ class acf_field_textarea extends acf_field
 			'formatting' 	=>	'br',
 			'maxlength'		=>	'',
 			'placeholder'	=>	'',
+			'readonly'		=>	0,
+			'disabled'		=>	0,
 		);
 		
 		
@@ -45,19 +47,33 @@ class acf_field_textarea extends acf_field
 	function render_field( $field )
 	{
 		// vars
+		$o = array( 'id', 'class', 'name', 'placeholder' );
+		$s = array( 'readonly', 'disabled' );
 		$e = '';
-		$atts = array( 
-			'id'			=> $field['id'],
-			'class'			=> $field['class'],
-			'name'			=> $field['name'],
-			'placeholder'	=> $field['placeholder']
-		);
 		
 		
 		// maxlength
 		if( $field['maxlength'] !== "" )
 		{
-			$atts['maxlength'] = $field['maxlength'];
+			$o[] = 'maxlength';
+		}
+		
+		
+		// populate atts
+		$atts = array();
+		foreach( $o as $k )
+		{
+			$atts[ $k ] = $field[ $k ];	
+		}
+		
+		
+		// special atts
+		foreach( $s as $k )
+		{
+			if( $field[ $k ] )
+			{
+				$atts[ $k ] = $k;
+			}
 		}
 		
 
