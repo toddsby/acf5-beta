@@ -48,13 +48,10 @@ function acf_pro_get_remote_url( $action = '', $args = array() ) {
 	
 	
 	// vars
-	$url = "http://connect/index.php";
+	$url = "http://connect/index.php?" . build_query($args);
 	
 	
-	// add in args
-	$url = add_query_arg( $args, $url );
-	
-	
+	// return
 	return $url;
 }
 
