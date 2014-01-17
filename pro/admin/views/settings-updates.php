@@ -108,7 +108,18 @@ $readonly = $active ? 1 : 0;
                     		<label>Changelog</label>
                     	</th>
 						<td>
-							<?php echo $changelog; ?>
+							<?php 
+							
+							$changelog_sections = explode('<h4>', $changelog);
+							$changelog_sections = array_slice($changelog_sections, 0, 2);
+							
+							foreach( $changelog_sections as $section )
+							{
+								$section = str_replace('<ul>', '<ul class="ul-disc">', $section);
+								echo "<h4>{$section}"; 
+							}
+							
+							?>
 						</td>
 					</tr>
 					<?php endif; ?>

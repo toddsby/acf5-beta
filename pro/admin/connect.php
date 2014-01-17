@@ -2,8 +2,6 @@
 
 class acf_pro_connect {
 	
-	var $info;
-	
 	
 	/*
 	*  __construct
@@ -20,13 +18,58 @@ class acf_pro_connect {
 	
 	function __construct() {
 		
-		// filters
-		add_filter('pre_set_site_transient_update_plugins', array($this, 'update_plugins'));
+		// override requests for plugin information
+        add_filter('plugins_api', array($this, 'inject_info'), 20, 3);
+        
+        
+		// insert our update info into the update array maintained by WP
+		add_filter('site_transient_update_plugins', array($this, 'inject_update'));
 	}
 	
 	
 	/*
-	*  update_plugins
+	*  inject_info
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	17/01/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function inject_info( $res, $action = null, $args = null ) {
+		
+		// vars
+		$slug = acf_get_setting('slug');
+        
+        
+		// validate
+    	if( isset($args->slug) && $args->slug == $slug )
+    	{
+	    	$info = acf_pro_get_remote_info();
+	    	
+	    	$obj = new stdClass();
+		
+		    foreach( $info as $k => $v )
+		    {
+		        $obj->$k = $v;
+		    }
+		    
+		    return $obj;
+		    
+    	}
+    	
+    	        
+        return $res;
+        
+	}
+	
+	
+	/*
+	*  inject_update
 	*
 	*  description
 	*
@@ -38,7 +81,7 @@ class acf_pro_connect {
 	*  @return	$post_id (int)
 	*/
 	
-	function update_plugins( $transient ) {
+	function inject_update( $transient ) {
 		
 		// bail early if no plugins are being checked
 	    if( empty($transient->checked) )
@@ -61,8 +104,7 @@ class acf_pro_connect {
         // vars
         $version = acf_get_setting('version');
         $basename = acf_get_setting('basename');
-        $slug = explode('/', $basename);
-        $slug = current($slug);
+        $slug = acf_get_setting('slug');
         
         
         // bail early if the external version is '<=' the current version
@@ -83,11 +125,9 @@ class acf_pro_connect {
         // license
 		if( acf_pro_is_license_active() )
 		{
-			$obj->package = acf_pro_get_remote_url( 'download', array( 'license' => acf_pro_get_license() ) );
+			$obj->package = acf_pro_get_remote_url( 'download', array( 'k' => acf_pro_get_license() ) );
 		}
 		
-        
-        
         
         // add to transient
         $transient->response[ $basename ] = $obj;

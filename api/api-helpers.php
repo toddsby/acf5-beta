@@ -1064,6 +1064,28 @@ function acf_cache_get( $key, &$found ) {
 }
 
 
+/*
+*  Hacks
+*
+*  description
+*
+*  @type	function
+*  @date	17/01/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
 
+add_filter("acf/settings/slug", '_acf_settings_slug');
+
+function _acf_settings_slug( $v ) {
+	
+	$basename = acf_get_setting('basename');
+    $slug = explode('/', $basename);
+    $slug = current($slug);
+	
+	return $slug;
+}
 
 ?>
