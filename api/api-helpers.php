@@ -55,6 +55,32 @@ function acf_update_setting( $name, $value )
 
 
 /*
+*  acf_append_setting
+*
+*  This function will add a value into the settings array found in the acf object
+*
+*  @type	function
+*  @date	28/09/13
+*  @since	5.0.0
+*
+*  @param	$name (string) the setting name to return
+*  @return	(mixed)
+*/
+
+function acf_append_setting( $name, $value ) {
+	
+	// createa array if needed
+	if( ! isset(acf()->settings[ $name ]) )
+	{
+		acf()->settings[ $name ] = array();
+	}
+	
+	// append to array
+	acf()->settings[ $name ][] = $value;
+}
+
+
+/*
 *  acf_get_path
 *
 *  This function will return the path to a file within the ACF plugin folder
@@ -770,7 +796,7 @@ function acf_verify_nonce( $nonce, $post_id = 0 ) {
 *  @return	(int) message ID (array position)
 */
 
-function acf_add_admin_notice( $text, $class = 'updated' )
+function acf_add_admin_notice( $text, $class = '' )
 {
 	// vars
 	$admin_notices = acf_get_admin_notices();
@@ -779,7 +805,7 @@ function acf_add_admin_notice( $text, $class = 'updated' )
 	// add to array
 	$admin_notices[] = array(
 		'text'	=> $text,
-		'class'	=> $class
+		'class'	=> "updated {$class}"
 	);
 	
 	
