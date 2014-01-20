@@ -22,6 +22,13 @@ function acf_get_valid_field( $field = false ) {
 	}
 	
 	
+	// bail ealry if field_name exists (only run this function once)
+	if( isset($field['field_name']) )
+	{
+		return $field;
+	}
+	
+	
 	// defaults
 	$field = acf_parse_args($field, array(
 		'ID'				=> 0,
@@ -44,7 +51,7 @@ function acf_get_valid_field( $field = false ) {
 	));
 	
 	
-	// id
+	// add id (may be custom set)
 	if( !$field['id'] )
 	{
 		$field['id'] = "acf-field-{$field['name']}";
@@ -254,7 +261,7 @@ function acf_get_fields_by_id( $id ) {
 
 
 /*
-*  acf_get_fields
+*  acf_get_field
 *
 *  This function will return a field for the given selector. 
 *
