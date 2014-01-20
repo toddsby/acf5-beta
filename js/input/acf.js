@@ -433,6 +433,124 @@ var acf = {
 			
 			return true;
 				
+		},
+		
+		open_popup : function( args ){
+			
+			// vars
+			$popup = $('body > #acf-poup');
+			
+			
+			// already exists?
+			if( $popup.exists() )
+			{
+				return update_popup(args);
+			}
+			
+			
+			// template
+			var tmpl = [
+				'<div id="acf-popup">',
+					'<div class="acf-popup-box acf-box">',
+						'<div class="title"><h3></h3><a href="#" class="acf-icon"><i class="acf-sprite-delete "></i></a></div>',
+						'<div class="inner"></div>',
+						'<div class="loading"><i class="acf-loading"></i></div>',
+					'</div>',
+					'<div class="bg"></div>',
+				'</div>'
+			].join('');
+			
+			
+			// append
+			$('body').append( tmpl );
+			
+			
+			$('#acf-popup .bg, #acf-popup .acf-icon').on('click', function(){
+				
+				acf.close_popup();
+				
+			});
+			
+			
+			// update
+			return this.update_popup(args);
+			
+		},
+		
+		update_popup : function( args ){
+			
+			// vars
+			$popup = $('#acf-popup');
+			
+			
+			// validate
+			if( !$popup.exists() )
+			{
+				return false
+			}
+			
+			
+			// defaults
+			args = $.extend({}, {
+				title	: '',
+				content : '',
+				width	: 0,
+				height	: 0,
+				loading : false
+			}, args);
+			
+			
+			if( args.width )
+			{
+				$popup.find('.acf-popup-box').css({
+					'width'			: args.width,
+					'margin-left'	: 0 - (args.width / 2),
+				});
+			}
+			
+			if( args.height )
+			{
+				$popup.find('.acf-popup-box').css({
+					'height'		: args.height,
+					'margin-top'	: 0 - (args.height / 2),
+				});	
+			}
+			
+			if( args.title )
+			{
+				$popup.find('.title h3').html( args.title );
+			}
+			
+			if( args.content )
+			{
+				$popup.find('.inner').html( args.content );
+			}
+			
+			if( args.loading )
+			{
+				$popup.find('.loading').show();
+			}
+			else
+			{
+				$popup.find('.loading').hide();
+			}
+			
+			return $popup;
+		},
+		
+		close_popup : function(){
+			
+			// vars
+			$popup = $('#acf-popup');
+			
+			
+			// already exists?
+			if( $popup.exists() )
+			{
+				$popup.remove();
+			}
+			
+			
 		}
 		
 	});

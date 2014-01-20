@@ -156,6 +156,15 @@ var acf_field_group = {};
 			});
 			
 			
+			this.$el.on('click', '.move-field', function( e ){
+				
+				e.preventDefault();
+				
+				_this.move( $(this).closest('.field') );
+				
+			});
+			
+			
 			this.$el.on('click', '.delete-field', function( e ){
 				
 				e.preventDefault();
@@ -484,15 +493,89 @@ var acf_field_group = {};
 						
 		},
 		
-		move : function(){
+		move : function( $field ){
 			
+			// open popup
+			acf.open_popup({
+				title	: acf._e('move_field'),
+				loading	: true
+			});
+			
+			
+			// AJAX data
+			var ajax_data = {
+				'action'	: 'acf/field_group/move_field',
+				'nonce'		: acf.get('nonce'),
+				'field_id'	: this.get_field_meta($field, 'ID')
+			};
+			
+			
+			// get HTML
+			$.ajax({
+				url: acf.get('ajaxurl'),
+				data: ajax_data,
+				type: 'post',
+				dataType: 'html',
+				success: function(html){
+				
+					acf_field_group.fields.move_confirm( $field, html );
+					
+				}
+			});
+			
+		},
+		
+		move_confirm : function( $field, html ){
+			
+			// update popup
+			acf.update_popup({
+				content : html
+			});
+			
+			
+			// AJAX data
+			var ajax_data = {
+				'action'			: 'acf/field_group/move_field',
+				'nonce'				: acf.get('nonce'),
+				'field_id'			: this.get_field_meta($field, 'ID'),
+				'field_group_id'	: 0
+			};
+			
+			
+			// submit form
+			$('#acf-move-field-form').on('submit', function(){
+
+				ajax_data.field_group_id = $(this).find('select').val();
+				
+				
+				// get HTML
+				$.ajax({
+					url: acf.get('ajaxurl'),
+					data: ajax_data,
+					type: 'post',
+					dataType: 'html',
+					success: function(html){
+					
+						acf.update_popup({
+							content : html
+						});
+						
+						acf_field_group.fields.remove( $field );
+						
+					}
+				});
+				
+				return false;
+				
+			});
 			
 		},
 		
 		duplicate : function( $field ){
 			
 			// vars
-			var $el = $field.clone();
+			var $el = $field.clone(),
+				$field_list	= $field.closest('.acf-field-list');
 			
 			
 			// update names
@@ -501,11 +584,6 @@ var acf_field_group = {};
 			
 			// append to table
 			$field_list.children('.field[data-key="acfcloneindex"]').before( $el );
-			
-			
-			// clear name
-			$el.find('.field-options .tr-field-type:first select').trigger('change');	
-			$el.find('.field-options input[type="text"]').val('');
 			
 			
 			// focus after form has dropped down
@@ -538,18 +616,14 @@ var acf_field_group = {};
 			
 			// update new_field label / name
 			var $label = $el.find('tr[data-name="label"]:first input'),
-				$name = $el.find('tr[data-name="name"]:first input')
-			
-			
-			var label = $el.find('tr.field_label:first input[type="text"]'),
-				name = $el.find('tr.field_name:first input[type="text"]');
+				$name = $el.find('tr[data-name="name"]:first input');
 					
 			
-			$name.val('');
+			//$name.val('');
 			$label.val( $label.val() + ' (' + acf._e('copy') + ')' );
 			
-			this.change_label( $el );
 			
+			this.render_field( $el );
 		},
 		
 		wipe_field : function( $el ){

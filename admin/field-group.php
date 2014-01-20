@@ -24,6 +24,7 @@ class acf_field_group {
 		// ajax
 		add_action( 'wp_ajax_acf/field_group/render_field_options',		array( $this, 'ajax_render_field_options') );
 		add_action( 'wp_ajax_acf/field_group/render_location_value',	array( $this, 'ajax_render_location_value') );
+		add_action( 'wp_ajax_acf/field_group/move_field',				array( $this, 'ajax_move_field') );
 	}
 	
 	
@@ -97,7 +98,7 @@ class acf_field_group {
 		// custom scripts
 		wp_enqueue_style( 'acf-field-group' );
 		wp_enqueue_script( 'acf-field-group' );
-		
+    
 		
 		// disable JSON to avoid conflicts between DB and JSON
 		acf_update_setting('json', false);
@@ -143,7 +144,8 @@ class acf_field_group {
 			'fields'			=>	__("Fields",'acf'),
 			'parent_fields'		=>	__("Parent fields",'acf'),
 			'sibling_fields'	=>	__("Sibling fields",'acf'),
-			'hide_show_all'		=>	__("Hide / Show All",'acf')
+			'hide_show_all'		=>	__("Hide / Show All",'acf'),
+			'move_field'		=>	__("Move Custom Field",'acf')
 		);
 		
 		$o = array(
@@ -822,6 +824,95 @@ class acf_field_group {
 		die();
 								
 	}
+	
+	/*
+	*  ajax_move_field
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	20/01/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function ajax_move_field() {
+		
+		$args = acf_parse_args($_POST, array(
+			'nonce'				=> '',
+			'field_id'			=> 0,
+			'field_group_id'	=> 0
+		));
+		
+		
+		// verify nonce
+		if( ! wp_verify_nonce($args['nonce'], 'acf-nonce') )
+		{
+			die();
+		}
+		
+		
+		// confirm?
+		if( $args['field_id'] && $args['field_group_id'] )
+		{
+			$field = acf_get_field($args['field_id']);
+			$field_group = acf_get_field_group($args['field_group_id']);
+			
+			$field['parent'] = $field_group['ID'];
+			
+			acf_update_field($field);
+			
+			echo '<p><strong>' . __('Success', 'acf') . '</strong>. ' . sprintf( __('The field %s was moved to field group %s', 'acf'), "'{$field['name']}'", "'{$field_group['title']}'" ). '</p>';
+			
+			die();
+			
+		}
+		
+		
+		// get all field groups
+		$field_groups = acf_get_field_groups();
+		$choices = array();
+		
+		
+		if( !empty($field_groups) )
+		{
+			foreach( $field_groups as $field_group )
+			{
+				if( $field_group['ID'] )
+				{
+					$choices[ $field_group['ID'] ] = $field_group['title'];
+				}
+			}
+		}
+		
+		// render options
+		$field = acf_get_valid_field(array(
+			'type'		=> 'select',
+			'name'		=> 'acf_field_group',
+			'choices'	=> $choices
+		));
+		
+		
+		echo '<p>' . __('Please select the field group you wish this field to move to', 'acf') . '</p>';
+		
+		echo '<form id="acf-move-field-form">';
+		
+			// render
+			acf_render_field_wrap( $field );
+			
+			echo '<button type="submit" class="acf-button blue">Move Field</button>';
+			
+		echo '</form>';
+		
+		
+		// die
+		die();
+		
+	}
+	
+	
 	
 }
 
