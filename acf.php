@@ -317,11 +317,6 @@ class acf {
 		// register scripts
 		$scripts = array();
 		$scripts[] = array(
-			'handle'	=> 'acf-input',
-			'src'		=> acf_get_dir( 'js/input.js' ),
-			'deps'		=> array('jquery', 'acf-datepicker', 'select2'),
-		);
-		$scripts[] = array(
 			'handle'	=> 'acf-datepicker',
 			'src'		=> acf_get_dir( 'inc/datepicker/jquery-ui-1.10.3.custom.min.js' ),
 			'deps'		=> array('jquery'),
@@ -330,6 +325,11 @@ class acf {
 			'handle'	=> 'select2',
 			'src'		=> acf_get_dir( 'inc/select2/select2.min.js' ),
 			'deps'		=> array('jquery'),
+		);
+		$scripts[] = array(
+			'handle'	=> 'acf-input',
+			'src'		=> acf_get_dir( 'js/input.js' ),
+			'deps'		=> array('jquery', 'underscore', 'acf-datepicker', 'select2'),
 		);
 		$scripts[] = array(
 			'handle'	=> 'acf-field-group',
