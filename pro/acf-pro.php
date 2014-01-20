@@ -36,6 +36,10 @@ class acf_pro {
 		add_action( 'acf/input/admin_enqueue_scripts',			array( $this, 'input_admin_enqueue_scripts') );
 		add_action( 'acf/field_group/admin_enqueue_scripts',	array( $this, 'field_group_admin_enqueue_scripts') );
 		add_filter( 'acf/update_field',							array( $this, 'update_field'), 1, 1 );
+		
+		
+		// add-ons
+		add_filter('acf/is_add_on_active/slug=acf-pro', '__return_true');
 	}
 	
 	
@@ -95,11 +99,13 @@ class acf_pro {
 	*/
 	
 	function include_admin() {
-
+		
+		// connect (update)
 		include_once('admin/connect.php');
 		
 		// settings
 		include_once('admin/settings-updates.php');
+		
 		
 	}
 	

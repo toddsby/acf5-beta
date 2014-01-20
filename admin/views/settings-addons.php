@@ -2,7 +2,6 @@
 
 // vars
 $json = acf_extract_var( $args, 'json');
-$active = acf_extract_var( $args, 'active');
 
 ?>
 <div class="wrap acf-settings-wrap">
@@ -39,8 +38,7 @@ $active = acf_extract_var( $args, 'active');
 						<p><?php echo $addon['description']; ?></p>
 					</div>
 					<div class="footer">
-					
-						<?php if( in_array($addon['slug'], $active) ): ?>
+						<?php if( apply_filters("acf/is_add_on_active/slug={$addon['slug']}", false ) ): ?>
 							<a class="acf-button" disabled="disabled"><?php _e("Installed",'acf'); ?></a>
 						<?php else: ?>
 							<a class="acf-button <?php echo $addon['btn_color']; ?>" target="_blank" href="<?php echo $addon['url']; ?>" ><?php _e($addon['btn']); ?></a>
