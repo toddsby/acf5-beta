@@ -133,7 +133,7 @@ function acf_pro_get_remote_info() {
 	
 	
 	// update transient
-	set_transient('acf_pro_get_info', $info, HOUR_IN_SECONDS );
+	set_transient('acf_pro_get_remote_info', $info, 1 * HOUR_IN_SECONDS );
 	
 	
 	return $info;
