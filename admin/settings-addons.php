@@ -68,7 +68,6 @@ class acf_settings_addons {
 		// vars
 		$this->view = array(
 			'json'		=> array(),
-			'active'	=> acf_get_field_types()
 		);
 		
 		
