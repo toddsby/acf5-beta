@@ -62,6 +62,13 @@ function acf_get_valid_field( $field = false ) {
 	$field['field_name'] = $field['name'];
 	
 	
+	// translate
+	foreach( array('label', 'instructions') as $s )
+	{
+		$field[ $s ] = __($field[ $s ]);
+	}
+	
+	
 	// field specific defaults
 	$field = apply_filters( "acf/get_valid_field", $field );
 	$field = apply_filters( "acf/get_valid_field/type={$field['type']}", $field );
