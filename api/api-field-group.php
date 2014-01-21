@@ -438,6 +438,10 @@ function acf_update_field_group( $field_group = array() ) {
 
 function acf_duplicate_field_group( $selector = 0 ) {
 	
+	// disable JSON to avoid conflicts between DB and JSON
+	acf_update_setting('json', false);
+	
+	
 	// load the origional field gorup
 	$field_group = acf_get_field_group( $selector );
 	

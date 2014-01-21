@@ -62,6 +62,10 @@ class acf_settings_export {
 	
 	function html() {
 		
+		// disable JSON to avoid conflicts between DB and JSON
+		acf_update_setting('json', false);
+		
+		
 		// vars
 		$view = array();
 		

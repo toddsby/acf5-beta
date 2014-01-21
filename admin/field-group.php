@@ -840,6 +840,10 @@ class acf_field_group {
 	
 	function ajax_move_field() {
 		
+		// disable JSON to avoid conflicts between DB and JSON
+		acf_update_setting('json', false);
+		
+		
 		$args = acf_parse_args($_POST, array(
 			'nonce'				=> '',
 			'field_id'			=> 0,

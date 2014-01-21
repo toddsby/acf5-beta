@@ -572,7 +572,7 @@ function acf_update_field( $field = false ) {
     // Note: find out why by default, ACF is adding a -2
 	add_filter( 'wp_unique_post_slug', 'acf_update_field_wp_unique_post_slug', 5, 6 ); 
 	
-		
+	
     // update the field and update the ID
     $field['ID'] = wp_insert_post( $save );
 
@@ -612,6 +612,10 @@ function acf_update_field_wp_unique_post_slug( $slug, $post_ID, $post_status, $p
 
 function acf_duplicate_field( $selector = 0, $parent_id = 0 ){
 	
+	// disable JSON to avoid conflicts between DB and JSON
+	acf_update_setting('json', false);
+	
+	
 	// load the origional field
 	$field = acf_get_field( $selector );
 	
@@ -625,6 +629,7 @@ function acf_duplicate_field( $selector = 0, $parent_id = 0 ){
 	
 	// update ID
 	$field['ID'] = false;
+	$field['key'] = uniqid('field_');
 	
 	
 	// update field group
@@ -635,7 +640,7 @@ function acf_duplicate_field( $selector = 0, $parent_id = 0 ){
 	
 	
 	// filter for 3rd party customization
-	$field = apply_filters('acf/duplicate_field_group', $field);
+	$field = apply_filters('acf/duplicate_field', $field);
 	
 	
 	// save
