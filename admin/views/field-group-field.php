@@ -29,7 +29,7 @@ $atts = array(
 	</div>
 	
 	<ul class="field-info acf-hl acf-tbody">
-		<li class="li-field_order"><span class="acf-icon"><?php echo ($field['menu_order'] + 1); ?></span></li>
+		<li class="li-field_order"><span class="acf-icon"><?php echo ($i + 1); ?></span></li>
 		<li class="li-field_label">
 			<strong>
 				<a class="edit-field" title="<?php _e("Edit field",'acf'); ?>" href="#"><?php echo $field['label']; ?></a>

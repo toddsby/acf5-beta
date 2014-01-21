@@ -35,9 +35,9 @@ $fields[] = acf_get_valid_field(array(
 	
 	<div class="acf-field-list">
 		
-		<?php foreach( $fields as $field ): ?>
+		<?php foreach( $fields as $i => $field ): ?>
 			
-			<?php acf_get_view('field-group-field', array( 'field' => $field )); ?>
+			<?php acf_get_view('field-group-field', array( 'field' => $field, 'i' => $i )); ?>
 			
 		<?php endforeach; ?>
 		
