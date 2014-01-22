@@ -461,7 +461,7 @@ function _acf_get_field_by_key( $key = '' ) {
 	
 	
 	// validate
-	if( empty($post[0]) )
+	if( empty($posts) )
 	{
 		return $field;	
 	}
