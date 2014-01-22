@@ -1533,6 +1533,56 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 	});
 	
 	
+	/*
+	*  oEmbed
+	*
+	*  Modify the HTML markup
+	*
+	*  @type	function
+	*  @date	31/10/2013
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	acf.add_action('open change', function( $el ){
+		
+		// validate
+		if( $el.attr('data-type') != 'oembed' )
+		{
+			return;
+		}
+		
+		
+		// vars
+		$width = $el.find('tr[data-name="width"]');
+		$height = $el.find('tr[data-name="height"]');
+		tmpl = '<ul class="acf-hl"><li style="width:48%;">$width</li><li style="width:48%; margin-left:4%;">$height</li></ul>';
+		
+		
+		// validate
+		if( !$width.exists() )
+		{
+			return;
+		}
+		
+		
+		// update tmpl
+		tmpl = tmpl.replace( '$width', $width.find('.acf-input').html() );
+		tmpl = tmpl.replace( '$height', $height.find('.acf-input').html() );
+		
+		
+		// update $lat
+		$width.find('.acf-input').html( tmpl );
+		
+		
+		// remove $lng
+		$height.remove();
+		
+	});
+	
+	
 	
 
 })(jQuery);

@@ -174,6 +174,7 @@ class acf {
 		include_once('fields/password.php');
 		
 		include_once('fields/wysiwyg.php');
+		include_once('fields/oembed.php');
 		include_once('fields/image.php');
 		include_once('fields/file.php');
 		

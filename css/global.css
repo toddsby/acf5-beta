@@ -158,6 +158,27 @@ img.acf-fw {
 }
 
 
+/* submit */
+.acf-sprite-submit {
+	background-position: -250px 0;
+	width: 9px;
+	height: 9px;
+}
+
+/* gallery */
+.acf-sprite-media {
+	background-position: -50px -100px;
+	width: 36px;
+	height: 36px;
+}
+
+/*
+.acf-sprite-submit:hover,
+.acf-icon:hover .acf-sprite-submit {
+	background-position: -250px -50px;
+}
+*/
+
 
 /*--------------------------------------------------------------------------------------------
 *
@@ -588,9 +609,14 @@ img.acf-fw {
 	margin: -4px 0 0 -4px;
 }
 
-/* remove */
-.acf-icon .acf-sprite-remove {
-	
+.acf-icon.full {
+	background: #F5F5F5;
+	border-color: #F5F5F5;
+}
+
+.acf-icon.full:hover {
+	background: #EBEBEB;
+	border-color: #EBEBEB;
 }
 
 
@@ -625,6 +651,7 @@ img.acf-fw {
 .acf-postbox.seamless {
 	border: 0 none;
 	background: transparent;
+	box-shadow: none;
 }
 
 .acf-postbox.seamless > .hndle,

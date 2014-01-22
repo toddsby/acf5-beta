@@ -1,4 +1,5243 @@
+
+
 /* **********************************************
      Begin event-manager.js
-********************************************** */(function(e,t){"use strict";var n=e.document,r=function(){function r(t,n,r){if(l(t)===!1||typeof n!="function")return e;r=parseInt(r||10,10);c("actions",t,n,r);return e}function i(){var t=Array.prototype.slice.call(arguments),n=t.shift();if(l(n)===!1)return e;p("actions",n,t);return e}function s(t){if(l(t)===!1)return e;f("actions",t);return e}function o(t,n,r){if(l(t)===!1||typeof n!="function")return e;r=parseInt(r||10,10);c("filters",t,n,r);return e}function u(){var t=Array.prototype.slice.call(arguments),n=t.shift();return l(n)===!1?e:p("filters",n,t)}function a(t){if(l(t)===!1)return e;f("filters",t);return e}function f(e,t){n[e][t]&&(n[e][t]=[])}function l(e){if(typeof e!="string")return!1;var t=e.replace(/^\s+|\s+$/i,"").split("."),n=t.shift();t=t.join(".");return n!==""&&t!==""}function c(e,t,r,i){var s={callback:r,priority:i},o=n[e][t];if(o){o.push(s);o=h(o)}else o=[s];n[e][t]=o}function h(e){var t,n,r;for(var i=1,s=e.length;i<s;i++){t=e[i];n=i;while((r=e[n-1])&&r.priority>t.priority){e[n]=e[n-1];--n}e[n]=t}return e}function p(e,r,i){var s=n[e][r];if(typeof s=="undefined")return e==="filters"?i[0]:!1;for(var o=0,u=s.length;o<u;o++)e==="actions"?s[o].callback.apply(t,i):i[0]=s[o].callback.apply(t,i);return e==="actions"?!0:i[0]}var e={removeFilter:a,applyFilters:u,addFilter:o,removeAction:s,doAction:i,addAction:r},n={actions:{},filters:{}};return e};e.wp=e.wp||{};e.wp.hooks=new r})(window);var acf={l10n:{},o:{},get:null,update:null,_e:null,get_atts:null,get_fields:null,get_uniqid:null,serialize_form:null,add_action:null,remove_action:null,do_action:null,add_filter:null,remove_filtern:null,apply_filters:null,helpers:{is_clone_field:null},validation:null,conditional_logic:null,media:null,fields:{date_picker:null,color_picker:null,image:null,file:null,wysiwyg:null,gallery:null,relationship:null}};(function(e){e.extend(acf,{update:function(e,t){this.o[e]=t},get:function(e){return this.o[e]||null},_e:function(e,t){t=t||!1;var n=this.l10n[e]||!1;t&&(n=n[t]||!1);return n||""},get_atts:function(t){var n={};t.exists()&&e.each(t[0].attributes,function(t,r){if(r.name.substr(0,5)=="data-"){var i=r.value,s=r.name.replace("data-","");e.isNumeric(i)&&(i=parseInt(i));n[s]=i}});return n},get_fields:function(t,n,r){t=t||{};n=n||e("body");r=r||!0;var i=".acf-field";e.each(t,function(e,t){i+="[data-"+e+'="'+t+'"]'});var s=n.find(i);r&&(s=s.filter(function(){return acf.apply_filters("is_field_ready_for_js",!0,e(this))}));return s},get_field:function(t,n){n=n||e("body");$fields=this.get_fields({key:t},n);return $fields.exists()?$fields.first():!1},get_field_el:function(e){return e.closest(".acf-field")},get_field_data:function(e,t){return e.attr("data-"+t)},is_field:function(t,n){var r=!0;t.hasClass("acf-field")||(r=!1);e.each(n,function(e,n){t.attr("data-"+e)!=n&&(r=!1)});return r},get_uniqid:function(e,t){typeof e=="undefined"&&(e="");var n,r=function(e,t){e=parseInt(e,10).toString(16);return t<e.length?e.slice(e.length-t):t>e.length?Array(1+(t-e.length)).join("0")+e:e};this.php_js||(this.php_js={});this.php_js.uniqidSeed||(this.php_js.uniqidSeed=Math.floor(Math.random()*123456789));this.php_js.uniqidSeed++;n=e;n+=r(parseInt((new Date).getTime()/1e3,10),8);n+=r(this.php_js.uniqidSeed,5);t&&(n+=(Math.random()*10).toFixed(8).toString());return n},serialize_form:function(t){var n={},r={};$selector=t.find("select, textarea, input");e.each($selector.serializeArray(),function(e,t){if(t.name.slice(-2)==="[]"){t.name=t.name.replace("[]","");typeof r[t.name]=="undefined"&&(r[t.name]=-1);r[t.name]++;t.name+="["+r[t.name]+"]"}n[t.name]=t.value});return n},remove_tr:function(e,t){var n=e.height(),r=e.children().length;e.addClass("acf-remove-element");setTimeout(function(){e.removeClass("acf-remove-element");e.html('<td style="padding:0; height:'+n+'px" colspan="'+r+'"></td>');e.children("td").animate({height:0},250,function(){e.remove();typeof t=="function"&&t()})},250)},remove_el:function(t,n){t.css({height:t.height(),width:t.width(),position:"absolute",padding:0});t.wrap('<div class="acf-temp-wrap" style="height:'+t.outerHeight(!0)+'px"></div>');t.animate({opacity:0},250);t.parent(".acf-temp-wrap").animate({height:0},250,function(){e(this).remove();typeof n=="function"&&n()})},isset_object:function(){var e=Array.prototype.slice.call(arguments),t=e.shift();for(var n=0;n<e.length;n++){if(!t.hasOwnProperty(e[n]))return!1;t=t[e[n]]}return!0},open_popup:function(t){$popup=e("body > #acf-poup");if($popup.exists())return update_popup(t);var n=['<div id="acf-popup">','<div class="acf-popup-box acf-box">','<div class="title"><h3></h3><a href="#" class="acf-icon"><i class="acf-sprite-delete "></i></a></div>','<div class="inner"></div>','<div class="loading"><i class="acf-loading"></i></div>',"</div>",'<div class="bg"></div>',"</div>"].join("");e("body").append(n);e("#acf-popup .bg, #acf-popup .acf-icon").on("click",function(){acf.close_popup()});return this.update_popup(t)},update_popup:function(t){$popup=e("#acf-popup");if(!$popup.exists())return!1;t=e.extend({},{title:"",content:"",width:0,height:0,loading:!1},t);t.width&&$popup.find(".acf-popup-box").css({width:t.width,"margin-left":0-t.width/2});t.height&&$popup.find(".acf-popup-box").css({height:t.height,"margin-top":0-t.height/2});t.title&&$popup.find(".title h3").html(t.title);t.content&&$popup.find(".inner").html(t.content);t.loading?$popup.find(".loading").show():$popup.find(".loading").hide();return $popup},close_popup:function(){$popup=e("#acf-popup");$popup.exists()&&$popup.remove()}});e.extend(acf,{add_action:function(){var e=arguments[0].split(" ");for(k in e){arguments[0]="acf."+e[k];wp.hooks.addAction.apply(this,arguments)}return this},remove_action:function(){arguments[0]="acf."+arguments[0];wp.hooks.removeAction.apply(this,arguments);return this},do_action:function(){arguments[0]="acf."+arguments[0];wp.hooks.doAction.apply(this,arguments);return this},add_filter:function(){arguments[0]="acf."+arguments[0];wp.hooks.addFilter.apply(this,arguments);return this},remove_filter:function(){arguments[0]="acf."+arguments[0];wp.hooks.removeFilter.apply(this,arguments);return this},apply_filters:function(){arguments[0]="acf."+arguments[0];return wp.hooks.applyFilters.apply(this,arguments)}});acf.add_filter("is_field_ready_for_js",function(e,t){t.parents('.acf-row[data-id="acfcloneindex"]').exists()&&(e=!1);t.parents("#available-widgets").exists()&&(e=!1);return e});acf.helpers.is_clone_field=function(e){return e.attr("name")&&e.attr("name").indexOf("[acfcloneindex]")!=-1?!0:!1};e.fn.exists=function(){return e(this).length>0};e.fn.outerHTML=function(){return e(this).clone().wrap("<div>").parent().html()};acf.media={div:null,frame:null,render_timout:null,clear_frame:function(){if(!this.frame)return;this.frame.detach();this.frame.dispose();this.frame=null},type:function(){var e="thickbox";typeof wp=="object"&&(e="backbone");return e},init:function(){if(typeof wp.media=="undefined")return!1;var t=wp.media.view.AttachmentCompat.prototype;t.orig_render=t.render;t.orig_dispose=t.dispose;t.className="compat-item acf_postbox no_box";t.render=function(){var t=this;if(t.ignore_render)return this;this.orig_render();setTimeout(function(){var n=t.$el.closest(".media-modal");if(n.hasClass("acf-media-modal"))return;if(n.find(".media-frame-router .acf-expand-details").exists())return;var r=e(['<a href="#" class="acf-expand-details">','<span class="icon"></span>','<span class="is-closed">'+acf.l10n.core.expand_details+"</span>",'<span class="is-open">'+acf.l10n.core.collapse_details+"</span>","</a>"].join(""));r.on("click",function(e){e.preventDefault();n.hasClass("acf-expanded")?n.removeClass("acf-expanded"):n.addClass("acf-expanded")});n.find(".media-frame-router").append(r)},0);clearTimeout(acf.media.render_timout);acf.media.render_timout=setTimeout(function(){e(document).trigger("acf/setup_fields",[t.$el])},50);return this};t.dispose=function(){e(document).trigger("acf/remove_fields",[this.$el]);this.orig_dispose()};t.save=function(e){var t={},n={};e&&e.preventDefault();_.each(this.$el.serializeArray(),function(e){if(e.name.slice(-2)==="[]"){e.name=e.name.replace("[]","");typeof n[e.name]=="undefined"&&(n[e.name]=-1);n[e.name]++;e.name+="["+n[e.name]+"]"}t[e.name]=e.value});this.ignore_render=!0;this.model.saveCompat(t)}}};acf.conditional_logic={items:[],init:function(){var t=this;e(document).on("change",".acf-field input, .acf-field textarea, .acf-field select",function(){e("#acf-has-changed").exists()&&e("#acf-has-changed").val(1);t.change(e(this))});acf.add_action("ready",function(n){t.refresh(e(el))});t.refresh()},change:function(t){var n=this,r=acf.get_field_el(t),i=acf.get_field_data(r,"key");e.each(this.items,function(t,r){e.each(r.rules,function(e,t){t.field==i&&n.refresh_field(r)})})},refresh_field:function(t){var n=this,r=acf.get_fields({key:t.field});r.each(function(){var r=!0;t.allorany=="any"&&(r=!1);var i=e(this),s=!0;e.each(t.rules,function(o,u){var a=acf.get_fields({key:u.field});if(a.hasClass("sub_field")){a=i.siblings(".field_key-"+u.field);s=!1;if(!a.exists()){i.parents("tr").each(function(){a=e(this).find(".field_key-"+u.field);if(a.exists())return!1});s=!0}}var f=i.parent("tr").parent().parent("table").parent(".layout");if(f.exists()){s=!0;i.is("th")&&a.is("th")&&(a=i.closest(".layout").find("td.field_key-"+u.field))}var f=i.parent("tr").parent().parent("table").parent(".repeater");if(f.exists()&&f.attr("data-max_rows")=="1"){s=!0;i.is("th")&&a.is("th")&&(a=i.closest("table").find("td.field_key-"+u.field))}var l=n.calculate(u,a,i);if(t.allorany=="all"){if(l==0){r=!1;return!1}}else if(l==1){r=!0;return!1}});i.removeClass("acf-conditional_logic-hide acf-conditional_logic-show acf-show-blank");if(r){i.find("input, textarea, select").removeAttr("disabled");i.addClass("acf-conditional_logic-show");e(document).trigger("acf/conditional_logic/show",[i,t])}else{i.find("input, textarea, select").attr("disabled","disabled");i.addClass("acf-conditional_logic-hide");s||i.addClass("acf-show-blank");e(document).trigger("acf/conditional_logic/hide",[i,t])}})},refresh:function(t){t=t||e("body");var n=this;e.each(this.items,function(r,i){e.each(i.rules,function(e,r){if(!t.find('.field[data-field_key="'+i.field+'"]').exists())return;n.refresh_field(i)})})},calculate:function(t,n,r){var i=!1;if(n.hasClass("field_type-true_false")||n.hasClass("field_type-checkbox")||n.hasClass("field_type-radio")){var s=n.find('input[value="'+t.value+'"]:checked').exists();t.operator=="=="?s&&(i=!0):s||(i=!0)}else{var o=n.find("input, textarea, select").last().val();e.isArray(o)||(o=[o]);t.operator=="=="?e.inArray(t.value,o)>-1&&(i=!0):e.inArray(t.value,o)<0&&(i=!0)}return i}};e(document).ready(function(){acf.do_action("ready",e("body"))});e(window).load(function(){acf.do_action("load",e("body"));acf.media.init();setTimeout(function(){try{e.isNumeric(acf.o.post_id)&&(wp.media.view.settings.post.id=acf.o.post_id)}catch(t){}},10)});acf.add_action("sortstart",function(t,n){if(t.is("tr")){t.css("position","relative");t.children().each(function(){e(this).width(e(this).width())});t.css("position","absolute");n.html('<td style="height:'+t.height()+'px; padding:0;" colspan="'+t.children("td").length+'"></td>')}})})(jQuery);(function(e){acf.ajax={o:{action:"acf/post/get_field_groups",post_id:0,page_template:0,page_parent:0,page_type:0,post_category:0,post_format:0,post_taxonomy:0,lang:0,nonce:0},update:function(e,t){this.o[e]=t;return this},get:function(e){return this.o[e]||null},init:function(){if(!acf.get("ajax"))return!1;this.update("post_id",acf.o.post_id);this.update("nonce",acf.o.nonce);if(e("#icl-als-first").length>0){var t=e("#icl-als-first").children("a").attr("href"),n=new RegExp("lang=([^&#]*)"),r=n.exec(t);this.update("lang",r[1])}this.add_events()},fetch:function(){var t=this;e.ajax({url:acf.get("ajaxurl"),data:this.o,type:"post",dataType:"json",success:function(e){_.isObject(e)&&t.render(e)}})},render:function(t){e(".acf-postbox").addClass("acf-hidden");e(".acf-postbox-toggle").addClass("acf-hidden");e.each(t,function(t,n){var r=e("#acf-"+n.ID),i=e('#adv-settings .acf_postbox-toggle[for="acf-'+n.ID+'-hide"]');r.removeClass("acf-hidden hide-if-js");i.removeClass("acf-hidden");i.find('input[type="checkbox"]').attr("checked","checked");r.find(".acf-replace-with-fields").each(function(){e(this).replaceWith(n.html);e(document).trigger("acf/setup_fields",[r])});t===0&&e("#acf-style").html(n.style)})},add_events:function(){var t=this;e(document).on("change","#page_template",function(){var n=e(this).val();t.update("page_template",n).fetch()});e(document).on("change","#parent_id",function(){var n="parent",r=0;if(val!=""){n="child";r=e(this).val()}t.update("page_type",n).update("page_parent",r).fetch()});e(document).on("change",'#post-formats-select input[type="radio"]',function(){var n=e(this).val();n=="0"&&(n="standard");t.update("post_format",n).fetch()});e(document).on("change",'.categorychecklist input[type="checkbox"]',function(){if(e(this).closest(".categorychecklist").hasClass("no-ajax"))return;setTimeout(function(){var n=[];e('.categorychecklist input[type="checkbox"]:checked').each(function(){if(e(this).is(":hidden")||e(this).is(":disabled"))return;e.inArray(e(this).val(),n)<0&&n.push(e(this).val())});t.update("post_taxonomy",n).fetch()},1)})}};e(document).ready(function(){acf.ajax.init()})})(jQuery);(function(e){acf.fields.color_picker={$el:null,$input:null,set:function(t){e.extend(this,t);this.$input=this.$el.find('input[type="text"]');return this},init:function(){this.$input.wpColorPicker()}};acf.add_action("ready append",function(t){acf.get_fields({type:"color_picker"},t).each(function(){acf.fields.color_picker.set({$el:e(this)}).init()})})})(jQuery);(function(e){acf.fields.date_picker={$el:null,$input:null,$hidden:null,o:{},set:function(t){e.extend(this,t);this.$input=this.$el.find('input[type="text"]');this.$hidden=this.$el.find('input[type="hidden"]');this.o=acf.get_atts(this.$el);return this},init:function(){this.$input.val(this.$hidden.val());var t=e.extend({},acf.l10n.date_picker,{dateFormat:this.o.save_format,altField:this.$hidden,altFormat:this.o.save_format,changeYear:!0,yearRange:"-100:+100",changeMonth:!0,showButtonPanel:!0,firstDay:this.o.first_day});t=acf.apply_filters("date_picker_args",t);this.$input.addClass("active").datepicker(t);this.$input.datepicker("option","dateFormat",this.o.display_format);e("body > #ui-datepicker-div").length>0&&e("#ui-datepicker-div").wrap('<div class="ui-acf" />')},blur:function(){this.$input.val()||this.$hidden.val("")}};acf.add_action("ready append",function(t){acf.get_fields({type:"date_picker"},t).each(function(){acf.fields.date_picker.set({$el:e(this)}).init()})});e(document).on("blur",'.acf-date_picker input[type="text"]',function(t){acf.fields.date_picker.set({$el:e(this).closest(".acf-field")}).blur()})})(jQuery);(function(e){var t=acf.media;acf.fields.file={$el:null,$input:null,o:{},set:function(t){e.extend(this,t);this.$input=this.$el.find('input[type="hidden"]');this.o=acf.get_atts(this.$el);this.o.multiple=this.$el.closest(".repeater").exists()?!0:!1;this.o.query={};this.o.library=="uploadedTo"&&(this.o.query.uploadedTo=acf.o.post_id);return this},add:function(e){var n=t.div;n.find(".acf-file-icon").attr("src",e.icon);n.find(".acf-file-title").text(e.title);n.find(".acf-file-name").text(e.name).attr("href",e.url);n.find(".acf-file-size").text(e.size);n.find(".acf-file-value").val(e.id).trigger("change");n.addClass("active");n.closest(".field").removeClass("error")},edit:function(){var n=this.$input.val();t.div=this.$el;t.clear_frame();t.frame=wp.media({title:acf.l10n.file.edit,multiple:!1,button:{text:acf.l10n.file.update}});t.frame.on("open",function(){t.frame.content._mode!="browse"&&t.frame.content.mode("browse");t.frame.$el.closest(".media-modal").addClass("acf-media-modal acf-expanded");var r=t.frame.state().get("selection"),i=wp.media.attachment(n);e.isEmptyObject(i.changed)&&i.fetch();r.add(i)});t.frame.on("close",function(){t.frame.$el.closest(".media-modal").removeClass("acf-media-modal")});acf.media.frame.open()},remove:function(){this.$el.find(".acf-file-icon").attr("src","");this.$el.find(".acf-file-title").text("");this.$el.find(".acf-file-name").text("").attr("href","");this.$el.find(".acf-file-size").text("");this.$el.find(".acf-file-value").val("").trigger("change");this.$el.removeClass("active")},popup:function(){var n=this;t.div=this.$el;t.clear_frame();t.frame=wp.media({states:[new wp.media.controller.Library({library:wp.media.query(n.o.query),multiple:n.o.multiple,title:acf.l10n.file.select,priority:20,filterable:"all"})]});acf.media.frame.on("content:activate",function(){var t=null,r=null;try{t=acf.media.frame.content.get().toolbar;r=t.get("filters")}catch(i){}if(!r)return!1;if(n.o.library=="uploadedTo"){r.$el.find('option[value="uploaded"]').remove();r.$el.after("<span>"+acf.l10n.file.uploadedTo+"</span>");e.each(r.filters,function(e,t){t.props.uploadedTo=acf.o.post_id})}});acf.media.frame.on("select",function(){selection=t.frame.state().get("selection");if(selection){var e=0;selection.each(function(n){e++;if(e>1){var r=t.div.closest("td"),s=r.closest(".row"),o=s.closest(".repeater"),u=r.attr("data-field_key"),a="td .acf-file-uploader:first";u&&(a='td[data-field_key="'+u+'"] .acf-file-uploader');s.next(".row").exists()||o.find(".add-row-end").trigger("click");t.div=s.next(".row").find(a)}var f={id:n.id,title:n.attributes.title,name:n.attributes.filename,url:n.attributes.url,icon:n.attributes.icon,size:n.attributes.filesize};acf.fields.file.add(f)})}});acf.media.frame.open();return!1}};e(document).on("click",".acf-file-uploader .acf-button-edit",function(t){t.preventDefault();acf.fields.file.set({$el:e(this).closest(".acf-file-uploader")}).edit()});e(document).on("click",".acf-file-uploader .acf-button-delete",function(t){t.preventDefault();acf.fields.file.set({$el:e(this).closest(".acf-file-uploader")}).remove()});e(document).on("click",".acf-file-uploader .add-file",function(t){t.preventDefault();acf.fields.file.set({$el:e(this).closest(".acf-file-uploader")}).popup()})})(jQuery);(function(e){acf.fields.google_map={$el:null,$input:null,o:{},ready:!1,geocoder:!1,map:!1,maps:{},set:function(t){e.extend(this,t);this.$input=this.$el.find(".value");this.o=acf.get_atts(this.$el);this.maps[this.o.id]&&(this.map=this.maps[this.o.id]);return this},init:function(){this.geocoder||(this.geocoder=new google.maps.Geocoder);this.ready=!0;this.render()},render:function(){var e=this,t=this.$el,n={zoom:parseInt(this.o.zoom),center:new google.maps.LatLng(this.o.lat,this.o.lng),mapTypeId:google.maps.MapTypeId.ROADMAP};this.map=new google.maps.Map(this.$el.find(".canvas")[0],n);var r=new google.maps.places.Autocomplete(this.$el.find(".search")[0]);r.map=this.map;r.bindTo("bounds",this.map);this.map.marker=new google.maps.Marker({draggable:!0,raiseOnDrag:!0,map:this.map});this.map.$el=this.$el;var i=this.$el.find(".input-lat").val(),s=this.$el.find(".input-lng").val();i&&s&&this.update(i,s).center();google.maps.event.addListener(r,"place_changed",function(t){var n=this.map.$el,r=n.find(".search").val();n.find(".input-address").val(r);n.find(".title h4").text(r);var i=this.getPlace();if(i.geometry){var s=i.geometry.location.lat(),o=i.geometry.location.lng();e.set({$el:n}).update(s,o).center()}else e.geocoder.geocode({address:r},function(t,r){if(r!=google.maps.GeocoderStatus.OK){console.log("Geocoder failed due to: "+r);return}if(!t[0]){console.log("No results found");return}i=t[0];var s=i.geometry.location.lat(),o=i.geometry.location.lng();e.set({$el:n}).update(s,o).center()})});google.maps.event.addListener(this.map.marker,"dragend",function(){var t=this.map.$el,n=this.map.marker.getPosition(),r=n.lat(),i=n.lng();e.set({$el:t}).update(r,i).sync()});google.maps.event.addListener(this.map,"click",function(t){var n=this.$el,r=t.latLng.lat(),i=t.latLng.lng();e.set({$el:n}).update(r,i).sync()});this.maps[this.o.id]=this.map},update:function(e,t){var n=new google.maps.LatLng(e,t);this.$el.find(".input-lat").val(e);this.$el.find(".input-lng").val(t).trigger("change");this.map.marker.setPosition(n);this.map.marker.setVisible(!0);this.$el.addClass("active");this.$el.closest(".acf-field").removeClass("error");return this},center:function(){var e=this.map.marker.getPosition(),t=this.o.lat,n=this.o.lng;if(e){t=e.lat();n=e.lng()}var r=new google.maps.LatLng(t,n);this.map.setCenter(r)},sync:function(){var e=this.$el,t=this.map.marker.getPosition(),n=new google.maps.LatLng(t.lat(),t.lng());this.geocoder.geocode({latLng:n},function(t,n){if(n!=google.maps.GeocoderStatus.OK){console.log("Geocoder failed due to: "+n);return}if(!t[0]){console.log("No results found");return}var r=t[0];e.find(".title h4").text(r.formatted_address);e.find(".input-address").val(r.formatted_address).trigger("change")});return this},locate:function(){var e=this,t=this.$el;if(!navigator.geolocation){alert(acf.l10n.google_map.browser_support);return this}t.find(".title h4").text(acf.l10n.google_map.locating+"...");t.addClass("active");navigator.geolocation.getCurrentPosition(function(n){var r=n.coords.latitude,i=n.coords.longitude;e.set({$el:t}).update(r,i).sync().center()})},clear:function(){this.$el.removeClass("active");this.$el.find(".search").val("");this.$el.find(".input-address").val("");this.$el.find(".input-lat").val("");this.$el.find(".input-lng").val("");this.map.marker.setVisible(!1)},edit:function(){this.$el.removeClass("active");var e=this.$el.find(".title h4").text();this.$el.find(".search").val(e).focus()},refresh:function(){google.maps.event.trigger(this.map,"resize");this.center()}};acf.add_action("ready append",function(t){var n=acf.get_fields({type:"google_map"},t);if(!n.exists())return;typeof google=="undefined"?e.getScript("https://www.google.com/jsapi",function(){google.load("maps","3",{other_params:"sensor=false&libraries=places",callback:function(){n.each(function(){acf.fields.google_map.set({$el:e(this).find(".acf-google-map")}).init()})}})}):n.each(function(){acf.fields.google_map.set({$el:e(this).find(".acf-google-map")}).init()})});e(document).on("click",".acf-google-map .acf-sprite-remove",function(t){t.preventDefault();acf.fields.google_map.set({$el:e(this).closest(".acf-google-map")}).clear();e(this).blur()});e(document).on("click",".acf-google-map .acf-sprite-locate",function(t){t.preventDefault();acf.fields.google_map.set({$el:e(this).closest(".acf-google-map")}).locate();e(this).blur()});e(document).on("click",".acf-google-map .title h4",function(t){t.preventDefault();acf.fields.google_map.set({$el:e(this).closest(".acf-google-map")}).edit()});e(document).on("keydown",".acf-google-map .search",function(e){if(e.which==13)return!1});e(document).on("blur",".acf-google-map .search",function(t){var n=e(this).closest(".acf-google-map");n.find(".input-lat").val()&&n.addClass("active")});acf.add_action("show_field",function(e){if(!acf.fields.google_map.ready)return;acf.is_field(e,{type:"google_map"})&&acf.fields.google_map.set({$el:e.find(".acf-google-map")}).refresh()})})(jQuery);(function(e){var t=acf.media;acf.fields.image={$el:null,$input:null,o:{},set:function(t){e.extend(this,t);this.$input=this.$el.find('input[type="hidden"]');this.o=acf.get_atts(this.$el);this.o.multiple=this.$el.closest(".repeater").exists()?!0:!1;this.o.query={type:"image"};this.o.library=="uploadedTo"&&(this.o.query.uploadedTo=acf.o.post_id);return this},add:function(e){var n=t.div;n.find(".acf-image-image").attr("src",e.url);n.find(".acf-image-value").val(e.id).trigger("change");n.addClass("active");n.closest(".field").removeClass("error")},edit:function(){var n=this.$input.val();t.div=this.$el;t.clear_frame();t.frame=wp.media({title:acf.l10n.image.edit,multiple:!1,button:{text:acf.l10n.image.update}});t.frame.on("open",function(){t.frame.content._mode!="browse"&&t.frame.content.mode("browse");t.frame.$el.closest(".media-modal").addClass("acf-media-modal acf-expanded");var r=t.frame.state().get("selection"),i=wp.media.attachment(n);e.isEmptyObject(i.changed)&&i.fetch();r.add(i)});t.frame.on("close",function(){t.frame.$el.closest(".media-modal").removeClass("acf-media-modal")});acf.media.frame.open()},remove:function(){this.$el.find(".acf-image-image").attr("src","");this.$el.find(".acf-image-value").val("").trigger("change");this.$el.removeClass("active")},popup:function(){var n=this;t.div=this.$el;t.clear_frame();t.frame=wp.media({states:[new wp.media.controller.Library({library:wp.media.query(n.o.query),multiple:n.o.multiple,title:acf.l10n.image.select,priority:20,filterable:"all"})]});acf.media.frame.on("content:activate",function(){var t=null,r=null;try{t=acf.media.frame.content.get().toolbar;r=t.get("filters")}catch(i){}if(!r)return!1;e.each(r.filters,function(e,t){t.props.type="image"});if(n.o.library=="uploadedTo"){r.$el.find('option[value="uploaded"]').remove();r.$el.after("<span>"+acf.l10n.image.uploadedTo+"</span>");e.each(r.filters,function(e,t){t.props.uploadedTo=acf.o.post_id})}r.$el.find("option").each(function(){var t=e(this).attr("value");if(t=="uploaded"&&n.o.library=="all")return;t.indexOf("image")===-1&&e(this).remove()});r.$el.val("image").trigger("change")});acf.media.frame.on("select",function(){selection=t.frame.state().get("selection");if(selection){var e=0;selection.each(function(r){e++;if(e>1){var s=t.div.closest("td"),o=s.closest(".row"),u=o.closest(".repeater"),a=s.attr("data-field_key"),f="td .acf-image-uploader:first";a&&(f='td[data-field_key="'+a+'"] .acf-image-uploader');o.next(".row").exists()||u.find(".add-row-end").trigger("click");t.div=o.next(".row").find(f)}var l={id:r.id,url:r.attributes.url};r.attributes.sizes&&r.attributes.sizes[n.o.preview_size]&&(l.url=r.attributes.sizes[n.o.preview_size].url);acf.fields.image.add(l)})}});acf.media.frame.open();return!1},text:{title_add:"Select Image",title_edit:"Edit Image"}};e(document).on("click",".acf-image-uploader .acf-button-edit",function(t){t.preventDefault();acf.fields.image.set({$el:e(this).closest(".acf-image-uploader")}).edit()});e(document).on("click",".acf-image-uploader .acf-button-delete",function(t){t.preventDefault();acf.fields.image.set({$el:e(this).closest(".acf-image-uploader")}).remove()});e(document).on("click",".acf-image-uploader .add-image",function(t){t.preventDefault();acf.fields.image.set({$el:e(this).closest(".acf-image-uploader")}).popup()})})(jQuery);(function(e){acf.fields.post_object={$el:null,$select:null,$input:null,o:{},set:function(t){e.extend(this,t);this.$select=this.$el.find("select");this.o=acf.get_atts(this.$select);return this},init:function(){var t=[],n=[];this.$select.find("option:selected").each(function(){t.push({id:e(this).attr("value"),text:e(this).text()});n.push(e(this).attr("value"))});if(this.o.multiple){var r=this.$select.attr("name").replace("[]","");this.$select.attr("name",r)}else t=t[0];var i='<input type="hidden" name="%name%" id="%id%" value="%value%" />';i=i.replace("%name%",this.$select.attr("name"));i=i.replace("%id%",this.$select.attr("id"));i=i.replace("%value%",n.join(","));this.$input=e(i);this.$select.replaceWith(this.$input);var s={action:"acf/fields/post_object/query",field_key:this.$el.attr("data-key"),nonce:acf.get("nonce"),post_id:acf.get("post_id")},o={width:"100%",placeholder:this.o.placeholder,allowClear:1,multiple:this.o.multiple,ajax:{url:acf.get("ajaxurl"),dataType:"json",type:"get",cache:!0,data:function(e,t){s.s=e;return s},results:function(e,t){return{results:e}}},initSelection:function(e,n){n(t)}};this.$input.select2(o);var u=this;this.o.sortable&&this.$input.select2("container").find("ul.select2-choices").sortable({containment:"parent",start:function(){u.$input.select2("onSortStart")},update:function(){u.$input.select2("onSortEnd")}})}};acf.add_action("ready append",function(t){acf.get_fields({type:"post_object"},t).each(function(){acf.fields.post_object.set({$el:e(this)}).init()})})})(jQuery);(function(e){acf.fields.radio={$el:null,$input:null,$other:null,set:function(t){e.extend(this,t);this.$input=this.$el.find('input[type="radio"]:checked');this.$other=this.$el.find('input[type="text"]');return this},change:function(){this.$el.find("li").removeClass("active");this.$input.closest("li").addClass("active");if(this.$input.val()=="other"){this.$other.attr("name",this.$input.attr("name"));this.$other.show()}else{this.$other.attr("name","");this.$other.hide()}}};e(document).on("change",'.acf-radio-list input[type="radio"]',function(t){acf.fields.radio.set({$el:e(this).closest(".acf-radio-list")}).change()})})(jQuery);(function(e){acf.fields.relationship={$el:null,$wrap:null,$input:null,$filters:null,$choices:null,$values:null,o:{},set:function(t){e.extend(this,t);this.$wrap=this.$el.find(".acf-relationship");this.$input=this.$wrap.find(".acf-hidden input");this.$choices=this.$wrap.find(".choices"),this.$values=this.$wrap.find(".values");this.o=acf.get_atts(this.$wrap);return this},init:function(){var e=this;this.$values.children(".list").sortable({items:"li",forceHelperSize:!0,forcePlaceholderSize:!0,scroll:!0,update:function(){e.$input.trigger("change")}});this.fetch()},fetch:function(){var t=this,n=this.$el;this.$choices.children(".list").html("<p>"+acf._e("relationship","loading")+"...</p>");var r={action:"acf/fields/relationship/query",field_key:this.$el.attr("data-key"),nonce:acf.get("nonce"),post_id:acf.get("post_id")};e.extend(r,this.o);this.$el.data("xhr")&&this.$el.data("xhr").abort();var i=e.ajax({url:acf.get("ajaxurl"),dataType:"json",type:"get",cache:!0,data:r,success:function(e){t.set({$el:n}).render(e)}});this.$el.data("xhr",i)},render:function(t){var n=this;if(!t||!t.length){this.$choices.children(".list").html("<li><p>"+acf._e("relationship","empty")+"</p></li>");return}this.$choices.children(".list").html(this.walker(t));this.$values.find(".acf-relationship-item").each(function(){var t=e(this).attr("data-id");n.$choices.find('.acf-relationship-item[data-id="'+t+'"]').addClass("disabled")});if(this.o.s){var r=this.o.s;this.$choices.find('.acf-relationship-item:contains("'+r+'")').each(function(){var t=e(this).html().replace(r,'<span class="match">'+r+"</span>");e(this).html(t)})}},walker:function(t){var n="";if(e.isArray(t))for(var r in t)n+=this.walker(t[r]);else if(e.isPlainObject(t))if(t.children!==undefined){n+='<li><span class="acf-relationship-label">'+t.text+'</span><ul class="acf-bl">';n+=this.walker(t.children);n+="</ul></li>"}else n+='<li><span class="acf-relationship-item" data-id="'+t.id+'">'+t.text+"</span></li>";return n},add:function(e){if(this.o.max>0&&this.$values.find(".acf-relationship-item").length>=this.o.max){alert(acf.l10n.relationship.max.replace("{max}",this.o.max));return!1}if(e.hasClass("disabled"))return!1;e.addClass("disabled");var t={value:e.attr("data-id"),text:e.html(),name:this.$input.attr("name")},n=_.template(acf.l10n.relationship.tmpl_li,t);this.$values.children(".list").append(n);this.$input.trigger("change");this.$el.removeClass("error")},remove:function(e){var t=e.attr("data-id");e.parent("li").remove();this.$choices.find('.acf-relationship-item[data-id="'+t+'"]').removeClass("disabled");this.$input.trigger("change")}};acf.add_action("ready append",function(t){acf.get_fields({type:"relationship"},t).each(function(){acf.fields.relationship.set({$el:e(this)}).init()})});e(document).on("keypress",".acf-relationship .filters [data-filter]",function(e){e.which==13&&e.preventDefault()});e(document).on("change keyup",".acf-relationship .filters [data-filter]",function(t){var n=e(this).val(),r=e(this).attr("data-filter"),i=e(this).closest(".acf-relationship");$el=i.closest(".acf-field");if(i.attr("data-"+r)==n)return;i.attr("data-"+r,n);acf.fields.relationship.set({$el:$el}).fetch()});e(document).on("click",".acf-relationship .choices .acf-relationship-item",function(t){t.preventDefault();acf.fields.relationship.set({$el:e(this).closest(".acf-field")}).add(e(this));e(this).blur()});e(document).on("click",".acf-relationship .values .acf-icon",function(t){t.preventDefault();acf.fields.relationship.set({$el:e(this).closest(".acf-field")}).remove(e(this).closest(".acf-relationship-item"));e(this).blur()})})(jQuery);(function(e){acf.fields.select={$el:null,$select:null,o:{},set:function(t){e.extend(this,t);this.$select=this.$el.find("select");this.o=acf.get_atts(this.$select);return this},init:function(){if(!this.o.ui)return;var e={width:"100%",allowClear:this.o.allow_null,placeholder:this.o.placeholder};this.o.allow_null&&this.$select.find('option[value=""]').remove();this.$select.select2(e)}};acf.add_action("ready append",function(t){acf.get_fields({type:"select"},t).each(function(){acf
-.fields.select.set({$el:e(this)}).init()});acf.get_fields({type:"user"},t).each(function(){acf.fields.select.set({$el:e(this)}).init()})})})(jQuery);(function(e){acf.fields.tab={add_group:function(e){var t="";e.is("tbody")?t='<tr class="acf-tab-wrap"><td colspan="2"><ul class="acf-hl acf-tab-group"></ul></td></tr>':t='<div class="acf-tab-wrap"><ul class="acf-hl acf-tab-group"></ul></div>';acf.get_fields({type:"tab"},e).first().before(t)},add_tab:function(e){var t=acf.get_field_el(e),n=t.parent(),r=acf.get_field_data(t,"key"),i=e.text();n.children(".acf-tab-wrap").exists()||this.add_group(n);n.children(".acf-tab-wrap").find(".acf-tab-group").append('<li><a class="acf-tab-button" href="#" data-key="'+r+'">'+i+"</a></li>")},toggle:function(t){var n=this,r=t.closest(".acf-tab-wrap").parent(),i=t.attr("data-key");t.parent("li").addClass("active").siblings("li").removeClass("active");acf.get_fields({type:"tab"},r).each(function(){var t=e(this);acf.is_field(e(this),{key:i})?n.show_tab_fields(e(this)):n.hide_tab_fields(e(this))})},show_tab_fields:function(t){t.nextUntil('.acf-field[data-type="tab"]').each(function(){e(this).removeClass("hidden_by_tab");acf.do_action("show_field",e(this))})},hide_tab_fields:function(t){t.nextUntil('.acf-field[data-type="tab"]').each(function(){e(this).addClass("hidden_by_tab");acf.do_action("hide_field",e(this))})},refresh:function(t){var n=this;t.find(".acf-tab-group").each(function(){e(this).find(".acf-tab-button:first").each(function(){n.toggle(e(this))})})}};acf.add_action("ready append",function(t){acf.get_fields({type:"tab"},t).each(function(){acf.fields.tab.add_tab(e(this))});acf.fields.tab.refresh(t)});e(document).on("click",".acf-tab-button",function(t){t.preventDefault();acf.fields.tab.toggle(e(this));e(this).trigger("blur")});acf.add_action("hide_field",function(e){if(!acf.is_field(e,{type:"tab"}))return;var t=e.siblings(".acf-tab-wrap").find('a[data-key="'+acf.get_field_data(e,"key")+'"]');if(t.is(":hidden"))return;t.parent().hide();t.parent().siblings(":visible").exists()?t.parent().siblings(":visible").first().children("a").trigger("click"):acf.fields.tab.hide_tab_fields(e)});acf.add_action("show_field",function(e){if(!acf.is_field(e,{type:"tab"}))return;var t=e.siblings(".acf-tab-wrap").find('a[data-key="'+acf.get_field_data(e,"key")+'"]');if(t.is(":visible"))return;t.parent().show();if(t.parent().hasClass("active")){t.trigger("click");return}if(t.parent().siblings(".active").hasClass("acf-conditional_logic-hide")){t.trigger("click");return}})})(jQuery);(function(e){acf.validation={active:1,ignore:0,error_class:"error",message_class:"acf-error-message",$trigger:null,init:function(){if(this.active==0)return;this.add_events()},add_error:function(e,t){e.addClass(this.error_class);if(t!==undefined){e.children(".acf-input").children("."+this.message_class).remove();e.children(".acf-input").prepend('<div class="'+this.message_class+'"><p>'+t+"</p></div>")}acf.do_action("add_field_error",e)},remove_error:function(e){$message=e.children(".acf-input").children("."+this.message_class);e.removeClass(this.error_class);setTimeout(function(){acf.remove_el($message)},250);acf.do_action("remove_field_error",e)},fetch:function(t){var n=this,r=acf.serialize_form(t);r.action="acf/validate_save_post";e.ajax({url:acf.get("ajaxurl"),data:r,type:"post",dataType:"json",success:function(e){n.complete(t,e)}})},complete:function(t,n){var r=this;t.children("."+this.message_class).remove();if(!n||n.result==1){t.find(".acf-postbox:hidden").remove();this.ignore=1;this.$trigger?this.$trigger.click():t.submit();return}if(e("#submitdiv").exists()){e("#save-post").removeClass("button-disabled");e("#publish").removeClass("button-primary-disabled");e("#ajax-loading").removeAttr("style");e("#publishing-action .spinner").hide()}t.prepend('<div class="'+this.message_class+'"><p>'+n.message+"</p></div>");e.each(n.errors,function(t,n){var i=e('.acf-field[data-key="'+t+'"]');r.add_error(i,n)})},add_events:function(){var t=this;e(document).on("focus click change",".acf-field.required input, .acf-field.required textarea, .acf-field.required select",function(n){t.remove_error(e(this).closest(".acf-field"))});e(document).on("click","#save-post",function(){t.ignore=1;t.$trigger=e(this)});e(document).on("click","#publish",function(){t.$trigger=e(this)});e(document).on("submit","form",function(n){if(!e(this).find("#acf-form-data").exists())return!0;if(t.ignore==1){t.ignore=0;return!0}if(t.active==0)return!0;n.preventDefault();t.fetch(e(this))})}};acf.add_action("ready",function(){})})(jQuery);(function(e){acf.fields.wysiwyg={$el:null,$textarea:null,o:{},set:function(t){e.extend(this,t);this.$textarea=this.$el.find("textarea");this.o=acf.get_atts(this.$el);this.o.id=this.$textarea.attr("id");return this},has_tinymce:function(){var e=!1;typeof tinyMCE=="object"&&(e=!0);return e},init:function(){var t=e.extend({},tinyMCE.settings);tinyMCE.settings.theme_advanced_buttons1="";tinyMCE.settings.theme_advanced_buttons2="";tinyMCE.settings.theme_advanced_buttons3="";tinyMCE.settings.theme_advanced_buttons4="";acf.isset_object(this.toolbars,this.o.toolbar)&&e.each(this.toolbars[this.o.toolbar],function(e,t){tinyMCE.settings[e]=t});tinyMCE.settings=acf.apply_filters("wysiwyg_tinymce_settings",tinyMCE.settings,this.o.id);tinyMCE.execCommand("mceAddControl",!1,this.o.id);this.add_events();tinyMCE.settings=t;wpActiveEditor=null},add_events:function(){var t=this.o.id,n=tinyMCE.get(t);if(!n)return;var r=e("#wp-"+t+"-wrap"),i=e(n.getBody()),s=e(n.getElement());r.on("click",function(){acf.validation.remove_error(r.closest(".acf-field"))});i.on("focus",function(){wpActiveEditor=t;acf.validation.remove_error(r.closest(".acf-field"))});i.on("blur",function(){wpActiveEditor=null;n.save();s.trigger("change")})},destroy:function(){var e=this.o.id,t=tinyMCE.get(e);try{tinyMCE.execCommand("mceRemoveControl",!1,e)}catch(n){console.log(n)}wpActiveEditor=null}};acf.add_action("ready",function(t){if(!acf.fields.wysiwyg.has_tinymce())return;acf.add_action("remove",function(t){acf.get_fields({type:"wysiwyg"},t).each(function(){acf.fields.wysiwyg.set({$el:e(this).find(".acf-wysiwyg-wrap")}).destroy()})}).add_action("sortstart",function(t){acf.get_fields({type:"wysiwyg"},t).each(function(){acf.fields.wysiwyg.set({$el:e(this).find(".acf-wysiwyg-wrap")}).destroy()})}).add_action("sortstop",function(t){acf.get_fields({type:"wysiwyg"},t).each(function(){acf.fields.wysiwyg.set({$el:e(this).find(".acf-wysiwyg-wrap")}).init()})}).add_action("load",function(t){var n=e("#wp-content-wrap").exists(),r=e("#wp-acf_settings-wrap").exists();mode="tmce";r&&e("#wp-acf_settings-wrap").hasClass("html-active")&&(mode="html");setTimeout(function(){r&&mode=="html"&&e("#acf_settings-tmce").trigger("click")},1);setTimeout(function(){var n=acf.get_fields({type:"wysiwyg"},t);n.each(function(){acf.fields.wysiwyg.set({$el:e(this).find(".acf-wysiwyg-wrap")}).destroy()});setTimeout(function(){n.each(function(){acf.fields.wysiwyg.set({$el:e(this).find(".acf-wysiwyg-wrap")}).init()})},0)},10);setTimeout(function(){r&&mode=="html"&&e("#acf_settings-html").trigger("click");n&&acf.fields.wysiwyg.set({$el:e("#wp-content-wrap")}).add_events()},11)})});e(document).on("click",".acfacf.fields.wysiwyg a.mce_fullscreen",function(){var t=e(this).closest(".acfacf.fields.wysiwyg"),n=t.attr("data-upload");n=="no"&&e("#mce_fullscreen_container td.mceToolbar .mce_add_media").remove()})})(jQuery);
+********************************************** */
+
+( function( window, undefined ) {
+	"use strict";
+	var document = window.document;
+
+	/**
+	 * Handles managing all events for whatever you plug it into. Priorities for hooks are based on lowest to highest in
+	 * that, lowest priority hooks are fired first.
+	 */
+	var EventManager = function() {
+		/**
+		 * Maintain a reference to the object scope so our public methods never get confusing.
+		 */
+		var MethodsAvailable = {
+			removeFilter : removeFilter,
+			applyFilters : applyFilters,
+			addFilter : addFilter,
+			removeAction : removeAction,
+			doAction : doAction,
+			addAction : addAction
+		};
+
+		/**
+		 * Contains the hooks that get registered with this EventManager. The array for storage utilizes a "flat"
+		 * object literal such that looking up the hook utilizes the native object literal hash.
+		 */
+		var STORAGE = {
+			actions : {},
+			filters : {}
+		};
+
+		/**
+		 * Adds an action to the event manager.
+		 *
+		 * @param action Must contain namespace.identifier
+		 * @param callback Must be a valid callback function before this action is added
+		 * @param priority Defaults to 10
+		 */
+		function addAction( action, callback, priority ) {
+			if( _validateNamespace( action ) === false || typeof callback !== 'function' ) {
+				return MethodsAvailable;
+			}
+
+			priority = parseInt( ( priority || 10 ), 10 );
+			_addHook( 'actions', action, callback, priority );
+			return MethodsAvailable;
+		}
+
+		/**
+		 * Performs an action if it exists. You can pass as many arguments as you want to this function; the only rule is
+		 * that the first argument must always be the action.
+		 */
+		function doAction( /* action, arg1, arg2, ... */ ) {
+			var args = Array.prototype.slice.call( arguments );
+			var action = args.shift();
+
+			if( _validateNamespace( action ) === false ) {
+				return MethodsAvailable;
+			}
+
+			_runHook( 'actions', action, args );
+
+			return MethodsAvailable;
+		}
+
+		/**
+		 * Removes the specified action if it contains a namespace.identifier & exists.
+		 *
+		 * @param action The action to remove
+		 */
+		function removeAction( action ) {
+			if( _validateNamespace( action ) === false ) {
+				return MethodsAvailable;
+			}
+
+			_removeHook( 'actions', action );
+			return MethodsAvailable;
+		}
+
+		/**
+		 * Adds a filter to the event manager.
+		 *
+		 * @param filter Must contain namespace.identifier
+		 * @param callback Must be a valid callback function before this action is added
+		 * @param priority Defaults to 10
+		 */
+		function addFilter( filter, callback, priority ) {
+			if( _validateNamespace( filter ) === false || typeof callback !== 'function' ) {
+				return MethodsAvailable;
+			}
+
+			priority = parseInt( ( priority || 10 ), 10 );
+			_addHook( 'filters', filter, callback, priority );
+			return MethodsAvailable;
+		}
+
+		/**
+		 * Performs a filter if it exists. You should only ever pass 1 argument to be filtered. The only rule is that
+		 * the first argument must always be the filter.
+		 */
+		function applyFilters( /* filter, filtered arg, arg2, ... */ ) {
+
+			var args = Array.prototype.slice.call( arguments );
+			var filter = args.shift();
+
+			if( _validateNamespace( filter ) === false ) {
+				return MethodsAvailable;
+			}
+
+			return _runHook( 'filters', filter, args );
+		}
+
+		/**
+		 * Removes the specified filter if it contains a namespace.identifier & exists.
+		 *
+		 * @param filter The action to remove
+		 */
+		function removeFilter( filter ) {
+			if( _validateNamespace( filter ) === false ) {
+				return MethodsAvailable;
+			}
+
+			_removeHook( 'filters', filter );
+			return MethodsAvailable;
+		}
+
+		/**
+		 * Removes the specified hook by resetting the value of it.
+		 *
+		 * @param type Type of hook, either 'actions' or 'filters'
+		 * @param hook The hook (namespace.identifier) to remove
+		 * @private
+		 */
+		function _removeHook( type, hook ) {
+			if( STORAGE[ type ][ hook ] ) {
+				STORAGE[ type ][ hook ] = [];
+			}
+		}
+
+		/**
+		 * Validates that the hook has both a namespace and an identifier.
+		 *
+		 * @param hook The hook we are checking for namespace and identifier for.
+		 * @return {Boolean} False if it does not contain both or is incorrect. True if it has an appropriate namespace & identifier.
+		 * @private
+		 */
+		function _validateNamespace( hook ) {
+			if( typeof hook !== 'string' ) {
+				return false;
+			}
+			var identifier = hook.replace( /^\s+|\s+$/i, '' ).split( '.' );
+			var namespace = identifier.shift();
+			identifier = identifier.join( '.' );
+
+			return ( namespace !== '' && identifier !== '' );
+		}
+
+		/**
+		 * Adds the hook to the appropriate storage container
+		 *
+		 * @param type 'actions' or 'filters'
+		 * @param hook The hook (namespace.identifier) to add to our event manager
+		 * @param callback The function that will be called when the hook is executed.
+		 * @param priority The priority of this hook. Must be an integer.
+		 * @private
+		 */
+		function _addHook( type, hook, callback, priority ) {
+			var hookObject = {
+				callback : callback,
+				priority : priority
+			};
+
+			// Utilize 'prop itself' : http://jsperf.com/hasownproperty-vs-in-vs-undefined/19
+			var hooks = STORAGE[ type ][ hook ];
+			if( hooks ) {
+				hooks.push( hookObject );
+				hooks = _hookInsertSort( hooks );
+			}
+			else {
+				hooks = [ hookObject ];
+			}
+
+			STORAGE[ type ][ hook ] = hooks;
+		}
+
+		/**
+		 * Use an insert sort for keeping our hooks organized based on priority. This function is ridiculously faster
+		 * than bubble sort, etc: http://jsperf.com/javascript-sort
+		 *
+		 * @param hooks The custom array containing all of the appropriate hooks to perform an insert sort on.
+		 * @private
+		 */
+		function _hookInsertSort( hooks ) {
+			var tmpHook, j, prevHook;
+			for( var i = 1, len = hooks.length; i < len; i++ ) {
+				tmpHook = hooks[ i ];
+				j = i;
+				while( ( prevHook = hooks[ j - 1 ] ) &&  prevHook.priority > tmpHook.priority ) {
+					hooks[ j ] = hooks[ j - 1 ];
+					--j;
+				}
+				hooks[ j ] = tmpHook;
+			}
+
+			return hooks;
+		}
+
+		/**
+		 * Runs the specified hook. If it is an action, the value is not modified but if it is a filter, it is.
+		 *
+		 * @param type 'actions' or 'filters'
+		 * @param hook The hook ( namespace.identifier ) to be ran.
+		 * @param args Arguments to pass to the action/filter. If it's a filter, args is actually a single parameter.
+		 * @private
+		 */
+		function _runHook( type, hook, args ) {
+			var hooks = STORAGE[ type ][ hook ];
+			if( typeof hooks === 'undefined' ) {
+				if( type === 'filters' ) {
+					return args[0];
+				}
+				return false;
+			}
+
+			for( var i = 0, len = hooks.length; i < len; i++ ) {
+				if( type === 'actions' ) {
+					hooks[ i ].callback.apply( undefined, args );
+				}
+				else {
+					args[ 0 ] = hooks[ i ].callback.apply( undefined, args );
+				}
+			}
+
+			if( type === 'actions' ) {
+				return true;
+			}
+
+			return args[ 0 ];
+		}
+
+		// return all of the publicly available methods
+		return MethodsAvailable;
+
+	};
+	
+	window.wp = window.wp || {};
+	window.wp.hooks = new EventManager();
+
+} )( window );
+
+
+/* **********************************************
+     Begin acf.js
+********************************************** */
+
+/*
+*  input.js
+*
+*  All javascript needed for ACF to work
+*
+*  @type	awesome
+*  @date	1/08/13
+*
+*  @param	N/A
+*  @return	N/A
+*/ 
+
+var acf = {
+	
+	// vars
+	l10n				: {},
+	o					: {},
+	
+	
+	// functions
+	get					: null,
+	update				: null,
+	_e					: null,
+	get_atts			: null,
+	get_fields			: null,
+	get_uniqid			: null,
+	serialize_form		: null,
+	
+	
+	// hooks
+	add_action			: null,
+	remove_action		: null,
+	do_action			: null,
+	add_filter			: null,
+	remove_filtern		: null,
+	apply_filters		: null,
+	
+	
+	// helper functions
+	helpers				:	{
+		is_clone_field	:	null,
+	},
+	
+	
+	// modules
+	validation			:	null,
+	conditional_logic	:	null,
+	media				:	null,
+	
+	
+	// fields
+	fields				:	{
+		date_picker		:	null,
+		color_picker	:	null,
+		image			:	null,
+		file			:	null,
+		wysiwyg			:	null,
+		gallery			:	null,
+		relationship	:	null
+	}
+};
+
+(function($){
+	
+	
+	/*
+	*  Functions
+	*
+	*  These functions interact with the o object, and events
+	*
+	*  @type	function
+	*  @date	23/10/13
+	*  @since	5.0.0
+	*
+	*  @param	$n/a
+	*  @return	$n/a
+	*/
+	
+	$.extend(acf, {
+		
+		update : function( k, v ){
+				
+			this.o[ k ] = v;
+			
+		},
+		
+		get : function( k ){
+			
+			return this.o[ k ] || null;
+			
+		},
+		
+		_e : function( context, string ){
+			
+			// defaults
+			string = string || false;
+			
+			
+			// get context
+			var r = this.l10n[ context ] || false;
+			
+			
+			// get string
+			if( string )
+			{
+				r = r[ string ] || false;
+			}
+			
+			
+			// return
+			return r || '';
+			
+		},
+		
+		get_atts : function( $el ){
+		
+			var atts = {};
+			
+			if( $el.exists() )
+			{
+				$.each( $el[0].attributes, function( index, attr ) {
+		        	
+		        	if( attr.name.substr(0, 5) == 'data-' )
+		        	{
+		        		// vars
+		        		var v = attr.value,
+		        			k = attr.name.replace('data-', '');
+		        		
+		        		
+		        		// convert ints (don't worry about floats. I doubt these would ever appear in data atts...)
+		        		if( $.isNumeric(v) )
+		        		{
+			        		v = parseInt(v);
+		        		}
+		        		
+		        		
+		        		// add to atts
+			        	atts[ k ] = v;
+		        	}
+		        });
+	        }
+	        
+	        return atts;
+				
+		},
+		
+		get_fields : function( args, $el, allow_filter ){
+			
+			// defaults
+			args = args || {};
+			$el = $el || $('body');
+			allow_filter = allow_filter || true;
+			
+			
+			// vars
+			var selector = '.acf-field';
+			
+			
+			// add selector
+			$.each( args, function( k, v ) {
+				
+				selector += '[data-' + k + '="' + v + '"]';
+				
+			});
+			
+			
+			// get fields
+			var $fields = $el.find(selector);
+			
+			//console.log('get_fields(%o, %s, %b). selector = %s', $el, field_type, allow_filter, selector);
+			//console.log( $el );
+			//console.log( $fields );
+			
+			// filter out fields
+			if( allow_filter )
+			{
+				$fields = $fields.filter(function(){
+					
+					return acf.apply_filters('is_field_ready_for_js', true, $(this));			
+
+				});
+			}
+			
+			
+			// return
+			return $fields;
+							
+		},
+		
+		get_field : function( field_key, $el ){
+			
+			// defaults
+			$el = $el || $('body');
+			
+			
+			// get fields
+			$fields = this.get_fields({ key : field_key }, $el);
+			
+			
+			// validate
+			if( !$fields.exists() )
+			{
+				return false;
+			}
+			
+			
+			// return
+			return $fields.first();
+			
+		},
+		
+		get_field_el : function( $el ){
+			
+			return $el.closest('.acf-field');
+			
+		},
+		
+		get_field_data : function( $el, attr ){
+			
+			return $el.attr('data-' + attr);
+			
+		},
+		
+		is_field : function( $el, args ){
+			
+			// var
+			var r = true;
+			
+			
+			// check $el calss
+			if( ! $el.hasClass('acf-field') )
+			{
+				r = false;
+			}
+			
+			
+			// check args (data attributes)
+			$.each( args, function( k, v ) {
+				
+				if( $el.attr('data-' + k) != v )
+				{
+					r = false;
+				}
+				
+			});
+			
+			
+			// return
+			return r;
+			
+		},
+		
+		get_uniqid : function( prefix, more_entropy ){
+		
+			// + original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+			// + revised by: Kankrelune (http://www.webfaktory.info/)
+			// % note 1: Uses an internal counter (in php_js global) to avoid collision
+			// * example 1: uniqid();
+			// * returns 1: 'a30285b160c14'
+			// * example 2: uniqid('foo');
+			// * returns 2: 'fooa30285b1cd361'
+			// * example 3: uniqid('bar', true);
+			// * returns 3: 'bara20285b23dfd1.31879087'
+			if (typeof prefix === 'undefined') {
+				prefix = "";
+			}
+			
+			var retId;
+			var formatSeed = function (seed, reqWidth) {
+				seed = parseInt(seed, 10).toString(16); // to hex str
+				if (reqWidth < seed.length) { // so long we split
+					return seed.slice(seed.length - reqWidth);
+				}
+				if (reqWidth > seed.length) { // so short we pad
+					return Array(1 + (reqWidth - seed.length)).join('0') + seed;
+				}
+				return seed;
+			};
+			
+			// BEGIN REDUNDANT
+			if (!this.php_js) {
+				this.php_js = {};
+			}
+			// END REDUNDANT
+			if (!this.php_js.uniqidSeed) { // init seed with big random int
+				this.php_js.uniqidSeed = Math.floor(Math.random() * 0x75bcd15);
+			}
+			this.php_js.uniqidSeed++;
+			
+			retId = prefix; // start with prefix, add current milliseconds hex string
+			retId += formatSeed(parseInt(new Date().getTime() / 1000, 10), 8);
+			retId += formatSeed(this.php_js.uniqidSeed, 5); // add seed hex string
+			if (more_entropy) {
+				// for more entropy we add a float lower to 10
+				retId += (Math.random() * 10).toFixed(8).toString();
+			}
+			
+			return retId;
+			
+		},
+		
+		serialize_form : function( $el ){
+			
+			// vars
+			var data = {},
+				names = {};
+			
+			
+			// selector
+			$selector = $el.find('select, textarea, input');
+			
+			
+			// populate data
+			$.each( $selector.serializeArray(), function( i, pair ) {
+				
+				// initiate name
+				if( pair.name.slice(-2) === '[]' )
+				{
+					// remove []
+					pair.name = pair.name.replace('[]', '');
+					
+					
+					// initiate counter
+					if( typeof names[ pair.name ] === 'undefined'){
+						
+						names[ pair.name ] = -1;
+					}
+					
+					
+					// increase counter
+					names[ pair.name ]++;
+					
+					
+					// add key
+					pair.name += '[' + names[ pair.name ] +']';
+				}
+				
+				
+				// append to data
+				data[ pair.name ] = pair.value;
+				
+			});
+			
+			
+			// return
+			return data;
+		},
+		
+		remove_tr : function( $tr, callback ){
+			
+			// vars
+			var height = $tr.height(),
+				children = $tr.children().length;
+			
+			
+			// add class
+			$tr.addClass('acf-remove-element');
+			
+			
+			// after animation
+			setTimeout(function(){
+				
+				// remove class
+				$tr.removeClass('acf-remove-element');
+				
+				
+				// vars
+				$tr.html('<td style="padding:0; height:' + height + 'px" colspan="' + children + '"></td>');
+				
+				
+				$tr.children('td').animate({ height : 0}, 250, function(){
+					
+					$tr.remove();
+					
+					if( typeof(callback) == 'function' )
+					{
+						callback();
+					}
+					
+					
+				});
+				
+					
+			}, 250);
+			
+		},
+		
+		remove_el : function( $el, callback ){
+			
+			// set layout
+			$el.css({
+				height		: $el.height(),
+				width		: $el.width(),
+				position	: 'absolute',
+				padding		: 0
+			});
+			
+			
+			// wrap field
+			$el.wrap( '<div class="acf-temp-wrap" style="height:' + $el.outerHeight(true) + 'px"></div>' );
+			
+			
+			// fade $el
+			$el.animate({ opacity : 0 }, 250);
+			
+			
+			// remove
+			$el.parent('.acf-temp-wrap').animate({ height : 0 }, 250, function(){
+				
+				$(this).remove();
+				
+				if( typeof(callback) == 'function' )
+				{
+					callback();
+				}
+				
+			});
+			
+			
+		},
+		
+		isset_object : function(){
+			
+			var args = Array.prototype.slice.call(arguments),
+				obj = args.shift();
+			
+			for (var i = 0; i < args.length; i++) {
+				if (!obj.hasOwnProperty(args[i])) {
+					return false;
+				}
+				obj = obj[args[i]];
+			}
+			
+			return true;
+				
+		},
+		
+		open_popup : function( args ){
+			
+			// vars
+			$popup = $('body > #acf-poup');
+			
+			
+			// already exists?
+			if( $popup.exists() )
+			{
+				return update_popup(args);
+			}
+			
+			
+			// template
+			var tmpl = [
+				'<div id="acf-popup">',
+					'<div class="acf-popup-box acf-box">',
+						'<div class="title"><h3></h3><a href="#" class="acf-icon"><i class="acf-sprite-delete "></i></a></div>',
+						'<div class="inner"></div>',
+						'<div class="loading"><i class="acf-loading"></i></div>',
+					'</div>',
+					'<div class="bg"></div>',
+				'</div>'
+			].join('');
+			
+			
+			// append
+			$('body').append( tmpl );
+			
+			
+			$('#acf-popup .bg, #acf-popup .acf-icon').on('click', function(){
+				
+				acf.close_popup();
+				
+			});
+			
+			
+			// update
+			return this.update_popup(args);
+			
+		},
+		
+		update_popup : function( args ){
+			
+			// vars
+			$popup = $('#acf-popup');
+			
+			
+			// validate
+			if( !$popup.exists() )
+			{
+				return false
+			}
+			
+			
+			// defaults
+			args = $.extend({}, {
+				title	: '',
+				content : '',
+				width	: 0,
+				height	: 0,
+				loading : false
+			}, args);
+			
+			
+			if( args.width )
+			{
+				$popup.find('.acf-popup-box').css({
+					'width'			: args.width,
+					'margin-left'	: 0 - (args.width / 2),
+				});
+			}
+			
+			if( args.height )
+			{
+				$popup.find('.acf-popup-box').css({
+					'height'		: args.height,
+					'margin-top'	: 0 - (args.height / 2),
+				});	
+			}
+			
+			if( args.title )
+			{
+				$popup.find('.title h3').html( args.title );
+			}
+			
+			if( args.content )
+			{
+				$popup.find('.inner').html( args.content );
+			}
+			
+			if( args.loading )
+			{
+				$popup.find('.loading').show();
+			}
+			else
+			{
+				$popup.find('.loading').hide();
+			}
+			
+			return $popup;
+		},
+		
+		close_popup : function(){
+			
+			// vars
+			$popup = $('#acf-popup');
+			
+			
+			// already exists?
+			if( $popup.exists() )
+			{
+				$popup.remove();
+			}
+			
+			
+		}
+		
+	});
+	
+	
+	/*
+	*  Hooks
+	*
+	*  These functions act as wrapper functions for the included event-manajer JS library
+	*  Wrapper functions will ensure that future changes to event-manager do not distrupt
+	*  any custom actions / filter code written by users
+	*
+	*  @type	functions
+	*  @date	30/11/2013
+	*  @since	5.0.0
+	*
+	*  @param	n/a
+	*  @return	n/a
+	*/
+	
+	$.extend(acf, {
+		
+		add_action : function() {
+			
+			// allow multiple action parameters such as 'ready append'
+			var actions = arguments[0].split(' ');
+			
+			for( k in actions )
+			{
+				// prefix action
+				arguments[0] = 'acf.' + actions[ k ];
+				
+				wp.hooks.addAction.apply(this, arguments);
+			}
+			
+			return this;
+		},
+		
+		remove_action : function() {
+			
+			// prefix action
+			arguments[0] = 'acf.' + arguments[0];
+			
+			wp.hooks.removeAction.apply(this, arguments);
+			
+			return this;
+		},
+		
+		do_action : function() {
+			
+			// prefix action
+			arguments[0] = 'acf.' + arguments[0];
+			
+			wp.hooks.doAction.apply(this, arguments);
+			
+			return this;
+		},
+		
+		add_filter : function() {
+			
+			// prefix action
+			arguments[0] = 'acf.' + arguments[0];
+			
+			wp.hooks.addFilter.apply(this, arguments);
+			
+			return this;
+		},
+		
+		remove_filter : function() {
+			
+			// prefix action
+			arguments[0] = 'acf.' + arguments[0];
+			
+			wp.hooks.removeFilter.apply(this, arguments);
+			
+			return this;
+		},
+		
+		apply_filters : function() {
+			
+			// prefix action
+			arguments[0] = 'acf.' + arguments[0];
+			
+			return wp.hooks.applyFilters.apply(this, arguments);
+		}
+		
+	});
+    
+    
+    acf.add_filter('is_field_ready_for_js', function( ready, $field ){
+		
+		// repeater sub field
+		if( $field.parents('.acf-row[data-id="acfcloneindex"]').exists() )
+		{
+			ready = false;
+		}
+		
+		
+		// widget
+		if( $field.parents('#available-widgets').exists() )
+		{
+			ready = false;
+		}
+		
+		
+		// debug
+		//console.log('is_field_ready_for_js %o, %b', $field, ready);
+		
+		
+		// return
+		return ready;
+	    
+    });
+    
+    
+	/*
+	*  is_clone_field
+	*
+	*  @description: 
+	*  @since: 3.5.8
+	*  @created: 17/01/13
+	*/
+	
+	acf.helpers.is_clone_field = function( input )
+	{
+		// sub field
+		if( input.attr('name') && input.attr('name').indexOf('[acfcloneindex]') != -1 )
+		{
+			return true;
+		}
+		
+
+		return false;
+	};
+	
+	
+	/*
+	*  Exists
+	*
+	*  @description: returns true / false		
+	*  @created: 1/03/2011
+	*/
+	
+	$.fn.exists = function()
+	{
+		return $(this).length>0;
+	};
+	
+	
+	/*
+	*  outerHTML
+	*
+	*  This function will return a string containing the HTML of the selected element
+	*
+	*  @type	function
+	*  @date	19/11/2013
+	*  @since	5.0.0
+	*
+	*  @param	$.fn
+	*  @return	(string)
+	*/
+	
+	$.fn.outerHTML = function() {
+	    
+	    return $(this).clone().wrap('<div>').parent().html();
+	    
+	}
+	
+	
+	/*
+	*  3.5 Media
+	*
+	*  @description: 
+	*  @since: 3.5.7
+	*  @created: 16/01/13
+	*/
+	
+	acf.media = {
+	
+		div : null,
+		frame : null,
+		render_timout : null,
+		
+		clear_frame : function(){
+			
+			// validate
+			if( !this.frame )
+			{
+				return;
+			}
+			
+			
+			// detach
+			this.frame.detach();
+			this.frame.dispose();
+			
+			
+			// reset var
+			this.frame = null;
+			
+		},
+		type : function(){
+			
+			// default
+			var type = 'thickbox';
+			
+			
+			// if wp exists
+			if( typeof(wp) == "object" )
+			{
+				type = 'backbone';
+			}
+			
+			
+			// return
+			return type;
+			
+		},
+		init : function(){
+			
+			// bail early if wp.media does not exist (field group edit page)
+			if( typeof(wp.media) == 'undefined' )
+			{
+				return false;
+			}
+			
+			
+			// vars
+			var _prototype = wp.media.view.AttachmentCompat.prototype;
+			
+			
+			// orig
+			_prototype.orig_render = _prototype.render;
+			_prototype.orig_dispose = _prototype.dispose;
+			
+			
+			// update class
+			_prototype.className = 'compat-item acf_postbox no_box';
+			
+			
+			// modify render
+			_prototype.render = function() {
+				
+				// reference
+				var _this = this;
+				
+				
+				// validate
+				if( _this.ignore_render )
+				{
+					return this;	
+				}
+				
+				
+				// run the old render function
+				this.orig_render();
+				
+				
+				// add button
+				setTimeout(function(){
+					
+					// vars
+					var $media_model = _this.$el.closest('.media-modal');
+					
+					
+					// is this an edit only modal?
+					if( $media_model.hasClass('acf-media-modal') )
+					{
+						return;	
+					}
+					
+					
+					// does button already exist?
+					if( $media_model.find('.media-frame-router .acf-expand-details').exists() )
+					{
+						return;	
+					}
+					
+					
+					// create button
+					var button = $([
+						'<a href="#" class="acf-expand-details">',
+							'<span class="icon"></span>',
+							'<span class="is-closed">' + acf.l10n.core.expand_details +  '</span>',
+							'<span class="is-open">' + acf.l10n.core.collapse_details +  '</span>',
+						'</a>'
+					].join('')); 
+					
+					
+					// add events
+					button.on('click', function( e ){
+						
+						e.preventDefault();
+						
+						if( $media_model.hasClass('acf-expanded') )
+						{
+							$media_model.removeClass('acf-expanded');
+						}
+						else
+						{
+							$media_model.addClass('acf-expanded');
+						}
+						
+					});
+					
+					
+					// append
+					$media_model.find('.media-frame-router').append( button );
+						
+				
+				}, 0);
+				
+				
+				// setup fields
+				// The clearTimout is needed to prevent many setup functions from running at the same time
+				clearTimeout( acf.media.render_timout );
+				acf.media.render_timout = setTimeout(function(){
+
+					$(document).trigger( 'acf/setup_fields', [ _this.$el ] );
+					
+				}, 50);
+
+				
+				// return based on the origional render function
+				return this;
+			};
+			
+			
+			// modify dispose
+			_prototype.dispose = function() {
+				
+				// remove
+				$(document).trigger('acf/remove_fields', [ this.$el ]);
+				
+				
+				// run the old render function
+				this.orig_dispose();
+				
+			};
+			
+			
+			// override save
+			_prototype.save = function( event ) {
+			
+				var data = {},
+					names = {};
+				
+				if ( event )
+					event.preventDefault();
+					
+					
+				_.each( this.$el.serializeArray(), function( pair ) {
+				
+					// initiate name
+					if( pair.name.slice(-2) === '[]' )
+					{
+						// remove []
+						pair.name = pair.name.replace('[]', '');
+						
+						
+						// initiate counter
+						if( typeof names[ pair.name ] === 'undefined'){
+							
+							names[ pair.name ] = -1;
+							//console.log( names[ pair.name ] );
+							
+						}
+						
+						
+						names[ pair.name ]++
+						
+						pair.name += '[' + names[ pair.name ] +']';
+						
+						
+					}
+ 
+					data[ pair.name ] = pair.value;
+				});
+ 
+				this.ignore_render = true;
+				this.model.saveCompat( data );
+				
+			};
+		}
+	};
+	
+	
+	/*
+	*  Conditional Logic Calculate
+	*
+	*  @description: 
+	*  @since 3.5.1
+	*  @created: 15/10/12
+	*/
+	
+	acf.conditional_logic = {
+		
+		items : [],
+		
+		init : function(){
+			
+			// reference
+			var _this = this;
+			
+			
+			// events
+			$(document).on('change', '.acf-field input, .acf-field textarea, .acf-field select', function(){
+				
+				// preview hack
+				if( $('#acf-has-changed').exists() )
+				{
+					$('#acf-has-changed').val(1);
+				}
+				
+				_this.change( $(this) );
+				
+			});
+			
+			
+			acf.add_action('ready', function( $el ){
+				
+				//console.log('acf/setup_fields calling acf.conditional_logic.refresh()');
+				_this.refresh( $(el) );
+				
+			});
+			
+			
+			//console.log('acf.conditional_logic.init() calling acf.conditional_logic.refresh()');
+			_this.refresh();
+			
+		},
+		change : function( $el ){
+			
+			//console.log('change %o', $el);
+			// reference
+			var _this = this;
+			
+			
+			// vars
+			var $field	= acf.get_field_el($el),
+				key		= acf.get_field_data($field, 'key');
+			
+			
+			// loop through items and find rules where this field key is a trigger
+			$.each(this.items, function( k, item ){
+				
+				$.each(item.rules, function( k2, rule ){
+					
+					// compare rule against the changed $field
+					if( rule.field == key )
+					{
+						_this.refresh_field( item );
+					}
+					
+				});
+				
+			});
+			
+		},
+		
+		refresh_field : function( item ){
+			
+			//console.log( 'refresh_field: %o ', item );
+			// reference
+			var _this = this;
+			
+			
+			// vars
+			var $targets = acf.get_fields({key : item.field});
+
+			
+			// may be multiple targets (sub fields)
+			$targets.each(function(){
+				
+				//console.log('target %o', $(this));
+				
+				// vars
+				var show = true;
+				
+				
+				// if 'any' was selected, start of as false and any match will result in show = true
+				if( item.allorany == 'any' )
+				{
+					show = false;
+				}
+				
+				
+				// vars
+				var $target		=	$(this),
+					hide_all	=	true;
+				
+				
+				// loop through rules
+				$.each(item.rules, function( k2, rule ){
+					
+					// vars
+					var $toggle = acf.get_fields({key : rule.field});
+					
+					
+					// are any of $toggle a sub field?
+					if( $toggle.hasClass('sub_field') )
+					{
+						// toggle may be a sibling sub field.
+						// if so ,show an empty td but keep the column
+						$toggle = $target.siblings('.field_key-' + rule.field);
+						hide_all = false;
+						
+						
+						// if no toggle was found, we need to look at parent sub fields.
+						// if so, hide the entire column
+						if( ! $toggle.exists() )
+						{
+							// loop through all the parents that could contain sub fields
+							$target.parents('tr').each(function(){
+								
+								// attempt to update $toggle to this parent sub field
+								$toggle = $(this).find('.field_key-' + rule.field)
+								
+								// if the parent sub field actuallly exists, great! Stop the loop
+								if( $toggle.exists() )
+								{
+									return false;
+								}
+								
+							});
+
+							hide_all = true;
+						}
+						
+					}
+					
+					
+					// if this sub field is within a flexible content layout, hide the entire column because 
+					// there will never be another row added to this table
+					var parent = $target.parent('tr').parent().parent('table').parent('.layout');
+					if( parent.exists() )
+					{
+						hide_all = true;
+						
+						if( $target.is('th') && $toggle.is('th') )
+						{
+							$toggle = $target.closest('.layout').find('td.field_key-' + rule.field);
+						}
+
+					}
+					
+					// if this sub field is within a repeater field which has a max row of 1, hide the entire column because 
+					// there will never be another row added to this table
+					var parent = $target.parent('tr').parent().parent('table').parent('.repeater');
+					if( parent.exists() && parent.attr('data-max_rows') == '1' )
+					{
+						hide_all = true;
+						
+						if( $target.is('th') && $toggle.is('th') )
+						{
+							$toggle = $target.closest('table').find('td.field_key-' + rule.field);
+						}
+
+					}
+					
+					
+					var calculate = _this.calculate( rule, $toggle, $target );
+					
+					if( item.allorany == 'all' )
+					{
+						if( calculate == false )
+						{
+							show = false;
+							
+							// end loop
+							return false;
+						}
+					}
+					else
+					{
+						if( calculate == true )
+						{
+							show = true;
+							
+							// end loop
+							return false;
+						}
+					}
+					
+				});
+				// $.each(item.rules, function( k2, rule ){
+				
+				
+				// clear classes
+				$target.removeClass('acf-conditional_logic-hide acf-conditional_logic-show acf-show-blank');
+				
+				
+				// hide / show field
+				if( show )
+				{
+					// remove "disabled"
+					$target.find('input, textarea, select').removeAttr('disabled');
+					
+					$target.addClass('acf-conditional_logic-show');
+					
+					// hook
+					$(document).trigger('acf/conditional_logic/show', [ $target, item ]);
+					
+				}
+				else
+				{
+					// add "disabled"
+					$target.find('input, textarea, select').attr('disabled', 'disabled');
+					
+					$target.addClass('acf-conditional_logic-hide');
+					
+					if( !hide_all )
+					{
+						$target.addClass('acf-show-blank');
+					}
+					
+					// hook
+					$(document).trigger('acf/conditional_logic/hide', [ $target, item ]);
+				}
+				
+				
+			});
+			
+		},
+		
+		refresh : function( $el ){
+			
+			// defaults
+			$el = $el || $('body');
+			
+			
+			// reference
+			var _this = this;
+			
+			
+			// loop through items and find rules where this field key is a trigger
+			$.each(this.items, function( k, item ){
+				
+				$.each(item.rules, function( k2, rule ){
+					
+					// is this field within the $el
+					// this will increase performance by ignoring conditional logic outside of this newly appended element ($el)
+					if( ! $el.find('.field[data-field_key="' + item.field + '"]').exists() )
+					{
+						return;
+					}
+					
+					_this.refresh_field( item );
+					
+				});
+				
+			});
+			
+		},
+		calculate : function( rule, $toggle, $target ){
+			
+			// vars
+			var r = false;
+			
+
+			// compare values
+			if( $toggle.hasClass('field_type-true_false') || $toggle.hasClass('field_type-checkbox') || $toggle.hasClass('field_type-radio') )
+			{
+				var exists = $toggle.find('input[value="' + rule.value + '"]:checked').exists();
+				
+				
+				if( rule.operator == "==" )
+				{
+					if( exists )
+					{
+						r = true;
+					}
+				}
+				else
+				{
+					if( ! exists )
+					{
+						r = true;
+					}
+				}
+				
+			}
+			else
+			{
+				// get val and make sure it is an array
+				var val = $toggle.find('input, textarea, select').last().val();
+				
+				if( ! $.isArray(val) )
+				{
+					val = [ val ];
+				}
+				
+				
+				if( rule.operator == "==" )
+				{
+					if( $.inArray(rule.value, val) > -1 )
+					{
+						r = true;
+					}
+				}
+				else
+				{
+					if( $.inArray(rule.value, val) < 0 )
+					{
+						r = true;
+					}
+				}
+				
+			}
+			
+			
+			// return
+			return r;
+			
+		}
+		
+	}; 
+	
+	
+	$(document).ready(function(){
+		
+		acf.do_action('ready', $('body'));
+		
+		
+		// conditional logic
+		//acf.conditional_logic.init();
+		
+	});
+	
+	
+	/*
+	*  window load
+	*
+	*  @description: 
+	*  @since: 3.5.5
+	*  @created: 22/12/12
+	*/
+	
+	$(window).load(function(){
+		
+		acf.do_action('load', $('body'));
+		
+		
+		// init
+		acf.media.init();
+		
+		
+		setTimeout(function(){
+			
+			// Hack for CPT without a content editor
+			try
+			{
+				// post_id may be string (user_1) and therefore, the uploaded image cannot be attached to the post
+				if( $.isNumeric(acf.o.post_id) )
+				{
+					wp.media.view.settings.post.id = acf.o.post_id;
+				}
+				
+			} 
+			catch(e)
+			{
+				// one of the objects was 'undefined'...
+			}
+			
+			
+			// setup fields
+			//$(document).trigger('acf/setup_fields', [ $(document) ]);
+			
+		}, 10);
+		
+	});
+	
+	
+	/*
+	*  Sortable
+	*
+	*  These functions will hook into the start and stop of a jQuery sortable event and modify the item and placeholder to look seamless
+	*
+	*  @type	function
+	*  @date	12/11/2013
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	acf.add_action('sortstart', function( $item, $placeholder ){
+		
+		// if $item is a tr, apply some css to the elements
+		if( $item.is('tr') )
+		{
+			// temp set as relative to find widths
+			$item.css('position', 'relative');
+			
+			
+			// set widths for td children		
+			$item.children().each(function(){
+			
+				$(this).width($(this).width());
+				
+			});
+			
+			
+			// revert postision css
+			$item.css('position', 'absolute');
+			
+			
+			// add markup to the placeholder
+			$placeholder.html('<td style="height:' + $item.height() + 'px; padding:0;" colspan="' + $item.children('td').length + '"></td>');
+		}
+		
+	});
+	
+	
+	
+})(jQuery);
+
+/* **********************************************
+     Begin ajax.js
+********************************************** */
+
+(function($){
+	
+	acf.ajax = {
+		
+		o : {
+			action 			:	'acf/post/get_field_groups',
+			post_id			:	0,
+			page_template	:	0,
+			page_parent		:	0,
+			page_type		:	0,
+			post_category	:	0,
+			post_format		:	0,
+			post_taxonomy	:	0,
+			lang			:	0,
+			nonce			:	0
+		},
+		
+		update : function( k, v ){
+			
+			this.o[ k ] = v;
+			return this;
+			
+		},
+		
+		get : function( k ){
+			
+			return this.o[ k ] || null;
+			
+		},
+		
+		init : function(){
+			
+			// bail early if ajax is disabled
+			if( ! acf.get('ajax') )
+			{
+				return false;	
+			}
+			
+			
+			// vars
+			this.update('post_id', acf.o.post_id);
+			this.update('nonce', acf.o.nonce);
+			
+			
+			// MPML
+			if( $('#icl-als-first').length > 0 )
+			{
+				var href = $('#icl-als-first').children('a').attr('href'),
+					regex = new RegExp( "lang=([^&#]*)" ),
+					results = regex.exec( href );
+				
+				// lang
+				this.update('lang', results[1]);
+				
+			}
+			
+			
+			// add triggers
+			this.add_events();
+		},
+		
+		fetch : function(){
+			
+			// reference
+			var _this = this;
+			
+			
+			// ajax
+			$.ajax({
+				url			: acf.get('ajaxurl'),
+				data		: this.o,
+				type		: 'post',
+				dataType	: 'json',
+				success		: function( json ){
+					
+					if( _.isObject(json) )
+					{
+						_this.render( json );
+					}
+					
+				}
+			});
+			
+		},
+		
+		render : function( field_groups ){
+			
+			// hide all metaboxes
+			$('.acf-postbox').addClass('acf-hidden');
+			$('.acf-postbox-toggle').addClass('acf-hidden');
+			
+			
+			// show the new postboxes
+			$.each(field_groups, function(k, field_group){
+				
+				// vars
+				var $el = $('#acf-' + field_group.ID),
+					$toggle = $('#adv-settings .acf_postbox-toggle[for="acf-' + field_group.ID + '-hide"]');
+				
+				
+				// classes
+				$el.removeClass('acf-hidden hide-if-js');
+				$toggle.removeClass('acf-hidden');
+				$toggle.find('input[type="checkbox"]').attr('checked', 'checked');
+				
+				
+				// load fields if needed
+				$el.find('.acf-replace-with-fields').each(function(){
+					
+					$(this).replaceWith( field_group.html );
+					
+					$(document).trigger('acf/setup_fields', [ $el ]);
+					
+				});
+				
+				
+				// update style if needed
+				if( k === 0 )
+				{
+					$('#acf-style').html( field_group.style );
+				}
+				
+			});
+			
+		},
+		
+		add_events : function(){
+			
+			// reference
+			var _this = this;
+			
+			
+			// page template
+			$(document).on('change', '#page_template', function(){
+				
+				var page_template = $(this).val();
+				
+				_this.update( 'page_template', page_template ).fetch();
+			    
+			});
+			
+			
+			// page parent
+			$(document).on('change', '#parent_id', function(){
+				
+				var page_type = 'parent',
+					page_parent = 0;
+				
+				
+				if( val != "" )
+				{
+					page_type = 'child';
+					page_parent = $(this).val();
+				}
+				
+				_this.update( 'page_type', page_type ).update( 'page_parent', page_parent ).fetch();
+			    
+			});
+			
+			
+			// post format
+			$(document).on('change', '#post-formats-select input[type="radio"]', function(){
+				
+				var post_format = $(this).val();
+				
+				if( post_format == '0' )
+				{
+					post_format = 'standard';
+				}
+				
+				_this.update( 'post_format', post_format ).fetch();
+				
+			});
+			
+			
+			// post taxonmy
+			$(document).on('change', '.categorychecklist input[type="checkbox"]', function(){
+				
+				// a taxonomy field may trigger this change event, however, the value selected is not
+				// actually a term relatinoship, it is meta data
+				if( $(this).closest('.categorychecklist').hasClass('no-ajax') )
+				{
+					return;
+				}
+				
+				
+				// set timeout to fix issue with chrome which does not register the change has yet happened
+				setTimeout(function(){
+					
+					// vars
+					var values = [];
+					
+					
+					$('.categorychecklist input[type="checkbox"]:checked').each(function(){
+						
+						if( $(this).is(':hidden') || $(this).is(':disabled') )
+						{
+							return;
+						}
+						
+						if( $.inArray( $(this).val(), values ) < 0 )
+						{
+							values.push( $(this).val() );
+						}
+						
+					});
+			
+					
+					_this.update( 'post_taxonomy', values ).fetch();
+					
+				
+				}, 1);
+				
+				
+			});
+			
+		}
+		
+	};
+	
+	
+	/*
+	*  Document Ready
+	*
+	*  Initialize the object
+	*
+	*  @type	function
+	*  @date	1/03/2011
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	$(document).ready(function(){
+		
+		// initialize
+		acf.ajax.init();
+		
+	});
+
+
+	
+})(jQuery);
+
+/* **********************************************
+     Begin color-picker.js
+********************************************** */
+
+(function($){
+	
+	/*
+	*  Color Picker
+	*
+	*  jQuery functionality for this field type
+	*
+	*  @type	object
+	*  @date	20/07/13
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	acf.fields.color_picker = {
+		
+		$el : null,
+		$input : null,
+		
+		set : function( o ){
+			
+			// merge in new option
+			$.extend( this, o );
+			
+			
+			// find input
+			this.$input = this.$el.find('input[type="text"]');
+			
+			
+			// return this for chaining
+			return this;
+			
+		},
+		
+		init : function(){
+			
+			this.$input.wpColorPicker();
+			
+		}
+	};
+	
+	
+	/*
+	*  acf/setup_fields
+	*
+	*  run init function on all elements for this field
+	*
+	*  @type	event
+	*  @date	20/07/13
+	*
+	*  @param	{object}	e		event object
+	*  @param	{object}	el		DOM object which may contain new ACF elements
+	*  @return	N/A
+	*/
+	
+	acf.add_action('ready append', function( $el ){
+		
+		acf.get_fields({ type : 'color_picker'}, $el).each(function(){
+			
+			acf.fields.color_picker.set({ $el : $(this) }).init();
+			
+		});
+		
+	});
+	
+
+})(jQuery);
+
+/* **********************************************
+     Begin date-picker.js
+********************************************** */
+
+(function($){
+	
+	/*
+	*  Date Picker
+	*
+	*  static model for this field
+	*
+	*  @type	event
+	*  @date	1/06/13
+	*
+	*/
+	
+	acf.fields.date_picker = {
+		
+		$el : null,
+		$input : null,
+		$hidden : null,
+		
+		o : {},
+		
+		set : function( o ){
+			
+			// merge in new option
+			$.extend( this, o );
+			
+			
+			// find input
+			this.$input = this.$el.find('input[type="text"]');
+			this.$hidden = this.$el.find('input[type="hidden"]');
+			
+			
+			// get options
+			this.o = acf.get_atts( this.$el );
+			
+			
+			// return this for chaining
+			return this;
+			
+		},
+		init : function(){
+			
+			// get and set value from alt field
+			this.$input.val( this.$hidden.val() );
+			
+			
+			// create options
+			var args = $.extend( {}, acf.l10n.date_picker, { 
+				dateFormat		:	this.o.save_format,
+				altField		:	this.$hidden,
+				altFormat		:	this.o.save_format,
+				changeYear		:	true,
+				yearRange		:	"-100:+100",
+				changeMonth		:	true,
+				showButtonPanel	:	true,
+				firstDay		:	this.o.first_day
+			});
+			
+			
+			// filter for 3rd party customization
+			args = acf.apply_filters('date_picker_args', args);
+			
+			
+			// add date picker
+			this.$input.addClass('active').datepicker( args );
+			
+			
+			// now change the format back to how it should be.
+			this.$input.datepicker( "option", "dateFormat", this.o.display_format );
+			
+			
+			// wrap the datepicker (only if it hasn't already been wrapped)
+			if( $('body > #ui-datepicker-div').length > 0 )
+			{
+				$('#ui-datepicker-div').wrap('<div class="ui-acf" />');
+			}
+			
+		},
+		blur : function(){
+			
+			if( !this.$input.val() )
+			{
+				this.$hidden.val('');
+			}
+			
+		}
+		
+	};
+	
+	
+	/*
+	*  acf/setup_fields
+	*
+	*  run init function on all elements for this field
+	*
+	*  @type	event
+	*  @date	20/07/13
+	*
+	*  @param	{object}	e		event object
+	*  @param	{object}	el		DOM object which may contain new ACF elements
+	*  @return	N/A
+	*/
+	
+	acf.add_action('ready append', function( $el ){
+		
+		acf.get_fields({ type : 'date_picker'}, $el).each(function(){
+			
+			acf.fields.date_picker.set({ $el : $(this) }).init();
+			
+		});
+		
+	});
+		
+	
+	/*
+	*  Events
+	*
+	*  jQuery events for this field
+	*
+	*  @type	event
+	*  @date	1/06/13
+	*
+	*/
+	
+	$(document).on('blur', '.acf-date_picker input[type="text"]', function( e ){
+		
+		acf.fields.date_picker.set({ $el : $(this).closest('.acf-field') }).blur();
+					
+	});
+	
+
+})(jQuery);
+
+/* **********************************************
+     Begin file.js
+********************************************** */
+
+(function($){
+	
+	/*
+	*  File
+	*
+	*  static model for this field
+	*
+	*  @type	event
+	*  @date	1/06/13
+	*
+	*/
+	
+	
+	// reference
+	var _media = acf.media;
+	
+	
+	acf.fields.file = {
+		
+		$el : null,
+		$input : null,
+		
+		o : {},
+		
+		set : function( o ){
+			
+			// merge in new option
+			$.extend( this, o );
+			
+			
+			// find input
+			this.$input = this.$el.find('input[type="hidden"]');
+			
+			
+			// get options
+			this.o = acf.get_atts( this.$el );
+			
+			
+			// multiple?
+			this.o.multiple = this.$el.closest('.repeater').exists() ? true : false;
+			
+			
+			// wp library query
+			this.o.query = {};
+			
+			
+			// library
+			if( this.o.library == 'uploadedTo' )
+			{
+				this.o.query.uploadedTo = acf.o.post_id;
+			}
+			
+			
+			// return this for chaining
+			return this;
+			
+		},
+		add : function( file ){
+			
+			// this function must reference a global div variable due to the pre WP 3.5 uploader
+			// vars
+			var div = _media.div;
+			
+			
+			// set atts
+			div.find('.acf-file-icon').attr( 'src', file.icon );
+		 	div.find('.acf-file-title').text( file.title );
+		 	div.find('.acf-file-name').text( file.name ).attr( 'href', file.url );
+		 	div.find('.acf-file-size').text( file.size );
+			div.find('.acf-file-value').val( file.id ).trigger('change');
+		 	
+		 	
+		 	// set div class
+		 	div.addClass('active');
+		 	
+		 	
+		 	// validation
+			div.closest('.field').removeClass('error');
+	
+		},
+		edit : function(){
+			
+			// vars
+			var id = this.$input.val();
+			
+			
+			// set global var
+			_media.div = this.$el;
+			
+
+			// clear the frame
+			_media.clear_frame();
+			
+			
+			// create the media frame
+			_media.frame = wp.media({
+				title		:	acf.l10n.file.edit,
+				multiple	:	false,
+				button		:	{ text : acf.l10n.file.update }
+			});
+			
+			
+			// log events
+			/*
+			acf.media.frame.on('all', function(e){
+				
+				console.log( e );
+				
+			});
+			*/
+			
+			
+			// open
+			_media.frame.on('open',function() {
+				
+				// set to browse
+				if( _media.frame.content._mode != 'browse' )
+				{
+					_media.frame.content.mode('browse');
+				}
+				
+				
+				// add class
+				_media.frame.$el.closest('.media-modal').addClass('acf-media-modal acf-expanded');
+					
+				
+				// set selection
+				var selection	=	_media.frame.state().get('selection'),
+					attachment	=	wp.media.attachment( id );
+				
+				
+				// to fetch or not to fetch
+				if( $.isEmptyObject(attachment.changed) )
+				{
+					attachment.fetch();
+				}
+				
+
+				selection.add( attachment );
+						
+			});
+			
+			
+			// close
+			_media.frame.on('close',function(){
+			
+				// remove class
+				_media.frame.$el.closest('.media-modal').removeClass('acf-media-modal');
+				
+			});
+			
+							
+			// Finally, open the modal
+			acf.media.frame.open();
+			
+		},
+		remove : function()
+		{
+			
+			// set atts
+			this.$el.find('.acf-file-icon').attr( 'src', '' );
+			this.$el.find('.acf-file-title').text( '' );
+		 	this.$el.find('.acf-file-name').text( '' ).attr( 'href', '' );
+		 	this.$el.find('.acf-file-size').text( '' );
+			this.$el.find('.acf-file-value').val( '' ).trigger('change');
+			
+			
+			// remove class
+			this.$el.removeClass('active');
+			
+		},
+		popup : function()
+		{
+			// reference
+			var t = this;
+			
+			
+			// set global var
+			_media.div = this.$el;
+			
+
+			// clear the frame
+			_media.clear_frame();
+			
+			
+			 // Create the media frame
+			 _media.frame = wp.media({
+				states : [
+					new wp.media.controller.Library({
+						library		:	wp.media.query( t.o.query ),
+						multiple	:	t.o.multiple,
+						title		:	acf.l10n.file.select,
+						priority	:	20,
+						filterable	:	'all'
+					})
+				]
+			});
+			
+			
+			// customize model / view
+			acf.media.frame.on('content:activate', function(){
+				
+				// vars
+				var toolbar = null,
+					filters = null;
+					
+				
+				// populate above vars making sure to allow for failure
+				try
+				{
+					toolbar = acf.media.frame.content.get().toolbar;
+					filters = toolbar.get('filters');
+				} 
+				catch(e)
+				{
+					// one of the objects was 'undefined'... perhaps the frame open is Upload Files
+					//console.log( e );
+				}
+				
+				
+				// validate
+				if( !filters )
+				{
+					return false;
+				}
+				
+				
+				// no need for 'uploaded' filter
+				if( t.o.library == 'uploadedTo' )
+				{
+					filters.$el.find('option[value="uploaded"]').remove();
+					filters.$el.after('<span>' + acf.l10n.file.uploadedTo + '</span>')
+					
+					$.each( filters.filters, function( k, v ){
+						
+						v.props.uploadedTo = acf.o.post_id;
+						
+					});
+				}
+								
+			});
+			
+			
+			// When an image is selected, run a callback.
+			acf.media.frame.on( 'select', function() {
+				
+				// get selected images
+				selection = _media.frame.state().get('selection');
+				
+				if( selection )
+				{
+					var i = 0;
+					
+					selection.each(function(attachment){
+	
+				    	// counter
+				    	i++;
+				    	
+				    	
+				    	// select / add another file field?
+				    	if( i > 1 )
+						{
+							// vars
+							var $td			=	_media.div.closest('td'),
+								$tr 		=	$td.closest('.row'),
+								$repeater 	=	$tr.closest('.repeater'),
+								key 		=	$td.attr('data-field_key'),
+								selector	=	'td .acf-file-uploader:first';
+								
+							
+							// key only exists for repeater v1.0.1 +
+							if( key )
+							{
+								selector = 'td[data-field_key="' + key + '"] .acf-file-uploader';
+							}
+							
+							
+							// add row?
+							if( ! $tr.next('.row').exists() )
+							{
+								$repeater.find('.add-row-end').trigger('click');
+								
+							}
+							
+							
+							// update current div
+							_media.div = $tr.next('.row').find( selector );
+							
+						}
+												
+						
+				    	// vars
+				    	var file = {
+					    	id		:	attachment.id,
+					    	title	:	attachment.attributes.title,
+					    	name	:	attachment.attributes.filename,
+					    	url		:	attachment.attributes.url,
+					    	icon	:	attachment.attributes.icon,
+					    	size	:	attachment.attributes.filesize
+				    	};
+				    	
+				    	
+				    	// add file to field
+				        acf.fields.file.add( file );
+				        
+						
+				    });
+				    // selection.each(function(attachment){
+				}
+				// if( selection )
+				
+			});
+			// acf.media.frame.on( 'select', function() {
+					 
+				
+			// Finally, open the modal
+			acf.media.frame.open();
+				
+			
+			return false;
+		}
+		
+	};
+	
+	
+	/*
+	*  Events
+	*
+	*  jQuery events for this field
+	*
+	*  @type	function
+	*  @date	1/03/2011
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	$(document).on('click', '.acf-file-uploader .acf-button-edit', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.file.set({ $el : $(this).closest('.acf-file-uploader') }).edit();
+			
+	});
+	
+	$(document).on('click', '.acf-file-uploader .acf-button-delete', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.file.set({ $el : $(this).closest('.acf-file-uploader') }).remove();
+			
+	});
+	
+	
+	$(document).on('click', '.acf-file-uploader .add-file', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.file.set({ $el : $(this).closest('.acf-file-uploader') }).popup();
+		
+	});
+	
+
+})(jQuery);
+
+/* **********************************************
+     Begin google-map.js
+********************************************** */
+
+(function($){
+	
+	/*
+	*  Location
+	*
+	*  static model for this field
+	*
+	*  @type	event
+	*  @date	1/06/13
+	*
+	*/
+	
+	acf.fields.google_map = {
+		
+		$el : null,
+		$input : null,
+		
+		o : {},
+		
+		ready : false,
+		geocoder : false,
+		map : false,
+		maps : {},
+		
+		set : function( o ){
+			
+			// merge in new option
+			$.extend( this, o );
+			
+			
+			// find input
+			this.$input = this.$el.find('.value');
+			
+			
+			// get options
+			this.o = acf.get_atts( this.$el );
+			
+			
+			// get map
+			if( this.maps[ this.o.id ] )
+			{
+				this.map = this.maps[ this.o.id ];
+			}
+			
+				
+			// return this for chaining
+			return this;
+			
+		},
+		init : function(){
+			
+			// geocode
+			if( !this.geocoder )
+			{
+				this.geocoder = new google.maps.Geocoder();
+			}
+			
+			
+			// google maps is loaded and ready
+			this.ready = true;
+			
+			
+			// render map
+			this.render();
+					
+		},
+		render : function(){
+			
+			// reference
+			var _this	= this,
+				_$el	= this.$el;
+			
+			
+			// vars
+			var args = {
+        		zoom		: parseInt(this.o.zoom),
+        		center		: new google.maps.LatLng(this.o.lat, this.o.lng),
+        		mapTypeId	: google.maps.MapTypeId.ROADMAP
+        	};
+			
+			// create map	        	
+        	this.map = new google.maps.Map( this.$el.find('.canvas')[0], args);
+	        
+	        
+	        // add search
+			var autocomplete = new google.maps.places.Autocomplete( this.$el.find('.search')[0] );
+			autocomplete.map = this.map;
+			autocomplete.bindTo('bounds', this.map);
+			
+			
+			// add dummy marker
+	        this.map.marker = new google.maps.Marker({
+		        draggable	: true,
+		        raiseOnDrag	: true,
+		        map			: this.map,
+		    });
+		    
+		    
+		    // add references
+		    this.map.$el = this.$el;
+		    
+		    
+		    // value exists?
+		    var lat = this.$el.find('.input-lat').val(),
+		    	lng = this.$el.find('.input-lng').val();
+		    
+		    if( lat && lng )
+		    {
+			    this.update( lat, lng ).center();
+		    }
+		    
+		    
+			// events
+			google.maps.event.addListener(autocomplete, 'place_changed', function( e ) {
+			    
+			    // reference
+			    var $el = this.map.$el;
+
+
+			    // manually update address
+			    var address = $el.find('.search').val();
+			    $el.find('.input-address').val( address );
+			    $el.find('.title h4').text( address );
+			    
+			    
+			    // vars
+			    var place = this.getPlace();
+			    
+			    
+			    // validate
+			    if( place.geometry )
+			    {
+			    	var lat = place.geometry.location.lat(),
+						lng = place.geometry.location.lng();
+						
+						
+				    _this.set({ $el : $el }).update( lat, lng ).center();
+			    }
+			    else
+			    {
+				    // client hit enter, manulaly get the place
+				    _this.geocoder.geocode({ 'address' : address }, function( results, status ){
+				    	
+				    	// validate
+						if( status != google.maps.GeocoderStatus.OK )
+						{
+							console.log('Geocoder failed due to: ' + status);
+							return;
+						}
+						
+						if( !results[0] )
+						{
+							console.log('No results found');
+							return;
+						}
+						
+						
+						// get place
+						place = results[0];
+						
+						var lat = place.geometry.location.lat(),
+							lng = place.geometry.location.lng();
+							
+							
+					    _this.set({ $el : $el }).update( lat, lng ).center();
+					    
+					});
+			    }
+			    
+			});
+		    
+		    
+		    google.maps.event.addListener( this.map.marker, 'dragend', function(){
+		    	
+		    	// reference
+			    var $el = this.map.$el;
+			    
+			    
+		    	// vars
+				var position = this.map.marker.getPosition(),
+					lat = position.lat(),
+			    	lng = position.lng();
+			    	
+				_this.set({ $el : $el }).update( lat, lng ).sync();
+			    
+			});
+			
+			
+			google.maps.event.addListener( this.map, 'click', function( e ) {
+				
+				// reference
+			    var $el = this.$el;
+			    
+			    
+				// vars
+				var lat = e.latLng.lat(),
+					lng = e.latLng.lng();
+				
+				
+				_this.set({ $el : $el }).update( lat, lng ).sync();
+			
+			});
+
+			
+			
+	        // add to maps
+	        this.maps[ this.o.id ] = this.map;
+	        
+	        
+		},
+		
+		update : function( lat, lng ){
+			
+			// vars
+			var latlng = new google.maps.LatLng( lat, lng );
+		    
+		    
+		    // update inputs
+			this.$el.find('.input-lat').val( lat );
+			this.$el.find('.input-lng').val( lng ).trigger('change');
+			
+			
+		    // update marker
+		    this.map.marker.setPosition( latlng );
+		    
+		    
+			// show marker
+			this.map.marker.setVisible( true );
+		    
+		    
+	        // update class
+	        this.$el.addClass('active');
+	        
+	        
+	        // validation
+			this.$el.closest('.acf-field').removeClass('error');
+			
+			
+	        // return for chaining
+	        return this;
+		},
+		
+		center : function(){
+			
+			// vars
+			var position = this.map.marker.getPosition(),
+				lat = this.o.lat,
+				lng = this.o.lng;
+			
+			
+			// if marker exists, center on the marker
+			if( position )
+			{
+				lat = position.lat();
+				lng = position.lng();
+			}
+			
+			
+			var latlng = new google.maps.LatLng( lat, lng );
+				
+			
+			// set center of map
+	        this.map.setCenter( latlng );
+		},
+		
+		sync : function(){
+			
+			// reference
+			var $el	= this.$el;
+				
+			
+			// vars
+			var position = this.map.marker.getPosition(),
+				latlng = new google.maps.LatLng( position.lat(), position.lng() );
+			
+			
+			this.geocoder.geocode({ 'latLng' : latlng }, function( results, status ){
+				
+				// validate
+				if( status != google.maps.GeocoderStatus.OK )
+				{
+					console.log('Geocoder failed due to: ' + status);
+					return;
+				}
+				
+				if( !results[0] )
+				{
+					console.log('No results found');
+					return;
+				}
+				
+				
+				// get location
+				var location = results[0];
+				
+				
+				// update h4
+				$el.find('.title h4').text( location.formatted_address );
+
+				
+				// update input
+				$el.find('.input-address').val( location.formatted_address ).trigger('change');
+				
+			});
+			
+			
+			// return for chaining
+	        return this;
+		},
+		
+		locate : function(){
+			
+			// reference
+			var _this	= this,
+				_$el	= this.$el;
+			
+			
+			// Try HTML5 geolocation
+			if( ! navigator.geolocation )
+			{
+				alert( acf.l10n.google_map.browser_support );
+				return this;
+			}
+			
+			
+			// show loading text
+			_$el.find('.title h4').text(acf.l10n.google_map.locating + '...');
+			_$el.addClass('active');
+			
+		    navigator.geolocation.getCurrentPosition(function(position){
+		    	
+		    	// vars
+				var lat = position.coords.latitude,
+			    	lng = position.coords.longitude;
+			    	
+				_this.set({ $el : _$el }).update( lat, lng ).sync().center();
+				
+			});
+
+				
+		},
+		
+		clear : function(){
+			
+			// update class
+	        this.$el.removeClass('active');
+			
+			
+			// clear search
+			this.$el.find('.search').val('');
+			
+			
+			// clear inputs
+			this.$el.find('.input-address').val('');
+			this.$el.find('.input-lat').val('');
+			this.$el.find('.input-lng').val('');
+			
+			
+			// hide marker
+			this.map.marker.setVisible( false );
+		},
+		
+		edit : function(){
+			
+			// update class
+	        this.$el.removeClass('active');
+			
+			
+			// clear search
+			var val = this.$el.find('.title h4').text();
+			
+			
+			this.$el.find('.search').val( val ).focus();
+			
+		},
+		
+		refresh : function(){
+			
+			// trigger resize on div
+			google.maps.event.trigger(this.map, 'resize');
+			
+			// center map
+			this.center();
+			
+		}
+
+	
+	};
+	
+	
+	/*
+	*  acf/setup_fields
+	*
+	*  run init function on all elements for this field
+	*
+	*  @type	event
+	*  @date	20/07/13
+	*
+	*  @param	{object}	e		event object
+	*  @param	{object}	el		DOM object which may contain new ACF elements
+	*  @return	N/A
+	*/
+	
+	acf.add_action('ready append', function( $el ){
+		
+		//vars
+		var $fields = acf.get_fields({ type : 'google_map'}, $el);
+		
+		
+		// validate
+		if( !$fields.exists() )
+		{
+			return;
+		}
+		
+		
+		// validate google
+		if( typeof google === 'undefined' )
+		{
+			$.getScript('https://www.google.com/jsapi', function(){
+			
+			    google.load('maps', '3', { other_params: 'sensor=false&libraries=places', callback: function(){
+			    
+			        $fields.each(function(){
+					
+						acf.fields.google_map.set({ $el : $(this).find('.acf-google-map') }).init();
+						
+					});
+			        
+			    }});
+			});
+			
+		}
+		else
+		{
+			$fields.each(function(){
+				
+				acf.fields.google_map.set({ $el : $(this).find('.acf-google-map') }).init();
+				
+			});
+			
+		}
+		
+		
+	});
+	
+	
+	/*
+	*  Events
+	*
+	*  jQuery events for this field
+	*
+	*  @type	function
+	*  @date	1/03/2011
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	$(document).on('click', '.acf-google-map .acf-sprite-remove', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.google_map.set({ $el : $(this).closest('.acf-google-map') }).clear();
+		
+		$(this).blur();
+		
+	});
+	
+	
+	$(document).on('click', '.acf-google-map .acf-sprite-locate', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.google_map.set({ $el : $(this).closest('.acf-google-map') }).locate();
+		
+		$(this).blur();
+		
+	});
+	
+	$(document).on('click', '.acf-google-map .title h4', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.google_map.set({ $el : $(this).closest('.acf-google-map') }).edit();
+			
+	});
+	
+	$(document).on('keydown', '.acf-google-map .search', function( e ){
+		
+		// prevent form from submitting
+		if( e.which == 13 )
+		{
+		    return false;
+		}
+			
+	});
+	
+	$(document).on('blur', '.acf-google-map .search', function( e ){
+		
+		// vars
+		var $el = $(this).closest('.acf-google-map');
+		
+		
+		// has a value?
+		if( $el.find('.input-lat').val() )
+		{
+			$el.addClass('active');
+		}
+			
+	});
+	
+	acf.add_action('show_field', function( $field ){
+		
+		// validate
+		if( ! acf.fields.google_map.ready )
+		{
+			return;
+		}
+		
+		
+		// validate
+		if( acf.is_field($field, {type : 'google_map'}) )
+		{
+			acf.fields.google_map.set({ $el : $field.find('.acf-google-map') }).refresh();
+		}
+		
+	});
+	
+
+})(jQuery);
+
+/* **********************************************
+     Begin image.js
+********************************************** */
+
+(function($){
+	
+	/*
+	*  Image
+	*
+	*  static model for this field
+	*
+	*  @type	event
+	*  @date	1/06/13
+	*
+	*/
+	
+	
+	// reference
+	var _media = acf.media;
+	
+	
+	acf.fields.image = {
+		
+		$el : null,
+		$input : null,
+		
+		o : {},
+		
+		set : function( o ){
+			
+			// merge in new option
+			$.extend( this, o );
+			
+			
+			// find input
+			this.$input = this.$el.find('input[type="hidden"]');
+			
+			
+			// get options
+			this.o = acf.get_atts( this.$el );
+			
+			
+			// multiple?
+			this.o.multiple = this.$el.closest('.repeater').exists() ? true : false;
+			
+			
+			// wp library query
+			this.o.query = {
+				type : 'image'
+			};
+			
+			
+			// library
+			if( this.o.library == 'uploadedTo' )
+			{
+				this.o.query.uploadedTo = acf.o.post_id;
+			}
+			
+			
+			// return this for chaining
+			return this;
+			
+		},
+		add : function( image ){
+			
+			// this function must reference a global div variable due to the pre WP 3.5 uploader
+			// vars
+			var div = _media.div;
+			
+			
+			// set atts
+			div.find('.acf-image-image').attr( 'src', image.url );
+			div.find('.acf-image-value').val( image.id ).trigger('change');
+		 	
+			
+		 	// set div class
+		 	div.addClass('active');
+		 	
+		 	
+		 	// validation
+			div.closest('.field').removeClass('error');
+	
+		},
+		edit : function(){
+			
+			// vars
+			var id = this.$input.val();
+			
+			
+			// set global var
+			_media.div = this.$el;
+			
+
+			// clear the frame
+			_media.clear_frame();
+			
+			
+			// create the media frame
+			_media.frame = wp.media({
+				title		:	acf.l10n.image.edit,
+				multiple	:	false,
+				button		:	{ text : acf.l10n.image.update }
+			});
+			
+			
+			// log events
+			/*
+			acf.media.frame.on('all', function(e){
+				
+				console.log( e );
+				
+			});
+			*/
+			
+			
+			// open
+			_media.frame.on('open',function() {
+				
+				// set to browse
+				if( _media.frame.content._mode != 'browse' )
+				{
+					_media.frame.content.mode('browse');
+				}
+				
+				
+				// add class
+				_media.frame.$el.closest('.media-modal').addClass('acf-media-modal acf-expanded');
+					
+				
+				// set selection
+				var selection	=	_media.frame.state().get('selection'),
+					attachment	=	wp.media.attachment( id );
+				
+				
+				// to fetch or not to fetch
+				if( $.isEmptyObject(attachment.changed) )
+				{
+					attachment.fetch();
+				}
+				
+
+				selection.add( attachment );
+						
+			});
+			
+			
+			// close
+			_media.frame.on('close',function(){
+			
+				// remove class
+				_media.frame.$el.closest('.media-modal').removeClass('acf-media-modal');
+				
+			});
+			
+							
+			// Finally, open the modal
+			acf.media.frame.open();
+			
+		},
+		remove : function()
+		{
+			
+			// set atts
+		 	this.$el.find('.acf-image-image').attr( 'src', '' );
+			this.$el.find('.acf-image-value').val( '' ).trigger('change');
+			
+			
+			// remove class
+			this.$el.removeClass('active');
+			
+		},
+		popup : function()
+		{
+			// reference
+			var t = this;
+			
+			
+			// set global var
+			_media.div = this.$el;
+			
+
+			// clear the frame
+			_media.clear_frame();
+			
+			
+			 // Create the media frame
+			 _media.frame = wp.media({
+				states : [
+					new wp.media.controller.Library({
+						library		:	wp.media.query( t.o.query ),
+						multiple	:	t.o.multiple,
+						title		:	acf.l10n.image.select,
+						priority	:	20,
+						filterable	:	'all'
+					})
+				]
+			});
+			
+			
+			/*acf.media.frame.on('all', function(e){
+				
+				console.log( e );
+				
+			});*/
+			
+			
+			// customize model / view
+			acf.media.frame.on('content:activate', function(){
+
+				// vars
+				var toolbar = null,
+					filters = null;
+					
+				
+				// populate above vars making sure to allow for failure
+				try
+				{
+					toolbar = acf.media.frame.content.get().toolbar;
+					filters = toolbar.get('filters');
+				} 
+				catch(e)
+				{
+					// one of the objects was 'undefined'... perhaps the frame open is Upload Files
+					//console.log( e );
+				}
+				
+				
+				// validate
+				if( !filters )
+				{
+					return false;
+				}
+				
+				
+				// filter only images
+				$.each( filters.filters, function( k, v ){
+				
+					v.props.type = 'image';
+					
+				});
+				
+				
+				// no need for 'uploaded' filter
+				if( t.o.library == 'uploadedTo' )
+				{
+					filters.$el.find('option[value="uploaded"]').remove();
+					filters.$el.after('<span>' + acf.l10n.image.uploadedTo + '</span>')
+					
+					$.each( filters.filters, function( k, v ){
+						
+						v.props.uploadedTo = acf.o.post_id;
+						
+					});
+				}
+				
+				
+				// remove non image options from filter list
+				filters.$el.find('option').each(function(){
+					
+					// vars
+					var v = $(this).attr('value');
+					
+					
+					// don't remove the 'uploadedTo' if the library option is 'all'
+					if( v == 'uploaded' && t.o.library == 'all' )
+					{
+						return;
+					}
+					
+					if( v.indexOf('image') === -1 )
+					{
+						$(this).remove();
+					}
+					
+				});
+				
+				
+				// set default filter
+				filters.$el.val('image').trigger('change');
+				
+			});
+			
+			
+			// When an image is selected, run a callback.
+			acf.media.frame.on( 'select', function() {
+				
+				// get selected images
+				selection = _media.frame.state().get('selection');
+				
+				if( selection )
+				{
+					var i = 0;
+					
+					selection.each(function(attachment){
+	
+				    	// counter
+				    	i++;
+				    	
+				    	
+				    	// select / add another image field?
+				    	if( i > 1 )
+						{
+							// vars
+							var $td			=	_media.div.closest('td'),
+								$tr 		=	$td.closest('.row'),
+								$repeater 	=	$tr.closest('.repeater'),
+								key 		=	$td.attr('data-field_key'),
+								selector	=	'td .acf-image-uploader:first';
+								
+							
+							// key only exists for repeater v1.0.1 +
+							if( key )
+							{
+								selector = 'td[data-field_key="' + key + '"] .acf-image-uploader';
+							}
+							
+							
+							// add row?
+							if( ! $tr.next('.row').exists() )
+							{
+								$repeater.find('.add-row-end').trigger('click');
+								
+							}
+							
+							
+							// update current div
+							_media.div = $tr.next('.row').find( selector );
+							
+						}
+						
+						
+				    	// vars
+				    	var image = {
+					    	id		:	attachment.id,
+					    	url		:	attachment.attributes.url
+				    	};
+				    	
+				    	// is preview size available?
+				    	if( attachment.attributes.sizes && attachment.attributes.sizes[ t.o.preview_size ] )
+				    	{
+					    	image.url = attachment.attributes.sizes[ t.o.preview_size ].url;
+				    	}
+				    	
+				    	// add image to field
+				        acf.fields.image.add( image );
+				        
+						
+				    });
+				    // selection.each(function(attachment){
+				}
+				// if( selection )
+				
+			});
+			// acf.media.frame.on( 'select', function() {
+					 
+				
+			// Finally, open the modal
+			acf.media.frame.open();
+				
+
+			return false;
+		},
+		
+		// temporary gallery fix		
+		text : {
+			title_add : "Select Image",
+			title_edit : "Edit Image"
+		}
+		
+	};
+	
+	
+	/*
+	*  Events
+	*
+	*  jQuery events for this field
+	*
+	*  @type	function
+	*  @date	1/03/2011
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	$(document).on('click', '.acf-image-uploader .acf-button-edit', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.image.set({ $el : $(this).closest('.acf-image-uploader') }).edit();
+			
+	});
+	
+	$(document).on('click', '.acf-image-uploader .acf-button-delete', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.image.set({ $el : $(this).closest('.acf-image-uploader') }).remove();
+			
+	});
+	
+	
+	$(document).on('click', '.acf-image-uploader .add-image', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.image.set({ $el : $(this).closest('.acf-image-uploader') }).popup();
+		
+	});
+	
+
+})(jQuery);
+
+/* **********************************************
+     Begin oembed.js
+********************************************** */
+
+(function($){
+	
+	acf.fields.oembed = {
+		
+		search : function( $el ){ 
+			
+			// vars
+			var s = $el.find('[data-name="search-input"]').val();
+			
+			
+			// fix missing 'http://' - causes the oembed code to error and fail
+			if( s.substr(0, 4) != 'http' )
+			{
+				s = 'http://' + s;
+				$el.find('[data-name="search-input"]').val( s );
+			}
+			
+			
+			// show loading
+			$el.addClass('is-loading');
+			
+			
+			// AJAX data
+			var ajax_data = {
+				'action'	: 'acf/fields/oembed/search',
+				'nonce'		: acf.get('nonce'),
+				's'			: s,
+				'width'		: acf.get_field_data($el, 'width'),
+				'height'	: acf.get_field_data($el, 'height')
+			};
+			
+			
+			// abort XHR if this field is already loading AJAX data
+			if( $el.data('xhr') )
+			{
+				$el.data('xhr').abort();
+			}
+			
+			
+			// get HTML
+			var xhr = $.ajax({
+				url: acf.get('ajaxurl'),
+				data: ajax_data,
+				type: 'post',
+				dataType: 'json',
+				success: function( json ){
+					
+					$el.removeClass('is-loading');
+					
+					
+					// update from json
+					acf.fields.oembed.search_success( $el, json );
+					
+					
+					// no results?
+					if( !json || !json.embed )
+					{
+						acf.fields.oembed.search_error( $el );
+					}
+					
+				}
+			});
+			
+			
+			// update el data
+			$el.data('xhr', xhr);
+			
+		},
+		
+		search_success : function( $el, json ){
+		
+			$el.removeClass('has-error').addClass('has-value');
+			
+			$el.find('[data-name="value-input"]').val( json.serialized );
+			$el.find('[data-name="value-title"]').html( json.url );
+			$el.find('[data-name="value-embed"]').html( json.embed );
+			
+		},
+		
+		search_error : function( $el ){
+			
+			// update class
+	        $el.removeClass('has-value').addClass('has-error');
+			
+		},
+		
+		clear : function( $el ){
+			
+			// update class
+	        $el.removeClass('has-error has-value');
+			
+			
+			// clear search
+			$el.find('[data-name="search-input"]').val('');
+			
+			
+			// clear inputs
+			$el.find('[data-name="value-input"]').val( '' );
+			$el.find('[data-name="value-title"]').html( '' );
+			$el.find('[data-name="value-embed"]').html( '' );
+			
+		},
+		
+		edit : function( $el ){ 
+			
+			// update class
+	        $el.addClass('is-editing');
+	        
+	        
+	        // set url and focus
+	        var url = $el.find('[data-name="value-title"]').text();
+	        
+	        $el.find('[data-name="search-input"]').val( url ).focus()
+			
+		},
+		
+		blur : function( $el ){ 
+			
+			$el.removeClass('is-editing');
+			
+			
+	        // set url and focus
+	        var old_url = $el.find('[data-name="value-title"]').text(),
+	        	new_url = $el.find('[data-name="search-input"]').val(),
+	        	embed = $el.find('[data-name="value-embed"]').html();
+	        
+	        
+	        // detect change
+	        if( new_url != old_url )
+	        {
+		        this.search( $el );
+	        }
+	        			
+		}
+	};
+	
+	
+	/*
+	*  acf/setup_fields
+	*
+	*  run init function on all elements for this field
+	*
+	*  @type	event
+	*  @date	20/07/13
+	*
+	*  @param	{object}	e		event object
+	*  @param	{object}	el		DOM object which may contain new ACF elements
+	*  @return	N/A
+	*/
+	
+	/*
+acf.add_action('ready append', function( $el ){
+		
+		
+		// add tabs
+		acf.get_fields({ type : 'oembed'}, $el).each(function(){
+			
+			acf.fields.oembed.add_oembed( $(this) );
+			
+		});
+		
+		
+		// activate first tab
+		acf.fields.tab.refresh( $el );
+		
+	});
+*/
+	
+	
+	/*
+	*  Events
+	*
+	*  jQuery events for this field
+	*
+	*  @type	function
+	*  @date	1/03/2011
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	$(document).on('click', '.acf-oembed [data-name="search-button"]', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.oembed.search( $(this).closest('.acf-oembed') );
+		
+		$(this).blur();
+		
+	});
+	
+	$(document).on('click', '.acf-oembed [data-name="clear-button"]', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.oembed.clear( $(this).closest('.acf-oembed') );
+		
+		$(this).blur();
+		
+	});
+	
+	$(document).on('click', '.acf-oembed [data-name="value-title"]', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.oembed.edit( $(this).closest('.acf-oembed') );
+			
+	});
+	
+	$(document).on('keypress', '.acf-oembed [data-name="search-input"]', function( e ){
+		
+		// don't submit form
+		if( e.which == 13 )
+		{
+			e.preventDefault();
+		}
+		
+	});
+	
+	
+	$(document).on('keyup', '.acf-oembed [data-name="search-input"]', function(e){
+		
+		acf.fields.oembed.search( $(this).closest('.acf-oembed') );
+		
+	});
+	
+	$(document).on('blur', '.acf-oembed [data-name="search-input"]', function(e){
+		
+		acf.fields.oembed.blur( $(this).closest('.acf-oembed') );
+		
+	});
+		
+	
+
+})(jQuery);
+
+/* **********************************************
+     Begin post_object.js
+********************************************** */
+
+(function($){
+	
+	/*
+	*  Post Object
+	*
+	*  static model and events for this field
+	*
+	*  @type	event
+	*  @date	1/06/13
+	*
+	*/
+	
+	acf.fields.post_object = {
+		
+		$el : null,
+		$select : null,
+		$input : null,
+		
+		o : {},
+		
+		set : function( o ){
+			
+			// merge in new option
+			$.extend( this, o );
+			
+			
+			// find input
+			this.$select = this.$el.find('select');
+			
+			
+			// get options
+			this.o = acf.get_atts( this.$select );
+			
+			
+			// return this for chaining
+			return this;
+			
+		},
+		init : function(){
+			
+			// read choices
+			var choices = [],
+				val = [];
+			
+			this.$select.find('option:selected').each(function(){
+				
+				choices.push({
+					id : $(this).attr('value'),
+					text : $(this).text()
+				});
+				
+				val.push( $(this).attr('value') );
+				
+			});
+			
+			
+			// multiple
+			if( this.o.multiple )
+			{
+				var name = this.$select.attr('name').replace('[]', '');
+				this.$select.attr('name', name);
+			}
+			else
+			{
+				// single
+				choices = choices[0];
+			}
+			
+			
+			// generate input
+			var input = '<input type="hidden" name="%name%" id="%id%" value="%value%" />';
+			
+				input = input.replace( '%name%',	this.$select.attr('name') );
+				input = input.replace( '%id%',		this.$select.attr('id') );
+				input = input.replace( '%value%',	val.join(',') );
+				
+			this.$input = $(input);
+			
+			
+			
+			// replace DOM
+			this.$select.replaceWith( this.$input );
+			
+			
+			// vars
+			var data = {
+				action		: 'acf/fields/post_object/query',
+				field_key	: this.$el.attr('data-key'),
+				nonce		: acf.get('nonce'),
+				post_id		: acf.get('post_id'),
+			};
+						
+			
+			// args
+			var args = {
+				
+				width		: '100%',
+				placeholder	: this.o.placeholder,
+				allowClear	: 1,
+				multiple	: this.o.multiple,
+				ajax		: {
+					url			: acf.get('ajaxurl'),
+					dataType	: 'json',
+					type		: 'get',
+					cache		: true,
+					data		: function (term, page) {
+						
+						//add search term
+						data.s = term;
+						/*
+console.log('-- data --')
+						console.log(term);
+						console.log(page);
+*/
+						
+						return data;
+						
+					},
+					results		: function (data, page) {
+						
+						/*
+console.log('-- results --')
+						console.log(data);
+						console.log(page);
+*/
+
+						return { results: data };
+					}
+				},
+				initSelection : function (element, callback) {
+				
+			        callback( choices );
+			        
+			    }
+				
+			};
+			
+			
+			// add select2
+			this.$input.select2( args );
+			
+			
+			var _this = this;
+			
+			// sortable?
+			if( this.o.sortable )
+			{
+			
+				this.$input.select2("container").find("ul.select2-choices").sortable({
+					 containment: 'parent',
+					 start: function() {
+					 	_this.$input.select2("onSortStart");
+					 },
+					 update: function() {
+					 	_this.$input.select2("onSortEnd")
+					 }
+				});
+			}
+			
+		}
+	};
+	
+	
+	/*
+	*  acf/setup_fields
+	*
+	*  run init function on all elements for this field
+	*
+	*  @type	event
+	*  @date	20/07/13
+	*
+	*  @param	{object}	e		event object
+	*  @param	{object}	el		DOM object which may contain new ACF elements
+	*  @return	N/A
+	*/
+	
+	acf.add_action('ready append', function( $el ){
+		
+		acf.get_fields({ type : 'post_object'}, $el).each(function(){
+			
+			acf.fields.post_object.set({ $el : $(this) }).init();
+			
+		});
+		
+	});
+	
+
+})(jQuery);
+
+/* **********************************************
+     Begin radio.js
+********************************************** */
+
+(function($){
+	
+	/*
+	*  Radio
+	*
+	*  static model and events for this field
+	*
+	*  @type	event
+	*  @date	1/06/13
+	*
+	*/
+	
+	acf.fields.radio = {
+		
+		$el : null,
+		$input : null,
+		$other : null,
+		
+		set : function( o ){
+			
+			// merge in new option
+			$.extend( this, o );
+			
+			
+			// find input
+			this.$input = this.$el.find('input[type="radio"]:checked');
+			this.$other = this.$el.find('input[type="text"]');
+			
+			
+			// return this for chaining
+			return this;
+			
+		},
+		
+		change : function(){
+			
+			// label classes
+			this.$el.find('li').removeClass('active');
+			this.$input.closest('li').addClass('active');
+			
+			
+			if( this.$input.val() == 'other' )
+			{
+				this.$other.attr('name', this.$input.attr('name'));
+				this.$other.show();
+			}
+			else
+			{
+				this.$other.attr('name', '');
+				this.$other.hide();
+			}
+		}
+	};
+	
+	
+	/*
+	*  Events
+	*
+	*  jQuery events for this field
+	*
+	*  @type	function
+	*  @date	1/03/2011
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	$(document).on('change', '.acf-radio-list input[type="radio"]', function( e ){
+		
+		acf.fields.radio.set({ $el : $(this).closest('.acf-radio-list') }).change();
+		
+	});
+	
+
+})(jQuery);
+
+/* **********************************************
+     Begin relationship.js
+********************************************** */
+
+(function($){
+	
+	/*
+	*  Relationship
+	*
+	*  static model for this field
+	*
+	*  @type	event
+	*  @date	1/06/13
+	*
+	*/
+	
+	acf.fields.relationship = {
+		
+		$el : null,
+		$wrap : null,
+		$input : null,
+		$filters : null,
+		$choices : null,
+		$values : null,
+				
+		o : {},
+		
+		set : function( o ){
+			
+			// merge in new option
+			$.extend( this, o );
+			
+			
+			// find elements
+			this.$wrap = this.$el.find('.acf-relationship');
+			this.$input = this.$wrap.find('.acf-hidden input');
+			this.$choices = this.$wrap.find('.choices'),
+			this.$values = this.$wrap.find('.values');
+			
+			
+			// get options
+			this.o = acf.get_atts( this.$wrap );
+			
+			
+			// return this for chaining
+			return this;
+			
+		},
+		
+		init : function(){
+			
+			// reference
+			var _this = this;
+			
+			
+			// right sortable
+			this.$values.children('.list').sortable({
+				//axis					:	'y',
+				items					:	'li',
+				forceHelperSize			:	true,
+				forcePlaceholderSize	:	true,
+				scroll					:	true,
+				update					:	function(){
+					
+					_this.$input.trigger('change');
+					
+				}
+			});
+			
+			
+			// ajax fetch values for left side
+			this.fetch();
+					
+		},
+		
+		fetch : function(){
+			
+			// reference
+			var _this = this,
+				$el = this.$el;
+			
+			
+			// add loading class, stops scroll loading
+			this.$choices.children('.list').html('<p>' + acf._e('relationship', 'loading') + '...</p>');
+			
+			
+			// vars
+			var data = {
+				action		: 'acf/fields/relationship/query',
+				field_key	: this.$el.attr('data-key'),
+				nonce		: acf.get('nonce'),
+				post_id		: acf.get('post_id'),
+			};
+			
+			
+			// merge in wrap data
+			$.extend(data, this.o);
+
+			
+			// abort XHR if this field is already loading AJAX data
+			if( this.$el.data('xhr') )
+			{
+				this.$el.data('xhr').abort();
+			}
+			
+			
+			// get results
+		    var xhr = $.ajax({
+		    	url			: acf.get('ajaxurl'),
+				dataType	: 'json',
+				type		: 'get',
+				cache		: true,
+				data		: data,
+				success			:	function( json ){
+					
+					// render
+					_this.set({ $el : $el }).render( json );
+					
+				}
+			});
+			
+			
+			// update el data
+			this.$el.data('xhr', xhr);
+			
+		},
+		
+		render : function( json ){
+			
+			// reference
+			var _this = this;
+			
+			
+			// no results?
+			if( ! json || ! json.length )
+			{
+				this.$choices.children('.list').html( '<li><p>' + acf._e('relationship', 'empty') + '</p></li>' );
+
+				return;
+			}
+			
+			
+			// append new results
+			this.$choices.children('.list').html( this.walker(json) );
+			
+						
+			// apply .disabled to left li's
+			this.$values.find('.acf-relationship-item').each(function(){
+				
+				var id = $(this).attr('data-id');
+				
+				_this.$choices.find('.acf-relationship-item[data-id="' + id + '"]').addClass('disabled');
+				
+			});
+			
+			
+			// underline search match
+			if( this.o.s )
+			{
+				var s = this.o.s;
+				
+				this.$choices.find('.acf-relationship-item:contains("' + s + '")').each(function(){
+					
+					var html = $(this).html().replace( s, '<span class="match">' + s + '</span>');
+					
+					$(this).html( html );
+				});
+				
+			}
+			
+		},
+		
+		walker : function( data ){
+			
+			// vars
+			var s = '';
+			
+			
+			// loop through data
+			if( $.isArray(data) )
+			{
+				for( var k in data )
+				{
+					s += this.walker( data[ k ] );
+				}
+			}
+			else if( $.isPlainObject(data) )
+			{
+				// optgroup
+				if( data.children !== undefined )
+				{
+					s += '<li><span class="acf-relationship-label">' + data.text + '</span><ul class="acf-bl">';
+					
+						s += this.walker( data.children );
+					
+					s += '</ul></li>';
+				}
+				else
+				{
+					s += '<li><span class="acf-relationship-item" data-id="' + data.id + '">' + data.text + '</span></li>';
+				}
+			}
+			
+			
+			return s;
+		},
+		
+		add : function( $span ){
+			
+			// max posts
+			if( this.o.max > 0 )
+			{
+				if( this.$values.find('.acf-relationship-item').length >= this.o.max )
+				{
+					alert( acf.l10n.relationship.max.replace('{max}', this.o.max) );
+					return false;
+				}
+			}
+			
+			
+			// can be added?
+			if( $span.hasClass('disabled') )
+			{
+				return false;
+			}
+			
+			
+			// disable
+			$span.addClass('disabled');
+			
+			
+			// template
+			var data = {
+					value	:	$span.attr('data-id'),
+					text	:	$span.html(),
+					name	:	this.$input.attr('name')
+				},
+				tmpl = _.template(acf.l10n.relationship.tmpl_li, data);
+			
+			
+	
+			// add new li
+			this.$values.children('.list').append( tmpl )
+			
+			
+			// trigger change on new_li
+			this.$input.trigger('change');
+			
+			
+			// validation
+			this.$el.removeClass('error');
+			
+		},
+		remove : function( $span ){
+			
+			// vars
+			var id = $span.attr('data-id');
+			
+			
+			// remove
+			$span.parent('li').remove();
+			
+			
+			// show
+			this.$choices.find('.acf-relationship-item[data-id="' + id + '"]').removeClass('disabled');
+			
+			
+			// trigger change on new_li
+			this.$input.trigger('change');
+			
+		}
+		
+	};
+	
+	
+	/*
+	*  acf/setup_fields
+	*
+	*  run init function on all elements for this field
+	*
+	*  @type	event
+	*  @date	20/07/13
+	*
+	*  @param	{object}	e		event object
+	*  @param	{object}	el		DOM object which may contain new ACF elements
+	*  @return	N/A
+	*/
+	
+	acf.add_action('ready append', function( $el ){
+		
+		acf.get_fields({ type : 'relationship'}, $el).each(function(){
+			
+			acf.fields.relationship.set({ $el : $(this) }).init();
+			
+		});
+		
+	});
+	
+	
+	/*
+	*  Events
+	*
+	*  jQuery events for this field
+	*
+	*  @type	function
+	*  @date	1/03/2011
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	$(document).on('keypress', '.acf-relationship .filters [data-filter]', function( e ){
+		
+		// don't submit form
+		if( e.which == 13 )
+		{
+			e.preventDefault();
+		}
+		
+	});
+	
+	
+	$(document).on('change keyup', '.acf-relationship .filters [data-filter]', function(e){
+		
+		// vars
+		var val = $(this).val(),
+			filter = $(this).attr('data-filter'),
+			$wrap = $(this).closest('.acf-relationship');
+			$el = $wrap.closest('.acf-field');
+			
+		
+		// Bail early if filter has not changed
+		if( $wrap.attr('data-' + filter) == val )
+		{
+			return;
+		}
+		
+		
+		// update attr
+		$wrap.attr('data-' + filter, val);
+		
+	    
+	    // fetch
+	    acf.fields.relationship.set({ $el : $el }).fetch();
+		
+	});
+
+	
+	$(document).on('click', '.acf-relationship .choices .acf-relationship-item', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.relationship.set({ $el : $(this).closest('.acf-field') }).add( $(this) );
+		
+		$(this).blur();
+		
+	});
+	
+	$(document).on('click', '.acf-relationship .values .acf-icon', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.relationship.set({ $el : $(this).closest('.acf-field') }).remove( $(this).closest('.acf-relationship-item') );
+		
+		$(this).blur();
+		
+	});
+	
+	
+	
+	
+
+})(jQuery);
+
+/* **********************************************
+     Begin select.js
+********************************************** */
+
+(function($){
+	
+	/*
+	*  Select
+	*
+	*  static model and events for this field
+	*
+	*  @type	event
+	*  @date	1/06/13
+	*
+	*/
+	
+	acf.fields.select = {
+		
+		$el : null,
+		$select : null,
+		
+		o : {},
+		
+		set : function( o ){
+			
+			// merge in new option
+			$.extend( this, o );
+			
+			
+			// find input
+			this.$select = this.$el.find('select');
+			
+			
+			// get options
+			this.o = acf.get_atts( this.$select );
+			
+			
+			// return this for chaining
+			return this;
+			
+		},
+		
+		init : function(){
+			
+			// bail early if no ui
+			if( ! this.o.ui )
+			{
+				return;
+			}
+			
+			
+			// construct args
+			var args = {
+				width		: '100%',
+				allowClear	: this.o.allow_null,
+				placeholder	: this.o.placeholder
+			};
+			
+			
+			// remove the blank option as we have a clear all button!
+			if( this.o.allow_null )
+			{
+				this.$select.find('option[value=""]').remove();
+			}
+			
+			
+			// add select2
+			this.$select.select2( args );
+			
+		}
+	};
+	
+	
+	/*
+	*  acf/setup_fields
+	*
+	*  run init function on all elements for this field
+	*
+	*  @type	event
+	*  @date	20/07/13
+	*
+	*  @param	{object}	e		event object
+	*  @param	{object}	el		DOM object which may contain new ACF elements
+	*  @return	N/A
+	*/
+	
+	acf.add_action('ready append', function( $el ){
+		
+		acf.get_fields({ type : 'select'}, $el).each(function(){
+			
+			acf.fields.select.set({ $el : $(this) }).init();
+			
+		});
+		
+		acf.get_fields({ type : 'user'}, $el).each(function(){
+			
+			acf.fields.select.set({ $el : $(this) }).init();
+			
+		});
+		
+	});
+	
+	
+
+})(jQuery);
+
+/* **********************************************
+     Begin tab.js
+********************************************** */
+
+(function($){
+
+	acf.fields.tab = {
+		
+		add_group : function( $wrap ){
+			
+			// vars
+			var html = '';
+			
+			
+			// generate html
+			if( $wrap.is('tbody') )
+			{
+				html = '<tr class="acf-tab-wrap"><td colspan="2"><ul class="acf-hl acf-tab-group"></ul></td></tr>';
+			}
+			else
+			{
+				html = '<div class="acf-tab-wrap"><ul class="acf-hl acf-tab-group"></ul></div>';
+			}
+			
+			
+			// append html
+			acf.get_fields({ type : 'tab'}, $wrap).first().before( html );
+			
+		},
+		
+		add_tab : function( $tab ){
+			
+			// vars
+			var $field	= acf.get_field_el( $tab ),
+				$wrap	= $field.parent(),
+				
+				key		= acf.get_field_data( $field, 'key'),
+				label 	= $tab.text();
+				
+				
+			// create tab group if it doesnt exist
+			if( ! $wrap.children('.acf-tab-wrap').exists() )
+			{
+				this.add_group( $wrap );
+			}
+			
+			// add tab
+			$wrap.children('.acf-tab-wrap').find('.acf-tab-group').append('<li><a class="acf-tab-button" href="#" data-key="' + key + '">' + label + '</a></li>');
+			
+		},
+		
+		toggle : function( $a ){
+			
+			// reference
+			var _this = this;
+			
+			
+			// vars
+			var $wrap	= $a.closest('.acf-tab-wrap').parent(),
+				key		= $a.attr('data-key');
+			
+			
+			// classes
+			$a.parent('li').addClass('active').siblings('li').removeClass('active');
+			
+			
+			// hide / show
+			acf.get_fields({ type : 'tab'}, $wrap).each(function(){
+				
+				// vars
+				var $tab = $(this);
+					
+				
+				if( acf.is_field( $(this), {key : key} ) )
+				{
+					_this.show_tab_fields( $(this) );
+				}
+				else
+				{
+					_this.hide_tab_fields( $(this) );
+				}
+				
+			});
+			
+		},
+		
+		show_tab_fields : function( $field ) {
+			
+			//console.log('show tab fields %o', $field);
+			$field.nextUntil('.acf-field[data-type="tab"]').each(function(){
+				
+				$(this).removeClass('hidden_by_tab');
+				acf.do_action('show_field', $(this));
+				
+			});
+		},
+		
+		hide_tab_fields : function( $field ) {
+			
+			$field.nextUntil('.acf-field[data-type="tab"]').each(function(){
+				
+				$(this).addClass('hidden_by_tab');
+				acf.do_action('hide_field', $(this));
+				
+			});
+		},
+		
+		refresh : function( $el ){
+			
+			// reference
+			var _this = this;
+			
+			
+			// trigger
+			$el.find('.acf-tab-group').each(function(){
+				
+				$(this).find('.acf-tab-button:first').each(function(){
+					
+					_this.toggle( $(this) );
+					
+				});
+				
+			});
+			
+		}
+		
+	};
+	
+	
+	/*
+	*  acf/setup_fields
+	*
+	*  run init function on all elements for this field
+	*
+	*  @type	event
+	*  @date	20/07/13
+	*
+	*  @param	{object}	e		event object
+	*  @param	{object}	el		DOM object which may contain new ACF elements
+	*  @return	N/A
+	*/
+	
+	acf.add_action('ready append', function( $el ){
+		
+		
+		// add tabs
+		acf.get_fields({ type : 'tab'}, $el).each(function(){
+			
+			acf.fields.tab.add_tab( $(this) );
+			
+		});
+		
+		
+		// activate first tab
+		acf.fields.tab.refresh( $el );
+		
+	});
+	
+	
+		
+	
+	/*
+	*  Events
+	*
+	*  jQuery events for this field
+	*
+	*  @type	function
+	*  @date	1/03/2011
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	$(document).on('click', '.acf-tab-button', function( e ){
+		
+		e.preventDefault();
+		
+		acf.fields.tab.toggle( $(this) );
+		
+		$(this).trigger('blur');
+			
+	});
+	
+	
+	acf.add_action('hide_field', function( $field ){
+		
+		// validate
+		if( ! acf.is_field($field, {type : 'tab'}) )
+		{
+			return;
+		}
+		
+		
+		// vars
+		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + acf.get_field_data($field, 'key') + '"]');
+		
+		
+		// if tab is already hidden, then ignore the following functiolnality
+		if( $tab.is(':hidden') )
+		{
+			return;
+		}
+		
+		
+		// visibility
+		$tab.parent().hide();
+		
+		
+		if( $tab.parent().siblings(':visible').exists() )
+		{
+			// if the $target to be hidden is a tab button, lets toggle a sibling tab button
+			$tab.parent().siblings(':visible').first().children('a').trigger('click');
+		}
+		else
+		{
+			// no onther tabs
+			acf.fields.tab.hide_tab_fields( $field );
+		}
+		
+	});
+	
+	
+	acf.add_action('show_field', function( $field ){
+		
+		// validate
+		if( ! acf.is_field($field, {type : 'tab'}) )
+		{
+			return;
+		}
+		
+		
+		// vars
+		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + acf.get_field_data($field, 'key') + '"]');
+		
+		
+		// if tab is already visible, then ignore the following functiolnality
+		if( $tab.is(':visible') )
+		{
+			return;
+		}
+		
+		
+		// visibility
+		$tab.parent().show();
+		
+		
+		// if this is the active tab
+		if( $tab.parent().hasClass('active') )
+		{
+			$tab.trigger('click');
+			return;
+		}
+		
+		
+		// if the sibling active tab is actually hidden by conditional logic, take ownership of tabs
+		if( $tab.parent().siblings('.active').hasClass('acf-conditional_logic-hide') )
+		{
+			// show this tab group
+			$tab.trigger('click');
+			return;
+		}
+		
+
+	});
+	
+	
+
+})(jQuery);
+
+/* **********************************************
+     Begin validation.js
+********************************************** */
+
+(function($){
+        
+	acf.validation = {
+		
+		// vars
+		active	: 1,
+		ignore	: 0,
+		
+		
+		// classes
+		error_class : 'error',
+		message_class : 'acf-error-message',
+		
+		
+		// el
+		$trigger : null,
+		
+		
+		// functions
+		init : function(){
+			
+			// bail early if disabled
+			if( this.active == 0 )
+			{
+				return;
+			}
+			
+			
+			// add events
+			this.add_events();
+		},
+		
+		add_error : function( $field, message ){
+			
+			// add class
+			$field.addClass(this.error_class);
+			
+			
+			// add message
+			if( message !== undefined )
+			{
+				$field.children('.acf-input').children('.' + this.message_class).remove();
+				$field.children('.acf-input').prepend('<div class="' + this.message_class + '"><p>' + message + '</p></div>');
+			}
+			
+			
+			// hook for 3rd party customization
+			acf.do_action('add_field_error', $field);
+		},
+		
+		remove_error : function( $field ){
+			
+			// var
+			$message = $field.children('.acf-input').children('.' + this.message_class);
+			
+			
+			// remove class
+			$field.removeClass(this.error_class);
+			
+			
+			// remove message
+			setTimeout(function(){
+				
+				acf.remove_el( $message );
+				
+			}, 250);
+			
+			
+			// hook for 3rd party customization
+			acf.do_action('remove_field_error', $field);
+		},
+		
+		fetch : function( $form ){
+			
+			// reference
+			var _this = this;
+			
+			
+			// vars
+			var data = acf.serialize_form( $form );
+				
+			
+			// append AJAX action		
+			data.action = 'acf/validate_save_post';
+			
+				
+			// ajax
+			$.ajax({
+				url			: acf.get('ajaxurl'),
+				data		: data,
+				type		: 'post',
+				dataType	: 'json',
+				success		: function( json ){
+					
+					_this.complete( $form, json );
+					
+				}
+			});
+			
+		},
+		
+		complete : function( $form, json ){
+			
+			// reference
+			var _this = this;
+			
+			
+			// remove previous error message
+			$form.children('.' + this.message_class).remove();
+			
+			
+			// validate json
+			if( !json || json.result == 1)
+			{
+				// remove hidden postboxes (this will stop them from being posted to save)
+				$form.find('.acf-postbox:hidden').remove();
+					
+					
+				// bypass JS and submit form
+				this.ignore = 1;
+				
+				
+				// submit form again
+				if( this.$trigger )
+				{
+					this.$trigger.click();
+				}
+				else
+				{
+					$form.submit();
+				}
+				
+				
+				// end function
+				return;
+			}
+			
+			
+			// hide ajax stuff on submit button
+			if( $('#submitdiv').exists() )
+			{
+				$('#save-post').removeClass('button-disabled');
+				$('#publish').removeClass('button-primary-disabled');
+				$('#ajax-loading').removeAttr('style');
+				$('#publishing-action .spinner').hide();
+			}
+			
+			
+			// show error message	
+			$form.prepend('<div class="' + this.message_class + '"><p>' + json.message + '</p></div>');
+			
+			
+			// show field error messages
+			$.each( json.errors, function( k, v ){
+				
+				var $field = $('.acf-field[data-key="' + k + '"]');
+				
+				_this.add_error( $field, v );
+				
+			});
+						
+			
+		},
+		
+		add_events : function(){
+			
+			var _this = this;
+			
+			
+			// focus
+			$(document).on('focus click change', '.acf-field.required input, .acf-field.required textarea, .acf-field.required select', function( e ){
+				
+				_this.remove_error( $(this).closest('.acf-field') );
+				
+			});
+			
+			
+			// click save
+			$(document).on('click', '#save-post', function(){
+				
+				_this.ignore = 1;
+				_this.$trigger = $(this);
+				
+			});
+			
+			
+			// click publish
+			$(document).on('click', '#publish', function(){
+				
+				_this.$trigger = $(this);
+				
+			});
+			
+			
+			// submit
+			$(document).on('submit', 'form', function( e ){
+				
+				// bail early if this form does not contain ACF data
+				if( ! $(this).find('#acf-form-data').exists() )
+				{
+					return true;
+				}
+				
+				
+				// ignore this submit?
+				if( _this.ignore == 1 )
+				{
+					_this.ignore = 0;
+					return true;
+				}
+				
+				
+				// bail early if disabled
+				if( _this.active == 0 )
+				{
+					return true;
+				}
+				
+				
+				// prevent default
+				e.preventDefault();
+				
+				
+				// run validation
+				_this.fetch( $(this) );
+								
+			});
+			
+		}
+		
+	};
+	
+	
+	acf.add_action('ready', function(){
+		
+		//acf.validation.init();
+		
+	});
+	
+
+})(jQuery);
+
+/* **********************************************
+     Begin wysiwyg.js
+********************************************** */
+
+(function($){
+	
+	/*
+	*  WYSIWYG
+	*
+	*  jQuery functionality for this field type
+	*
+	*  @type	object
+	*  @date	20/07/13
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	acf.fields.wysiwyg = {
+		
+		$el : null,
+		$textarea : null,
+		
+		o : {},
+		
+		set : function( o ){
+			
+			// merge in new option
+			$.extend( this, o );
+			
+			
+			// find textarea
+			this.$textarea = this.$el.find('textarea');
+			
+			
+			// get options
+			this.o = acf.get_atts( this.$el );
+			
+			
+			// add ID
+			this.o.id = this.$textarea.attr('id');
+			
+			
+			// return this for chaining
+			return this;
+			
+		},
+		has_tinymce : function(){
+		
+			var r = false;
+			
+			if( typeof(tinyMCE) == "object" )
+			{
+				r = true;
+			}
+			
+			return r;
+			
+		},
+		init : function(){
+			
+			// temp store tinyMCE.settings
+			var backup = $.extend( {}, tinyMCE.settings );
+			
+			
+			// reset tinyMCE settings
+			tinyMCE.settings.theme_advanced_buttons1 = '';
+			tinyMCE.settings.theme_advanced_buttons2 = '';
+			tinyMCE.settings.theme_advanced_buttons3 = '';
+			tinyMCE.settings.theme_advanced_buttons4 = '';
+			
+			if( acf.isset_object( this.toolbars, this.o.toolbar ) )
+			{
+				$.each( this.toolbars[ this.o.toolbar ], function( k, v ){
+					tinyMCE.settings[ k ] = v;
+				})
+			}
+				
+			
+			// hook for 3rd party customization
+			tinyMCE.settings = acf.apply_filters('wysiwyg_tinymce_settings', tinyMCE.settings, this.o.id);
+			
+			
+			// add functionality back in
+			tinyMCE.execCommand("mceAddControl", false, this.o.id);
+				
+				
+			// add events (click, focus, blur) for inserting image into correct editor
+			this.add_events();
+				
+			
+			// restore tinyMCE.settings
+			tinyMCE.settings = backup;
+			
+			
+			// set active editor to null
+			wpActiveEditor = null;
+					
+		},
+		add_events : function(){
+		
+			// vars
+			var id = this.o.id,
+				editor = tinyMCE.get( id );
+			
+			
+			// validate
+			if( !editor )
+			{
+				return;
+			}
+			
+			
+			// vars
+			var	$container = $('#wp-' + id + '-wrap'),
+				$body = $( editor.getBody() ),
+				$textarea = $( editor.getElement() );
+	
+			
+			// events
+			$container.on('click', function(){
+				
+				acf.validation.remove_error( $container.closest('.acf-field') );
+				
+			});
+			
+			$body.on('focus', function(){
+			
+				wpActiveEditor = id;
+		
+				acf.validation.remove_error( $container.closest('.acf-field') );
+				
+			});
+			
+			$body.on('blur', function(){
+			
+				wpActiveEditor = null;
+				
+				// update the hidden textarea
+				// - This fixes a but when adding a taxonomy term as the form is not posted and the hidden tetarea is never populated!
+
+				// save to textarea	
+				editor.save();
+				
+				
+				// trigger change on textarea
+				$textarea.trigger('change');
+				
+			});
+			
+			
+		},
+		destroy : function(){
+			
+			// vars
+			var id = this.o.id,
+				editor = tinyMCE.get( id );
+			
+			
+			// Remove tinymcy functionality.
+			// Due to the media popup destroying and creating the field within such a short amount of time,
+			// a JS error will be thrown when launching the edit window twice in a row.
+			try
+			{
+				tinyMCE.execCommand("mceRemoveControl", false, id);
+			} 
+			catch(e)
+			{
+				console.log( e );
+			}
+			
+			
+			// set active editor to null
+			wpActiveEditor = null;
+			
+		}
+		
+	};
+	
+	
+	/*
+	*  acf/setup_fields
+	*
+	*  run init function on all elements for this field
+	*
+	*  @type	event
+	*  @date	20/07/13
+	*
+	*  @param	{object}	e		event object
+	*  @param	{object}	el		DOM object which may contain new ACF elements
+	*  @return	N/A
+	*/
+	
+	acf.add_action('ready', function( $el ){
+		
+		// validate
+		if( ! acf.fields.wysiwyg.has_tinymce() )
+		{
+			return;
+		}
+		
+		
+		// events
+		acf.add_action('remove', function( $el ){
+		
+			acf.get_fields({ type : 'wysiwyg'}, $el).each(function(){
+				
+				acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).destroy();
+				
+			});
+			
+		}).add_action('sortstart', function( $el ){
+		
+			acf.get_fields({ type : 'wysiwyg'}, $el).each(function(){
+				
+				acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).destroy();
+				
+			});
+			
+		}).add_action('sortstop', function( $el ){
+		
+			acf.get_fields({ type : 'wysiwyg'}, $el).each(function(){
+				
+				acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).init();
+				
+			});
+			
+		}).add_action('load', function( $el ){
+		
+			// vars
+			var wp_content = $('#wp-content-wrap').exists(),
+				wp_acf_settings = $('#wp-acf_settings-wrap').exists()
+				mode = 'tmce';
+			
+			
+			// has_editor
+			if( wp_acf_settings )
+			{
+				// html_mode
+				if( $('#wp-acf_settings-wrap').hasClass('html-active') )
+				{
+					mode = 'html';
+				}
+			}
+			
+			
+			setTimeout(function(){
+				
+				// trigger click on hidden wysiwyg (to get in HTML mode)
+				if( wp_acf_settings && mode == 'html' )
+				{
+					$('#acf_settings-tmce').trigger('click');
+				}
+				
+			}, 1);
+			
+			
+			setTimeout(function(){
+				
+				// vars
+				var $fields = acf.get_fields({ type : 'wysiwyg'}, $el);
+				
+				
+				// Destory all WYSIWYG fields
+				// This hack will fix a problem when the WP popup is created and hidden, then the ACF popup (image/file field) is opened
+				$fields.each(function(){
+					
+					acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).destroy();
+					
+				});
+				
+				
+				// Add WYSIWYG fields
+				setTimeout(function(){
+					
+					$fields.each(function(){
+					
+						acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).init();
+						
+					});
+					
+				}, 0);
+				
+			}, 10);
+			
+			
+			setTimeout(function(){
+				
+				// trigger html mode for people who want to stay in HTML mode
+				if( wp_acf_settings && mode == 'html' )
+				{
+					$('#acf_settings-html').trigger('click');
+				}
+				
+				// Add events to content editor
+				if( wp_content )
+				{
+					acf.fields.wysiwyg.set({ $el : $('#wp-content-wrap') }).add_events();
+				}
+				
+				
+			}, 11);
+			
+		});
+		
+		
+	});
+	
+	
+	/*
+	*  Full screen
+	*
+	*  @description: this hack will hide the 'image upload' button in the wysiwyg full screen mode if the field has disabled image uploads!
+	*  @since: 3.6
+	*  @created: 26/02/13
+	*/
+	
+	$(document).on('click', '.acfacf.fields.wysiwyg a.mce_fullscreen', function(){
+		
+		// vars
+		var wysiwyg = $(this).closest('.acfacf.fields.wysiwyg'),
+			upload = wysiwyg.attr('data-upload');
+		
+		if( upload == 'no' )
+		{
+			$('#mce_fullscreen_container td.mceToolbar .mce_add_media').remove();
+		}
+		
+	});
+	
+
+})(jQuery);
