@@ -46,7 +46,7 @@ class acf_field
 		$this->add_filter('acf/update_value/type=' . $this->name, array($this, 'update_value'), 10, 3);
 		$this->add_filter('acf/delete_value/type=' . $this->name, array($this, 'delete_value'), 10, 3);
 		$this->add_filter('acf/format_value/type=' . $this->name, array($this, 'format_value'), 10, 3);
-		$this->add_filter('acf/format_value_for_api/type=' . $this->name, array($this, 'format_value_for_api'), 10, 3);
+		$this->add_filter('acf/format_value_api/type=' . $this->name, array($this, 'format_value_api'), 10, 3);
 		
 		
 		// field

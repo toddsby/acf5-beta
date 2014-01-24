@@ -13,11 +13,11 @@
 *  @param	$post_id (int)
 *  @param	$field (array)
 *  @param	$format (boolean)
-*  @param	$format_api (boolean)
+*  @param	$format_template (boolean)
 *  @return	(mixed)
 */
 
-function acf_get_value( $post_id, $field, $format = false, $format_api = false ) {
+function acf_get_value( $post_id, $field, $format = false, $format_template = false ) {
 	
 	// vars
 	$value = null;
@@ -106,10 +106,10 @@ function acf_get_value( $post_id, $field, $format = false, $format_api = false )
 	
 	
 	// format
-	if( $format_api )
+	if( $format_template )
 	{
-		$value = apply_filters( "acf/format_value_api", $value, $post_id, $field );
-		$value = apply_filters( "acf/format_value_api/type={$field['type']}", $value, $post_id, $field );
+		$value = apply_filters( "acf/format_value_for_template", $value, $post_id, $field );
+		$value = apply_filters( "acf/format_value_for_template/type={$field['type']}", $value, $post_id, $field );
 	}
 	elseif( $format )
 	{
