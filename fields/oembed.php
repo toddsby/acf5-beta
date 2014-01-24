@@ -39,6 +39,38 @@ class acf_field_oembed extends acf_field
 	
 	
 	/*
+	*  wp_oembed_get
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	24/01/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function wp_oembed_get( $url = '', $width = 0, $height = 0 ) {
+		
+		// vars
+		$embed = '';
+		$res = array(
+			'width'		=> $width,
+			'height'	=> $height
+		);
+		
+		
+		// get emebed
+		$embed = @wp_oembed_get( $url, $res );
+		
+		
+		// return
+		return $embed;
+	}
+	
+	
+	/*
 	*  ajax_search
 	*
 	*  description
@@ -62,10 +94,6 @@ class acf_field_oembed extends acf_field
 		));
 		
 		
-		// get embed res
-		$res = acf_extract_vars( $args, array('width', 'height') );
-		
-		
 		// validate
 		if( ! wp_verify_nonce($args['nonce'], 'acf_nonce') )
 		{
@@ -74,18 +102,10 @@ class acf_field_oembed extends acf_field
 		
 		
 		// get oembed
-		$json = array(
-			'url'		=> $args['s'],
-			'embed'		=> @wp_oembed_get( $args['s'], $res )
-		);
+		echo $this->wp_oembed_get($args['s'], $args['width'], $args['height']);
 		
 		
-		// also send back a serialized version
-		$json['serialized'] = maybe_serialize($json);
-		
-		
-		// return HTML
-		echo json_encode($json);
+		// die
 		die();
 			
 	}
@@ -105,13 +125,6 @@ class acf_field_oembed extends acf_field
 	
 	function render_field( $field ) {
 		
-		// value
-		$field['value'] = acf_parse_args($field['value'], array(
-			'url'	=> '',
-			'embed'	=> '',
-		));
-		
-		
 		// default options
 		foreach( $this->default_values as $k => $v )
 		{
@@ -129,7 +142,7 @@ class acf_field_oembed extends acf_field
 			'data-height'	=> $field['height']
 		);
 		
-		if( !empty($field['value']['url']) )
+		if( $field['value'] )
 		{
 			$atts['class'] .= ' has-value';
 		}
@@ -137,7 +150,7 @@ class acf_field_oembed extends acf_field
 		?>
 		<div <?php acf_esc_attr_e($atts) ?>>
 			<div class="acf-hidden">
-				<input type="hidden" data-name="value-input" name="<?php echo esc_attr($field['name']); ?>" value="<?php echo esc_attr(maybe_serialize($field['value'])); ?>" />
+				<input type="hidden" data-name="value-input" name="<?php echo esc_attr($field['name']); ?>" value="<?php echo esc_attr($field['value']); ?>" />
 			</div>
 			<div class="title">
 				
@@ -145,7 +158,7 @@ class acf_field_oembed extends acf_field
 					<a data-name="clear-button" href="#" class="acf-icon full">
 						<i class="acf-sprite-delete" href="#"></i>
 					</a>
-					<h4 data-name="value-title"><?php echo $field['value']['url']; ?></h4>
+					<h4 data-name="value-title"><?php echo $field['value']; ?></h4>
 				</div>
 				
 				<div class="title-search">
@@ -167,7 +180,7 @@ class acf_field_oembed extends acf_field
 				</div>
 				
 				<div class="canvas-media" data-name="value-embed">
-					<?php echo $field['value']['embed']; ?>
+					<?php echo $this->wp_oembed_get($field['value'], $field['width'], $field['height']); ?>
 				</div>
 				
 				<i class="acf-sprite-media hide-if-value"></i>
@@ -238,7 +251,7 @@ class acf_field_oembed extends acf_field
 	
 	function format_value( $value, $post_id, $field )
 	{
-		
+
 		return $value;
 	}
 	
@@ -246,7 +259,7 @@ class acf_field_oembed extends acf_field
 	/*
 	*  format_value_for_api()
 	*
-	*  This filter is appied to the $value after it is loaded from the db and before it is passed back to the api functions such as the_field
+	*  This filter is appied to the $value after it is loaded from the db and before it is passed back to the template functions such as the_field
 	*
 	*  @type	filter
 	*  @since	3.6
@@ -259,10 +272,9 @@ class acf_field_oembed extends acf_field
 	*  @return	$value	- the modified value
 	*/
 	
-	function format_value_for_api( $value, $post_id, $field )
-	{
+	function format_value_for_template( $value, $post_id, $field ) {
 		
-		
+		$value = $this->wp_oembed_get($value, $field['width'], $field['height']);
 		
 		return $value;
 	}

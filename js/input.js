@@ -3449,18 +3449,18 @@ var acf = {
 				url: acf.get('ajaxurl'),
 				data: ajax_data,
 				type: 'post',
-				dataType: 'json',
-				success: function( json ){
+				dataType: 'html',
+				success: function( html ){
 					
 					$el.removeClass('is-loading');
 					
 					
 					// update from json
-					acf.fields.oembed.search_success( $el, json );
+					acf.fields.oembed.search_success( $el, s, html );
 					
 					
 					// no results?
-					if( !json || !json.embed )
+					if( !html )
 					{
 						acf.fields.oembed.search_error( $el );
 					}
@@ -3474,13 +3474,13 @@ var acf = {
 			
 		},
 		
-		search_success : function( $el, json ){
+		search_success : function( $el, s, html ){
 		
 			$el.removeClass('has-error').addClass('has-value');
 			
-			$el.find('[data-name="value-input"]').val( json.serialized );
-			$el.find('[data-name="value-title"]').html( json.url );
-			$el.find('[data-name="value-embed"]').html( json.embed );
+			$el.find('[data-name="value-input"]').val( s );
+			$el.find('[data-name="value-title"]').html( s );
+			$el.find('[data-name="value-embed"]').html( html );
 			
 		},
 		
