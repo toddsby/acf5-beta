@@ -258,6 +258,7 @@ img.acf-fw {
 
 .acf-field {
 	margin: 0 0 20px;
+	max-width: 1400px;
 }
 
 .acf-label {
