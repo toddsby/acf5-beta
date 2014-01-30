@@ -73,7 +73,7 @@
 				dataType	: 'json',
 				success		: function( json ){
 					
-					if( _.isObject(json) )
+					if( json && json.length )
 					{
 						_this.render( json );
 					}
@@ -83,7 +83,7 @@
 			
 		},
 		
-		render : function( field_groups ){
+		render : function( json ){
 			
 			// hide all metaboxes
 			$('.acf-postbox').addClass('acf-hidden');
@@ -91,25 +91,25 @@
 			
 			
 			// show the new postboxes
-			$.each(field_groups, function(k, field_group){
+			$.each(json, function( k, field_group ){
 				
 				// vars
-				var $el = $('#acf-' + field_group.ID),
-					$toggle = $('#adv-settings .acf_postbox-toggle[for="acf-' + field_group.ID + '-hide"]');
+				var $el = $('#acf-' + field_group.key),
+					$toggle = $('#adv-settings .acf_postbox-toggle[for="acf-' + field_group.key + '-hide"]');
 				
 				
 				// classes
 				$el.removeClass('acf-hidden hide-if-js');
-				$toggle.removeClass('acf-hidden');
+				$toggle.removeClass('acf-hidden hide-if-js');
 				$toggle.find('input[type="checkbox"]').attr('checked', 'checked');
 				
 				
-				// load fields if needed
+				// replace HTML if needed
 				$el.find('.acf-replace-with-fields').each(function(){
 					
 					$(this).replaceWith( field_group.html );
 					
-					$(document).trigger('acf/setup_fields', [ $el ]);
+					acf.do_action('append', $el);
 					
 				});
 				
@@ -213,6 +213,16 @@
 				
 				
 			});
+			
+			
+			// user role
+			/*
+			$(document).on('change', 'select[id="role"][name="role"]', function(){
+				
+				_this.update( 'user_role', $(this).val() ).fetch();
+				
+			});
+			*/
 			
 		}
 		
