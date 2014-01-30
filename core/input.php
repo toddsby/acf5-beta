@@ -153,6 +153,7 @@ class acf_input {
 			'nonce'			=> wp_create_nonce( 'acf_nonce' ),
 			'admin_url'		=> admin_url(),
 			'ajaxurl'		=> admin_url( 'admin-ajax.php' ),
+			'ajax'			=> $args['ajax'],
 			'wp_version'	=> $wp_version,
 		);
 		
