@@ -8,7 +8,7 @@
 		
 		
 		// classes
-		error_class : 'error',
+		error_class : 'acf-error',
 		message_class : 'acf-error-message',
 		
 		
