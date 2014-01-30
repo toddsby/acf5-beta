@@ -824,9 +824,42 @@ function match_field_groups_ajax()
 		
 		// vars
 		$user_id = $options['user_id'];
+		$user_role = $options['user_role'];
 		
 		
-		if( $user_id )
+		// user form AJAX will send through user_form
+		if( $user_role )
+		{
+			if($rule['operator'] == "==")
+	        {
+	        	if( $user_role === $rule['value'] )
+	        	{
+	        		$match = true;
+	        	}
+	        	
+	        	
+	        	// override for "all"
+		        if( $rule['value'] === 'all' )
+				{
+					$match = true;
+				}
+	        }
+	        elseif($rule['operator'] == "!=")
+	        {
+	        	if( $user_role !== $rule['value'] )
+	        	{
+	        		$match = true;
+	        	}
+	        	
+	        	
+	        	// override for "all"
+		        if( $rule['value'] === 'all' )
+				{
+					$match = false;
+				}
+	        }
+		}
+		elseif( $user_id )
 		{
 			if($rule['operator'] == "==")
 	        {
@@ -1067,6 +1100,7 @@ function acf_get_field_group_visibility( $field_group, $args = array() )
 		'post_taxonomy'	=> array(),
 		'taxonomy'		=> 0,
 		'user_id'		=> 0,
+		'user_role'		=> 0,
 		'user_form'		=> 0,
 		'attachment'	=> 0,
 		'comment'		=> 0,
