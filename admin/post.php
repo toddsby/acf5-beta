@@ -204,7 +204,7 @@ class acf_controller_post {
 		acf_form_data(array( 
 			'post_id'	=> $this->post_id, 
 			'nonce'		=> 'post',
-			'ajax'		=> true
+			'ajax'		=> 1
 		));
 		
 		
@@ -408,6 +408,8 @@ class acf_controller_post {
 				// append to $r
 				$r[] = array(
 					'ID'	=> $field_group['ID'],
+					'key'	=> $field_group['key'],
+					'title'	=> $field_group['title'],
 					'html'	=> $html,
 					'style' => $style,
 					'class'	=> $class
