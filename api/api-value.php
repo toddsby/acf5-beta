@@ -87,7 +87,7 @@ function acf_get_value( $post_id, $field, $format = false, $format_template = fa
 	// no value? load default
 	if( $value === null )
 	{
-		if( !empty($field['default_value']) )
+		if( isset($field['default_value']) )
 		{
 			$value = $field['default_value'];
 		}
