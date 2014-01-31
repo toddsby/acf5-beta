@@ -82,6 +82,94 @@ img.acf-fw {
 }
 
 
+/* show on hover */
+.acf-soh .acf-soh-target {
+	-webkit-transition: opacity 0.25s 0s ease-in-out, visibility 0s linear 0.25s;
+	-moz-transition: opacity 0.25s 0s ease-in-out, visibility 0s linear 0.25s;
+	-o-transition: opacity 0.25s 0s ease-in-out, visibility 0s linear 0.25s; 	
+	transition: opacity 0.25s 0s ease-in-out, visibility 0s linear 0.25s; 
+	
+	visibility: hidden;
+	opacity: 0;
+}
+
+.acf-soh:hover .acf-soh-target {
+	-webkit-transition-delay:0s;
+	-moz-transition-delay:0s;
+	-o-transition-delay:0s;
+	transition-delay:0s;
+	
+	visibility: visible;
+	opacity: 1;
+}
+
+
+/* show if value */
+.show-if-value { display: none; }
+.hide-if-value { display: block; }
+
+.has-value .show-if-value { display: block; }
+.has-value .hide-if-value { display: none; }
+
+
+
+/*--------------------------------------------------------------------------------------------
+*
+*	acf-icon
+*
+*--------------------------------------------------------------------------------------------*/
+
+.acf-icon {
+	display: block;
+	height: 22px;
+	width: 22px;
+	border: #BBBBBB solid 1px;
+	border-radius: 12px;
+	
+	position: relative;
+	overflow: hidden;
+	
+	font-size: 12px;
+	line-height: 21px;
+	text-align: center;
+	background: #fff;
+}
+
+.acf-icon:hover {
+	border-color: #999;
+}
+
+.acf-icon:active,
+.acf-icon:focus {
+	outline: none;
+}
+
+.acf-icon.small {
+	width: 18px;
+	height: 18px;
+	line-height: 18px;
+}
+
+
+/* add */
+.acf-icon [class^="acf-sprite-"] {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -4px 0 0 -4px;
+}
+
+.acf-icon.full {
+	background: #F5F5F5;
+	border-color: #F5F5F5;
+}
+
+.acf-icon.full:hover {
+	background: #EBEBEB;
+	border-color: #EBEBEB;
+}
+
+
 /*--------------------------------------------------------------------------------------------
 *
 *	Sprite
@@ -104,8 +192,6 @@ img.acf-fw {
 /* remove */
 .acf-sprite-remove {
 	background-position: -50px 0;
-	width: 8px;
-	height: 8px;
 }
 
 .acf-sprite-remove:hover,
@@ -129,7 +215,13 @@ img.acf-fw {
 
 /* edit */
 .acf-sprite-edit {
+	width: 11px;
+	height: 11px;
 	background-position: -150px 0;
+}
+
+.acf-icon .acf-sprite-edit {
+	margin: -6px 0 0 -5px;
 }
 
 .acf-sprite-edit:hover,
@@ -261,11 +353,31 @@ img.acf-fw {
 	max-width: 1400px;
 }
 
-.acf-label {
+.acf-field .acf-label {
 	vertical-align: top;
+	margin: 0 0 10px;
 }
 
-.acf-input {
+.acf-field .acf-label label {
+    display: block;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 1.4em;
+    margin: 0 0 3px;
+}
+
+.acf-field .acf-label p {
+	color: #777777;
+    display: block;
+    font-size: 12px;
+    line-height: 1.4em;
+    font-style: normal;
+    
+    margin: 3px 0 0 !important;
+    padding: 0 !important;
+}
+
+.acf-field .acf-input {
 	vertical-align: top;	
 }
 
@@ -399,22 +511,6 @@ img.acf-fw {
     width: 24%;
 }
 
-.acf-table td.acf-label p {
-	color: #899194;
-    display: block;
-    font-size: 12px;
-    font-style: normal;
-    line-height: 16px;
-    margin: 3px 0 0 !important;
-    padding: 0 !important;
-}
-
-.acf-table td.acf-label label {
-    display: block;
-    font-weight: bold;
-    margin: 0 0 3px;
-}
-
 .acf-table td.acf-label + td {
 	border-left-color: #E1E1E1;
 }
@@ -441,6 +537,8 @@ img.acf-fw {
 	border: 1px solid #F5F5F5;
 	background: #F9F9F9;
 }
+
+
 
 
 /*--------------------------------------------------------------------------------------------
@@ -566,63 +664,6 @@ img.acf-fw {
 
 /*--------------------------------------------------------------------------------------------
 *
-*	acf-icon
-*
-*--------------------------------------------------------------------------------------------*/
-
-.acf-icon {
-	display: block;
-	height: 22px;
-	width: 22px;
-	border: #BBBBBB solid 1px;
-	border-radius: 12px;
-	
-	position: relative;
-	overflow: hidden;
-	
-	font-size: 12px;
-	line-height: 21px;
-	text-align: center;
-	background: #fff;
-}
-
-.acf-icon:hover {
-	border-color: #999;
-}
-
-.acf-icon:active,
-.acf-icon:focus {
-	outline: none;
-}
-
-.acf-icon.small {
-	width: 18px;
-	height: 18px;
-	line-height: 18px;
-}
-
-
-/* add */
-.acf-icon [class^="acf-sprite-"] {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin: -4px 0 0 -4px;
-}
-
-.acf-icon.full {
-	background: #F5F5F5;
-	border-color: #F5F5F5;
-}
-
-.acf-icon.full:hover {
-	background: #EBEBEB;
-	border-color: #EBEBEB;
-}
-
-
-/*--------------------------------------------------------------------------------------------
-*
 *	acf-postbox
 *
 *--------------------------------------------------------------------------------------------*/
@@ -632,23 +673,22 @@ img.acf-fw {
 }
 
 .acf-postbox > .inside {
-	
-}
-
-/* no-padding */
-.acf-postbox.no-padding {
-	border-radius: 0;
-	background: #fff;
-	border-radius: 0;
-}
-
-.acf-postbox.no-padding > .inside {
 	margin: 0 !important;
 	padding: 0 !important;
 }
 
+.acf-postbox > .inside > .acf-field {
+	margin: 0;
+	padding: 15px 12px;
+	border-top: #EEEEEE solid 1px;
+}
 
-/* no-border */
+.acf-postbox .acf-field:first-child {
+	border-top: 0 none;
+}
+
+
+/* seamless */
 .acf-postbox.seamless {
 	border: 0 none;
 	background: transparent;
@@ -660,9 +700,16 @@ img.acf-fw {
 	display: none;
 }
 
-.acf-postbox.seamless > .inside {
-	margin: 0 !important;
-	padding: 0 !important;
+.acf-postbox.seamless > .inside > .acf-field {
+	margin: 0;
+	padding: 15px 0;
+	border-top: 0 none;
+}
+
+.acf-postbox.seamless > .inside > .acf-table,
+.acf-postbox.seamless > .inside > .acf-table > tbody > tr > td {
+	background: none;
+	border: 0 none;
 }
 
 
@@ -796,7 +843,6 @@ img.acf-fw {
 *---------------------------------------------------------------------------------------------*/
 
 .acf-input-table {
-	table-layout: fixed;
 	border: #DFDFDF solid 1px;
 }
 
@@ -805,28 +851,18 @@ img.acf-fw {
 }
 
 .acf-input-table > thead th {
-	
-	font-size: 14px;
-	line-height: 1.3em;
-	
-	padding: 8px;
-	text-align: left;
-	font-weight: normal;
-	font-family: Georgia, "Times New Roman", "Bitstream Charter", Times, serif;
-	color: #333333;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
-	
-	background: #F2F2F2;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC)); /* Safari 4+, Chrome */
-	background-image: -webkit-linear-gradient(top, #F9F9F9, #ECECEC); /* Chrome 10+, Safari 5.1+, iOS 5+ */
-	background-image:    -moz-linear-gradient(top, #F9F9F9, #ECECEC); /* Firefox 3.6-15 */
-	background-image:      -o-linear-gradient(top, #F9F9F9, #ECECEC); /* Opera 11.10+ */
-	background-image:         linear-gradient(to bottom, #F9F9F9, #ECECEC); /* Firefox 16+ */
-	
-	border-style: solid;
-	border-width: 1px 0 1px 1px;
-	border-color: #FFFFFF #FFFFFF #DFDFDF #DFDFDF;
-
+	background: #fff;
+	border-left: 1px solid #E1E1E1;
+	border-bottom: 1px solid #E1E1E1;
+    padding: 8px;
+    position: relative;
+    vertical-align: top;
+    text-align: left;
+    
+    color: #333333;
+    font-size: 14px;
+    line-height: 1.4em;
+    font-weight: normal;
 }
 
 .acf-input-table > tbody > tr {

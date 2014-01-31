@@ -13,10 +13,13 @@
 .acf-field textarea,
 .acf-field select {
     width: 100%;
-	padding: 5px;
+	padding: 3px 5px;
 	resize: none;
 	margin: 0;
     box-sizing: border-box;
+    
+    font-size: 14px;
+    line-height: 15px;
 }
 
 .acf-field textarea {
@@ -33,11 +36,11 @@
 
 .acf-input-prepend,
 .acf-input-append {
-	font-size: 12px;
-	line-height: 15px;
-	height: 15px;
+	font-size: 13px;
+	line-height: 19px;
+	height: 20px;
 	
-	padding: 5px 7px;
+	padding: 3px 7px;
 	
 	background: #F4F4F4;
 	border: #DFDFDF solid 1px;
@@ -61,7 +64,7 @@
 }
 
 .acf-input-wrap input {
-	height: 27px;
+	height: 28px;
 	margin: 0;
 }
 
@@ -491,7 +494,7 @@ ul.acf-radio-list.pill li label input {
 *
 *---------------------------------------------------------------------------------------------*/
 
-.field_type-tab {
+.acf-field.field_type-tab {
 	display: none !important;
 }
 
@@ -700,3 +703,109 @@ ul.acf-radio-list.pill li label input {
 
 .acf-oembed.has-error .canvas-error { display: block; }
 .acf-oembed.has-error .canvas .acf-sprite-media { display: none; }
+
+
+/*--------------------------------------------------------------------------------------------
+*
+*	Image
+*
+*--------------------------------------------------------------------------------------------*/
+
+.acf-image-uploader {
+	position: relative;
+}
+
+.acf-image-uploader .view { float: left; position: relative; max-width: 100%; }
+
+.acf-image-uploader img {
+	width: 100%;
+	height: auto;
+	display: block;
+	min-width: 30px;
+	min-height: 30px;
+	background: #f1f1f1;
+	margin: 0;
+	padding: 0;
+}
+
+.acf-image-uploader .no-image p {
+	display: block;
+	margin: 0 !important;
+}
+
+.acf-image-uploader input.button {
+	width: auto;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	
+	.acf-image-uploader img {
+		width: auto;
+		max-width: 100%;
+	}
+	
+}
+
+
+/*
+*  Hover
+*/
+
+.acf-image-uploader .acf-soh-target {
+	position: absolute;
+	top: -11px;
+	right: -11px;
+}
+
+.acf-image-uploader .acf-soh-target li {
+	margin: 0 0 2px;
+}
+
+
+/*--------------------------------------------------------------------------------------------
+*
+*	File
+*
+*--------------------------------------------------------------------------------------------*/
+
+.acf-file-uploader {
+	position: relative;
+}
+
+.acf-file-uploader li {
+	position: relative;
+}
+
+.acf-file-uploader img {
+	min-height: 60px;
+	min-width: 46px;
+	display: block;
+	background: #f1f1f1;
+	margin: 0 10px 0 0 ;
+}
+
+.acf-file-uploader a {
+	text-decoration: none;
+}
+
+.acf-file-uploader p {
+	margin: 0 0 2px;
+	font-size: 13px;
+	line-height: 1.4em;
+}
+
+
+/*
+*  Hover
+*/
+
+.acf-file-uploader .acf-soh-target {
+	position: absolute;
+	top: -6px;
+	right: 0;
+}
+
+.acf-file-uploader .acf-soh-target li {
+	margin: 0 0 2px;
+}
+

@@ -729,46 +729,295 @@ var acf = {
 	*/
 	
 	acf.media = {
-	
-		div : null,
-		frame : null,
-		render_timout : null,
 		
-		clear_frame : function(){
+		upload_popup : function( args ) {
 			
-			// validate
-			if( !this.frame )
+			// defaults
+			args = $.extend({}, {
+				title		: '',		// Uploade Image
+				type		: '',		// image
+				query		: {},		// library query
+				uploadedTo	: 0,		// restrict browsing to post_id
+				multiple	: 0,		// allow multiple attachments to be selected
+				select		: function( attachment, i ){}
+			}, args);
+			
+			
+			// args.query
+			if( args.type )
 			{
-				return;
+				args.query = { 
+					type : args.type
+				};
 			}
 			
 			
-			// detach
-			this.frame.detach();
-			this.frame.dispose();
+			// create frame
+			var frame = wp.media({
+				states : [
+					new wp.media.controller.Library({
+						title		: args.title,
+						multiple	: args.multiple,
+						library		: wp.media.query(args.query),
+						priority	: 20,
+						filterable	: 'all'
+					})
+				]
+			});
 			
 			
-			// reset var
-			this.frame = null;
+			// events
+			frame.on('content:activate', function(){
+
+				// vars
+				var toolbar = null,
+					filters = null;
+					
+				
+				// populate above vars making sure to allow for failure
+				try
+				{
+					toolbar = frame.content.get().toolbar;
+					filters = toolbar.get('filters');
+				} 
+				catch(e)
+				{
+					// one of the objects was 'undefined'... perhaps the frame open is Upload Files
+					//console.log( e );
+				}
+				
+				
+				// validate
+				if( !filters )
+				{
+					return false;
+				}
+				
+				
+				// no need for 'uploaded' filter
+				if( args.uploadedTo )
+				{
+					filters.$el.find('option[value="uploaded"]').remove();
+					filters.$el.after('<span>' + acf._e('image', 'uploadedTo') + '</span>')
+					
+					$.each( filters.filters, function( k, v ){
+						
+						v.props.uploadedTo = args.uploadedTo;
+						
+					});
+				}
+				
+				
+				// image
+				if( args.type == 'image' )
+				{
+					// filter only images
+					$.each( filters.filters, function( k, v ){
+					
+						v.props.type = 'image';
+						
+					});
+					
+					
+					// remove non image options from filter list
+					filters.$el.find('option').each(function(){
+						
+						// vars
+						var v = $(this).attr('value');
+						
+						
+						// don't remove the 'uploadedTo' if the library option is 'all'
+						if( v == 'uploaded' && t.o.library == 'all' )
+						{
+							return;
+						}
+						
+						if( v.indexOf('image') === -1 )
+						{
+							$(this).remove();
+						}
+						
+					});
+					
+					
+					// set default filter
+					filters.$el.val('image').trigger('change');
+					
+				}
+			});
 			
-		},
-		type : function(){
 			
-			// default
-			var type = 'thickbox';
+			// select callback
+			frame.on( 'select', function() {
+				
+				
+				// validate
+				if( typeof args.select !== 'function' )
+				{
+					return false;
+				}
+				
+				
+				// get selected images
+				var selection = frame.state().get('selection');
+				
+				
+				// loop over selection
+				if( selection )
+				{
+					var i = -1;
+					
+					selection.each(function( attachment ){
+						
+						i++;
+						
+						args.select( attachment, i );
+						
+					});
+				}
+				
+			});
 			
 			
-			// if wp exists
-			if( typeof(wp) == "object" )
-			{
-				type = 'backbone';
-			}
+			// close
+			frame.on('close',function(){
+			
+				setTimeout(function(){
+					
+					// detach
+					frame.detach();
+					frame.dispose();
+					
+					
+					// reset var
+					frame = null;
+					
+				}, 500);
+				
+			});
+			
+			
+			// open popup
+			frame.open();
 			
 			
 			// return
-			return type;
+			return frame;
 			
 		},
+		
+		edit_popup : function( args ) {
+			
+			// defaults
+			args = $.extend({}, {
+				title		: '',
+				button		: '',
+				id			: 0
+			}, args);
+			
+			
+			// create frame
+			var frame = wp.media({
+				title		: args.title,
+				multiple	: 0,
+				button		: { text : args.button }
+			});
+			
+			
+			// open
+			frame.on('open',function() {
+				
+				// set to browse
+				if( frame.content._mode != 'browse' )
+				{
+					frame.content.mode('browse');
+				}
+				
+				
+				// add class
+				frame.$el.closest('.media-modal').addClass('acf-media-modal acf-expanded');
+					
+				
+				// set selection
+				var selection	=	frame.state().get('selection'),
+					attachment	=	wp.media.attachment( args.id );
+				
+				
+				// to fetch or not to fetch
+				if( $.isEmptyObject(attachment.changed) )
+				{
+					attachment.fetch();
+				}
+				
+
+				selection.add( attachment );
+						
+			});
+			
+			
+			// select callback
+			frame.on( 'select', function() {
+				
+				
+				// validate
+				if( typeof args.select !== 'function' )
+				{
+					return false;
+				}
+				
+				
+				// get selected images
+				var selection = frame.state().get('selection');
+				
+				
+				// loop over selection
+				if( selection )
+				{
+					var i = -1;
+					
+					selection.each(function( attachment ){
+						
+						i++;
+						
+						args.select( attachment, i );
+						
+					});
+				}
+				
+			});
+			
+			
+			// close
+			frame.on('close',function(){
+				
+				setTimeout(function(){
+					
+					// detach
+					frame.detach();
+					frame.dispose();
+					
+					
+					// reset var
+					frame = null;
+					
+				}, 500);
+				
+				
+				// remove class
+				frame.$el.closest('.media-modal').removeClass('acf-media-modal');
+				
+			});
+			
+			
+			// open popup
+			frame.open();
+			
+			
+			// return
+			return frame;
+
+		},
+		
 		init : function(){
 			
 			// bail early if wp.media does not exist (field group edit page)

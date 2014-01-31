@@ -37,11 +37,6 @@ class acf_field_file extends acf_field
     	// filters
 		add_filter('get_media_item_args', array($this, 'get_media_item_args'));
 		add_filter('wp_prepare_attachment_for_js', array($this, 'wp_prepare_attachment_for_js'), 10, 3);
-		
-		
-		// JSON
-		//add_action('wp_ajax_acf/fields/file/get_files', array($this, 'ajax_get_files'));
-		//add_action('wp_ajax_nopriv_acf/fields/file/get_files', array($this, 'ajax_get_files'), 10, 1);
 	}
 	
 	
@@ -61,7 +56,7 @@ class acf_field_file extends acf_field
 	{
 		// vars
 		$o = array(
-			'class'		=>	'',
+			'class'		=>	'acf-file-uploader acf-cf',
 			'icon'		=>	'',
 			'title'		=>	'',
 			'size'		=>	'',
@@ -75,10 +70,10 @@ class acf_field_file extends acf_field
 			
 			if( $file )
 			{
-				$o['class'] = 'active';
+				$o['class'] .= ' has-value';
 				$o['icon'] = wp_mime_type_icon( $file->ID );
 				$o['title']	= $file->post_title;
-				$o['size'] = size_format(filesize( get_attached_file( $file->ID ) ));
+				$o['size'] = @size_format(filesize( get_attached_file( $file->ID ) ));
 				$o['url'] = wp_get_attachment_url( $file->ID );
 				
 				$explode = explode('/', $o['url']);
@@ -88,41 +83,39 @@ class acf_field_file extends acf_field
 		
 		
 		?>
-<div class="acf-file-uploader clearfix <?php echo $o['class']; ?>" data-library="<?php echo $field['library']; ?>">
-	<input class="acf-file-value" type="hidden" name="<?php echo $field['name']; ?>" value="<?php echo $field['value']; ?>" />
-	<div class="has-file">
-		<ul class="hl clearfix">
+<div <?php acf_esc_attr_e(array( 'class' => $o['class'], 'data-library' => $field['library'] )); ?>>
+	<div class="acf-hidden">
+		<input type="hidden" <?php acf_esc_attr_e(array( 'name' => $field['name'], 'value' => $field['value'], 'data-name' => 'id' )); ?> />	
+	</div>
+	<div class="show-if-value acf-soh">
+		<ul class="acf-hl">
 			<li>
-				<img class="acf-file-icon" src="<?php echo $o['icon']; ?>" alt=""/>
-				<div class="hover">
-					<ul class="acf-bl">
-						<li><a href="#" class="acf-button-delete ir">Remove</a></li>
-						<li><a href="#" class="acf-button-edit ir">Edit</a></li>
+				<img data-name="icon" src="<?php echo $o['icon']; ?>" alt=""/>
+				<div class="acf-soh-target">
+					<ul class="acf-bl acf-soh-target">
+						<li><a class="acf-icon" data-name="remove-button" href="#"><i class="acf-sprite-delete"></i></a></li>
+						<li><a class="acf-icon" data-name="edit-button" href="#"><i class="acf-sprite-edit"></i></a></li>
 					</ul>
 				</div>
 			</li>
 			<li>
 				<p>
-					<strong class="acf-file-title"><?php echo $o['title']; ?></strong>
+					<strong data-name="title"><?php echo $o['title']; ?></strong>
 				</p>
 				<p>
 					<strong>Name:</strong>
-					<a class="acf-file-name" href="<?php echo $o['url']; ?>" target="_blank"><?php echo $o['name']; ?></a>
+					<a data-name="name" href="<?php echo $o['url']; ?>" target="_blank"><?php echo $o['name']; ?></a>
 				</p>
 				<p>
 					<strong>Size:</strong>
-					<span class="acf-file-size"><?php echo $o['size']; ?></span>
+					<span data-name="size"><?php echo $o['size']; ?></span>
 				</p>
 				
 			</li>
 		</ul>
 	</div>
-	<div class="no-file">
-		<ul class="hl clearfix">
-			<li>
-				<span><?php _e('No File Selected','acf'); ?></span>. <a href="#" class="button add-file"><?php _e('Add File','acf'); ?></a>
-			</li>
-		</ul>
+	<div class="hide-if-value">
+		<p><?php _e('No File selected','acf'); ?> <a data-name="add-button" class="acf-button" href="#"><?php _e('Add File','acf'); ?></a></p>
 	</div>
 </div>
 		<?php

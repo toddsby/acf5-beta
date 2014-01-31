@@ -39,10 +39,6 @@ class acf_field_image extends acf_field
 		add_filter('get_media_item_args', array($this, 'get_media_item_args'));
 		add_filter('wp_prepare_attachment_for_js', array($this, 'wp_prepare_attachment_for_js'), 10, 3);
 		
-		
-		// JSON
-		//add_action('wp_ajax_acf/fields/image/get_images', array($this, 'ajax_get_images'), 10, 1);
-		//add_action('wp_ajax_nopriv_acf/fields/image/get_images', array($this, 'ajax_get_images'), 10, 1);
 	}
 	
 	
@@ -62,7 +58,7 @@ class acf_field_image extends acf_field
 	{
 		// vars
 		$div_atts = array(
-			'class'					=> 'acf-image-uploader clearfix',
+			'class'					=> 'acf-image-uploader acf-cf',
 			'data-preview_size'		=> $field['preview_size'],
 			'data-library'			=> $field['library']
 		);
@@ -70,7 +66,7 @@ class acf_field_image extends acf_field
 			'type'					=> 'hidden',
 			'name'					=> $field['name'],
 			'value'					=> $field['value'],
-			'class'					=> 'acf-image-value'
+			'data-name'				=> 'value-id'
 		);
 		$url = '';
 		
@@ -81,23 +77,23 @@ class acf_field_image extends acf_field
 			$url = wp_get_attachment_image_src($field['value'], $field['preview_size']);
 			$url = $url[0];
 			
-			$div_atts['class'] .= ' active';
+			$div_atts['class'] .= ' has-value';
 		}
 		
 		?>
 <div <?php acf_esc_attr_e( $div_atts ); ?>>
-	<input <?php acf_esc_attr_e( $input_atts ); ?>/>
-	<div class="has-image">
-		<div class="hover">
-			<ul class="acf-bl">
-				<li><a class="acf-button-delete ir" href="#"><?php _e("Remove",'acf'); ?></a></li>
-				<li><a class="acf-button-edit ir" href="#"><?php _e("Edit",'acf'); ?></a></li>
-			</ul>
-		</div>
-		<img class="acf-image-image" src="<?php echo $url; ?>" alt=""/>
+	<div class="acf-hidden">
+		<input <?php acf_esc_attr_e( $input_atts ); ?>/>
 	</div>
-	<div class="no-image">
-		<p><?php _e('No image selected','acf'); ?> <input type="button" class="button add-image" value="<?php _e('Add Image','acf'); ?>" />
+	<div class="view show-if-value acf-soh">
+		<ul class="acf-bl acf-soh-target">
+			<li><a class="acf-icon" data-name="remove-button" href="#"><i class="acf-sprite-delete"></i></a></li>
+			<li><a class="acf-icon" data-name="edit-button" href="#"><i class="acf-sprite-edit"></i></a></li>
+		</ul>
+		<img data-name="value-url" src="<?php echo $url; ?>" alt=""/>
+	</div>
+	<div class="view hide-if-value">
+		<p><?php _e('No image selected','acf'); ?> <a data-name="add-button" class="acf-button" href="#"><?php _e('Add Image','acf'); ?></a></p>
 	</div>
 </div>
 		<?php
