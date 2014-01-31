@@ -23,8 +23,8 @@ class acf_field_oembed extends acf_field
 			'height'	=> '',
 		);
 		$this->default_values = array(
-			'width' 	=> 720,
-			'height'	=> 480
+			'width' 	=> 640,
+			'height'	=> 390
 		);
 
 		
@@ -89,9 +89,20 @@ class acf_field_oembed extends acf_field
    		$args = acf_parse_args( $_POST, array(
 			's'			=> '',
 			'nonce'		=> '',
-			'width'		=> $this->default_values['width'],
-			'height'	=> $this->default_values['height'],
+			'width'		=> 0,
+			'height'	=> 0,
 		));
+		
+		
+		// width and height
+		if( !$args['width'] )
+		{
+			$args['width'] = $this->default_values['width'];
+		}
+		if( !$args['height'] )
+		{
+			$args['height'] = $this->default_values['height'];
+		}
 		
 		
 		// validate
