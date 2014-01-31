@@ -73,7 +73,7 @@ var acf_field_group = {};
 	 acf.add_action('ready', function(){
 		
 		// update postbox classes
-		$('#submitdiv, #acf-field-group-fields, #acf-field-group-locations, #acf-field-group-options').addClass('acf-postbox no-padding');
+		$('#submitdiv, #acf-field-group-fields, #acf-field-group-locations, #acf-field-group-options').addClass('acf-postbox');
 		
 		$('#acf-field-group-fields').addClass('seamless');
 		

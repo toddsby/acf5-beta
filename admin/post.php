@@ -260,8 +260,6 @@ class acf_controller_post {
 			// render
 			if( $field_group['label_placement'] == 'left' )
 			{
-				$class .= ' no-padding';
-				
 				?>
 				<table class="acf-table">
 					<tbody>
@@ -382,8 +380,6 @@ class acf_controller_post {
 				// render
 				if( $field_group['label_placement'] == 'left' )
 				{
-					$class .= 'no-padding';
-					
 					?>
 					<table class="acf-table">
 						<tbody>
