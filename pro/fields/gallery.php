@@ -190,7 +190,7 @@ class acf_field_gallery extends acf_field
 		
 		// options
 		$r = array();
-   		$options = acf_parse_args( $_REQUEST, array(
+   		$args = acf_parse_args( $_REQUEST, array(
 			'ids'			=>	0,
 			'sort'			=>	'date',
 			'field_key'		=>	'',
@@ -199,9 +199,18 @@ class acf_field_gallery extends acf_field
 		
 		
 		// validate
-		if( ! wp_verify_nonce($options['nonce'], 'acf_nonce') )
+		if( ! wp_verify_nonce($args['nonce'], 'acf_nonce') )
 		{
 			wp_send_json_error();
+		}
+		
+		
+		// reverse
+		if( $args['sort'] == 'reverse' )
+		{
+			$ids = array_reverse($args['ids']);
+			
+			wp_send_json_success($ids);
 		}
 		
 		
@@ -210,9 +219,9 @@ class acf_field_gallery extends acf_field
 			'post_type'		=> 'attachment',
 			'numberposts'	=> -1,
 			'post_status'	=> 'any',
-			'post__in'		=> $options['ids'],
+			'post__in'		=> $args['ids'],
 			'order'			=> 'DESC',
-			'orderby'		=> $options['sort'],
+			'orderby'		=> $args['sort'],
 			'fields'		=> 'ids'		
 		));
 		
@@ -251,7 +260,8 @@ class acf_field_gallery extends acf_field
 			<p class="uploaded"><?php echo $attachment['dateFormatted']; ?></p>
 			<p class="dimensions"><?php echo $attachment['width']; ?> × <?php echo $attachment['height']; ?></p>
 			<p>
-				<a target="_blank" href="#" class="edit-attachment">Edit</a> <a href="#" class="remove-attachment" data-id="<?php echo $id; ?>">Remove</a>
+				<a target="_blank" href="#" >Edit</a> 
+				<a href="#" class="remove-attachment" data-name="remove-attachment-button" data-id="<?php echo $id; ?>">Remove</a>
 			</p>
 		</div>
 		<table class="form-table">
@@ -324,96 +334,98 @@ class acf_field_gallery extends acf_field
 		);
 		
 		?>
-		<div <?php acf_esc_attr_e($atts); ?>>
+<div <?php acf_esc_attr_e($atts); ?>>
+	
+	<div class="acf-hidden">
+		<input type="hidden" <?php acf_esc_attr_e(array( 'name' => $field['name'], 'value' => '', 'data-name' => 'ids' )); ?> />
+	</div>
+	
+	<div class="acf-gallery-main">
+		
+		<div class="acf-gallery-attachments">
 			
-			<input type="hidden" name="<?php echo $field['name']; ?>" value="" />
+			<?php if( !empty($field['value']) ): ?>
+				
+				<?php foreach( $field['value'] as $id ): 
+					
+					// vars
+					$mime_type = get_post_mime_type( $id );
+					$src = '';
+	
+					if( strpos($mime_type, 'image') !== false )
+					{
+						$src = wp_get_attachment_image_src( $id, $field['preview_size'] );
+						$src = $src[0];
+					}
+					else
+					{
+						$src = wp_mime_type_icon( $id );
+					}
+					
+					?>
+					
+					<div class="acf-gallery-attachment" data-id="<?php echo $id; ?>">
+						<input type="hidden" name="<?php echo $field['name']; ?>[]" value="<?php echo $id; ?>" />
+						<div class="padding">
+							<img src="<?php echo $src; ?>" alt="" />
+						</div>
+					</div>
+					
+				<?php endforeach; ?>
+				
+			<?php endif; ?>
 			
-			<div class="acf-gallery-main">
-				
-				<div class="acf-gallery-attachments">
-					
-					<?php if( !empty($field['value']) ): ?>
-						
-						<?php foreach( $field['value'] as $id ): 
-							
-							// vars
-							$mime_type = get_post_mime_type( $id );
-							$src = '';
-			
-							if( strpos($mime_type, 'image') !== false )
-							{
-								$src = wp_get_attachment_image_src( $id, $field['preview_size'] );
-								$src = $src[0];
-							}
-							else
-							{
-								$src = wp_mime_type_icon( $id );
-							}
-							
-							?>
-							
-							<div class="acf-gallery-attachment" data-id="<?php echo $id; ?>">
-								<input type="hidden" name="<?php echo $field['name']; ?>[]" value="<?php echo $id; ?>" />
-								<div class="padding">
-									<img src="<?php echo $src; ?>" alt="" />
-								</div>
-							</div>
-							
-						<?php endforeach; ?>
-						
-					<?php endif; ?>
-					
-					
-				</div>
-				
-				<div class="acf-gallery-toolbar">
-					
-					<ul class="acf-hl">
-						<li>
-							<a class="acf-button blue add-attachment">Add to gallery</a>
-						</li>
-						<li class="acf-fr">
-							<select class="bulk-actions-select">
-								<option value="">Bulk actions</option>
-								<option value="date">Sort by date uploaded</option>
-								<option value="modified">Sort by date modified</option>
-								<option value="title">Sort by title</option>
-								<option value="reverse">Reverse current order</option>
-							</select>
-							<!-- <a class="acf-button bulk-actions-apply">Apply</a> -->
-						</li>
-					</ul>
-					
-				</div>
-				
-			</div>
-			
-			<div class="acf-gallery-side">
-			<div class="acf-gallery-side-inner">
-					
-				<div class="acf-gallery-side-data">
-				
-					<?php //echo get_media_item( 158 ); ?>
-					
-				</div>
-								
-				<div class="acf-gallery-toolbar">
-					
-					<ul class="acf-hl">
-						<li>
-							<a class="acf-button close-attachment">Close</a>
-						</li>
-						<li class="acf-fr">
-							<a class="acf-button blue save-attachment">Update</a>
-						</li>
-					</ul>
-					
-				</div>
-				
-			</div>	
-			</div>
 			
 		</div>
+		
+		<div class="acf-gallery-toolbar">
+			
+			<ul class="acf-hl">
+				<li>
+					<a data-name="add-attachment-button" class="acf-button blue">Add to gallery</a>
+				</li>
+				<li class="acf-fr">
+					<select data-name="bulk-actions-select">
+						<option value="">Bulk actions</option>
+						<option value="date">Sort by date uploaded</option>
+						<option value="modified">Sort by date modified</option>
+						<option value="title">Sort by title</option>
+						<option value="reverse">Reverse current order</option>
+					</select>
+					<!-- <a class="acf-button bulk-actions-apply">Apply</a> -->
+				</li>
+			</ul>
+			
+		</div>
+		
+	</div>
+	
+	<div class="acf-gallery-side">
+	<div class="acf-gallery-side-inner">
+			
+		<div class="acf-gallery-side-data">
+		
+			<?php //echo get_media_item( 158 ); ?>
+			
+		</div>
+						
+		<div class="acf-gallery-toolbar">
+			
+			<ul class="acf-hl">
+				<li>
+					<a data-name="close-attachment-button" class="acf-button">Close</a>
+				</li>
+				<li class="acf-fr">
+					<a data-name="save-attachment-button" class="acf-button blue">Update</a>
+				</li>
+			</ul>
+			
+		</div>
+		
+	</div>	
+	</div>
+	
+</div>
 		<?php
 		
 	}

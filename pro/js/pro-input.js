@@ -989,24 +989,19 @@
 			
 		},
 		
-		get_field_wrap : function( $el ){
+		has_value : function( $el ){
 			
-			return $el.closest('.acf-field');
-			
+			return $el.find('.acf-gallery-attachment').exists();
+				
 		},
 		
-		get_id : function( $attachment ){
-			
-			return $attachment.attr('data-id');
-			
-		},
-		
-		init : function( $gallery ){
-			
-			$gallery.find('.acf-gallery-attachments').unbind('sortable').sortable({
+		init : function( $el ){
+					
+			// sortable
+			$el.find('.acf-gallery-attachments').unbind('sortable').sortable({
 				
 				items					: '.acf-gallery-attachment',
-				//handle					: '.acf-gallery-attachment',
+				//handle				: '.acf-gallery-attachment',
 				forceHelperSize			: true,
 				forcePlaceholderSize	: true,
 				scroll					: true,
@@ -1024,7 +1019,28 @@
 	   			}
 			});
 			
+			
+			// render
+			this.render( $el );
 					
+		},
+		
+		render : function( $el ) {
+			
+			// vars
+			var $select = $el.find('[data-name="bulk-actions-select"]');
+			
+			
+			// disable select
+			if( this.has_value( $el ) )
+			{
+				$select.removeAttr('disabled');
+			}
+			else
+			{
+				$select.attr('disabled', 'disabled');
+			}
+			
 		},
 		
 		sort : function( $select ){
@@ -1044,7 +1060,7 @@
 			// vars
 			var data = {
 				action		: 'acf/fields/gallery/get_sort_order',
-				field_key	: this.get_field_wrap( $gallery ).attr('data-key'),
+				field_key	: acf.get_field_wrap( $gallery ).attr('data-key'),
 				nonce		: acf.get('nonce'),
 				post_id		: acf.get('post_id'),
 				ids			: [],
@@ -1101,7 +1117,7 @@
 			
 			// vars
 			var $gallery = this.get_field( $attachment ),
-				id = this.get_id( $attachment );
+				id = $attachment.attr('data-id');
 			
 			
 			// clear selection
@@ -1162,7 +1178,7 @@
 			// vars
 			var data = {
 				action		: 'acf/fields/gallery/get_attachment',
-				field_key	: this.get_field_wrap( $gallery ).attr('data-key'),
+				field_key	: acf.get_field_wrap( $gallery ).attr('data-key'),
 				nonce		: acf.get('nonce'),
 				post_id		: acf.get('post_id'),
 				id			: id
@@ -1238,19 +1254,26 @@
 			
 		},
 		
-		add : function( image, $gallery ){
+		add : function( $el, image ){
+			
+			// append to image data
+			$.extend(image, {
+				name	: $el.find('[data-name="ids"]').attr('name')
+			});
+			
 			
 			// template
-			var data = {
-					id		:	image.id,
-					url		:	image.url,
-					name	:	$gallery.children('input').attr('name')
-				},
-				tmpl = acf._e('gallery', 'tmpl'),
-				html = _.template(tmpl, data);
+			var tmpl = acf._e('gallery', 'tmpl'),
+				html = _.template(tmpl, image);
 			
 			
-			$gallery.find('.acf-gallery-attachments').append( html );
+			// append
+			$el.find('.acf-gallery-attachments').append( html );
+			
+			
+			// render
+			this.render( $el );
+			
 			
 		},
 		
@@ -1258,169 +1281,139 @@
 			
 			// vars
 			var id = $a.attr('data-id'),
-				$gallery = this.get_field( $a );
+				$el = this.get_field( $a );
 			
 			
 			// deselect attachmnet
-			this.clear_selection( $gallery );
+			this.clear_selection( $el );
 			
 			
 			// update sidebar
-			$gallery.find('.acf-gallery-side-data').html('');
+			$el.find('.acf-gallery-side-data').html('');
 			
 			
 			// remove image
-			$gallery.find('.acf-gallery-attachment[data-id="' + id  + '"]').remove();
+			$el.find('.acf-gallery-attachment[data-id="' + id  + '"]').remove();
 			
+			
+			// close sidebar
+			if( !this.has_value( $el ) )
+			{
+				this.close_sidebar( $el );
+			}
+			
+			
+			// render
+			this.render( $el );
+		},
+		
+		render_collection : function( frame ){
+			
+			// Note: Need to find a differen 'on' event. Now that attachments load custom fields, this function can't rely on a timeout. Instead, hook into a render function foreach item
+			
+			// set timeout for 0, then it will always run last after the add event
+			setTimeout(function(){
+			
+			
+			// vars
+			var $gallery	=	_media.div,
+				$content	=	_media.frame.content.get().$el
+
+				collection	=	_media.frame.content.get().collection || null;
+				
+			
+			if( collection )
+			{
+				var i = -1;
+				
+				collection.each(function( item ){
+					
+					i++;
+					
+					var $li = $content.find('.attachments > .attachment:eq(' + i + ')');
+					
+					
+					// if image is already inside the gallery, disable it!
+					if( $gallery.find('.thumbnails .thumbnail[data-id="' + item.id + '"]').exists() )
+					{
+						item.off('selection:single');
+						$li.addClass('acf-selected');
+					}
+					
+				});
+			}
+			
+			
+			}, 0);
+
+				
 		},
 		
 		popup : function( $a ){
 			
-			// reference
-			var _this = this;
-			
-			
 			// vars
-			var $gallery = this.get_field( $a ),
-				atts = acf.get_atts( $gallery );
+			var $el = $a.closest('.acf-gallery'),
+				library = acf.get_field_data( $el, 'library' ),
+				preview_size = acf.get_field_data( $el, 'preview_size' );
 			
 			
-			
-			// clear the frame
-			acf.media.clear_frame();
-			
-			
-			// Create the media frame
-			acf.media.frame = wp.media({
-				states : [
-					new wp.media.controller.Library({
-						//library		:	wp.media.query( this.o.query ),
-						multiple	:	true,
-						title		:	acf._e('gallery', 'select'),
-						priority	:	20,
-						filterable	:	'all'
-					})
-				]
-			});
-			
-			
-			// customize model / view
-			acf.media.frame.on('content:activate', function(){
-				
-				// vars
-				var toolbar = null,
-					filters = null;
+			// popup
+			var frame = acf.media.upload_popup({
+				title		: acf._e('gallery', 'select'),
+				type		: 'image',
+				multiple	: 1,
+				uploadedTo	: ( library == 'uploadedTo' ) ? acf.get('post_id') : 0,
+				activate	: function( frame ){
 					
-				
-				// populate above vars making sure to allow for failure
-				try
-				{
-					toolbar = acf.media.frame.content.get().toolbar;
-					filters = toolbar.get('filters');
-				} 
-				catch(e)
-				{
-					// one of the objects was 'undefined'... perhaps the frame open is Upload Files
-					//console.log( e );
-				}
-				
-				
-				// validate
-				if( !filters )
-				{
-					return false;
-				}
-				
-				
-				// no need for 'uploaded' filter
-				if( atts.library == 'uploadedTo' )
-				{
-					filters.$el.find('option[value="uploaded"]').remove();
-					filters.$el.after('<span>' + acf._e('gallery', 'uploadedTo') + '</span>')
+					acf.fields.gallery.render_collection( frame );
 					
-					$.each( filters.filters, function( k, v ){
-						
-						v.props.uploadedTo = acf.get('post_id');
-						
-					});
-				}
-				
-				
-				/*
-// hide selected items from the library
-				_this.render_collection();
-				 
-				acf.media.frame.content.get().collection.on( 'reset add', function(){
-				    
-					_this.render_collection();
-				    
-			    });
-*/
-			    
-								
-			});
-			
-			
-			// When an image is selected, run a callback.
-			acf.media.frame.on( 'select', function() {
-				
-				// get selected images
-				selection = acf.media.frame.state().get('selection');
-				
-				if( selection )
-				{
-					selection.each(function(attachment){
-	
-						
-						/*
-// is image already in gallery?
-						if( _this.$el.find('.thumbnails .thumbnail[data-id="' + attachment.id + '"]').exists() )
-						{
-							return;
-						}
-*/
-											
-						
-				    	// vars
-				    	var image = {
-					    	id			:	attachment.id,
-					    	url			:	attachment.attributes.url
-				    	};
-				    	
-				    	
-				    	// file?
-					    if( attachment.attributes.type != 'image' )
-					    {
-						    image.url = attachment.attributes.icon;
-					    }
-					    
-					    
-					    // is preview size available?
-				    	if( attachment.attributes.sizes && attachment.attributes.sizes[ atts.preview_size ] )
-				    	{
-					    	image.url = attachment.attributes.sizes[ atts.preview_size ].url;
-				    	}
-					    
-					    
-				    	// add file to field
-				        _this.add( image, $gallery );
-				        
-						
-				    });
-				    // selection.each(function(attachment){
-				}
-				// if( selection )
-				
-				
-			});
-			// acf.media.frame.on( 'select', function() {
+					/*
+
+					
 					 
-			
-			// Finally, open the modal
-			acf.media.frame.open();
-				
-			
-			return false;
+					frame.content.get().collection.on( 'reset add', function(){
+					    
+						acf.fields.gallery.render_collection( frame );
+					    
+				    });
+*/
+						
+				},
+				select		: function( attachment, i ) {
+					
+					// is image already in gallery?
+					if( $el.find('.acf-gallery-attachment[data-id="' + attachment.id  + '"]').exists() )
+					{
+						return;
+					}
+					
+					
+			    	// vars
+			    	var image = {
+				    	id			:	attachment.id,
+				    	url			:	attachment.attributes.url
+			    	};
+			    	
+			    	
+			    	// file?
+				    if( attachment.attributes.type != 'image' )
+				    {
+					    image.url = attachment.attributes.icon;
+				    }
+				    
+				    
+				    // is preview size available?
+			    	if( attachment.attributes.sizes && attachment.attributes.sizes[ preview_size ] )
+			    	{
+				    	image.url = attachment.attributes.sizes[ preview_size ].url;
+			    	}
+				    
+				    
+			    	// add file to field
+			        acf.fields.gallery.add( $el, image );
+					
+				}
+			});
 		}
 		
 	};
@@ -1469,7 +1462,7 @@
 		
 	});
 	
-	$(document).on('click', '.acf-gallery .close-attachment', function( e ){
+	$(document).on('click', '.acf-gallery [data-name="close-attachment-button"]', function( e ){
 		
 		e.preventDefault();
 		
@@ -1477,7 +1470,7 @@
 		
 	});	
 	
-	$(document).on('click', '.acf-gallery .save-attachment', function( e ){
+	$(document).on('click', '.acf-gallery [data-name="save-attachment-button"]', function( e ){
 		
 		e.preventDefault();
 		
@@ -1485,7 +1478,7 @@
 		
 	});
 	
-	$(document).on('click', '.acf-gallery .remove-attachment', function( e ){
+	$(document).on('click', '.acf-gallery [data-name="remove-attachment-button"]', function( e ){
 		
 		e.preventDefault();
 		
@@ -1493,7 +1486,7 @@
 		
 	});
 	
-	$(document).on('click', '.acf-gallery .add-attachment', function( e ){
+	$(document).on('click', '.acf-gallery [data-name="add-attachment-button"]', function( e ){
 		
 		e.preventDefault();
 		
@@ -1501,7 +1494,7 @@
 		
 	});
 	
-	$(document).on('change', '.acf-gallery .bulk-actions-select', function( e ){
+	$(document).on('change', '.acf-gallery [data-name="bulk-actions-select"]', function( e ){
 		
 		if( ! $(this).val() )
 		{
