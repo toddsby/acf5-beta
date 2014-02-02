@@ -27,7 +27,7 @@
 		add_tab : function( $tab ){
 			
 			// vars
-			var $field	= acf.get_field_el( $tab ),
+			var $field	= acf.get_field_wrap( $tab ),
 				$wrap	= $field.parent(),
 				
 				key		= acf.get_field_data( $field, 'key'),

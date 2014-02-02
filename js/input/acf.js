@@ -209,7 +209,7 @@ var acf = {
 			
 		},
 		
-		get_field_el : function( $el ){
+		get_field_wrap : function( $el ){
 			
 			return $el.closest('.acf-field');
 			
@@ -739,6 +739,7 @@ var acf = {
 				query		: {},		// library query
 				uploadedTo	: 0,		// restrict browsing to post_id
 				multiple	: 0,		// allow multiple attachments to be selected
+				activate	: function(){},
 				select		: function( attachment, i ){}
 			}, args);
 			
@@ -768,7 +769,7 @@ var acf = {
 			
 			// events
 			frame.on('content:activate', function(){
-
+				
 				// vars
 				var toolbar = null,
 					filters = null;
@@ -827,7 +828,7 @@ var acf = {
 						
 						
 						// don't remove the 'uploadedTo' if the library option is 'all'
-						if( v == 'uploaded' && t.o.library == 'all' )
+						if( v == 'uploaded' && !args.uploadedTo )
 						{
 							return;
 						}
@@ -843,6 +844,13 @@ var acf = {
 					// set default filter
 					filters.$el.val('image').trigger('change');
 					
+				}
+				
+				
+				// callback
+				if( typeof args.activate === 'function' )
+				{
+					args.activate.apply( this, [ frame ] );
 				}
 			});
 			
@@ -871,7 +879,7 @@ var acf = {
 						
 						i++;
 						
-						args.select( attachment, i );
+						args.select.apply( this, attachment, i );
 						
 					});
 				}
@@ -1239,7 +1247,7 @@ var acf = {
 			
 			
 			// vars
-			var $field	= acf.get_field_el($el),
+			var $field	= acf.get_field_wrap($el),
 				key		= acf.get_field_data($field, 'key');
 			
 			

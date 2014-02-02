@@ -214,16 +214,14 @@
       "outputAbbreviatedPath" : "No Output Path",
       "fileType" : 2048
     },
-    "\/inc\/select2\/select2_locale_is.js" : {
+    "\/pro\/fields\/gallery.php" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 0,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/inc\/select2\/select2_locale_is.js",
-      "outputStyle" : 1,
-      "syntaxCheckerStyle" : 1,
-      "outputAbbreviatedPath" : "\/inc\/select2\/select2_locale_is.min.js",
-      "fileType" : 64
+      "inputAbbreviatedPath" : "\/pro\/fields\/gallery.php",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 2048
     },
     "\/inc\/datepicker\/images\/ui-icons_888888_256x240.png" : {
       "ignoreWasSetByUser" : 0,
@@ -296,14 +294,16 @@
       "outputAbbreviatedPath" : "No Output Path",
       "fileType" : 2048
     },
-    "\/pro\/fields\/gallery.php" : {
+    "\/inc\/select2\/select2_locale_is.js" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 0,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/pro\/fields\/gallery.php",
-      "outputAbbreviatedPath" : "No Output Path",
-      "fileType" : 2048
+      "inputAbbreviatedPath" : "\/inc\/select2\/select2_locale_is.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 1,
+      "outputAbbreviatedPath" : "\/inc\/select2\/select2_locale_is.min.js",
+      "fileType" : 64
     },
     "\/inc\/select2\/select2_locale_es.js" : {
       "ignoreWasSetByUser" : 0,
@@ -325,6 +325,15 @@
       "outputAbbreviatedPath" : "No Output Path",
       "fileType" : 2048
     },
+    "\/admin\/views\/settings-addons.php" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/admin\/views\/settings-addons.php",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 2048
+    },
     "\/inc\/select2\/select2_locale_lt.js" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 0,
@@ -335,15 +344,6 @@
       "syntaxCheckerStyle" : 1,
       "outputAbbreviatedPath" : "\/inc\/select2\/select2_locale_lt.min.js",
       "fileType" : 64
-    },
-    "\/admin\/views\/settings-addons.php" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/admin\/views\/settings-addons.php",
-      "outputAbbreviatedPath" : "No Output Path",
-      "fileType" : 2048
     },
     "\/inc\/select2\/select2_locale_fa.js" : {
       "ignoreWasSetByUser" : 0,
@@ -603,25 +603,14 @@
       "outputAbbreviatedPath" : "\/inc\/select2\/select2_locale_eu.min.js",
       "fileType" : 64
     },
-    "\/pro\/fields\/repeater.php" : {
+    "\/core\/input.php" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 0,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/pro\/fields\/repeater.php",
+      "inputAbbreviatedPath" : "\/core\/input.php",
       "outputAbbreviatedPath" : "No Output Path",
       "fileType" : 2048
-    },
-    "\/inc\/datepicker\/images\/ui-bg_flat_0_aaaaaa_40x100.png" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/inc\/datepicker\/images\/ui-bg_flat_0_aaaaaa_40x100.png",
-      "processed" : 0,
-      "outputAbbreviatedPath" : "\/inc\/datepicker\/images\/ui-bg_flat_0_aaaaaa_40x100.png",
-      "initialSize" : 212,
-      "fileType" : 8192
     },
     "\/inc\/select2\/select2_locale_lv.js" : {
       "ignoreWasSetByUser" : 0,
@@ -633,6 +622,17 @@
       "syntaxCheckerStyle" : 1,
       "outputAbbreviatedPath" : "\/inc\/select2\/select2_locale_lv.min.js",
       "fileType" : 64
+    },
+    "\/inc\/datepicker\/images\/ui-bg_flat_0_aaaaaa_40x100.png" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/inc\/datepicker\/images\/ui-bg_flat_0_aaaaaa_40x100.png",
+      "processed" : 0,
+      "outputAbbreviatedPath" : "\/inc\/datepicker\/images\/ui-bg_flat_0_aaaaaa_40x100.png",
+      "initialSize" : 212,
+      "fileType" : 8192
     },
     "\/js\/input\/acf.js" : {
       "ignoreWasSetByUser" : 1,
@@ -654,12 +654,12 @@
       "outputAbbreviatedPath" : "No Output Path",
       "fileType" : 2048
     },
-    "\/core\/input.php" : {
+    "\/pro\/fields\/repeater.php" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 0,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/core\/input.php",
+      "inputAbbreviatedPath" : "\/pro\/fields\/repeater.php",
       "outputAbbreviatedPath" : "No Output Path",
       "fileType" : 2048
     },
@@ -1042,15 +1042,6 @@
       "outputAbbreviatedPath" : "No Output Path",
       "fileType" : 2048
     },
-    "\/fields\/wysiwyg.php" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/fields\/wysiwyg.php",
-      "outputAbbreviatedPath" : "No Output Path",
-      "fileType" : 2048
-    },
     "\/inc\/select2\/select2_locale_ar.js" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 0,
@@ -1061,6 +1052,15 @@
       "syntaxCheckerStyle" : 1,
       "outputAbbreviatedPath" : "\/inc\/select2\/select2_locale_ar.min.js",
       "fileType" : 64
+    },
+    "\/fields\/wysiwyg.php" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/fields\/wysiwyg.php",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 2048
     },
     "\/pro\/acf-pro.php" : {
       "ignoreWasSetByUser" : 0,
@@ -1124,15 +1124,6 @@
       "outputAbbreviatedPath" : "\/inc\/select2\/select2_locale_vi.min.js",
       "fileType" : 64
     },
-    "\/admin\/views\/settings-export.php" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/admin\/views\/settings-export.php",
-      "outputAbbreviatedPath" : "No Output Path",
-      "fileType" : 2048
-    },
     "\/js\/input\/post_object.js" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 1,
@@ -1143,6 +1134,15 @@
       "syntaxCheckerStyle" : 1,
       "outputAbbreviatedPath" : "\/js\/input\/post_object.min.js",
       "fileType" : 64
+    },
+    "\/admin\/views\/settings-export.php" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/admin\/views\/settings-export.php",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 2048
     },
     "\/fields\/color_picker.php" : {
       "ignoreWasSetByUser" : 0,
@@ -1215,17 +1215,6 @@
       "outputAbbreviatedPath" : "No Output Path",
       "fileType" : 2048
     },
-    "\/pro\/js\/pro-field-group.js" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/pro\/js\/pro-field-group.js",
-      "outputStyle" : 1,
-      "syntaxCheckerStyle" : 1,
-      "outputAbbreviatedPath" : "\/pro\/js\/pro-field-group.min.js",
-      "fileType" : 64
-    },
     "\/js\/input\/validation.js" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 1,
@@ -1235,6 +1224,17 @@
       "outputStyle" : 1,
       "syntaxCheckerStyle" : 1,
       "outputAbbreviatedPath" : "\/js\/input\/validation.min.js",
+      "fileType" : 64
+    },
+    "\/pro\/js\/pro-field-group.js" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/pro\/js\/pro-field-group.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 1,
+      "outputAbbreviatedPath" : "\/pro\/js\/pro-field-group.min.js",
       "fileType" : 64
     },
     "\/inc\/select2\/select2_locale_et.js" : {
@@ -1317,15 +1317,6 @@
       "outputAbbreviatedPath" : "No Output Path",
       "fileType" : 2048
     },
-    "\/admin\/settings-export.php" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/admin\/settings-export.php",
-      "outputAbbreviatedPath" : "No Output Path",
-      "fileType" : 2048
-    },
     "\/inc\/select2\/select2_locale_hu.js" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 0,
@@ -1336,6 +1327,15 @@
       "syntaxCheckerStyle" : 1,
       "outputAbbreviatedPath" : "\/inc\/select2\/select2_locale_hu.min.js",
       "fileType" : 64
+    },
+    "\/admin\/settings-export.php" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/admin\/settings-export.php",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 2048
     },
     "\/js\/input\/radio.js" : {
       "ignoreWasSetByUser" : 0,
@@ -1844,7 +1844,7 @@
   "projectAttributes" : {
     "bourbonEnabled" : 0,
     "displayValue" : "advanced-custom-fields-pro",
-    "displayValueWasSetByUser" : 0,
+    "displayValueWasSetByUser" : 1,
     "compassEnabled" : 0
   }
 }
