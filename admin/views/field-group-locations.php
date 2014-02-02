@@ -35,7 +35,7 @@ if( empty($field_group['location']) )
 				<label><?php _e("Rules",'acf'); ?></label>
 				<p><?php _e("Create a set of rules to determine which edit screens will use these advanced custom fields",'acf'); ?></p>
 			</td>
-			<td class="acf-field">
+			<td class="acf-input">
 				<div class="location-groups">
 					
 					<?php foreach( $field_group['location'] as $group_id => $group ): 
