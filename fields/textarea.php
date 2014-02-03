@@ -18,12 +18,13 @@ class acf_field_textarea extends acf_field
 		$this->name = 'textarea';
 		$this->label = __("Text Area",'acf');
 		$this->defaults = array(
-			'default_value'	=>	'',
-			'formatting' 	=>	'br',
-			'maxlength'		=>	'',
-			'placeholder'	=>	'',
-			'readonly'		=>	0,
-			'disabled'		=>	0,
+			'default_value'	=> '',
+			'formatting' 	=> 'br',
+			'maxlength'		=> '',
+			'placeholder'	=> '',
+			'readonly'		=> 0,
+			'disabled'		=> 0,
+			'rows'			=> ''
 		);
 		
 		
@@ -44,18 +45,25 @@ class acf_field_textarea extends acf_field
 	*  @date	23/01/13
 	*/
 	
-	function render_field( $field )
-	{
+	function render_field( $field ) {
+		
 		// vars
-		$o = array( 'id', 'class', 'name', 'placeholder' );
+		$o = array( 'id', 'class', 'name', 'placeholder', 'rows' );
 		$s = array( 'readonly', 'disabled' );
 		$e = '';
 		
 		
 		// maxlength
-		if( $field['maxlength'] !== "" )
+		if( $field['maxlength'] !== '' )
 		{
 			$o[] = 'maxlength';
+		}
+		
+		
+		// rows
+		if( empty($field['rows']) )
+		{
+			$field['rows'] = 8;
 		}
 		
 		
@@ -77,7 +85,7 @@ class acf_field_textarea extends acf_field
 		}
 		
 
-		$e .= '<textarea rows="4" ' . acf_esc_attr( $atts ) . ' >';
+		$e .= '<textarea ' . acf_esc_attr( $atts ) . ' >';
 		$e .= esc_textarea( $field['value'] );
 		$e .= '</textarea>';
 		
@@ -132,6 +140,18 @@ class acf_field_textarea extends acf_field
 			'name'			=> 'maxlength',
 			'prefix'		=> $field['prefix'],
 			'value'			=> $field['maxlength'],
+		));
+		
+		
+		// rows
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Rows','acf'),
+			'instructions'	=> __('Sets the textarea height','acf'),
+			'type'			=> 'number',
+			'name'			=> 'rows',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['rows'],
+			'placeholder'	=> 8
 		));
 		
 		

@@ -24,7 +24,7 @@
 
 .acf-field textarea {
 	resize: vertical;
-	min-height: 150px;
+	line-height: 1.4em;
 }
 
 
