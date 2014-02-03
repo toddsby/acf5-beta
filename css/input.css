@@ -119,27 +119,36 @@ ul.acf-radio-list,
 ul.acf-checkbox-list {
 	background: transparent !important;
 	position: relative;
-	display: block;
 	padding: 1px;
 	margin: 0;
 }
 
-ul.acf-radio-list.horizontal,
-ul.acf-checkbox-list.horizontal {
-	overflow: hidden;
+ul.acf-radio-list li,
+ul.acf-checkbox-list li {
+	font-size: 13px;
+	line-height: 1.4em;
+	margin: 0;
+	clear: both;
 }
 
-ul.acf-radio-list.horizontal li,
-ul.acf-checkbox-list.horizontal li {
-	float: left;
+ul.acf-hl.acf-radio-list li,
+ul.acf-hl.acf-checkbox-list li {
 	margin-right: 20px;
+	clear: none;
 }
 
 ul.acf-radio-list li input,
 ul.acf-checkbox-list li input {
-	margin-top: 0;
-	margin-right: 5px !important;
+	margin: -1px 4px 0 0;
 	width: auto !important;
+	vertical-align: middle;
+}
+
+ul.acf-radio-list li label,
+ul.acf-checkbox-list li label {
+	padding: 3px 0;
+	display: block;
+	float: left;
 }
 
 ul.acf-radio-list.pill {
@@ -156,26 +165,15 @@ ul.acf-radio-list.pill li label {
 	position: relative;
 	
 	border-radius: 0;
-	height: 21px;
-	padding: 0 11px 1px 7px;
+	padding: 4px 10px;
     cursor: pointer;
 	
     color: #333;
     font-weight: normal;
-    font-size: 12px;
-    line-height: 23px;
     text-align: center;
 	
 	background: #F9F9F9;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#FEFEFE), to(#F4F4F4)); /* Safari 4+, Chrome */
-	background-image: -webkit-linear-gradient(top, #FEFEFE, #F4F4F4); /* Chrome 10+, Safari 5.1+, iOS 5+ */
-	background-image:    -moz-linear-gradient(top, #FEFEFE, #F4F4F4); /* Firefox 3.6-15 */
-	background-image:      -o-linear-gradient(top, #FEFEFE, #F4F4F4); /* Opera 11.10+ */
-	background-image:         linear-gradient(to bottom, #FEFEFE, #F4F4F4); /* Firefox 16+ */
-	
-	border: #BBBBBB solid 1px;
-	text-shadow: #fff 0 1px 0;
-	box-shadow: inset #fff 0 1px 0 0;
+	border: #E1E1E1 solid 1px;
 }
 
 ul.acf-radio-list.pill li label:hover {

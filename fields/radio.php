@@ -48,7 +48,14 @@ class acf_field_radio extends acf_field
 	{
 		// vars
 		$i = 0;
-		$e = '<ul class="acf-radio-list ' . esc_attr($field['class']) . ' ' . esc_attr($field['layout']) . '">';
+		
+		// class
+		$field['class'] .= ' acf-radio-list';
+		$field['class'] .= ($field['layout'] == 'horizontal') ? ' acf-hl' : ' acf-bl';
+
+		
+		// e
+		$e = '<ul ' . acf_esc_attr(array( 'class' => $field['class'] )) . '>';
 
 		
 		// add choices
@@ -60,10 +67,10 @@ class acf_field_radio extends acf_field
 				$i++;
 				$li_atts = array();
 				$input_atts = array(
-					'type' => 'radio',
-					'name' => $field['name'],
-					'value' => $value,
-					'id' => "{$field['id']}-{$value}"
+					'type'	=> 'radio',
+					'name'	=> $field['name'],
+					'value'	=> $value,
+					'id'	=> "{$field['id']}-{$value}"
 				);
 				
 				
@@ -102,17 +109,17 @@ class acf_field_radio extends acf_field
 		{
 			// vars
 			$atts1 = array(
-				'type' => 'radio',
-				'name' => $field['name'],
-				'value' => 'other',
-				'id' => "{$field['id']}-other"
+				'type'		=> 'radio',
+				'name'		=> $field['name'],
+				'value'		=> 'other',
+				'id'		=> "{$field['id']}-other"
 			);
 			
 			$atts2 = array(
-				'type' => 'text',
-				'name' => '',
-				'value' => '',
-				'style' => 'display:none'
+				'type'		=> 'text',
+				'name'		=> $field['name'],
+				'value'		=> '',
+				'disabled'	=> 'disabled'
 			);
 			
 			
@@ -123,13 +130,13 @@ class acf_field_radio extends acf_field
 					$atts1['checked'] = 'checked';
 					$atts1['data-checked'] = 'checked';
 					
-					$atts2['name'] = $field['name'];
 					$atts2['value'] = $field['value'];
+					unset( $atts2['disabled'] );
 				}
 			}
 			
 			
-			$e .= '<li><label><input ' . acf_esc_attr( $atts1 ) . ' />' . __("Other", 'acf') . '</label> <input type="text" ' . acf_esc_attr( $atts2 ) . ' /></li>';
+			$e .= '<li><label><input ' . acf_esc_attr( $atts1 ) . ' /></label> <input type="text" ' . acf_esc_attr( $atts2 ) . ' /></li>';
 		}
 
 

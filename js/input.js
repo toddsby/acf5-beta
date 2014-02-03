@@ -3716,43 +3716,24 @@ console.log('-- results --')
 	*/
 	
 	acf.fields.radio = {
-		
-		$el : null,
-		$input : null,
-		$other : null,
-		
-		set : function( o ){
+	
+		change : function( $radio ){
 			
-			// merge in new option
-			$.extend( this, o );
+			// vars
+			var $ul = $radio.closest('ul'),
+				$val = $ul.find('input[type="radio"]:checked'),
+				$other = $ul.find('input[type="text"]');
 			
 			
-			// find input
-			this.$input = this.$el.find('input[type="radio"]:checked');
-			this.$other = this.$el.find('input[type="text"]');
-			
-			
-			// return this for chaining
-			return this;
-			
-		},
-		
-		change : function(){
-			
-			// label classes
-			this.$el.find('li').removeClass('active');
-			this.$input.closest('li').addClass('active');
-			
-			
-			if( this.$input.val() == 'other' )
+			if( $val.val() == 'other' )
 			{
-				this.$other.attr('name', this.$input.attr('name'));
-				this.$other.show();
+				$other.removeAttr('disabled');
+				$other.attr('name', $val.attr('name'));
 			}
 			else
 			{
-				this.$other.attr('name', '');
-				this.$other.hide();
+				$other.attr('disabled', 'disabled');
+				$other.attr('name', '');
 			}
 		}
 	};
@@ -3772,7 +3753,7 @@ console.log('-- results --')
 	
 	$(document).on('change', '.acf-radio-list input[type="radio"]', function( e ){
 		
-		acf.fields.radio.set({ $el : $(this).closest('.acf-radio-list') }).change();
+		acf.fields.radio.change( $(this) );
 		
 	});
 	
