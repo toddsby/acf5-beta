@@ -598,6 +598,32 @@ function acf_esc_attr_e( $atts ) {
 
 
 /*
+*  acf_hidden_input
+*
+*  description
+*
+*  @type	function
+*  @date	3/02/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_get_hidden_input( $atts ) {
+
+	return '<input ' . acf_esc_attr( $atts ) . ' />';
+	
+}
+
+function acf_hidden_input( $atts ) {
+	
+	echo acf_get_hidden_input( $atts );
+	
+}
+
+
+/*
 *  acf_extract_var
 *
 *  This function will remove the var from the array, and return the var

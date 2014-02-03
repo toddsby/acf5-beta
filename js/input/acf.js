@@ -112,38 +112,6 @@ var acf = {
 			
 		},
 		
-		get_atts : function( $el ){
-		
-			var atts = {};
-			
-			if( $el.exists() )
-			{
-				$.each( $el[0].attributes, function( index, attr ) {
-		        	
-		        	if( attr.name.substr(0, 5) == 'data-' )
-		        	{
-		        		// vars
-		        		var v = attr.value,
-		        			k = attr.name.replace('data-', '');
-		        		
-		        		
-		        		// convert ints (don't worry about floats. I doubt these would ever appear in data atts...)
-		        		if( $.isNumeric(v) )
-		        		{
-			        		v = parseInt(v);
-		        		}
-		        		
-		        		
-		        		// add to atts
-			        	atts[ k ] = v;
-		        	}
-		        });
-	        }
-	        
-	        return atts;
-				
-		},
-		
 		get_fields : function( args, $el, allow_filter ){
 			
 			// defaults
@@ -215,10 +183,76 @@ var acf = {
 			
 		},
 		
-		get_field_data : function( $el, attr ){
+		get_field_data : function( $el, name ){
 			
-			return $el.attr('data-' + attr);
+			// defaults
+			name = name || false;
 			
+			
+			// vars
+			$field = this.get_field_wrap( $el );
+			
+			console.log( $field );
+			// return
+			return this.get_data( $field, name );
+			
+		},
+		
+		get_data : function( $el, name ){
+			
+			// defaults
+			name = name || false;
+			
+			
+			// vars
+			var data = false;
+			
+			
+			// specific data-name
+			if( name )
+			{
+				data = $el.attr('data-' + name)
+				
+				// convert ints (don't worry about floats. I doubt these would ever appear in data atts...)
+        		if( $.isNumeric(data) )
+        		{
+	        		data = parseInt(data);
+        		}
+			}
+			else
+			{
+				// all data-names
+				data = {};
+				
+				if( $el.exists() )
+				{
+					$.each( $el[0].attributes, function( index, attr ) {
+			        	
+			        	if( attr.name.substr(0, 5) == 'data-' )
+			        	{
+			        		// vars
+			        		var v = attr.value,
+			        			k = attr.name.replace('data-', '');
+			        		
+			        		
+			        		// convert ints (don't worry about floats. I doubt these would ever appear in data atts...)
+			        		if( $.isNumeric(v) )
+			        		{
+				        		v = parseInt(v);
+			        		}
+			        		
+			        		
+			        		// add to atts
+				        	data[ k ] = v;
+			        	}
+			        });
+		        }
+			}
+			
+			
+			// return
+	        return data;
+				
 		},
 		
 		is_field : function( $el, args ){
@@ -1248,7 +1282,7 @@ var acf = {
 			
 			// vars
 			var $field	= acf.get_field_wrap($el),
-				key		= acf.get_field_data($field, 'key');
+				key		= acf.get_data($field, 'key');
 			
 			
 			// loop through items and find rules where this field key is a trigger

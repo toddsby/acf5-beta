@@ -23,7 +23,6 @@ class acf_field_select extends acf_field
 			'choices'		=>	array(),
 			'default_value'	=>	'',
 			'ui'			=>	0,
-			//'search'		=>	0,
 			'ajax'			=>	0,
 			'sortable'		=>	0,
 			'placeholder'	=>	''
@@ -35,11 +34,82 @@ class acf_field_select extends acf_field
     	
     	
     	// extra
-		//add_filter('acf/update_field/type=select', array($this, 'update_field'), 5, 1);
-		add_filter('acf/update_field/type=checkbox', array($this, 'update_field'), 5, 1);
-		add_filter('acf/update_field/type=radio', array($this, 'update_field'), 5, 1);
+		add_filter('acf/update_field/type=checkbox',				array($this, 'update_field'), 5, 1);
+		add_filter('acf/update_field/type=radio',					array($this, 'update_field'), 5, 1);
+		
+		
+		// ajax
+		add_action('wp_ajax_acf/fields/select/query',				array($this, 'ajax_query'));
+		add_action('wp_ajax_nopriv_acf/fields/select/query',		array($this, 'ajax_query'));
 	}
 
+	
+	/*
+	*  query_posts
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	24/10/13
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function ajax_query()
+   	{
+   		// options
+   		$options = acf_parse_args( $_GET, array(
+			'post_id'					=>	0,
+			's'							=>	'',
+			'field_key'					=>	'',
+			'nonce'						=>	'',
+		));
+		
+		
+		// load field
+		$field = acf_get_field( $options['field_key'] );
+		
+		if( !$field )
+		{
+			die();
+		}
+		
+		
+		// vars
+		$r = array();
+		
+		
+		if( !empty($field['choices']) )
+		{
+			foreach( $field['choices'] as $k => $v )
+			{
+				// search
+				if( $options['s'] )
+				{
+					if( strpos($v, $options['s']) === false )
+					{
+						continue;
+					}
+				}
+				
+				
+				// append
+				$r[] = array(
+					'id'	=> $k,
+					'text'	=> $v
+				);
+			}
+		}
+		
+		
+		// return JSON
+		echo json_encode( $r );
+		die();
+			
+	}
+	
 	
 	/*
 	*  render_field()
@@ -74,7 +144,7 @@ class acf_field_select extends acf_field
 		
 		
 		// value must be array
-		if( !is_array($field['value']) )
+		if( is_string($field['value']) )
 		{
 			// perhaps this is a default value with new lines in it?
 			if( strpos($field['value'], "\n") !== false )
@@ -93,13 +163,19 @@ class acf_field_select extends acf_field
 		$field['value'] = array_map('trim', $field['value']);
 		
 		
+		// placeholder
+		if( empty($field['placeholder']) )
+		{
+			$field['placeholder'] = __("Select",'acf');
+		}
+		
+		
 		// vars
 		$atts = array(
 			'id'				=> $field['id'],
 			'class'				=> $field['class'],
 			'name'				=> $field['name'],
 			'data-ui'			=> $field['ui'],
-			//'data-search'		=> $field['search'],
 			'data-ajax'			=> $field['ajax'],
 			'data-multiple'		=> $field['multiple'],
 			'data-sortable'		=> $field['sortable'],
@@ -108,22 +184,36 @@ class acf_field_select extends acf_field
 		);
 		
 		
-		// placeholder
-		if( !$field['placeholder'] )
+		// hidden input
+		if( $field['ui'] )
 		{
-			$field['placeholder'] = __("- Select -",'acf');
-			$atts['data-placeholder'] = __("Select",'acf');
+			acf_hidden_input(array(
+				'type'	=> 'hidden',
+				'id'	=> $field['id'],
+				'name'	=> $field['name'],
+				'value'	=> implode(',', $field['value'])
+			));
+		}
+		elseif( $field['multiple'] )
+		{
+			acf_hidden_input(array(
+				'type'	=> 'hidden',
+				'name'	=> $field['name'],
+			));
+		} 
+		
+		
+		// ui
+		if( $field['ui'] )
+		{
+			$atts['disabled'] = 'disabled';
+			$atts['class'] .= ' acf-hidden';
 		}
 		
 		
 		// multiple
 		if( $field['multiple'] )
 		{
-			// create a hidden field to allow for no selections
-			echo '<input type="hidden" name="' . acf_esc_attr($field['name']) . '" />';
-			
-			
-			// update to atts
 			$atts['multiple'] = 'multiple';
 			$atts['size'] = 5;
 			$atts['name'] .= '[]';
@@ -137,7 +227,7 @@ class acf_field_select extends acf_field
 		// null
 		if( $field['allow_null'] )
 		{
-			echo '<option value="">' . $field['placeholder'] . '</option>';
+			echo '<option value="">- ' . $field['placeholder'] . ' -</option>';
 		}
 		
 		
@@ -419,6 +509,46 @@ acf_render_field_option( $this->name, array(
 		
 		
 		return $field;
+	}
+	
+	
+	/*
+	*  update_value()
+	*
+	*  This filter is appied to the $value before it is updated in the db
+	*
+	*  @type	filter
+	*  @since	3.6
+	*  @date	23/01/13
+	*
+	*  @param	$value - the value which will be saved in the database
+	*  @param	$post_id - the $post_id of which the value will be saved
+	*  @param	$field - the field array holding all the field options
+	*
+	*  @return	$value - the modified value
+	*/
+	
+	function update_value( $value, $post_id, $field ) {
+		
+		// validate
+		if( empty($value) )
+		{
+			return $value;
+		}
+		
+		
+		if( is_string($value) )
+		{
+			// string
+			$value = explode(',', $value);
+			
+			// save value as strings, so we can clearly search for them in SQL LIKE statements
+			$value = array_map('strval', $value);
+			
+		}
+		
+		
+		return $value;
 	}
 	
 }

@@ -29,7 +29,7 @@
 			
 			
 			// get options
-			this.o = acf.get_atts( this.$select );
+			this.o = acf.get_data( this.$select );
 			
 			
 			// return this for chaining

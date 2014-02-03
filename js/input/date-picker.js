@@ -30,7 +30,7 @@
 			
 			
 			// get options
-			this.o = acf.get_atts( this.$el );
+			this.o = acf.get_data( this.$el );
 			
 			
 			// return this for chaining

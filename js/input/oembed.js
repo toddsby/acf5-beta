@@ -25,8 +25,8 @@
 				'action'	: 'acf/fields/oembed/search',
 				'nonce'		: acf.get('nonce'),
 				's'			: s,
-				'width'		: acf.get_field_data($el, 'width'),
-				'height'	: acf.get_field_data($el, 'height')
+				'width'		: acf.get_data($el, 'width'),
+				'height'	: acf.get_data($el, 'height')
 			};
 			
 			

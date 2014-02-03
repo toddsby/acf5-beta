@@ -30,7 +30,7 @@
 			var $field	= acf.get_field_wrap( $tab ),
 				$wrap	= $field.parent(),
 				
-				key		= acf.get_field_data( $field, 'key'),
+				key		= acf.get_data( $field, 'key'),
 				label 	= $tab.text();
 				
 				
@@ -188,7 +188,7 @@
 		
 		
 		// vars
-		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + acf.get_field_data($field, 'key') + '"]');
+		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + acf.get_data($field, 'key') + '"]');
 		
 		
 		// if tab is already hidden, then ignore the following functiolnality
@@ -226,7 +226,7 @@
 		
 		
 		// vars
-		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + acf.get_field_data($field, 'key') + '"]');
+		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + acf.get_data($field, 'key') + '"]');
 		
 		
 		// if tab is already visible, then ignore the following functiolnality

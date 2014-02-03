@@ -37,8 +37,8 @@
 			
 			// vars
 			var $el = $a.closest('.acf-image-uploader'),
-				library = acf.get_field_data( $el, 'library' ),
-				preview_size = acf.get_field_data( $el, 'preview_size' );
+				library = acf.get_data( $el, 'library' ),
+				preview_size = acf.get_data( $el, 'preview_size' );
 			
 			
 			// popup

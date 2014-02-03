@@ -35,7 +35,7 @@
 			
 			
 			// get options
-			this.o = acf.get_atts( this.$wrap );
+			this.o = acf.get_data( this.$wrap );
 			
 			
 			// return this for chaining

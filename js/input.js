@@ -372,38 +372,6 @@ var acf = {
 			
 		},
 		
-		get_atts : function( $el ){
-		
-			var atts = {};
-			
-			if( $el.exists() )
-			{
-				$.each( $el[0].attributes, function( index, attr ) {
-		        	
-		        	if( attr.name.substr(0, 5) == 'data-' )
-		        	{
-		        		// vars
-		        		var v = attr.value,
-		        			k = attr.name.replace('data-', '');
-		        		
-		        		
-		        		// convert ints (don't worry about floats. I doubt these would ever appear in data atts...)
-		        		if( $.isNumeric(v) )
-		        		{
-			        		v = parseInt(v);
-		        		}
-		        		
-		        		
-		        		// add to atts
-			        	atts[ k ] = v;
-		        	}
-		        });
-	        }
-	        
-	        return atts;
-				
-		},
-		
 		get_fields : function( args, $el, allow_filter ){
 			
 			// defaults
@@ -475,10 +443,76 @@ var acf = {
 			
 		},
 		
-		get_field_data : function( $el, attr ){
+		get_field_data : function( $el, name ){
 			
-			return $el.attr('data-' + attr);
+			// defaults
+			name = name || false;
 			
+			
+			// vars
+			$field = this.get_field_wrap( $el );
+			
+			console.log( $field );
+			// return
+			return this.get_data( $field, name );
+			
+		},
+		
+		get_data : function( $el, name ){
+			
+			// defaults
+			name = name || false;
+			
+			
+			// vars
+			var data = false;
+			
+			
+			// specific data-name
+			if( name )
+			{
+				data = $el.attr('data-' + name)
+				
+				// convert ints (don't worry about floats. I doubt these would ever appear in data atts...)
+        		if( $.isNumeric(data) )
+        		{
+	        		data = parseInt(data);
+        		}
+			}
+			else
+			{
+				// all data-names
+				data = {};
+				
+				if( $el.exists() )
+				{
+					$.each( $el[0].attributes, function( index, attr ) {
+			        	
+			        	if( attr.name.substr(0, 5) == 'data-' )
+			        	{
+			        		// vars
+			        		var v = attr.value,
+			        			k = attr.name.replace('data-', '');
+			        		
+			        		
+			        		// convert ints (don't worry about floats. I doubt these would ever appear in data atts...)
+			        		if( $.isNumeric(v) )
+			        		{
+				        		v = parseInt(v);
+			        		}
+			        		
+			        		
+			        		// add to atts
+				        	data[ k ] = v;
+			        	}
+			        });
+		        }
+			}
+			
+			
+			// return
+	        return data;
+				
 		},
 		
 		is_field : function( $el, args ){
@@ -1508,7 +1542,7 @@ var acf = {
 			
 			// vars
 			var $field	= acf.get_field_wrap($el),
-				key		= acf.get_field_data($field, 'key');
+				key		= acf.get_data($field, 'key');
 			
 			
 			// loop through items and find rules where this field key is a trigger
@@ -2251,7 +2285,7 @@ var acf = {
 			
 			
 			// get options
-			this.o = acf.get_atts( this.$el );
+			this.o = acf.get_data( this.$el );
 			
 			
 			// return this for chaining
@@ -2414,7 +2448,7 @@ var acf = {
 			
 			// vars
 			var $el = $a.closest('.acf-file-uploader'),
-				library = acf.get_field_data( $el, 'library' );
+				library = acf.get_data( $el, 'library' );
 			
 			
 			// popup
@@ -2573,7 +2607,7 @@ var acf = {
 			
 			
 			// get options
-			this.o = acf.get_atts( this.$el );
+			this.o = acf.get_data( this.$el );
 			
 			
 			// get map
@@ -3113,8 +3147,8 @@ var acf = {
 			
 			// vars
 			var $el = $a.closest('.acf-image-uploader'),
-				library = acf.get_field_data( $el, 'library' ),
-				preview_size = acf.get_field_data( $el, 'preview_size' );
+				library = acf.get_data( $el, 'library' ),
+				preview_size = acf.get_data( $el, 'preview_size' );
 			
 			
 			// popup
@@ -3263,8 +3297,8 @@ var acf = {
 				'action'	: 'acf/fields/oembed/search',
 				'nonce'		: acf.get('nonce'),
 				's'			: s,
-				'width'		: acf.get_field_data($el, 'width'),
-				'height'	: acf.get_field_data($el, 'height')
+				'width'		: acf.get_data($el, 'width'),
+				'height'	: acf.get_data($el, 'height')
 			};
 			
 			
@@ -3507,7 +3541,7 @@ acf.add_action('ready append', function( $el ){
 			
 			
 			// get options
-			this.o = acf.get_atts( this.$select );
+			this.o = acf.get_data( this.$select );
 			
 			
 			// return this for chaining
@@ -3786,7 +3820,7 @@ console.log('-- results --')
 			
 			
 			// get options
-			this.o = acf.get_atts( this.$wrap );
+			this.o = acf.get_data( this.$wrap );
 			
 			
 			// return this for chaining
@@ -4125,68 +4159,143 @@ console.log('-- results --')
 
 (function($){
 	
-	/*
-	*  Select
-	*
-	*  static model and events for this field
-	*
-	*  @type	event
-	*  @date	1/06/13
-	*
-	*/
-	
 	acf.fields.select = {
 		
-		$el : null,
-		$select : null,
-		
-		o : {},
-		
-		set : function( o ){
+		init : function( $select ){
 			
-			// merge in new option
-			$.extend( this, o );
+			// vars
+			var o = acf.get_data( $select );
 			
-			
-			// find input
-			this.$select = this.$el.find('select');
-			
-			
-			// get options
-			this.o = acf.get_atts( this.$select );
-			
-			
-			// return this for chaining
-			return this;
-			
-		},
-		
-		init : function(){
 			
 			// bail early if no ui
-			if( ! this.o.ui )
+			if( ! o.ui )
 			{
 				return;
 			}
 			
 			
-			// construct args
+			// vars
+			var $input = $select.siblings('input');
+			
+			
+			// select2 args
 			var args = {
 				width		: '100%',
-				allowClear	: this.o.allow_null,
-				placeholder	: this.o.placeholder
+				allowClear	: o.allow_null,
+				placeholder	: o.placeholder,
+				multiple	: o.multiple,
+				data		: []
 			};
 			
 			
 			// remove the blank option as we have a clear all button!
-			if( this.o.allow_null )
+			if( o.allow_null )
 			{
-				this.$select.find('option[value=""]').remove();
+				args.placeholder = o.placeholder;
+				$select.find('option[value=""]').remove();
+			}
+			
+			
+			// vars
+			var selected = $input.val().split(',').reverse(),
+				selected_i = [];
+			
+			
+			// populate args.data
+			$select.find('option').each(function( i ){
+				
+				// append to choices
+				args.data.push({
+					id		: $(this).attr('value'),
+					text	: $(this).text()
+				});
+				
+			});
+			
+			
+			// re-order options
+			$.each( selected, function( k, value ){
+					
+				$.each( args.data, function( i, choice ){
+					
+					if( value == choice.id )
+					{
+						selected_i.push( i );
+					}
+					
+				});
+								
+			});
+			
+			
+			// ajax
+			if( o.ajax )
+			{
+				// vars
+				var data = {
+					action		: 'acf/fields/select/query',
+					field_key	: acf.get_field_data($input, 'key'),
+					nonce		: acf.get('nonce'),
+					post_id		: acf.get('post_id'),
+				};
+				
+				args.ajax = {
+					url			: acf.get('ajaxurl'),
+					dataType	: 'json',
+					type		: 'get',
+					cache		: true,
+					data		: function (term, page) {
+						
+						//add search term
+						data.s = term;
+												
+						return data;
+						
+					},
+					results		: function (data, page) {
+						
+						return { results: data };
+						
+					}
+				};
+				
+				args.initSelection = function (element, callback) {
+					
+					// vars
+					var data = [];
+					
+					
+					$.each( selected_i, function( k, v ){
+						
+						data.push( args.data[ v ] );
+						
+					});
+					
+			        
+			        // callback
+			        callback( data );
+			        
+			    };
 			}
 			
 			
 			// add select2
-			this.$select.select2( args );
+			$input.select2( args );
+			
+			
+			// sortable?
+			if( o.sortable )
+			{
+				$input.select2("container").find("ul.select2-choices").sortable({
+					 containment: 'parent',
+					 start: function() {
+					 	$input.select2("onSortStart");
+					 },
+					 update: function() {
+					 	$input.select2("onSortEnd");
+					 }
+				});
+			}
 			
 		}
 	};
@@ -4209,13 +4318,13 @@ console.log('-- results --')
 		
 		acf.get_fields({ type : 'select'}, $el).each(function(){
 			
-			acf.fields.select.set({ $el : $(this) }).init();
+			acf.fields.select.init( $(this).find('select') );
 			
 		});
 		
 		acf.get_fields({ type : 'user'}, $el).each(function(){
 			
-			acf.fields.select.set({ $el : $(this) }).init();
+			acf.fields.select.init( $(this).find('select') );
 			
 		});
 		
@@ -4261,7 +4370,7 @@ console.log('-- results --')
 			var $field	= acf.get_field_wrap( $tab ),
 				$wrap	= $field.parent(),
 				
-				key		= acf.get_field_data( $field, 'key'),
+				key		= acf.get_data( $field, 'key'),
 				label 	= $tab.text();
 				
 				
@@ -4419,7 +4528,7 @@ console.log('-- results --')
 		
 		
 		// vars
-		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + acf.get_field_data($field, 'key') + '"]');
+		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + acf.get_data($field, 'key') + '"]');
 		
 		
 		// if tab is already hidden, then ignore the following functiolnality
@@ -4457,7 +4566,7 @@ console.log('-- results --')
 		
 		
 		// vars
-		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + acf.get_field_data($field, 'key') + '"]');
+		var $tab = $field.siblings('.acf-tab-wrap').find('a[data-key="' + acf.get_data($field, 'key') + '"]');
 		
 		
 		// if tab is already visible, then ignore the following functiolnality
@@ -4776,7 +4885,7 @@ console.log('-- results --')
 			
 			
 			// get options
-			this.o = acf.get_atts( this.$el );
+			this.o = acf.get_data( this.$el );
 			
 			
 			// add ID

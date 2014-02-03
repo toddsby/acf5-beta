@@ -57,7 +57,7 @@
 			
 			// vars
 			var $el = $a.closest('.acf-file-uploader'),
-				library = acf.get_field_data( $el, 'library' );
+				library = acf.get_data( $el, 'library' );
 			
 			
 			// popup

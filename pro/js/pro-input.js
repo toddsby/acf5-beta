@@ -33,7 +33,7 @@
 			
 			
 			// get options
-			this.o = acf.get_atts( this.$el );
+			this.o = acf.get_data( this.$el );
 			
 			
 			// add row_count
@@ -305,7 +305,7 @@
 			
 			
 			// get options
-			this.o = acf.get_atts( this.$el );
+			this.o = acf.get_data( this.$el );
 			
 			
 			// add layout_count
@@ -1353,8 +1353,8 @@
 			
 			// vars
 			var $el = $a.closest('.acf-gallery'),
-				library = acf.get_field_data( $el, 'library' ),
-				preview_size = acf.get_field_data( $el, 'preview_size' );
+				library = acf.get_data( $el, 'library' ),
+				preview_size = acf.get_data( $el, 'preview_size' );
 			
 			
 			// popup

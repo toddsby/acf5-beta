@@ -1,67 +1,142 @@
 (function($){
 	
-	/*
-	*  Select
-	*
-	*  static model and events for this field
-	*
-	*  @type	event
-	*  @date	1/06/13
-	*
-	*/
-	
 	acf.fields.select = {
 		
-		$el : null,
-		$select : null,
-		
-		o : {},
-		
-		set : function( o ){
+		init : function( $select ){
 			
-			// merge in new option
-			$.extend( this, o );
+			// vars
+			var o = acf.get_data( $select );
 			
-			
-			// find input
-			this.$select = this.$el.find('select');
-			
-			
-			// get options
-			this.o = acf.get_atts( this.$select );
-			
-			
-			// return this for chaining
-			return this;
-			
-		},
-		
-		init : function(){
 			
 			// bail early if no ui
-			if( ! this.o.ui )
+			if( ! o.ui )
 			{
 				return;
 			}
 			
 			
-			// construct args
+			// vars
+			var $input = $select.siblings('input');
+			
+			
+			// select2 args
 			var args = {
 				width		: '100%',
-				allowClear	: this.o.allow_null,
-				placeholder	: this.o.placeholder
+				allowClear	: o.allow_null,
+				placeholder	: o.placeholder,
+				multiple	: o.multiple,
+				data		: []
 			};
 			
 			
 			// remove the blank option as we have a clear all button!
-			if( this.o.allow_null )
+			if( o.allow_null )
 			{
-				this.$select.find('option[value=""]').remove();
+				args.placeholder = o.placeholder;
+				$select.find('option[value=""]').remove();
+			}
+			
+			
+			// vars
+			var selected = $input.val().split(',').reverse(),
+				selected_i = [];
+			
+			
+			// populate args.data
+			$select.find('option').each(function( i ){
+				
+				// append to choices
+				args.data.push({
+					id		: $(this).attr('value'),
+					text	: $(this).text()
+				});
+				
+			});
+			
+			
+			// re-order options
+			$.each( selected, function( k, value ){
+					
+				$.each( args.data, function( i, choice ){
+					
+					if( value == choice.id )
+					{
+						selected_i.push( i );
+					}
+					
+				});
+								
+			});
+			
+			
+			// ajax
+			if( o.ajax )
+			{
+				// vars
+				var data = {
+					action		: 'acf/fields/select/query',
+					field_key	: acf.get_field_data($input, 'key'),
+					nonce		: acf.get('nonce'),
+					post_id		: acf.get('post_id'),
+				};
+				
+				args.ajax = {
+					url			: acf.get('ajaxurl'),
+					dataType	: 'json',
+					type		: 'get',
+					cache		: true,
+					data		: function (term, page) {
+						
+						//add search term
+						data.s = term;
+												
+						return data;
+						
+					},
+					results		: function (data, page) {
+						
+						return { results: data };
+						
+					}
+				};
+				
+				args.initSelection = function (element, callback) {
+					
+					// vars
+					var data = [];
+					
+					
+					$.each( selected_i, function( k, v ){
+						
+						data.push( args.data[ v ] );
+						
+					});
+					
+			        
+			        // callback
+			        callback( data );
+			        
+			    };
 			}
 			
 			
 			// add select2
-			this.$select.select2( args );
+			$input.select2( args );
+			
+			
+			// sortable?
+			if( o.sortable )
+			{
+				$input.select2("container").find("ul.select2-choices").sortable({
+					 containment: 'parent',
+					 start: function() {
+					 	$input.select2("onSortStart");
+					 },
+					 update: function() {
+					 	$input.select2("onSortEnd");
+					 }
+				});
+			}
 			
 		}
 	};
@@ -84,13 +159,13 @@
 		
 		acf.get_fields({ type : 'select'}, $el).each(function(){
 			
-			acf.fields.select.set({ $el : $(this) }).init();
+			acf.fields.select.init( $(this).find('select') );
 			
 		});
 		
 		acf.get_fields({ type : 'user'}, $el).each(function(){
 			
-			acf.fields.select.set({ $el : $(this) }).init();
+			acf.fields.select.init( $(this).find('select') );
 			
 		});
 		
