@@ -30,6 +30,18 @@
 			};
 			
 			
+			// customize HTML for selected choices
+			if( o.multiple )
+			{
+				args.formatSelection = function( object, $div ){
+					
+					$div.parent().append('<input type="hidden" name="' + $select.attr('name') + '" value="' + object.id + '" />');
+					
+					return object.text;
+				}	
+			}
+			
+			
 			// remove the blank option as we have a clear all button!
 			if( o.allow_null )
 			{
@@ -162,6 +174,7 @@
 			
 			// add select2
 			$input.select2( args );
+
 			
 			
 			// sortable?

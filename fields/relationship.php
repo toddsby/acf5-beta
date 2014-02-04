@@ -931,43 +931,7 @@ class acf_field_relationship extends acf_field
 		
 		return $value;
 	}
-	
-	
-	/*
-	*  update_field()
-	*
-	*  This filter is appied to the $field before it is saved to the database
-	*
-	*  @type	filter
-	*  @since	3.6
-	*  @date	23/01/13
-	*
-	*  @param	$field - the field array holding all the field options
-	*  @param	$post_id - the field group ID (post_type = acf)
-	*
-	*  @return	$field - the modified field
-	*/
-
-	function update_field( $field ) {
 		
-		// post type must be ana array
-		if( !empty($field['post_type']) )
-		{
-			$field['post_type'] = acf_force_type_array( $field['post_type'] );
-		}
-		
-		
-		// taxonomy must be ana array
-		if( !empty($field['taxonomy']) )
-		{
-			$field['taxonomy'] = acf_force_type_array( $field['taxonomy'] );
-		}
-		
-		
-		// return
-		return $field;
-	}
-	
 }
 
 new acf_field_relationship();
