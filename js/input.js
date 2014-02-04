@@ -3991,7 +3991,7 @@ acf.add_action('ready append', function( $el ){
 					$div.parent().append('<input type="hidden" name="' + $select.attr('name') + '" value="' + object.id + '" />');
 					
 					return object.text;
-				}	
+				}
 			}
 			
 			
@@ -4128,6 +4128,9 @@ acf.add_action('ready append', function( $el ){
 			// add select2
 			$input.select2( args );
 
+			
+			// reoreder DOM
+			$input.select2('container').before( $input );
 			
 			
 			// sortable?

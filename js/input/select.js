@@ -38,7 +38,7 @@
 					$div.parent().append('<input type="hidden" name="' + $select.attr('name') + '" value="' + object.id + '" />');
 					
 					return object.text;
-				}	
+				}
 			}
 			
 			
@@ -175,6 +175,9 @@
 			// add select2
 			$input.select2( args );
 
+			
+			// reoreder DOM
+			$input.select2('container').before( $input );
 			
 			
 			// sortable?
