@@ -64,10 +64,24 @@ class acf_field_checkbox extends acf_field
 		$field['value'] = array_map('trim', $field['value']);
 		
 		
+		// hiden input
+		acf_hidden_input(array(
+			'type'	=> 'hidden',
+			'name'	=> $field['name'],
+		));
+		
+		
 		// vars
 		$i = 0;
-		$e = '<input type="hidden" name="' .  esc_attr($field['name']) . '" value="" />';
-		$e .= '<ul class="acf-checkbox-list ' . esc_attr($field['class']) . ' ' . esc_attr($field['layout']) . '">';
+		
+		
+		// class
+		$field['class'] .= ' acf-checkbox-list';
+		$field['class'] .= ($field['layout'] == 'horizontal') ? ' acf-hl' : ' acf-bl';
+
+		
+		// e
+		$e = '<ul ' . acf_esc_attr(array( 'class' => $field['class'] )) . '>';
 		
 		
 		// checkbox saves an array
@@ -137,7 +151,15 @@ class acf_field_checkbox extends acf_field
 		{		
 			foreach( $field['choices'] as $k => $v )
 			{
-				$field['choices'][ $k ] = $k . ' : ' . $v;
+				if( $k === $v )
+				{
+					$field['choices'][ $k ] = $v;
+				}
+				else
+				{
+					$field['choices'][ $k ] = $k . ' : ' . $v;
+				}
+				
 			}
 			$field['choices'] = implode("\n", $field['choices']);
 		}

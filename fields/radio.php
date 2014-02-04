@@ -167,7 +167,15 @@ class acf_field_radio extends acf_field
 		{		
 			foreach( $field['choices'] as $k => $v )
 			{
-				$field['choices'][ $k ] = $k . ' : ' . $v;
+				if( $k === $v )
+				{
+					$field['choices'][ $k ] = $v;
+				}
+				else
+				{
+					$field['choices'][ $k ] = $k . ' : ' . $v;
+				}
+				
 			}
 			$field['choices'] = implode("\n", $field['choices']);
 		}
