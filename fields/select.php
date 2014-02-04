@@ -144,7 +144,7 @@ class acf_field_select extends acf_field
 		
 		
 		// value must be array
-		if( is_string($field['value']) )
+		if( !is_array($field['value']) )
 		{
 			// perhaps this is a default value with new lines in it?
 			if( strpos($field['value'], "\n") !== false )
@@ -280,12 +280,20 @@ class acf_field_select extends acf_field
 	
 	function render_field_options( $field ) {
 		
-		// implode choices so they work in a textarea
+		// implode checkboxes so they work in a textarea
 		if( is_array($field['choices']) )
 		{		
 			foreach( $field['choices'] as $k => $v )
 			{
-				$field['choices'][ $k ] = $k . ' : ' . $v;
+				if( $k === $v )
+				{
+					$field['choices'][ $k ] = $v;
+				}
+				else
+				{
+					$field['choices'][ $k ] = $k . ' : ' . $v;
+				}
+				
 			}
 			$field['choices'] = implode("\n", $field['choices']);
 		}
@@ -456,8 +464,7 @@ acf_render_field_option( $this->name, array(
 	*  @return	$field - the modified field
 	*/
 
-	function update_field( $field )
-	{
+	function update_field( $field ) {
 		
 		// check if is array. Normal back end edit posts a textarea, but a user might use update_field from the front end
 		if( is_array( $field['choices'] ))
