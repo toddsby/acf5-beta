@@ -50,7 +50,7 @@ class acf_field_radio extends acf_field
 		$i = 0;
 		
 		// class
-		$field['class'] .= ' acf-radio-list';
+		$field['class'] .= ' acf-radio-list acf-cf';
 		$field['class'] .= ($field['layout'] == 'horizontal') ? ' acf-hl' : ' acf-bl';
 
 		

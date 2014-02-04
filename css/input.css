@@ -126,9 +126,12 @@ ul.acf-checkbox-list {
 ul.acf-radio-list li,
 ul.acf-checkbox-list li {
 	font-size: 13px;
-	line-height: 1.4em;
+	line-height: 22px;
 	margin: 0;
 	clear: both;
+	float: left;
+	position: relative;
+	word-wrap: break-word;
 }
 
 ul.acf-hl.acf-radio-list li,
@@ -146,9 +149,8 @@ ul.acf-checkbox-list li input {
 
 ul.acf-radio-list li label,
 ul.acf-checkbox-list li label {
-	padding: 3px 0;
-	display: block;
 	float: left;
+	margin: 2px 0;
 }
 
 ul.acf-radio-list.pill {

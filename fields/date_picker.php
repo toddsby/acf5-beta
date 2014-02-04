@@ -19,13 +19,10 @@ class acf_field_date_picker extends acf_field
 		$this->label = __("Date Picker",'acf');
 		$this->category = __("jQuery",'acf');
 		$this->defaults = array(
-			'date_format'		=> '',
-			'display_format'	=> '',
+			'date_format'		=> 'Ymd',
+			'display_format'	=> 'd/m/Y',
+			'return_format'		=> 'Ymd',
 			'first_day'			=> 1
-		);
-		$this->default_values = array(
-			'date_format'		=> 'yymmdd',
-			'display_format'	=> 'dd/mm/yy',
 		);
 		
 		
@@ -142,33 +139,38 @@ class acf_field_date_picker extends acf_field
 		global $wp_locale;
 		
 		
-		// center_lat
-		acf_render_field_option( $this->name, array(
-			'label'			=> __('Save format','acf'),
-			'instructions'	=> __('This format will determine the value saved to the database and returned via the API','acf')
-							   . '<br /><br />' .
-							   __('"yymmdd" is the most versatile save format. Read more about','acf')
-							   . '<a href="http://docs.jquery.com/UI/Datepicker/formatDate"> '. __('jQuery date formats','acf') . '</a>',
-			'type'			=> 'text',
-			'name'			=> 'date_format',
-			'prefix'		=> $field['prefix'],
-			'value'			=> $field['date_format'],
-			'placeholder'	=> $this->default_values['date_format']
-		));
-		
-		
 		// display_format
 		acf_render_field_option( $this->name, array(
 			'label'			=> __('Display format','acf'),
-			'instructions'	=> __('This format will be seen by the user when entering a value','acf')
-							   . '<br /><br />' .
-							   __('"dd/mm/yy" or "mm/dd/yy" are the most common display formats. Read more about','acf')
-							   . '<a href="http://docs.jquery.com/UI/Datepicker/formatDate"> '. __('jQuery date formats','acf') . '</a>',
-			'type'			=> 'text',
+			'instructions'	=> __('The format displayed when editing a post','acf'),
+			'type'			=> 'radio',
 			'name'			=> 'display_format',
 			'prefix'		=> $field['prefix'],
 			'value'			=> $field['display_format'],
-			'placeholder'	=> $this->default_values['display_format']
+			'other_choice'	=> 1,
+			'choices'		=> array(
+				'd/m/Y'			=> date('d/m/Y'),
+				'm/d/Y'			=> date('m/d/Y'),
+				'F j, Y'		=> date('F j, Y'),
+			)
+		));
+				
+		
+		// return_format
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Return format','acf'),
+			'instructions'	=> __('The format returned via template functions','acf'),
+			'type'			=> 'radio',
+			'name'			=> 'return_format',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['return_format'],
+			'other_choice'	=> 1,
+			'choices'		=> array(
+				'd/m/Y'			=> date('d/m/Y'),
+				'm/d/Y'			=> date('m/d/Y'),
+				'F j, Y'		=> date('F j, Y'),
+				'Ymd'			=> date('Ymd'),
+			)
 		));
 		
 		

@@ -1583,6 +1583,53 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 	});
 	
 	
+	/*
+	*  Date Picker
+	*
+	*  The select field requies some conditional logic on it's settings
+	*
+	*  @type	function
+	*  @date	24/10/13
+	*  @since	5.0.0
+	*
+	*  @param	n/a
+	*  @return	n/a
+	*/
+	
+	function acf_render_date_picker_field( $el ){
+		
+		$.each(['display_format', 'return_format'], function(k,v){
+			
+			// vars
+			var $radio = $el.find('.acf-field[data-name="' + v + '"] input[type="radio"]:checked'),
+				$other = $el.find('.acf-field[data-name="' + v + '"] input[type="text"]');
+			
+			
+			if( $radio.val() != 'other' )
+			{
+				$other.val( $radio.val() );
+			}
+			
+		});
+		
+	}
+	
+	acf.add_action('open change', function( $el ){
+		
+		if( $el.attr('data-type') == 'date_picker' )
+		{
+			acf_render_date_picker_field( $el );
+		}
+		
+	});
+	
+	$(document).on('change', '.field[data-type="date_picker"] input[type="radio"]', function(){
+		
+		acf_render_date_picker_field( $(this).closest('.field') );
+		
+	});
+	
+	
 	
 
 })(jQuery);

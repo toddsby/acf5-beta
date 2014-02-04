@@ -21,90 +21,160 @@ class acf_field_user extends acf_field
 			'role' 			=> '',
 			'multiple' 		=> 0,
 			'allow_null' 	=> 0,
-			'ui'			=> 0,
-			'sortable'		=> 0,
 		);
 		
 		
 		// do not delete!
     	parent::__construct();
     	
+    	
+    	// extra
+		add_action('wp_ajax_acf/fields/user/query',			array($this, 'ajax_query'));
+		add_action('wp_ajax_nopriv_acf/fields/user/query',	array($this, 'ajax_query'));
 	}
 
 	
 	/*
-	*  format_value_for_api()
+	*  query_posts
 	*
-	*  This filter is appied to the $value after it is loaded from the db and before it is passed back to the api functions such as the_field
+	*  description
 	*
-	*  @type	filter
-	*  @since	3.6
-	*  @date	23/01/13
+	*  @type	function
+	*  @date	24/10/13
+	*  @since	5.0.0
 	*
-	*  @param	$value	- the value which was loaded from the database
-	*  @param	$field	- the field array holding all the field options
-	*
-	*  @return	$value	- the modified value
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
 	*/
 	
-	function format_value_for_api( $value, $post_id, $field )
-	{
-
-		// format value
-		if( !$value || $value == 'null' )
+	function ajax_query()
+   	{
+   		// options
+   		$options = acf_parse_args( $_GET, array(
+			'post_id'					=>	0,
+			's'							=>	'',
+			'field_key'					=>	'',
+			'nonce'						=>	'',
+		));
+		
+		
+		$args = array(
+			'hide_empty'	=>	false,
+		);
+		
+		
+   		// vars
+   		$r = array();
+   		
+		
+		// validate
+		if( ! wp_verify_nonce($options['nonce'], 'acf_nonce') )
 		{
-			return false;
+			die();
 		}
 		
 		
-		// temp convert to array
-		$is_array = true;
+		// load field
+		$field = acf_get_field( $options['field_key'] );
 		
-		if( !is_array($value) )
+		if( !$field )
 		{
-			$is_array = false;
-			$value = array( $value );
+			die();
 		}
-
 		
-		foreach( $value as $k => $v )
+		
+		// editable roles
+		$editable_roles = get_editable_roles();
+		
+		if( !empty($field['role']) )
 		{
-			$user_data = get_userdata( $v );
-			
-			//cope with deleted users by @adampope
-			if( !is_object($user_data) )
+			foreach( $editable_roles as $role => $role_info )
 			{
-				unset( $value[$k] );
-				continue;
+				if( !in_array($role, $field['role']) )
+				{
+					unset( $editable_roles[ $role ] );
+				}
 			}
-
-			
-			$value[ $k ] = array();
-			$value[ $k ]['ID'] = $v;
-			$value[ $k ]['user_firstname'] = $user_data->user_firstname;
-			$value[ $k ]['user_lastname'] = $user_data->user_lastname;
-			$value[ $k ]['nickname'] = $user_data->nickname;
-			$value[ $k ]['user_nicename'] = $user_data->user_nicename;
-			$value[ $k ]['display_name'] = $user_data->display_name;
-			$value[ $k ]['user_email'] = $user_data->user_email;
-			$value[ $k ]['user_url'] = $user_data->user_url;
-			$value[ $k ]['user_registered'] = $user_data->user_registered;
-			$value[ $k ]['user_description'] = $user_data->user_description;
-			$value[ $k ]['user_avatar'] = get_avatar( $v );
-			
 		}
 		
-		
-		// de-convert from array
-		if( !$is_array && isset($value[0]) )
+				
+		// search
+		if( $options['s'] )
 		{
-			$value = $value[0];
+			$args['search'] = $options['s'];
 		}
 		
-
-		// return value
-		return $value;
 		
+		// filters
+		$args = apply_filters('acf/fields/user/query', $args, $field, $options['post_id']);
+		$args = apply_filters('acf/fields/user/query/name=' . $field['name'], $args, $field, $options['post_id'] );
+		$args = apply_filters('acf/fields/user/query/key=' . $field['key'], $args, $field, $options['post_id'] );
+			
+		
+		// get users
+		$users = get_users( $args );
+		
+		
+		if( !empty($users) && !empty($editable_roles) )
+		{
+			foreach( $editable_roles as $role => $role_info )
+			{
+				// vars
+				$this_users = array();
+				$this_json = array();
+				
+				
+				// loop over users
+				$keys = array_keys($users);
+				foreach( $keys as $key )
+				{
+					if( in_array($role, $users[ $key ]->roles) )
+					{
+						$this_users[] = acf_extract_var( $users, $key );
+					}
+				}
+				
+				
+				// bail early if no users for this role
+				if( empty($this_users) )
+				{
+					continue;
+				}
+				
+				
+				// append to json
+				foreach( $this_users as $user )
+				{
+					// add to json
+					$this_json[] = array(
+						'id'	=> $user->ID,
+						'text'	=> ucfirst( $user->display_name )
+					);
+	
+				}
+				
+				
+				// add as optgroup or results
+				if( count($editable_roles) == 1 )
+				{
+					$r = $this_json;
+				}
+				else
+				{
+					$r[] = array(
+						'text'		=> translate_user_role( $role_info['name'] ),
+						'children'	=> $this_json
+					);
+				}
+				
+			}
+		}
+		
+		
+		// return JSON
+		echo json_encode( $r );
+		die();
+			
 	}
 	
 	
@@ -142,54 +212,34 @@ class acf_field_user extends acf_field
 	*  @param	$field - an array holding all the field's data
 	*/
 	
-	function render_field( $field )
-	{
-		// vars
-		$field['choices'] = array();
-		$args = array();
-		$editable_roles = get_editable_roles();
-
-
-		// roles
-		if( empty($field['role']) )
-		{
-			$field['role'] = array();
-			
-			foreach( $editable_roles as $role => $details )
-			{			
-				// only translate the output not the value
-				$field['role'][] = $role;
-			}
-		}
-				
+	function render_field( $field ) {
 		
-		// choices
-		foreach( $field['role'] as $role )
+		// Change Field into a select
+		$field['type'] = 'select';
+		$field['ui'] = 1;
+		$field['ajax'] = 1;
+		$field['choices'] = array();
+		
+		
+		// populate choices
+		if( !empty($field['value']) )
 		{
-			$label = translate_user_role( $editable_roles[ $role ]['name'] );
-			
-			// get users			
 			$users = get_users(array(
-				'role' => $role	
+				'include' => acf_force_type_array( $field['value'] )
 			));
-					
 			
-			if( $users )
+			if( !empty($users) )
 			{
-				$field['choices'][ $label ] = array();
-				
 				foreach( $users as $user )
 				{
-					$field['choices'][ $label ][ $user->ID ] = ucfirst( $user->display_name );
+					$field['choices'][ $user->ID ] = ucfirst( $user->display_name );
 				}
 			}
 		}
 		
 		
-		// modify field
-		$field['type'] = 'select';
-		
-		acf_render_field( $field );		
+		// render
+		acf_render_field( $field );
 		
 	}
 	
@@ -267,38 +317,6 @@ class acf_field_user extends acf_field
 		));
 		
 		
-		// ui
-		acf_render_field_option( $this->name, array(
-			'label'			=> __('Stylised UI','acf'),
-			'instructions'	=> '',
-			'type'			=> 'radio',
-			'name'			=> 'ui',
-			'prefix'		=> $field['prefix'],
-			'value'			=> $field['ui'],
-			'choices'		=> array(
-				1				=> __("Yes",'acf'),
-				0				=> __("No",'acf'),
-			),
-			'layout'	=>	'horizontal',
-		));
-		
-		
-		// sortable
-		acf_render_field_option( $this->name, array(
-			'label'			=> __('Allow values to be sortable','acf'),
-			'instructions'	=> '',
-			'type'			=> 'radio',
-			'name'			=> 'sortable',
-			'prefix'		=> $field['prefix'],
-			'value'			=> $field['sortable'],
-			'choices'		=> array(
-				1				=> __("Yes",'acf'),
-				0				=> __("No",'acf'),
-			),
-			'layout'	=>	'horizontal',
-		));
-		
-		
 	}
 	
 	
@@ -335,6 +353,81 @@ class acf_field_user extends acf_field
 		return $value;
 	}
 	
+	
+	/*
+	*  format_value_for_api()
+	*
+	*  This filter is appied to the $value after it is loaded from the db and before it is passed back to the api functions such as the_field
+	*
+	*  @type	filter
+	*  @since	3.6
+	*  @date	23/01/13
+	*
+	*  @param	$value	- the value which was loaded from the database
+	*  @param	$field	- the field array holding all the field options
+	*
+	*  @return	$value	- the modified value
+	*/
+	
+	function format_value_for_api( $value, $post_id, $field )
+	{
+
+		// format value
+		if( !$value || $value == 'null' )
+		{
+			return false;
+		}
+		
+		
+		// temp convert to array
+		$is_array = true;
+		
+		if( !is_array($value) )
+		{
+			$is_array = false;
+			$value = array( $value );
+		}
+
+		
+		foreach( $value as $k => $v )
+		{
+			$user_data = get_userdata( $v );
+			
+			//cope with deleted users by @adampope
+			if( !is_object($user_data) )
+			{
+				unset( $value[$k] );
+				continue;
+			}
+
+			
+			$value[ $k ] = array();
+			$value[ $k ]['ID'] = $v;
+			$value[ $k ]['user_firstname'] = $user_data->user_firstname;
+			$value[ $k ]['user_lastname'] = $user_data->user_lastname;
+			$value[ $k ]['nickname'] = $user_data->nickname;
+			$value[ $k ]['user_nicename'] = $user_data->user_nicename;
+			$value[ $k ]['display_name'] = $user_data->display_name;
+			$value[ $k ]['user_email'] = $user_data->user_email;
+			$value[ $k ]['user_url'] = $user_data->user_url;
+			$value[ $k ]['user_registered'] = $user_data->user_registered;
+			$value[ $k ]['user_description'] = $user_data->user_description;
+			$value[ $k ]['user_avatar'] = get_avatar( $v );
+			
+		}
+		
+		
+		// de-convert from array
+		if( !$is_array && isset($value[0]) )
+		{
+			$value = $value[0];
+		}
+		
+
+		// return value
+		return $value;
+		
+	}
 		
 }
 
