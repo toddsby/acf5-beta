@@ -239,9 +239,9 @@ class acf_field_post_object extends acf_field
 							
 				
 				// filters
-				$title = apply_filters('acf/fields/post_object/result', $title, $post, $field, $post);
-				$title = apply_filters('acf/fields/post_object/result/name=' . $field['name'] , $title, $post, $field, $post);
-				$title = apply_filters('acf/fields/post_object/result/key=' . $field['key'], $title, $post, $field, $post);
+				$title = apply_filters('acf/fields/post_object/result', $title, $post, $field, $options['post_id']);
+				$title = apply_filters('acf/fields/post_object/result/name=' . $field['name'] , $title, $post, $field, $options['post_id']);
+				$title = apply_filters('acf/fields/post_object/result/key=' . $field['key'], $title, $post, $field, $options['post_id']);
 				
 				
 				// add to json
