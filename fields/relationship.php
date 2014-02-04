@@ -281,90 +281,6 @@ class acf_field_relationship extends acf_field
 	}
 	
 	
-	
-	
-	
-	
-	/*
-	*  load_field()
-	*  
-	*  This filter is appied to the $field after it is loaded from the database
-	*  
-	*  @type filter
-	*  @since 3.6
-	*  @date 23/01/13
-	*  
-	*  @param $field - the field array holding all the field options
-	*  
-	*  @return $field - the field array holding all the field options
-	*/
-	
-	/*
-function load_field( $field )
-	{
-		// validate post_type
-		if( !$field['post_type'] || !is_array($field['post_type']) || in_array('', $field['post_type']) )
-		{
-			$field['post_type'] = array( 'all' );
-		}
-
-		
-		// validate taxonomy
-		if( !$field['taxonomy'] || !is_array($field['taxonomy']) || in_array('', $field['taxonomy']) )
-		{
-			$field['taxonomy'] = array( 'all' );
-		}
-		
-		
-		// validate result_elements
-		if( !is_array( $field['result_elements'] ) )
-		{
-			$field['result_elements'] = array();
-		}
-		
-		if( !in_array('post_title', $field['result_elements']) )
-		{
-			$field['result_elements'][] = 'post_title';
-		}
-		
-		
-		// filters
-		if( !is_array( $field['filters'] ) )
-		{
-			$field['filters'] = array();
-		}
-		
-		
-		// return
-		return $field;
-	}
-*/
-		
-
-	/*
-   	*  posts_where
-   	*
-   	*  @description: 
-   	*  @created: 3/09/12
-   	*/
-   	
-  /*
- 	function posts_where( $where, &$wp_query )
-	{
-	    global $wpdb;
-	    
-	    if ( $title = $wp_query->get('like_title') )
-	    {
-	        $where .= " AND " . $wpdb->posts . ".post_title LIKE '%" . esc_sql( like_escape(  $title ) ) . "%'";
-	    }
-	    
-	    return $where;
-	}
-*/
-	
-	
-	
-	
 	/*
 	*  get_result
 	*
@@ -1014,6 +930,42 @@ function load_field( $field )
 				
 		
 		return $value;
+	}
+	
+	
+	/*
+	*  update_field()
+	*
+	*  This filter is appied to the $field before it is saved to the database
+	*
+	*  @type	filter
+	*  @since	3.6
+	*  @date	23/01/13
+	*
+	*  @param	$field - the field array holding all the field options
+	*  @param	$post_id - the field group ID (post_type = acf)
+	*
+	*  @return	$field - the modified field
+	*/
+
+	function update_field( $field ) {
+		
+		// post type must be ana array
+		if( !empty($field['post_type']) )
+		{
+			$field['post_type'] = acf_force_type_array( $field['post_type'] );
+		}
+		
+		
+		// taxonomy must be ana array
+		if( !empty($field['taxonomy']) )
+		{
+			$field['taxonomy'] = acf_force_type_array( $field['taxonomy'] );
+		}
+		
+		
+		// return
+		return $field;
 	}
 	
 }

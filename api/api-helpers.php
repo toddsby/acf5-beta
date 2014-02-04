@@ -1091,6 +1091,40 @@ function acf_cache_get( $key, &$found ) {
 
 
 /*
+*  acf_force_type_array
+*
+*  This function will force a variable to become an array
+*
+*  @type	function
+*  @date	4/02/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_force_type_array( $var ) {
+	
+	// is array?
+	if( is_array($var) )
+	{
+		return $var;
+	}
+	
+	
+	// string 
+	if( is_string($var) )
+	{
+		return explode(',', $var);
+	}
+	
+	
+	// place in array
+	return array( $var );
+} 
+
+
+/*
 *  Hacks
 *
 *  description
