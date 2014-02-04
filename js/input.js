@@ -3957,6 +3957,13 @@ acf.add_action('ready append', function( $el ){
 		
 		init : function( $select ){
 			
+			// validate $select
+			if( ! $select.exists() )
+			{
+				return false;
+			}
+			
+			
 			// vars
 			var o = acf.get_data( $select );
 			
@@ -3964,7 +3971,7 @@ acf.add_action('ready append', function( $el ){
 			// bail early if no ui
 			if( ! o.ui )
 			{
-				return;
+				return false;
 			}
 			
 			
@@ -4037,7 +4044,7 @@ acf.add_action('ready append', function( $el ){
 				
 			});
 			
-			
+
 			$.each( optgroups, function( label, children ){
 				
 				if( label == '_root' )
@@ -4057,7 +4064,7 @@ acf.add_action('ready append', function( $el ){
 				}
 							
 			});
-			
+
 			
 			// re-order options
 			$.each( selection.reverse(), function( k, value ){
@@ -4070,7 +4077,7 @@ acf.add_action('ready append', function( $el ){
 					}
 					
 				});
-								
+							
 			});
 			
 			
@@ -4113,7 +4120,14 @@ acf.add_action('ready append', function( $el ){
 				};
 				
 				args.initSelection = function (element, callback) {
-								        
+					
+					// single select requires 1 val, not an array
+					if( ! o.multiple )
+					{
+						initial_selection = initial_selection[0];
+					}
+					
+						        
 			        // callback
 			        callback( initial_selection );
 			        
@@ -4134,9 +4148,9 @@ acf.add_action('ready append', function( $el ){
 			
 			
 			// sortable?
-			if( o.sortable )
+			if( o.multiple )
 			{
-				$input.select2("container").find("ul.select2-choices").sortable({
+				$input.select2('container').find('ul.select2-choices').sortable({
 					 //containment: 'parent',
 					 start: function() {
 					 	$input.select2("onSortStart");
@@ -4179,6 +4193,12 @@ acf.add_action('ready append', function( $el ){
 		});
 		
 		acf.get_fields({ type : 'post_object'}, $el).each(function(){
+			
+			acf.fields.select.init( $(this).find('select') );
+			
+		});
+		
+		acf.get_fields({ type : 'taxonomy'}, $el).each(function(){
 			
 			acf.fields.select.init( $(this).find('select') );
 			

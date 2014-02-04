@@ -4,6 +4,13 @@
 		
 		init : function( $select ){
 			
+			// validate $select
+			if( ! $select.exists() )
+			{
+				return false;
+			}
+			
+			
 			// vars
 			var o = acf.get_data( $select );
 			
@@ -11,7 +18,7 @@
 			// bail early if no ui
 			if( ! o.ui )
 			{
-				return;
+				return false;
 			}
 			
 			
@@ -84,7 +91,7 @@
 				
 			});
 			
-			
+
 			$.each( optgroups, function( label, children ){
 				
 				if( label == '_root' )
@@ -104,7 +111,7 @@
 				}
 							
 			});
-			
+
 			
 			// re-order options
 			$.each( selection.reverse(), function( k, value ){
@@ -117,7 +124,7 @@
 					}
 					
 				});
-								
+							
 			});
 			
 			
@@ -160,7 +167,14 @@
 				};
 				
 				args.initSelection = function (element, callback) {
-								        
+					
+					// single select requires 1 val, not an array
+					if( ! o.multiple )
+					{
+						initial_selection = initial_selection[0];
+					}
+					
+						        
 			        // callback
 			        callback( initial_selection );
 			        
@@ -181,9 +195,9 @@
 			
 			
 			// sortable?
-			if( o.sortable )
+			if( o.multiple )
 			{
-				$input.select2("container").find("ul.select2-choices").sortable({
+				$input.select2('container').find('ul.select2-choices').sortable({
 					 //containment: 'parent',
 					 start: function() {
 					 	$input.select2("onSortStart");
@@ -226,6 +240,12 @@
 		});
 		
 		acf.get_fields({ type : 'post_object'}, $el).each(function(){
+			
+			acf.fields.select.init( $(this).find('select') );
+			
+		});
+		
+		acf.get_fields({ type : 'taxonomy'}, $el).each(function(){
 			
 			acf.fields.select.init( $(this).find('select') );
 			
