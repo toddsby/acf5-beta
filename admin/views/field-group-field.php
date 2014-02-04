@@ -126,7 +126,7 @@ $atts = array(
 				?>
 				<tr class="field_save">
 					<td class="acf-label"></td>
-					<td class="acf-field">
+					<td class="acf-input">
 						<ul class="acf-hl acf-clearfix">
 							<li>
 								<a class="edit-field acf-button grey" title="<?php _e("Close Field",'acf'); ?>" href="#"><?php _e("Close Field",'acf'); ?></a>
