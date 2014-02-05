@@ -60,7 +60,7 @@
 			// vars
 			var selection = $input.val().split(','),
 				initial_selection = [];
-			
+				
 			
 			// populate args.data
 			var optgroups = {};
@@ -194,6 +194,10 @@
 			$input.select2('container').before( $input );
 			
 			
+			// clear input value (allow nothing to be saved)
+			$input.val('');
+			
+			
 			// sortable?
 			if( o.multiple )
 			{
@@ -207,6 +211,8 @@
 					 }
 				});
 			}
+			
+			
 			
 		}
 	};

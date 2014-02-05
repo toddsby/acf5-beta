@@ -913,7 +913,7 @@ var acf = {
 						
 						i++;
 						
-						args.select.apply( this, attachment, i );
+						args.select.apply( this, [ attachment, i] );
 						
 					});
 				}

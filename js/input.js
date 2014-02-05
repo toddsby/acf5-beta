@@ -1173,7 +1173,7 @@ var acf = {
 						
 						i++;
 						
-						args.select.apply( this, attachment, i );
+						args.select.apply( this, [ attachment, i] );
 						
 					});
 				}
@@ -3968,7 +3968,7 @@ acf.add_action('ready append', function( $el ){
 			// vars
 			var selection = $input.val().split(','),
 				initial_selection = [];
-			
+				
 			
 			// populate args.data
 			var optgroups = {};
@@ -4102,6 +4102,10 @@ acf.add_action('ready append', function( $el ){
 			$input.select2('container').before( $input );
 			
 			
+			// clear input value (allow nothing to be saved)
+			$input.val('');
+			
+			
 			// sortable?
 			if( o.multiple )
 			{
@@ -4115,6 +4119,8 @@ acf.add_action('ready append', function( $el ){
 					 }
 				});
 			}
+			
+			
 			
 		}
 	};
@@ -4892,9 +4898,9 @@ acf.add_action('ready append', function( $el ){
 			});
 			
 		}).add_action('sortstart', function( $el ){
-		
+			
 			acf.get_fields({ type : 'wysiwyg'}, $el).each(function(){
-				
+			
 				acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).destroy();
 				
 			});

@@ -206,9 +206,9 @@
 			});
 			
 		}).add_action('sortstart', function( $el ){
-		
+			
 			acf.get_fields({ type : 'wysiwyg'}, $el).each(function(){
-				
+			
 				acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).destroy();
 				
 			});
