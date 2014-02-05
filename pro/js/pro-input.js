@@ -1,60 +1,17 @@
 (function($){
 	
-	
-	/*
-	*  Repeater
-	*
-	*  static model for this field
-	*
-	*  @type	event
-	*  @date	18/08/13
-	*
-	*/
-	
 	acf.fields.repeater = {
 		
-		$field : null,
-		$el : null,
+		init : function( $el ){
+			
+			// vars
+			var o = acf.get_data( $el );
 				
-		o : {},
-		
-		set : function( o ){
-			
-			// merge in new option
-			$.extend( this, o );
-			
-			
-			// get field
-			this.$field = this.$el.closest('.acf-field');
-			
-			
-			// find elements
-			//this.$input = this.$el.children('input[type="hidden"]');
-			
-			
-			// get options
-			this.o = acf.get_data( this.$el );
-			
-			
-			// add row_count
-			this.o.row_count = this.$el.find('> table > tbody > tr').length - 1;
-			
-			
-			// return this for chaining
-			return this;
-			
-		},
-		init : function(){
-			
-			// reference
-			var _this = this,
-				$el = this.$el;
-			
-			
+				
 			// sortable
-			if( this.o.max != 1 )
+			if( o.max != 1 )
 			{
-				this.$el.find('> table > tbody').unbind('sortable').sortable({
+				$el.find('> table > tbody').unbind('sortable').sortable({
 				
 					items					: '> tr',
 					handle					: '> td.order',
@@ -74,7 +31,7 @@
 						
 						
 						// render
-						_this.set({ $el : $el }).render();
+						acf.fields.repeater.render( $el );
 						
 		   			}
 				});
@@ -82,17 +39,19 @@
 						
 			
 			// render
-			this.render();
+			this.render( $el );
 					
 		},
-		render : function(){
+		
+		render : function( $el ){
 			
-			// update row_count
-			//this.o.row_count = this.$el.find('> table > tbody > tr').length - 1;
+			// vars
+			var row_count = $el.find('> table > tbody > tr').length - 1,
+				o = acf.get_data( $el );
 			
 			
 			// update order numbers
-			this.$el.find('> table > tbody > tr').each(function(i){
+			$el.find('> table > tbody > tr').each(function(i){
 			
 				$(this).children('td.order').html( i+1 );
 				
@@ -100,60 +59,66 @@
 			
 			
 			// empty?
-			if( this.o.row_count == 0 )
+			if( row_count == 0 )
 			{
-				this.$el.addClass('empty');
+				$el.addClass('empty');
 			}
 			else
 			{
-				this.$el.removeClass('empty');
+				$el.removeClass('empty');
 			}
 			
 			
 			// row limit reached
-			if( this.o.row_count >= this.o.max_rows )
+			if( row_count >= o.max_rows )
 			{
-				this.$el.addClass('disabled');
-				this.$el.find('> .acf-hl .acf-button').addClass('disabled');
+				$el.addClass('disabled');
+				$el.find('> .acf-hl .acf-button').addClass('disabled');
 			}
 			else
 			{
-				this.$el.removeClass('disabled');
-				this.$el.find('> .acf-hl .acf-button').removeClass('disabled');
+				$el.removeClass('disabled');
+				$el.find('> .acf-hl .acf-button').removeClass('disabled');
 			}
 			
 		},
-		add : function( $before ){
+		
+		add : function( $el, $before ){
 			
+			// vars
+			var row_count = $el.find('> table > tbody > tr').length - 1,
+				o = acf.get_data( $el );
+				
+				
 			// validate
-			if( this.o.row_count >= this.o.max_rows )
+			if( row_count >= o.max_rows )
 			{
-				alert( acf._e('repeater','max').replace('{max}', this.o.max_rows) );
+				alert( acf._e('repeater','max').replace('{max}', o.max_rows) );
 				return false;
 			}
 			
 		
 			// create and add the new field
 			var new_id = acf.get_uniqid(),
-				new_field_html = this.$el.find('> table > tbody > tr[data-id="acfcloneindex"]').html().replace(/(=["]*[\w-\[\]]*?)(acfcloneindex)/g, '$1' + new_id),
+				new_field_html = $el.find('> table > tbody > tr[data-id="acfcloneindex"]').html().replace(/(=["]*[\w-\[\]]*?)(acfcloneindex)/g, '$1' + new_id),
 				$tr = $('<tr class="acf-row" data-id="' + new_id + '"></tr>').append( new_field_html );
 			
 			
 			// add row
 			if( ! $before )
 			{
-				$before = this.$el.find('> table > tbody > tr[data-id="acfcloneindex"]');
+				$before = $el.find('> table > tbody > tr[data-id="acfcloneindex"]');
 			}
 			
 			$before.before( $tr );
 			
 			
 			// trigger mouseenter on parent repeater to work out css margin on add-row button
-			this.$el.parents('tr').trigger('mouseenter');
+			$el.parents('tr').trigger('mouseenter');
 			
 			
 			// update order
-			this.render();
+			this.render( $el );
 			
 			
 			// setup fields
@@ -161,19 +126,22 @@
 	
 			
 			// validation
-			this.$field.removeClass('error');
+			//this.$field.removeClass('error');
 			
 		},
+		
 		remove : function( $tr ){
 			
-			// refernce
-			var _this = this;
+			// vars
+			var $el = $tr.closest('.acf-repeater'),
+				row_count = $el.find('> table > tbody > tr').length - 1,
+				o = acf.get_data( $el );
 			
 			
 			// validate
-			if( this.o.row_count <= this.o.min_rows )
+			if( row_count <= o.min_rows )
 			{
-				alert( acf._e('repeater','min').replace('{min}', this.o.min_rows) );
+				alert( acf._e('repeater','min').replace('{min}', o.min_rows) );
 				return false;
 			}
 			
@@ -182,11 +150,11 @@
 			acf.remove_tr( $tr, function(){
 				
 				// trigger mouseenter on parent repeater to work out css margin on add-row button
-				_this.$el.closest('tr').trigger('mouseenter');
+				$el.closest('tr').trigger('mouseenter');
 				
 				
 				// render
-				_this.render();
+				acf.fields.repeater.render( $el );
 				
 			});
 			
@@ -213,7 +181,7 @@
 		
 		acf.get_fields({ type : 'repeater'}, $el).each(function(){
 			
-			acf.fields.repeater.set({ $el : $(this).find('.acf-repeater') }).init();
+			acf.fields.repeater.init( $(this).find('.acf-repeater') );
 			
 		});
 		
@@ -246,7 +214,7 @@
 		}
 		
 		
-		acf.fields.repeater.set({ $el : $(this).closest('.acf-repeater') }).add( before );
+		acf.fields.repeater.add( $(this).closest('.acf-repeater'), before );
 		
 		
 		$(this).blur();
@@ -257,7 +225,7 @@
 		
 		e.preventDefault();
 		
-		acf.fields.repeater.set({ $el : $(this).closest('.acf-repeater') }).remove( $(this).closest('.acf-row') );
+		acf.fields.repeater.remove( $(this).closest('.acf-row') );
 		
 		$(this).blur();
 		

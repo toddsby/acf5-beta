@@ -60,7 +60,7 @@
 			
 			
 			// update parent
-			$el.find('> .acf-hidden > .input-parent').val( val );
+			this.update_field_input( $el, 'parent', val );
 			
 			
 			// append hidden flexible content layout (fc_layout)
