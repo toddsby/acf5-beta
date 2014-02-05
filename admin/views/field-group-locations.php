@@ -30,7 +30,7 @@ if( empty($field_group['location']) )
 ?>
 <table class="acf-table">
 	<tbody>
-		<tr>
+		<tr class="acf-field">
 			<td class="acf-label">
 				<label><?php _e("Rules",'acf'); ?></label>
 				<p><?php _e("Create a set of rules to determine which edit screens will use these advanced custom fields",'acf'); ?></p>
