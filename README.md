@@ -25,6 +25,7 @@ For the duration of this beta testing, a developer license will be made availabl
 `cHVyY2hhc2VkPTI1MjQ3fHR5cGU9c2luZ2xlfGRhdGU9MjAxNC0wMS0xNyAwMzoyNToxOQ==`
 
 To correctly install ACF5 for beta testing, please follow these steps:
+
 1. Setup a new local WP installation or use an existing one
 2. Disabled the `advanced-custom-fields` plugin if already exists
 3. Clone this repository into a new folder: `wp-content/plugins/advanced-custom-fields-pro`
