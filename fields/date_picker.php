@@ -80,22 +80,10 @@ class acf_field_date_picker extends acf_field
 	
 	function render_field( $field ) {
 		
-		
-		// default options
-		foreach( $this->default_values as $k => $v )
-		{
-			if( empty($field[ $k ]) )
-			{
-				$field[ $k ] = $v;
-			}	
-		}
-		
-		
 		// vars
 		$e = '';
 		$el_atts = array(
 			'class'					=> 'acf-date_picker',
-			'data-save_format'		=> $field['date_format'],
 			'data-display_format'	=> $field['display_format'],
 			'data-first_day'		=> $field['first_day'],
 		);
@@ -106,6 +94,38 @@ class acf_field_date_picker extends acf_field
 			'name'					=> $field['name'],
 			'value'					=> $field['value'],
 		);
+		
+		
+		// php_to_js
+		$php_to_js = array(
+			
+			// Year
+			'Y'	=> 'yy',	// Numeric, 4 digits 								1999, 2003
+			'y'	=> 'y',		// Numeric, 2 digits 								99, 03
+						
+			// Month
+			'm'	=> 'mm',	// Numeric, with leading zeros  					01–12
+			'n'	=> 'm',		// Numeric, without leading zeros  					1–12
+			'F'	=> 'MM',	// Textual full   									January – December
+			'M'	=> 'M',		// Textual three letters    						Jan - Dec 
+			
+			
+			// Weekday
+			'l'	=> 'DD',	// Full name  (lowercase 'L') 						Sunday – Saturday
+			'D'	=> 'D',		// Three letter name 	 							Mon – Sun 
+			
+			
+			// Day of Month
+			'd'	=> 'dd',	// Numeric, with leading zeros						01–31
+			'j'	=> 'd',		// Numeric, without leading zeros 					1–31
+			'S'	=> '',		// The English suffix for the day of the month  	st, nd or th in the 1st, 2nd or 15th. 
+		);
+		
+		
+		foreach( $php_to_js as $from => $to )
+		{
+			$el_atts['data-display_format'] = str_replace($from, $to, $el_atts['data-display_format']);
+		}
 		
 
 		// html
@@ -188,6 +208,43 @@ class acf_field_date_picker extends acf_field
 		
 	}
 	
+	
+	/*
+	*  format_value_for_api()
+	*
+	*  This filter is appied to the $value after it is loaded from the db and before it is passed back to the api functions such as the_field
+	*
+	*  @type	filter
+	*  @since	3.6
+	*  @date	23/01/13
+	*
+	*  @param	$value	- the value which was loaded from the database
+	*  @param	$post_id - the $post_id from which the value was loaded
+	*  @param	$field	- the field array holding all the field options
+	*
+	*  @return	$value	- the modified value
+	*/
+	
+	function format_value_for_template( $value, $post_id, $field ) {
+		
+		// validate type
+		if( empty($value) )
+		{
+			return $value;
+		}
+		
+		
+		// get time
+		$unixtimestamp = strtotime( $value );
+ 
+		
+		// translate
+		$value = date_i18n($field['return_format'], $unixtimestamp);
+		
+		
+		// return
+		return $value;
+	}
 }
 
 new acf_field_date_picker();

@@ -24,11 +24,11 @@
 			
 		},
 		
-		add_tab : function( $tab ){
+		add_tab : function( $field ){
 			
 			// vars
-			var $field	= acf.get_field_wrap( $tab ),
-				$wrap	= $field.parent(),
+			var $wrap	= $field.parent(),
+				$tab	= $field.find('.acf-tab'),
 				
 				key		= acf.get_data( $field, 'key'),
 				label 	= $tab.text();

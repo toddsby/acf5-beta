@@ -565,7 +565,10 @@ ul.acf-radio-list.pill li label input {
 
 .acf-postbox.default .acf-tab-group {
 	padding-left: 10px;
-	border-bottom-color: #E8E8E8;
+	background: #F9F9F9;
+	border-bottom: #E8E8E8 solid 1px;
+	border-top: #E8E8E8 solid 1px;
+	margin-bottom: -1px;
 }
 
 .acf-postbox.default .acf-tab-group li a {
@@ -574,6 +577,22 @@ ul.acf-radio-list.pill li label input {
 
 .acf-postbox.default .acf-tab-group li.active a {
 	background: #FFFFFF;
+}
+
+
+/*
+*  Box (label left)
+*/
+
+.acf-table tr.acf-tab-wrap td {
+	padding: 0;
+	background: #F9F9F9;
+	border-top-color: #E8E8E8;
+}
+
+.acf-table tr.acf-tab-wrap td .acf-tab-group {
+	margin-bottom: -1px;
+	padding-left: 24%;
 }
 
 
@@ -813,5 +832,22 @@ ul.acf-radio-list.pill li label input {
 
 .acf-file-uploader .acf-soh-target li {
 	margin: 0 0 2px;
+}
+
+
+
+/*---------------------------------------------------------------------------------------------
+*
+*	Date Picker
+*
+*---------------------------------------------------------------------------------------------*/
+
+.ui-datepicker.acf-datepicker {
+	z-index: 999999999 !important;
+}
+
+.ui-datepicker.acf-datepicker {
+	background: #fff;
+	border: #E1E1E1 solid 1px;
 }
 

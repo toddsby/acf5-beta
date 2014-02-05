@@ -317,11 +317,13 @@ class acf {
 		
 		// register scripts
 		$scripts = array();
-		$scripts[] = array(
+		/*
+$scripts[] = array(
 			'handle'	=> 'acf-datepicker',
 			'src'		=> acf_get_dir( 'inc/datepicker/jquery-ui-1.10.3.custom.min.js' ),
 			'deps'		=> array('jquery'),
 		);
+*/
 		$scripts[] = array(
 			'handle'	=> 'select2',
 			'src'		=> acf_get_dir( 'inc/select2/select2.min.js' ),
@@ -330,7 +332,7 @@ class acf {
 		$scripts[] = array(
 			'handle'	=> 'acf-input',
 			'src'		=> acf_get_dir( 'js/input.js' ),
-			'deps'		=> array('jquery', 'underscore', 'acf-datepicker', 'select2'),
+			'deps'		=> array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'underscore', 'select2'),
 		);
 		$scripts[] = array(
 			'handle'	=> 'acf-field-group',
@@ -347,6 +349,16 @@ class acf {
 		// register styles
 		$styles = array();
 		$styles[] = array(
+			'handle'	=> 'select2',
+			'src'		=> acf_get_dir( 'inc/select2/select2.css' ),
+			'deps'		=> array(),
+		);
+		$styles[] = array(
+			'handle'	=> 'acf-datepicker',
+			'src'		=> acf_get_dir( 'inc/datepicker/jquery-ui-1.10.4.custom.min.css' ),
+			'deps'		=> array(),
+		);
+		$styles[] = array(
 			'handle'	=> 'acf-global',
 			'src'		=> acf_get_dir( 'css/global.css' ),
 			'deps'		=> array(),
@@ -354,23 +366,14 @@ class acf {
 		$styles[] = array(
 			'handle'	=> 'acf-field-group',
 			'src'		=> acf_get_dir( 'css/field-group.css' ),
-			'deps'		=> array('select2'),
+			'deps'		=> array(),
 		);
 		$styles[] = array(
 			'handle'	=> 'acf-input',
 			'src'		=> acf_get_dir( 'css/input.css' ),
 			'deps'		=> array('acf-datepicker', 'select2'),
 		);
-		$styles[] = array(
-			'handle'	=> 'acf-datepicker',
-			'src'		=> acf_get_dir( 'inc/datepicker/jquery-ui-1.10.3.custom.min.css' ),
-			'deps'		=> array(),
-		);
-		$styles[] = array(
-			'handle'	=> 'select2',
-			'src'		=> acf_get_dir( 'inc/select2/select2.css' ),
-			'deps'		=> array(),
-		);
+		
 		
 		foreach( $styles as $style )
 		{

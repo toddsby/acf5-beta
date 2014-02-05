@@ -1,40 +1,10 @@
 (function($){
 	
-	/*
-	*  Color Picker
-	*
-	*  jQuery functionality for this field type
-	*
-	*  @type	object
-	*  @date	20/07/13
-	*
-	*  @param	N/A
-	*  @return	N/A
-	*/
-	
 	acf.fields.color_picker = {
 		
-		$el : null,
-		$input : null,
-		
-		set : function( o ){
+		init : function( $input ){
 			
-			// merge in new option
-			$.extend( this, o );
-			
-			
-			// find input
-			this.$input = this.$el.find('input[type="text"]');
-			
-			
-			// return this for chaining
-			return this;
-			
-		},
-		
-		init : function(){
-			
-			this.$input.wpColorPicker();
+			$input.wpColorPicker();
 			
 		}
 	};
@@ -57,7 +27,7 @@
 		
 		acf.get_fields({ type : 'color_picker'}, $el).each(function(){
 			
-			acf.fields.color_picker.set({ $el : $(this) }).init();
+			acf.fields.color_picker.init( $(this).find('input[type="text"]') );
 			
 		});
 		

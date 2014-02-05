@@ -12,74 +12,59 @@
 	
 	acf.fields.date_picker = {
 		
-		$el : null,
-		$input : null,
-		$hidden : null,
-		
-		o : {},
-		
-		set : function( o ){
+		init : function( $el ){
 			
-			// merge in new option
-			$.extend( this, o );
-			
-			
-			// find input
-			this.$input = this.$el.find('input[type="text"]');
-			this.$hidden = this.$el.find('input[type="hidden"]');
+			// vars
+			var $input = $el.find('input[type="text"]'),
+				$hidden = $el.find('input[type="hidden"]');
 			
 			
 			// get options
-			this.o = acf.get_data( this.$el );
+			var o = acf.get_data( $el );
 			
-			
-			// return this for chaining
-			return this;
-			
-		},
-		init : function(){
 			
 			// get and set value from alt field
-			this.$input.val( this.$hidden.val() );
+			$input.val( $hidden.val() );
 			
 			
 			// create options
 			var args = $.extend( {}, acf.l10n.date_picker, { 
-				dateFormat		:	this.o.save_format,
-				altField		:	this.$hidden,
-				altFormat		:	this.o.save_format,
+				dateFormat		:	'yy-mm-dd',
+				altField		:	$hidden,
+				altFormat		:	'yy-mm-dd',
 				changeYear		:	true,
 				yearRange		:	"-100:+100",
 				changeMonth		:	true,
 				showButtonPanel	:	true,
-				firstDay		:	this.o.first_day
+				firstDay		:	o.first_day
 			});
 			
 			
 			// filter for 3rd party customization
-			args = acf.apply_filters('date_picker_args', args);
+			args = acf.apply_filters('date_picker_args', args, $el);
 			
 			
 			// add date picker
-			this.$input.addClass('active').datepicker( args );
+			$input.addClass('active').datepicker( args );
 			
 			
 			// now change the format back to how it should be.
-			this.$input.datepicker( "option", "dateFormat", this.o.display_format );
+			$input.datepicker( "option", "dateFormat", o.display_format );
 			
 			
 			// wrap the datepicker (only if it hasn't already been wrapped)
-			if( $('body > #ui-datepicker-div').length > 0 )
+			if( $('body > #ui-datepicker-div').exists() )
 			{
-				$('#ui-datepicker-div').wrap('<div class="ui-acf" />');
+				$('body > #ui-datepicker-div').wrap('<div class="acf-ui-datepicker" />');
 			}
 			
 		},
-		blur : function(){
+		
+		blur : function( $input ){
 			
-			if( !this.$input.val() )
+			if( !$input.val() )
 			{
-				this.$hidden.val('');
+				$input.siblings('input[type="hidden"]').val('');
 			}
 			
 		}
@@ -104,7 +89,7 @@
 		
 		acf.get_fields({ type : 'date_picker'}, $el).each(function(){
 			
-			acf.fields.date_picker.set({ $el : $(this) }).init();
+			acf.fields.date_picker.init( $(this).find('.acf-date_picker') );
 			
 		});
 		
@@ -123,7 +108,7 @@
 	
 	$(document).on('blur', '.acf-date_picker input[type="text"]', function( e ){
 		
-		acf.fields.date_picker.set({ $el : $(this).closest('.acf-field') }).blur();
+		acf.fields.date_picker.blur( $(this) );
 					
 	});
 	
