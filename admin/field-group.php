@@ -284,7 +284,8 @@ class acf_field_group {
 				
 				
 				// add args
-				$field['parent'] = $post_id;
+				// set only field_group which allows the parent to be 0 (parent) or 123 (sub field)
+				$field['field_group'] = $post_id;
 				
 				
 				// save field
