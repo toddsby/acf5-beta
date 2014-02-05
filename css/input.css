@@ -566,8 +566,8 @@ ul.acf-radio-list.pill li label input {
 .acf-postbox.default .acf-tab-group {
 	padding-left: 10px;
 	background: #F9F9F9;
-	border-bottom: #E8E8E8 solid 1px;
 	border-top: #E8E8E8 solid 1px;
+	border-bottom: #E8E8E8 solid 1px;
 	margin-bottom: -1px;
 }
 
@@ -587,7 +587,8 @@ ul.acf-radio-list.pill li label input {
 .acf-table tr.acf-tab-wrap td {
 	padding: 0;
 	background: #F9F9F9;
-	border-top-color: #E8E8E8;
+	border-top: none;
+	border-bottom: none;
 }
 
 .acf-table tr.acf-tab-wrap td .acf-tab-group {
