@@ -32,7 +32,8 @@ To correctly install ACF5 for beta testing, please follow these steps:
 4. Activate the `advanced-custom-fields-pro` plugin via wp-admin
 5. Navigate to `Custom Fields -> Updates` and enter the above License Key to unlock updates
 
-Notes regarding updates
+### Notes regarding updates
+
 Please do not update the plugin via the `Custom Fields -> Updates` page as this will destroy your `git` data. Instead, please test that the page functionality is working correctly.
 
 The files in this git repository represent the files available for download using a purchased developer license. All `PRO` functionality is included in a `pro` folder. Removing this folder will represent the `FREE` version.
