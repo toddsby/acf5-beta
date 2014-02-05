@@ -95,25 +95,15 @@
 .acf-flexible-content .layout .acf-fc-layout-handle {
 	display: block;
 	position: relative;
-	padding: 0 10px;
+	padding: 8px 10px;
 	
 	cursor: move;
 	
-	box-shadow: 0 1px 0 #FFFFFF inset;
-	border: #DFDFDF solid 1px;
-	
-	background: #F1F1F1;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#ECECEC)); /* Safari 4+, Chrome */
-	background-image: -webkit-linear-gradient(top, #F9F9F9, #ECECEC); /* Chrome 10+, Safari 5.1+, iOS 5+ */
-	background-image:    -moz-linear-gradient(top, #F9F9F9, #ECECEC); /* Firefox 3.6-15 */
-	background-image:      -o-linear-gradient(top, #F9F9F9, #ECECEC); /* Opera 11.10+ */
-	background-image:         linear-gradient(to bottom, #F9F9F9, #ECECEC); /* Firefox 16+ */
-	
-	
-	color: #666;
-	text-shadow: 0 1px 0 #FFFFFF;
-	font-size: 12px;
-	line-height: 35px;
+	border: #E1E1E1 solid 1px;
+		
+	color: #333333;
+	font-size: 14px;
+	line-height: 1.4em;
 	
 }
 
