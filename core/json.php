@@ -337,7 +337,8 @@ function acf_register_json_field_group( $field_group ) {
 		{
 			$field['ancestors'][] = $parent;
 			
-			$parent = acf_get_json_field( $parent )['parent'];
+			$parent = acf_get_json_field( $parent );
+			$parent = $parent['parent'];
 		}
 		
 		$field['ancestors'][] = $field_group['key'];
