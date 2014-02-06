@@ -362,7 +362,7 @@ function get_fields( $post_id = false ) {
 	
 	// vars
 	$fields = get_field_objects( $post_id );
-	$return = [];
+	$return = '';
 	
 	
 	// populate
