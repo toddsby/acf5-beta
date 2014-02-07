@@ -682,11 +682,10 @@ var acf_field_group = {};
 					{
 						return;
 					}
-					console.log('update menu order');
+					
 					
 					// update meta
 					_this.update_field_meta($(this), {
-						changed : 1,
 						menu_order : i
 					});
 					

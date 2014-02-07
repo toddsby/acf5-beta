@@ -25,6 +25,7 @@ class acf_field_group {
 		add_action( 'wp_ajax_acf/field_group/render_field_options',		array( $this, 'ajax_render_field_options') );
 		add_action( 'wp_ajax_acf/field_group/render_location_value',	array( $this, 'ajax_render_location_value') );
 		add_action( 'wp_ajax_acf/field_group/move_field',				array( $this, 'ajax_move_field') );
+		
 	}
 	
 	
@@ -279,6 +280,9 @@ class acf_field_group {
 				// only saved field if has changed
 				if( ! acf_extract_var( $field, 'changed' ) )
 				{
+					// update only menu order
+					acf_update_field_order( $field );
+					
 					continue;
 				}
 				
@@ -916,7 +920,6 @@ class acf_field_group {
 		die();
 		
 	}
-	
 	
 	
 }

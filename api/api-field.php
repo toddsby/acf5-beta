@@ -598,6 +598,38 @@ function acf_update_field_wp_unique_post_slug( $slug, $post_ID, $post_status, $p
 
 
 /*
+*  acf_update_field_order
+*
+*  description
+*
+*  @type	function
+*  @date	7/02/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_update_field_order( $field ) {
+	
+	// save
+    $save = array(
+    	'ID'			=> $field['ID'],
+    	'menu_order'	=> $field['menu_order'],
+    );
+    
+    
+    // update field
+    wp_update_post( $save );
+
+    
+    // remove cache
+	wp_cache_delete( "load_field/ID={$field['ID']}", 'acf' );
+	
+}
+
+
+/*
 *  acf_duplicate_field
 *
 *  This function will duplicate a field and attach it to the given field group ID
