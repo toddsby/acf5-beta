@@ -58,12 +58,8 @@ class acf_field_user extends acf_field
 		));
 		
 		
-		$args = array(
-			'hide_empty'	=>	false,
-		);
-		
-		
    		// vars
+   		$args = array();
    		$r = array();
    		
 		
