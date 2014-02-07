@@ -235,6 +235,13 @@ class acf_json {
 		// loop through and add to cache
 		foreach( $paths as $path )
 		{
+			// check that path exists
+			if( !file_exists( $path ) )
+			{
+				continue;
+			}
+			
+			
 			$dir = opendir( $path );
 	    
 		    while(false !== ( $file = readdir($dir)) )
