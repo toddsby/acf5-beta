@@ -20,6 +20,7 @@ class acf_field_post_object extends acf_field
 		$this->defaults = array(
 			'post_type'		=> array(),
 			'taxonomy'		=> array(),
+			'allow_null' 	=> 0,
 			'multiple'		=> 0,
 			'return_format'	=> 'object',
 			'ui'			=> 1,
