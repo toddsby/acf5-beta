@@ -390,7 +390,6 @@ var acf_field_group = {};
 			
 		},
 		
-		
 		add : function( $field_list ){
 			
 			// clone last tr
@@ -437,7 +436,6 @@ var acf_field_group = {};
 			
 			// open up form
 			this.edit( $el );
-			
 			
 		},
 		
