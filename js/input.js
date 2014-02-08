@@ -395,6 +395,15 @@ var acf = {
 			// get fields
 			var $fields = $el.find(selector);
 			
+			
+			// is current $el a field?
+			// this is the case when editing a field group
+			if( $el.is( selector ) )
+			{
+				$fields = $fields.add( $el );
+			}
+			
+			
 			//console.log('get_fields(%o, %s, %b). selector = %s', $el, field_type, allow_filter, selector);
 			//console.log( $el );
 			//console.log( $fields );
