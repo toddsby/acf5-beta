@@ -476,14 +476,21 @@ var acf_field_group = {};
 			
 			
 			// close field
-			var end_height = 0;
+			var end_height = 0,
+				$show = false;
 			
 			if( $field_list.children('.field').length == 1 )
 			{
-				end_height = $field_list.children('.no-fields-message').height();
+				$show = $field_list.children('.no-fields-message');
+				end_height = $show.outerHeight();
 			}
 			
 			$el.parent('.temp-field-wrap').animate({ height : end_height }, 250, function(){
+				
+				if( $show )
+				{
+					$show.show();
+				}
 				
 				$(this).remove();
 				
