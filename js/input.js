@@ -4575,6 +4575,16 @@ acf.add_action('ready append', function( $el ){
 				this.ignore = 1;
 				
 				
+				// attempt to find $trigger
+				if( ! this.$trigger )
+				{
+					if( $form.find('.submit input[type="submit"]').exists() )
+					{
+						this.$trigger = $form.find('.submit input[type="submit"]');
+					}
+				}
+				
+				
 				// submit form again
 				if( this.$trigger )
 				{
