@@ -314,31 +314,25 @@ class acf {
 		));
 		
 		
+		// min
+		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		
+		
 		// register scripts
 		$scripts = array();
-		/*
-$scripts[] = array(
-			'handle'	=> 'acf-datepicker',
-			'src'		=> acf_get_dir( 'inc/datepicker/jquery-ui-1.10.3.custom.min.js' ),
-			'deps'		=> array('jquery'),
-		);
-*/
 		$scripts[] = array(
 			'handle'	=> 'select2',
-			'src'		=> acf_get_dir( 'inc/select2/select2.min.js' ),
+			'src'		=> acf_get_dir( "inc/select2/select2{$min}.js" ),
 			'deps'		=> array('jquery'),
 		);
-
-		$maybe_debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-
 		$scripts[] = array(
 			'handle'	=> 'acf-input',
-			'src'		=> acf_get_dir( "js/input{$maybe_debug}.js" ),
+			'src'		=> acf_get_dir( "js/input{$min}.js" ),
 			'deps'		=> array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'underscore', 'select2'),
 		);
 		$scripts[] = array(
 			'handle'	=> 'acf-field-group',
-			'src'		=> acf_get_dir( 'js/field-group{$maybe_debug}.js'),
+			'src'		=> acf_get_dir( "js/field-group{$min}.js"),
 			'deps'		=> array('acf-input'),
 		);
 		
