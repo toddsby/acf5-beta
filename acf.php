@@ -315,7 +315,8 @@ class acf {
 		
 		
 		// min
-		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		//$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$min = '';
 		
 		
 		// register scripts
