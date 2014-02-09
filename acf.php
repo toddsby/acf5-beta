@@ -328,14 +328,17 @@ $scripts[] = array(
 			'src'		=> acf_get_dir( 'inc/select2/select2.min.js' ),
 			'deps'		=> array('jquery'),
 		);
+
+		$maybe_debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
 		$scripts[] = array(
 			'handle'	=> 'acf-input',
-			'src'		=> acf_get_dir( 'js/input.js' ),
+			'src'		=> acf_get_dir( "js/input{$maybe_debug}.js" ),
 			'deps'		=> array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'underscore', 'select2'),
 		);
 		$scripts[] = array(
 			'handle'	=> 'acf-field-group',
-			'src'		=> acf_get_dir( 'js/field-group.js'),
+			'src'		=> acf_get_dir( 'js/field-group{$maybe_debug}.js'),
 			'deps'		=> array('acf-input'),
 		);
 		
