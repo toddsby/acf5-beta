@@ -257,19 +257,29 @@
 	
 	acf.fields.flexible_content = {
 		
-		$el : null,
-		$values : null,
-				
-		o : {},
+		// vars	
+		o		: {},
+		el		: '.acf-flexible-content',
 		
-		set : function( o ){
+		
+		// el
+		$field	: null,
+		$el		: null,	
+		$values : null,
+		$clones : null,
+		
+		
+		// functions
+		set : function( $field ){
 			
-			// merge in new option
-			$.extend( this, o );
+			// sel $el
+			this.$field = $field;
+			this.$el = $field.find( this.el ).first();
 			
 			
 			// find elements
 			this.$values = this.$el.children('.values');
+			this.$clones = this.$el.children('.clones');
 			
 			
 			// get options
@@ -284,11 +294,12 @@
 			return this;
 			
 		},
+		
 		init : function(){
 			
-			// reference
+			// refernce
 			var _this = this,
-				$el = this.$el;
+				$field = this.$field;
 			
 			
 			// sortable
@@ -313,7 +324,7 @@
 						
 						
 						// render
-						_this.set({ $el : $el }).render();
+						_this.set( $field ).render();
 		   			}
 				});
 			}
@@ -355,13 +366,13 @@
 				
 			}
 			
-			
 			if( add_required )
 			{
-				this.$el.closest('.field').addClass('required');
+				this.$field.addClass('required');
 			}		
 			
 		},
+		
 		render : function(){
 			
 			// update order numbers
@@ -406,11 +417,11 @@
 			if( this.o.max > 0 && this.o.layout_count >= this.o.max )
 			{
 				var identifier	= ( this.o.max == 1 ) ? 'layout' : 'layouts',
-					s 			= acf.l10n.flexible_content.max;
+					s 			= acf._e('flexible_content', 'max');
 				
 				// translate
 				s = s.replace('{max}', this.o.max);
-				s = s.replace('{identifier}', acf.l10n.flexible_content[ identifier ]);
+				s = s.replace('{identifier}', acf._e('flexible_content', identifier));
 				
 				r = false;
 				
@@ -429,12 +440,12 @@
 			if( layout_max > 0 && layout_count >= layout_max )
 			{
 				var identifier	= ( layout_max == 1 ) ? 'layout' : 'layouts',
-					s 			= acf.l10n.flexible_content.max_layout;
+					s 			= acf._e('flexible_content', 'max_layout');
 				
 				// translate
 				s = s.replace('{max}', layout_count);
 				s = s.replace('{label}', '"' + $a.text() + '"');
-				s = s.replace('{identifier}', acf.l10n.flexible_content[ identifier ]);
+				s = s.replace('{identifier}', acf._e('flexible_content', identifier));
 				
 				r = false;
 				
@@ -454,12 +465,12 @@
 			if( this.o.min > 0 && this.o.layout_count <= this.o.min )
 			{
 				var identifier	= ( this.o.min == 1 ) ? 'layout' : 'layouts',
-					s 			= acf.l10n.flexible_content.min + ', ' + acf.l10n.flexible_content.remove;
+					s 			= acf._e('flexible_content', 'min') + ', ' + acf._e('flexible_content', 'remove');
 				
 				// translate
 				s = s.replace('{min}', this.o.min);
-				s = s.replace('{identifier}', acf.l10n.flexible_content[ identifier ]);
-				s = s.replace('{layout}', acf.l10n.flexible_content.layout);
+				s = s.replace('{identifier}', acf._e('flexible_content', identifier));
+				s = s.replace('{layout}', acf._e('flexible_content', 'layout'));
 				
 				return confirm( s );
 
@@ -478,13 +489,13 @@
 			if( layout_min > 0 && layout_count <= layout_min )
 			{
 				var identifier	= ( layout_min == 1 ) ? 'layout' : 'layouts',
-					s 			= acf.l10n.flexible_content.min_layout + ', ' + acf.l10n.flexible_content.remove;
+					s 			= acf._e('flexible_content', 'min_layout') + ', ' + acf._e('flexible_content', 'remove');
 				
 				// translate
 				s = s.replace('{min}', layout_count);
 				s = s.replace('{label}', '"' + $a.text() + '"');
-				s = s.replace('{identifier}', acf.l10n.flexible_content[ identifier ]);
-				s = s.replace('{layout}', acf.l10n.flexible_content.layout);
+				s = s.replace('{identifier}', acf._e('flexible_content', identifier));
+				s = s.replace('{layout}', acf._e('flexible_content', 'layout'));
 				
 				return confirm( s );
 			}
@@ -494,7 +505,6 @@
 			return true;
 			
 		},
-		
 		
 		add : function( layout, $before ){
 			
@@ -507,8 +517,8 @@
 			
 			// vars
 			var new_id = acf.get_uniqid(),
-				new_field_html = this.$el.find('> .clones > .layout[data-layout="' + layout + '"]').html().replace(/(=["]*[\w-\[\]]*?)(acfcloneindex)/g, '$1' + new_id),
-				new_field = $('<div class="layout" data-layout="' + layout + '"></div>').append( new_field_html );
+				html = this.$clones.children('.layout[data-layout="' + layout + '"]').html().replace(/(=["]*[\w-\[\]]*?)(acfcloneindex)/g, '$1' + new_id),
+				$html = $('<div class="layout" data-layout="' + layout + '"></div>').append( html );
 				
 				
 			// hide no values message
@@ -518,16 +528,16 @@
 			// add row
 			if( $before )
 			{
-				$before.before( new_field );
+				$before.before( $html );
 			}
 			else
 			{
-				this.$values.append( new_field ); 
+				this.$values.append( $html ); 
 			}
 			
 			
-			// acf/setup_fields
-			$(document).trigger('acf/setup_fields', [ new_field ] );
+			// setup fields
+			acf.do_action('append', $html);
 			
 			
 			// update order
@@ -535,65 +545,38 @@
 			
 			
 			// validation
-			this.$el.closest('.field').removeClass('error');
+			acf.validation.remove_error( this.$field );
 			
 		},
-		remove : function( $el ){
+		
+		remove : function( $layout ){
 			
 			// bail early if validation fails
-			if( !this.validate_remove( $el.attr('data-layout') ) )
+			if( !this.validate_remove( $layout.attr('data-layout') ) )
 			{
 				return;
 			}
 			
 			
-			// refernce
-			var _this = this;
-			
-			
-			// set layout
-			$el.css({
-				height		: $el.height(),
-				width		: $el.width(),
-				position	: 'absolute'
-			});
-			
-			
-			// fade $tr
-			$el.animate({ opacity : 0 }, 250, function(){
-				
-				$(this).remove();
-				
-			});
-			
-			
-			// create blank space
-			$blank = $('<div style="height:' + $el.height() + 'px"></div>');
-			
-			
-			$el.after( $blank );
-			
-			
 			// close field
-			var end_height = 0;
+			var end_height = 0,
+				$message = this.$el.children('.no-value-message');
 			
-			if( $el.siblings('.layout').length == 0 )
+			if( $layout.siblings('.layout').length == 0 )
 			{
-				end_height = this.$el.children('.no-value-message').outerHeight();
+				end_height = $message.outerHeight();
 			}
 			
-			$blank.animate({ height : end_height }, 250, function(){
-				
-				$(this).remove();
-				
+			
+			// remove
+			acf.remove_el( $layout, function(){
 				
 				if( end_height > 0 )
 				{
-					_this.$el.children('.no-value-message').show();
+					$message.show();
 				}
 				
-			});
-			
+			}, end_height);
 			
 		},
 		
@@ -623,7 +606,7 @@
 			
 			
 			// vars
-			$popup = $( this.$el.children('.tmpl-popup').html() );
+			var $popup = $( this.$el.children('.tmpl-popup').html() );
 			
 			
 			$popup.find('a').each(function(){
@@ -742,7 +725,7 @@
 		
 		acf.get_fields({ type : 'flexible_content'}, $el).each(function(){
 			
-			acf.fields.flexible_content.set({ $el : $(this).find('.acf-flexible-content') }).init();
+			acf.fields.flexible_content.set( $(this) ).init();
 			
 		});
 		
@@ -765,17 +748,25 @@
 		
 		e.preventDefault();
 		
-		// before
-		var before = false;
 		
+		// vars
+		var $a		= $(this),
+			$field	= acf.get_field_wrap( $a ),
+			before	= false;
+			
+		
+		// before
 		if( $(this).attr('data-before') )
 		{
 			before = true;
 		}
 		
-		acf.fields.flexible_content.set({ $el : $(this).closest('.acf-flexible-content') }).open_popup( $(this), before );
+		
+		// open_popup
+		acf.fields.flexible_content.set( $field ).open_popup( $a, before );
 		
 		
+		// blur
 		$(this).blur();
 		
 	});
@@ -784,8 +775,18 @@
 		
 		e.preventDefault();
 		
-		acf.fields.flexible_content.set({ $el : $(this).closest('.acf-flexible-content') }).remove( $(this).closest('.layout') );
 		
+		// vars
+		var $a		= $(this),
+			$field	= acf.get_field_wrap( $a ),
+			$layout	= $a.closest('.layout');
+			
+			
+		// remove
+		acf.fields.flexible_content.set( $field ).remove( $layout );
+		
+		
+		// blur
 		$(this).blur();
 		
 	});
@@ -794,30 +795,45 @@
 	
 		e.preventDefault();
 		
-		acf.fields.flexible_content.toggle( $(this).closest('.layout') );
 		
+		// vars
+		var $a		= $(this),
+			$layout	= $a.closest('.layout');
+			
+		
+		// toggle
+		acf.fields.flexible_content.toggle( $layout );
+		
+		
+		// blur
 		$(this).blur();
 			
 	});
-	
-	
-	/* popup */
 	
 	$(document).on('click', '.acf-flexible-content .acf-fc-popup li a', function( e ){
 		
 		e.preventDefault();
 		
-		var $popup = $(this).closest('.acf-fc-popup'),
-			$layout = null;
 		
+		// vars
+		var $a		= $(this),
+			$field	= acf.get_field_wrap( $a ),
+			$popup	= $a.closest('.acf-fc-popup')
+			$layout	= null;
+			
+			
+		// $layout
 		if( $popup.hasClass('within-layout') )
 		{
 			$layout = $popup.closest('.layout');
 		}
 		
 		
-		acf.fields.flexible_content.set({ $el : $(this).closest('.acf-flexible-content') }).add( $(this).attr('data-layout'), $layout );
+		// add
+		acf.fields.flexible_content.set( $field ).add( $a.attr('data-layout'), $layout );
 		
+		
+		// blur
 		$(this).blur();
 		
 	});
