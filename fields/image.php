@@ -163,28 +163,35 @@ class acf_field_image extends acf_field
 	
 	
 	/*
-	*  format_value_for_api()
+	*  format_value()
 	*
-	*  This filter is appied to the $value after it is loaded from the db and before it is passed back to the api functions such as the_field
+	*  This filter is appied to the $value after it is loaded from the db and before it is passed to the render_field action
 	*
 	*  @type	filter
 	*  @since	3.6
 	*  @date	23/01/13
 	*
-	*  @param	$value	- the value which was loaded from the database
-	*  @param	$post_id - the $post_id from which the value was loaded
-	*  @param	$field	- the field array holding all the field options
+	*  @param	$value (mixed) the value which was loaded from the database
+	*  @param	$post_id (mixed) the $post_id from which the value was loaded
+	*  @param	$field (array) the field array holding all the field options
+	*  @param	$template (boolean) true if value requires formatting for front end template function
 	*
-	*  @return	$value	- the modified value
+	*  @return	$value (mixed) the modified value
 	*/
 	
-	function format_value_for_api( $value, $post_id, $field )
-	{
+	function format_value( $value, $post_id, $field, $template ) {
 		
-		// validate
-		if( !$value )
+		// bail early if no value
+		if( empty($value) )
 		{
-			return false;
+			return $value;
+		}
+		
+		
+		// bail early if not formatting for template use
+		if( !$template )
+		{
+			return $value;
 		}
 		
 		
@@ -209,16 +216,14 @@ class acf_field_image extends acf_field
 			$src = wp_get_attachment_image_src( $attachment->ID, 'full' );
 			
 			$value = array(
-				'ID' => $attachment->ID,
-				'id' => $attachment->ID,
-				'alt' => get_post_meta($attachment->ID, '_wp_attachment_image_alt', true),
-				'title' => $attachment->post_title,
-				'caption' => $attachment->post_excerpt,
-				'description' => $attachment->post_content,
-				'url' => $src[0],
-				'width' => $src[1],
-				'height' => $src[2],
-				'sizes' => array(),
+				'ID'			=> $attachment->ID,
+				'alt'			=> get_post_meta($attachment->ID, '_wp_attachment_image_alt', true),
+				'title'			=> $attachment->post_title,
+				'caption'		=> $attachment->post_excerpt,
+				'description'	=> $attachment->post_content,
+				'url'			=> $src[0],
+				'width'			=> $src[1],
+				'height'		=> $src[2],
 			);
 			
 			
@@ -227,15 +232,17 @@ class acf_field_image extends acf_field
 			
 			if( $image_sizes )
 			{
+				$value['sizes'] = array();
+				
 				foreach( $image_sizes as $image_size )
 				{
 					// find src
 					$src = wp_get_attachment_image_src( $attachment->ID, $image_size );
 					
 					// add src
-					$value[ 'sizes' ][ $image_size ] = $src[0];
-					$value[ 'sizes' ][ $image_size . '-width' ] = $src[1];
-					$value[ 'sizes' ][ $image_size . '-height' ] = $src[2];
+					$value['sizes'][ $image_size ] = $src[0];
+					$value['sizes'][ $image_size . '-width' ] = $src[1];
+					$value['sizes'][ $image_size . '-height' ] = $src[2];
 				}
 				// foreach( $image_sizes as $image_size )
 			}
@@ -262,60 +269,6 @@ class acf_field_image extends acf_field
 	    return($vars);
 	}
 	
-	
-	/*
-   	*  ajax_get_images
-   	*
-   	*  @description: 
-   	*  @since: 3.5.7
-   	*  @created: 13/01/13
-   	*/
-	
-   	/*
-function ajax_get_images()
-   	{
-   		// vars
-		$options = array(
-			'nonce' => '',
-			'images' => array(),
-			'preview_size' => 'thumbnail'
-		);
-		$return = array();
-		
-		
-		// load post options
-		$options = array_merge($options, $_POST);
-		
-		
-		// verify nonce
-		if( ! wp_verify_nonce($options['nonce'], 'acf_nonce') )
-		{
-			die(0);
-		}
-		
-		
-		if( $options['images'] )
-		{
-			foreach( $options['images'] as $id )
-			{
-				$url = wp_get_attachment_image_src( $id, $options['preview_size'] );
-				
-				
-				$return[] = array(
-					'id' => $id,
-					'url' => $url[0],
-				);
-			}
-		}
-		
-		
-		// return json
-		echo json_encode( $return );
-		die;
-		
-   	}
-*/
-   		
 	
 	/*
 	*  image_size_names_choose

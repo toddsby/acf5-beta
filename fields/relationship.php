@@ -718,86 +718,32 @@ class acf_field_relationship extends acf_field
 	*  @since	3.6
 	*  @date	23/01/13
 	*
-	*  @param	$value	- the value which was loaded from the database
-	*  @param	$post_id - the $post_id from which the value was loaded
-	*  @param	$field	- the field array holding all the field options
+	*  @param	$value (mixed) the value which was loaded from the database
+	*  @param	$post_id (mixed) the $post_id from which the value was loaded
+	*  @param	$field (array) the field array holding all the field options
+	*  @param	$template (boolean) true if value requires formatting for front end template function
 	*
-	*  @return	$value	- the modified value
+	*  @return	$value (mixed) the modified value
 	*/
 	
-	function format_value( $value, $post_id, $field )
-	{
-		// empty?
-		if( !$value )
+	function format_value( $value, $post_id, $field, $template ) {
+		
+		// bail early if no value
+		if( empty($value) )
 		{
 			return $value;
 		}
 		
 		
-		// Pre 3.3.3, the value is a string coma seperated
-		if( is_string($value) )
-		{
-			$value = explode(',', $value);
-		}
-		
-		
-		// empty?
-		if( !is_array($value) || empty($value) )
-		{
-			return $value;
-		}
-		
-		
-		// convert to integers
+		// convert to int
 		$value = array_map('intval', $value);
 		
 		
-		// return value
-		return $value;	
-	}
-	
-	
-	/*
-	*  format_value_for_api()
-	*
-	*  This filter is appied to the $value after it is loaded from the db and before it is passed back to the api functions such as the_field
-	*
-	*  @type	filter
-	*  @since	3.6
-	*  @date	23/01/13
-	*
-	*  @param	$value	- the value which was loaded from the database
-	*  @param	$post_id - the $post_id from which the value was loaded
-	*  @param	$field	- the field array holding all the field options
-	*
-	*  @return	$value	- the modified value
-	*/
-	
-	function format_value_for_api( $value, $post_id, $field )
-	{
-		// empty?
-		if( !$value )
+		// bail early if not formatting for template use
+		if( !$template )
 		{
 			return $value;
 		}
-		
-		
-		// Pre 3.3.3, the value is a string coma seperated
-		if( is_string($value) )
-		{
-			$value = explode(',', $value);
-		}
-		
-		
-		// empty?
-		if( !is_array($value) || empty($value) )
-		{
-			return $value;
-		}
-		
-		
-		// convert to integers
-		$value = array_map('intval', $value);
 		
 		
 		// return format

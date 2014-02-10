@@ -293,12 +293,6 @@ function get_field_object( $selector, $post_id = false, $format_value = true, $l
 	}
 	
 	
-	// vars
-	$format = false;
-	$format_api = $format_value;
-	$field_key = $selector;
-	
-	
 	// filter post_id
 	$post_id = acf_get_valid_post_id( $post_id );
 	
@@ -306,12 +300,12 @@ function get_field_object( $selector, $post_id = false, $format_value = true, $l
 	// load field reference if not a field_key
 	if( !acf_is_field_key($selector) )
 	{
-		$field_key = get_field_reference( $selector, $post_id );
+		$selector = get_field_reference( $selector, $post_id );
 	}
 	
 	
 	// get field key
-	$field = acf_get_field( $field_key );
+	$field = acf_get_field( $selector );
 	
 	
 	// create blank field
@@ -323,14 +317,14 @@ function get_field_object( $selector, $post_id = false, $format_value = true, $l
 			'type'	=> '',
 		));
 		
-		$format_api = false;
+		$format_value = false;
 	}
 	
 	
 	// load value
 	if( $load_value )
 	{
-		$field['value'] = acf_get_value( $post_id, $field, $format, $format_api );
+		$field['value'] = acf_get_value( $post_id, $field, $format_value, $format_value );
 	
 	}
 	

@@ -106,15 +106,10 @@ function acf_get_value( $post_id, $field, $format = false, $format_template = fa
 	
 	
 	// format
-	if( $format_template )
+	if( $format )
 	{
-		$value = apply_filters( "acf/format_value_for_template", $value, $post_id, $field );
-		$value = apply_filters( "acf/format_value_for_template/type={$field['type']}", $value, $post_id, $field );
-	}
-	elseif( $format )
-	{
-		$value = apply_filters( "acf/format_value", $value, $post_id, $field );
-		$value = apply_filters( "acf/format_value/type={$field['type']}", $value, $post_id, $field );
+		$value = apply_filters( "acf/format_value", $value, $post_id, $field, $format_template );
+		$value = apply_filters( "acf/format_value/type={$field['type']}", $value, $post_id, $field, $format_template );
 	}
 	
 	

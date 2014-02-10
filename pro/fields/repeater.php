@@ -441,24 +441,34 @@ class acf_field_repeater extends acf_field
 	/*
 	*  format_value()
 	*
-	*  This filter is appied to the $value after it is loaded from the db and before it is passed to the create_field action
+	*  This filter is appied to the $value after it is loaded from the db and before it is passed to the render_field action
 	*
 	*  @type	filter
 	*  @since	3.6
 	*  @date	23/01/13
 	*
-	*  @param	$value	- the value which was loaded from the database
-	*  @param	$post_id - the $post_id from which the value was loaded
-	*  @param	$field	- the field array holding all the field options
+	*  @param	$value (mixed) the value which was loaded from the database
+	*  @param	$post_id (mixed) the $post_id from which the value was loaded
+	*  @param	$field (array) the field array holding all the field options
+	*  @param	$template (boolean) true if value requires formatting for front end template function
 	*
-	*  @return	$value	- the modified value
+	*  @return	$value (mixed) the modified value
 	*/
 	
-	function format_value( $value, $post_id, $field ) {
+	function format_value( $value, $post_id, $field, $template ) {
+		
+		// bail early if no value
+		if( empty($value) )
+		{
+			return $value;
+		}
+		
 		
 		// vars
 		$values = array();
-
+		$format = true;
+		$format_template = $template;
+		
 		
 		if( $value > 0 )
 		{
@@ -477,7 +487,7 @@ class acf_field_repeater extends acf_field
 					
 					
 					// get value
-					$values[ $i ][ $sub_field['key'] ] = acf_get_value( $post_id, $sub_field, true, false );
+					$values[ $i ][ $sub_field['key'] ] = acf_get_value( $post_id, $sub_field, $format, $format_template );
 					
 				}
 			}
@@ -488,58 +498,6 @@ class acf_field_repeater extends acf_field
 		return $values;
 	}
 
-	
-	
-	/*
-	*  format_value_for_api()
-	*
-	*  This filter is appied to the $value after it is loaded from the db and before it is passed back to the api functions such as the_field
-	*
-	*  @type	filter
-	*  @since	3.6
-	*  @date	23/01/13
-	*
-	*  @param	$value	- the value which was loaded from the database
-	*  @param	$post_id - the $post_id from which the value was loaded
-	*  @param	$field	- the field array holding all the field options
-	*
-	*  @return	$value	- the modified value
-	*/
-
-	function format_value_for_api( $value, $post_id, $field )
-	{
-		// vars
-		$values = array();
-		
-		
-		if( $value > 0 )
-		{
-			// loop through rows
-			for($i = 0; $i < $value; $i++)
-			{
-				// create empty array
-				$values[ $i ] = array();
-				
-				
-				// loop through sub fields
-				foreach( $field['sub_fields'] as $sub_field )
-				{
-					// update full name
-					$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
-					
-					
-					// get value
-					$values[ $i ][ $sub_field['key'] ] = acf_get_value( $post_id, $sub_field, true, true );
-					
-				}
-			}
-		}
-		
-		
-		// return
-		return $values;
-	}
-	
 }
 
 new acf_field_repeater();

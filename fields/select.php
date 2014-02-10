@@ -404,29 +404,39 @@ acf_render_field_option( $this->name, array(
 	
 	
 	/*
-	*  format_value_for_api()
+	*  format_value()
 	*
-	*  This filter is appied to the $value after it is loaded from the db and before it is passed back to the api functions such as the_field
+	*  This filter is appied to the $value after it is loaded from the db and before it is passed to the render_field action
 	*
 	*  @type	filter
 	*  @since	3.6
 	*  @date	23/01/13
 	*
-	*  @param	$value	- the value which was loaded from the database
-	*  @param	$post_id - the $post_id from which the value was loaded
-	*  @param	$field	- the field array holding all the field options
+	*  @param	$value (mixed) the value which was loaded from the database
+	*  @param	$post_id (mixed) the $post_id from which the value was loaded
+	*  @param	$field (array) the field array holding all the field options
+	*  @param	$template (boolean) true if value requires formatting for front end template function
 	*
-	*  @return	$value	- the modified value
+	*  @return	$value (mixed) the modified value
 	*/
 	
-	function format_value_for_api( $value, $post_id, $field )
-	{
-		if( $value == 'null' )
+	function format_value( $value, $post_id, $field, $template ) {
+		
+		// bail early if no value
+		if( empty($value) )
 		{
-			$value = false;
+			return $value;
 		}
 		
 		
+		// null
+		if( $value == 'null' )
+		{
+			$value = null;
+		}
+		
+		
+		// return
 		return $value;
 	}
 	
