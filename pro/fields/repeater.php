@@ -159,7 +159,7 @@ class acf_field_repeater extends acf_field
 		{
 			$el = 'tr';
 		}
-		
+	
 		
 		?>
 		<div <?php acf_esc_attr_e(array( 'class' => 'acf-repeater', 'data-min' => $field['min'], 'data-max'	=> $field['max'] )); ?>>

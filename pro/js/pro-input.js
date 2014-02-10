@@ -100,17 +100,21 @@
 		
 			// create and add the new field
 			var new_id = acf.get_uniqid(),
-				new_field_html = $el.find('> table > tbody > tr[data-id="acfcloneindex"]').html().replace(/(=["]*[\w-\[\]]*?)(acfcloneindex)/g, '$1' + new_id),
-				$tr = $('<tr class="acf-row" data-id="' + new_id + '"></tr>').append( new_field_html );
-			
-			
+				html = $el.find('> table > tbody > tr[data-id="acfcloneindex"]').html();
+				
+				
+			// replace [acfcloneindex]
+			var html = html.replace(/(="[\w-\[\]]*?)(\[acfcloneindex\])/g, '$1' + '[' + new_id + ']'),
+				$html = $('<tr class="acf-row" data-id="' + new_id + '"></tr>').append( html );
+				
+						
 			// add row
-			if( ! $before )
+			if( !$before )
 			{
 				$before = $el.find('> table > tbody > tr[data-id="acfcloneindex"]');
 			}
 			
-			$before.before( $tr );
+			$before.before( $html );
 			
 			
 			// trigger mouseenter on parent repeater to work out css margin on add-row button
@@ -122,7 +126,7 @@
 			
 			
 			// setup fields
-			acf.do_action('append', $tr);
+			acf.do_action('append', $html);
 	
 			
 			// validation
@@ -515,12 +519,16 @@
 			}
 			
 			
-			// vars
+			// create and add the new field
 			var new_id = acf.get_uniqid(),
-				html = this.$clones.children('.layout[data-layout="' + layout + '"]').html().replace(/(=["]*[\w-\[\]]*?)(acfcloneindex)/g, '$1' + new_id),
+				html = this.$clones.children('.layout[data-layout="' + layout + '"]').html();
+				
+				
+			// replace [acfcloneindex]
+			var html = html.replace(/(="[\w-\[\]]*?)(\[acfcloneindex\])/g, '$1' + '[' + new_id + ']'),
 				$html = $('<div class="layout" data-layout="' + layout + '"></div>').append( html );
-				
-				
+			
+							
 			// hide no values message
 			this.$el.children('.no-value-message').hide();
 			
