@@ -61,7 +61,7 @@ class acf_field_flexible_content extends acf_field
 		// vars
 		$sub_fields = acf_get_fields($field);
 		
-			
+		
 		// loop through layouts, sub fields and swap out the field key with the real field
 		foreach( $field['layouts'] as $k1 => $layout )
 		{
@@ -74,10 +74,11 @@ class acf_field_flexible_content extends acf_field
 			{
 				foreach( array_keys($sub_fields) as $k2 )
 				{
-					// bail early if 'parent_layout' is empty
+					// check if 'parent_layout' is empty
 					if( empty($sub_fields[ $k2 ]['parent_layout']) )
 					{
-						continue;
+						// parent_layout did not save for this field, default it to first layout
+						$sub_fields[ $k2 ]['parent_layout'] = $layout['key'];
 					}
 					
 					

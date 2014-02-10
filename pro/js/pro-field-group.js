@@ -64,7 +64,7 @@
 			
 			
 			// append hidden flexible content layout (fc_layout)
-			if( $parents.exists() && $el.closest('tr.acf-field').attr('data-option') == 'flexible-content' )
+			if( $parents.exists() && $el.closest('tr.acf-field').attr('data-option') == 'flexible_content' )
 			{
 				// vars
 				var key = $el.closest('tr.acf-field').attr('data-key');
