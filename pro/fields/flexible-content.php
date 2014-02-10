@@ -224,7 +224,7 @@ class acf_field_flexible_content extends acf_field
 			
 			
 			?>
-			<tr class="acf-field" data-name="fc_layout" data-option="flexible-content" data-key="<?php echo $layout['key']; ?>">
+			<tr class="acf-field" data-name="fc_layout" data-option="flexible_content" data-key="<?php echo $layout['key']; ?>">
 				<td class="acf-label">
 					<label><?php _e("Layout",'acf'); ?></label>
 					<p class="desription acf-fc-description">
