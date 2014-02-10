@@ -688,7 +688,11 @@ var acf = {
 			
 		},
 		
-		remove_el : function( $el, callback ){
+		remove_el : function( $el, callback, end_height ){
+			
+			// defaults
+			end_height = end_height || 0;
+			
 			
 			// set layout
 			$el.css({
@@ -708,7 +712,7 @@ var acf = {
 			
 			
 			// remove
-			$el.parent('.acf-temp-wrap').animate({ height : 0 }, 250, function(){
+			$el.parent('.acf-temp-wrap').animate({ height : end_height }, 250, function(){
 				
 				$(this).remove();
 				
@@ -947,6 +951,13 @@ var acf = {
 		
 		// repeater sub field
 		if( $field.parents('.acf-row[data-id="acfcloneindex"]').exists() )
+		{
+			ready = false;
+		}
+		
+		
+		// flexible content sub field
+		if( $field.parents('.acf-flexible-content > .clones').exists() )
 		{
 			ready = false;
 		}
@@ -4925,6 +4936,14 @@ acf.add_action('ready append', function( $el ){
 			});
 			
 		}).add_action('sortstop', function( $el ){
+		
+			acf.get_fields({ type : 'wysiwyg'}, $el).each(function(){
+				
+				acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).init();
+				
+			});
+			
+		}).add_action('append', function( $el ){
 		
 			acf.get_fields({ type : 'wysiwyg'}, $el).each(function(){
 				
