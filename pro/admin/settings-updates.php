@@ -97,7 +97,7 @@ class acf_settings_updates {
 		
 		
 		// force recheck?
-		if( !empty($_GET['force-recheck']) )
+		if( !empty($_GET['force-check']) )
 		{
 			delete_transient( 'acf_pro_get_remote_info' );
 		}
