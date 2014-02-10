@@ -221,6 +221,14 @@
 				
 			});
 			
+		}).add_action('append', function( $el ){
+		
+			acf.get_fields({ type : 'wysiwyg'}, $el).each(function(){
+				
+				acf.fields.wysiwyg.set({ $el : $(this).find('.acf-wysiwyg-wrap') }).init();
+				
+			});
+			
 		}).add_action('load', function( $el ){
 		
 			// vars
