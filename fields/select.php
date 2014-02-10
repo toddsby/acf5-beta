@@ -97,7 +97,7 @@ class acf_field_select extends acf_field
 				// append
 				$r[] = array(
 					'id'	=> $k,
-					'text'	=> $v
+					'text'	=> strval( $v )
 				);
 			}
 		}
