@@ -66,6 +66,7 @@ Missing features in ACF5
 
 Please keep in mind that this is quite an early beta release and many core features are still missing. These will be added in over the next month and the above list will be updated.
 
+* Conditional logic has not yet been added
 * WPML has not yet been tested
 * 3rd party fields are currently not supported
 * Migration from v4 to v5 has not yet been added
