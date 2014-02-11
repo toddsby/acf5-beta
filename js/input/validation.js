@@ -101,6 +101,10 @@
 		
 		complete : function( $form, json ){
 			
+			// filter for 3rd party customization
+			json = acf.apply_filters('validation_complete', json, $form);
+			
+			
 			// reference
 			var _this = this;
 			
@@ -112,9 +116,6 @@
 			// validate json
 			if( !json || json.result == 1)
 			{
-				// hook for 3rd party customization
-				acf.do_action('validation_success', $form, json );	
-			
 			
 				// remove hidden postboxes (this will stop them from being posted to save)
 				$form.find('.acf-postbox:hidden').remove();
@@ -165,17 +166,16 @@
 			
 			
 			// show field error messages
-			$.each( json.errors, function( k, v ){
+			$.each( json.errors, function( k, item ){
+			
+				var $input = $form.find('[name="' + item.input + '"]').first(),
+					$field = acf.get_field_wrap( $input );
 				
-				var $field = acf.get_field( k, $form );
 				
-				_this.add_error( $field, v );
+				// add error
+				_this.add_error( $field, item.message );
 				
 			});
-			
-			
-			// hook for 3rd party customization
-			acf.do_action('validation_complete', $form, json );	
 			
 		},
 		

@@ -260,12 +260,13 @@
 	});
 	
 	
-	acf.add_action('validation_complete', function( $form, json ){
+	acf.add_filter('validation_complete', function( json, $form ){
 		
 		// show field error messages
-		$.each( json.errors, function( k, v ){
-			
-			var $field = acf.get_field( k, $form ),
+		$.each( json.errors, function( k, item ){
+		
+			var $input = $form.find('[name="' + item.input + '"]').first(),
+				$field = acf.get_field_wrap( $input ),
 				$tab = $field.prevAll('.acf-field[data-type="tab"]:first');
 			
 			
@@ -290,8 +291,12 @@
 			// field is within a tab group, and hte tab is already showing
 			// end loop
 			return false;
-							
+			
 		});
+		
+		
+		// return
+		return json;
 				
 	});
 	

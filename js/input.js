@@ -4457,12 +4457,13 @@ acf.add_action('ready append', function( $el ){
 	});
 	
 	
-	acf.add_action('validation_complete', function( $form, json ){
+	acf.add_filter('validation_complete', function( json, $form ){
 		
 		// show field error messages
-		$.each( json.errors, function( k, v ){
-			
-			var $field = acf.get_field( k, $form ),
+		$.each( json.errors, function( k, item ){
+		
+			var $input = $form.find('[name="' + item.input + '"]').first(),
+				$field = acf.get_field_wrap( $input ),
 				$tab = $field.prevAll('.acf-field[data-type="tab"]:first');
 			
 			
@@ -4487,8 +4488,12 @@ acf.add_action('ready append', function( $el ){
 			// field is within a tab group, and hte tab is already showing
 			// end loop
 			return false;
-							
+			
 		});
+		
+		
+		// return
+		return json;
 				
 	});
 	
@@ -4603,6 +4608,10 @@ acf.add_action('ready append', function( $el ){
 		
 		complete : function( $form, json ){
 			
+			// filter for 3rd party customization
+			json = acf.apply_filters('validation_complete', json, $form);
+			
+			
 			// reference
 			var _this = this;
 			
@@ -4614,9 +4623,6 @@ acf.add_action('ready append', function( $el ){
 			// validate json
 			if( !json || json.result == 1)
 			{
-				// hook for 3rd party customization
-				acf.do_action('validation_success', $form, json );	
-			
 			
 				// remove hidden postboxes (this will stop them from being posted to save)
 				$form.find('.acf-postbox:hidden').remove();
@@ -4667,17 +4673,16 @@ acf.add_action('ready append', function( $el ){
 			
 			
 			// show field error messages
-			$.each( json.errors, function( k, v ){
+			$.each( json.errors, function( k, item ){
+			
+				var $input = $form.find('[name="' + item.input + '"]').first(),
+					$field = acf.get_field_wrap( $input );
 				
-				var $field = acf.get_field( k, $form );
 				
-				_this.add_error( $field, v );
+				// add error
+				_this.add_error( $field, item.message );
 				
 			});
-			
-			
-			// hook for 3rd party customization
-			acf.do_action('validation_complete', $form, json );	
 			
 		},
 		

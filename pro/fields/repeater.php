@@ -160,6 +160,11 @@ class acf_field_repeater extends acf_field
 			$el = 'tr';
 		}
 	
+		// hidden input
+		acf_hidden_input(array(
+			'type'	=> 'hidden',
+			'name'	=> $field['name'],
+		));
 		
 		?>
 		<div <?php acf_esc_attr_e(array( 'class' => 'acf-repeater', 'data-min' => $field['min'], 'data-max'	=> $field['max'] )); ?>>
@@ -496,6 +501,68 @@ class acf_field_repeater extends acf_field
 		
 		// return
 		return $values;
+	}
+	
+	
+	/*
+	*  validate_value
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	11/02/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function validate_value( $valid, $value, $field, $input ){
+		
+		// remove acfcloneindex
+		if( isset($value['acfcloneindex']) )
+		{
+			unset($value['acfcloneindex']);
+		}
+		
+		
+		// valid
+		if( empty($value) )
+		{
+			$valid = false;
+		}
+		
+		
+		// check sub fields
+		if( !empty($field['sub_fields']) && !empty($value) )
+		{
+			$keys = array_keys($value);
+			
+			foreach( $keys as $i )
+			{
+				foreach( $field['sub_fields'] as $sub_field )
+				{
+					// vars
+					$k = $sub_field['key'];
+					
+					
+					// test sub field exists
+					if( !isset($value[ $i ][ $k ]) )
+					{
+						continue;
+					}
+					
+					
+					// validate
+					acf_validate_value( $value[ $i ][ $k ], $sub_field, "{$input}[{$i}][{$k}]" );
+				}
+				
+			}
+			
+		}
+		
+		return $valid;
+		
 	}
 
 }

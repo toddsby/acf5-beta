@@ -453,25 +453,18 @@ function acf_validate_save_post( $show_errors = false ) {
 	// validate required fields
 	if( !empty($_POST['acf']) )
 	{
+		$keys = array_keys($_POST['acf']);
+		
 		// loop through and save $_POST data
-		foreach( $_POST['acf'] as $key => $value )
+		foreach( $keys as $key )
 		{
 			// get field
 			$field = acf_get_field( $key );
 			
 			
-			// check required
-			if( $field['required'] && empty($value) )
-			{
-				acf_add_validation_error( $field['key'], "{$field['label']} value is empty" );
-			}
+			// validate
+			acf_validate_value( $_POST['acf'][ $key ], $field, "acf[{$key}]" );
 			
-			
-			// hook for 3rd party customization
-			foreach( array('type', 'name', 'key') as $key )
-			{
-				do_action('acf/validate_field/' . $key . '=' . $field[ $key ], $field, $value);
-			}
 			
 		}
 		// foreach($fields as $key => $value)
@@ -492,7 +485,7 @@ function acf_validate_save_post( $show_errors = false ) {
 			
 			foreach( $errors as $error )
 			{
-				$message .= '<li>' . $error . '</li>';
+				$message .= '<li>' . $error['message'] . '</li>';
 			}
 			
 			$message .= '</ul>';
@@ -510,6 +503,55 @@ function acf_validate_save_post( $show_errors = false ) {
 }
 
 
+function acf_validate_value( $value, $field, $input ) {
+	
+	// check required
+	if( !$field['required'] )
+	{
+		return true;
+	}
+	
+	
+	// vars
+	$valid = true;
+	$message = "{$field['label']} value is required";
+	
+	
+	// valid
+	if( empty($value) )
+	{
+		$valid = false;
+	}
+	
+	
+	// filter for 3rd party customization
+	$valid = apply_filters( "acf/validate_value", $valid, $value, $field, $input );
+	$valid = apply_filters( "acf/validate_value/type={$field['type']}", $valid, $value, $field, $input );
+	$valid = apply_filters( "acf/validate_value/name={$field['name']}", $valid, $value, $field, $input );
+	$valid = apply_filters( "acf/validate_value/key={$field['key']}", $valid, $value, $field, $input );
+		
+	
+	// allow $valid to be a custom error message
+	if( !empty($valid) && is_string($valid) )
+	{
+		$message = $valid;
+		$valid = false;
+	}
+	
+	
+	if( !$valid )
+	{
+		acf_add_validation_error( $input, $message );
+		return false;
+	}
+	
+	
+	// return
+	return true;
+	
+}
+
+
 /*
 *  acf_add_validation_error
 *
@@ -523,7 +565,7 @@ function acf_validate_save_post( $show_errors = false ) {
 *  @return	$post_id (int)
 */
 
-function acf_add_validation_error( $key, $message = '' ) {
+function acf_add_validation_error( $input, $message = '' ) {
 	
 	// instantiate array if empty
 	if( empty($GLOBALS['acf_validation_errors']) )
@@ -533,7 +575,10 @@ function acf_add_validation_error( $key, $message = '' ) {
 	
 	
 	// add to array
-	$GLOBALS['acf_validation_errors'][ $key ] = $message;
+	$GLOBALS['acf_validation_errors'][] = array(
+		'input'		=> $input,
+		'message'	=> $message
+	);
 	
 }
 
@@ -551,7 +596,7 @@ function acf_add_validation_error( $key, $message = '' ) {
 *  @return	$post_id (int)
 */
 
-function acf_get_validation_errors( $delete = false ) {
+function acf_get_validation_errors() {
 	
 	if( empty($GLOBALS['acf_validation_errors']) )
 	{
