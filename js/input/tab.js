@@ -85,7 +85,7 @@
 			//console.log('show tab fields %o', $field);
 			$field.nextUntil('.acf-field[data-type="tab"]').each(function(){
 				
-				$(this).removeClass('hidden_by_tab');
+				$(this).removeClass('hidden-by-tab');
 				acf.do_action('show_field', $(this));
 				
 			});
@@ -95,7 +95,7 @@
 			
 			$field.nextUntil('.acf-field[data-type="tab"]').each(function(){
 				
-				$(this).addClass('hidden_by_tab');
+				$(this).addClass('hidden-by-tab');
 				acf.do_action('hide_field', $(this));
 				
 			});
@@ -257,6 +257,42 @@
 		}
 		
 
+	});
+	
+	
+	acf.add_action('validation_complete', function( $form, json ){
+		
+		// show field error messages
+		$.each( json.errors, function( k, v ){
+			
+			var $field = acf.get_field( k, $form ),
+				$tab = $field.prevAll('.acf-field[data-type="tab"]:first');
+			
+			
+			// does tab group exist?
+			if( ! $tab.exists() )
+			{
+				return;
+			}
+
+			
+			// is this field hidden
+			if( $field.hasClass('hidden-by-tab') )
+			{
+				// show this tab
+				$tab.siblings('.acf-tab-wrap').find('a[data-key="' + acf.get_data($tab, 'key') + '"]').trigger('click');
+				
+				// end loop
+				return false;
+			}
+			
+			
+			// field is within a tab group, and hte tab is already showing
+			// end loop
+			return false;
+							
+		});
+				
 	});
 	
 	
