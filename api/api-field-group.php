@@ -410,7 +410,14 @@ function acf_update_field_group( $field_group = array() ) {
     
     
     // update the field group and update the ID
-	$field_group['ID'] = wp_insert_post( $save );
+    if( $field_group['ID'] )
+    {
+	    wp_update_post( $save );
+    }
+    else
+    {
+	    $field_group['ID'] = wp_insert_post( $save );
+    }
 	
 	
 	// action for 3rd party customization

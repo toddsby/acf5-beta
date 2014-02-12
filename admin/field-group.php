@@ -277,13 +277,17 @@ class acf_field_group {
 		{
 			foreach( $_POST['acf_fields'] as $field )
 			{
+				// vars
+				$specific = false;
+				
+				
 				// only saved field if has changed
 				if( ! acf_extract_var( $field, 'changed' ) )
 				{
-					// update only menu order
-					acf_update_field_order( $field );
-					
-					continue;
+					$specific = array(
+						'menu_order',
+						'post_parent',
+					);
 				}
 				
 				
@@ -293,7 +297,7 @@ class acf_field_group {
 				
 				
 				// save field
-				acf_update_field( $field );
+				acf_update_field( $field, $specific );
 			}
 		}
 		

@@ -522,7 +522,7 @@ function _acf_get_field_by_key( $key = '' ) {
 *  @return	(int)
 */
 
-function acf_update_field( $field = false ) {
+function acf_update_field( $field = false, $specific = false ) {
 	
 	// $field must be an array
 	if( !is_array($field) )
@@ -602,13 +602,45 @@ function acf_update_field( $field = false ) {
     );
     
     
+    // $specific
+    if( !empty($specific) )
+    {
+    	// prepend ID
+    	array_unshift( $specific, 'ID' );
+    	
+    	
+    	// appen data
+    	foreach( $specific as $key )
+    	{
+	    	$_save[ $key ] = $save[ $key ];
+    	}
+    	
+    	
+    	// override save
+    	$save = $_save;
+    	
+    	
+    	// clean up
+    	unset($_save);
+    	
+    	
+    }
+    
+    
     // Note: find out why by default, ACF is adding a -2
 	add_filter( 'wp_unique_post_slug', 'acf_update_field_wp_unique_post_slug', 5, 6 ); 
 	
 	
     // update the field and update the ID
-    $field['ID'] = wp_insert_post( $save );
-
+    if( $field['ID'] )
+    {
+	    wp_update_post( $save );
+    }
+    else
+    {
+	    $field['ID'] = wp_insert_post( $save );
+    }
+	
     
     // update cache
 	wp_cache_set( "load_field/ID={$field['ID']}", $field, 'acf' );
@@ -627,38 +659,6 @@ function acf_update_field_wp_unique_post_slug( $slug, $post_ID, $post_status, $p
 	}
 	
 	return $slug;
-}
-
-
-/*
-*  acf_update_field_order
-*
-*  description
-*
-*  @type	function
-*  @date	7/02/2014
-*  @since	5.0.0
-*
-*  @param	$post_id (int)
-*  @return	$post_id (int)
-*/
-
-function acf_update_field_order( $field ) {
-	
-	// save
-    $save = array(
-    	'ID'			=> $field['ID'],
-    	'menu_order'	=> $field['menu_order'],
-    );
-    
-    
-    // update field
-    wp_update_post( $save );
-
-    
-    // remove cache
-	wp_cache_delete( "load_field/ID={$field['ID']}", 'acf' );
-	
 }
 
 
