@@ -730,10 +730,6 @@ function acf_render_flexible_content_layout( $field, $layout, $i, $value ) {
 					$sub_field['prefix'] = "{$field['name']}[{$i}]";
 					
 					
-					// update id attribute
-					$sub_field['id'] = str_replace('acf-field', "acf-field-{$field['field_name']}-{$i}", $sub_field['id']);
-					
-					
 					// render input
 					acf_render_field_wrap( $sub_field, $el ); ?>
 					

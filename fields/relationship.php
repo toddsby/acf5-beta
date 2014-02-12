@@ -346,7 +346,7 @@ class acf_field_relationship extends acf_field
 		
 		// filters
 		$title = apply_filters('acf/fields/relationship/result', $title, $post, $field, $post_id);
-		$title = apply_filters('acf/fields/relationship/result/name=' . $field['field_name'] , $title, $post, $field, $post_id);
+		$title = apply_filters('acf/fields/relationship/result/name=' . $field['name'] , $title, $post, $field, $post_id);
 		$title = apply_filters('acf/fields/relationship/result/key=' . $field['key'], $title, $post, $field, $post_id);
 		
 		

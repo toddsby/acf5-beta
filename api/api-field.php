@@ -23,7 +23,7 @@ function acf_get_valid_field( $field = false ) {
 	
 	
 	// bail ealry if field_name exists (only run this function once)
-	if( isset($field['field_name']) )
+	if( !empty($field['_valid']) )
 	{
 		return $field;
 	}
@@ -35,6 +35,7 @@ function acf_get_valid_field( $field = false ) {
 		'key'				=> '',
 		'label'				=> '',
 		'name'				=> '',
+		'prefix'			=> '',
 		'type'				=> 'text',
 		'value'				=> null,
 		'menu_order'		=> 0,
@@ -46,20 +47,14 @@ function acf_get_valid_field( $field = false ) {
 		'parent'			=> 0,
 		'ancestors'			=> array(),
 		'field_group'		=> 0,
-		'field_name'		=> '',
-		'prefix'			=> '',
+		'_name'				=> '',
+		'_input'			=> '',
+		'_valid'			=> 0,
 	));
 	
 	
-	// add id (may be custom set)
-	if( !$field['id'] )
-	{
-		$field['id'] = "acf-field-{$field['name']}";
-	}
-	
-	
-	// backup name to field name
-	$field['field_name'] = $field['name'];
+	// _name
+	$field['_name'] = $field['name'];
 	
 	
 	// translate
@@ -72,6 +67,62 @@ function acf_get_valid_field( $field = false ) {
 	// field specific defaults
 	$field = apply_filters( "acf/get_valid_field", $field );
 	$field = apply_filters( "acf/get_valid_field/type={$field['type']}", $field );
+	
+	
+	// field is now valid
+	$field['_valid'] = 1;
+	
+	
+	// return
+	return $field;
+}
+
+
+/*
+*  acf_prepare_field
+*
+*  This function will prepare the field for input
+*
+*  @type	function
+*  @date	12/02/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_prepare_field( $field ) {
+	
+	// _input
+	if( !$field['_input'] )
+	{
+		$field['_input'] = $field['name'];
+	
+	
+		// _input: key overrides name
+		if( $field['key'] )
+		{
+			$field['_input'] = $field['key'];
+		}
+	
+		
+		// _input: prefix prepends name
+		if( $field['prefix'] )
+		{
+			$field['_input'] = "{$field['prefix']}[{$field['_input']}]";
+		}
+	}
+	
+	
+	// add id (may be custom set)
+	if( !$field['id'] )
+	{
+		$field['id'] = str_replace(
+			array('][', '[', ']'),
+			array('-', '-', ''),
+			$field['_input']
+		);
+	}
 	
 	
 	// return
@@ -98,33 +149,13 @@ function acf_render_field( $field = false ) {
 	$field = acf_get_valid_field( $field );
 	
 	
-	// class
-	//$field['class'] .= ' ' . $field['type'];
+	// prepare field for input
+	$field = acf_prepare_field( $field );
 	
 	
-	// update the $field's name based on the key and prefix
-	// $field['name'] has been used so far as a nice name for element attributes such as css.
-	// now, however, the name is more useful as the $_POST name
-	// this allows a plugin dev to use the field name for $_POST data, whilst ACF can use the field key
-	/*
-	if( $field['ID'] )
-		{
-			$field['name'] = $field['ID'];
-		}
-		else
-	*/
-	if( $field['key'] )
-	{
-		$field['name'] = $field['key'];
-	}
-
-	
-	// prefix
-	if( $field['prefix'] )
-	{
-		$field['name'] = "{$field['prefix']}[{$field['name']}]";
-	}
-	
+	// update $field['name']
+	$field['name'] = $field['_input'];
+		
 	
 	// create field specific html
 	do_action( "acf/render_field", $field );
@@ -539,6 +570,7 @@ function acf_update_field( $field = false ) {
 		'key',
 		'label',
 		'name',
+		'prefix',
 		'value',
 		'menu_order',
 		'id',
@@ -546,8 +578,9 @@ function acf_update_field( $field = false ) {
 		'parent',
 		'ancestors',
 		'field_group',
-		'field_name',
-		'prefix',
+		'_name',
+		'_input',
+		'_valid',
 	));
 	
 	

@@ -12,7 +12,7 @@
 	margin: 0 0 8px;
 }
 
-.acf-repeater .acf-row[data-id="acfcloneindex"] {
+.acf-repeater .acf-row.clone {
 	display: none !important;
 }
 

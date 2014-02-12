@@ -22,7 +22,7 @@
 			
 
 			// find elements
-			this.$clone = this.$el.find('> table > tbody > tr[data-id="acfcloneindex"]');
+			this.$clone = this.$el.find('> table > tbody > tr.clone');
 			
 			
 			// get options
@@ -140,9 +140,13 @@
 				
 				
 			// replace acfcloneindex
-			var html = html.replace(/(="[\w-\[\]]*?)(acfcloneindex)/g, '$1' + new_id),
+			var html = html.replace(/(="[\w-\[\]]+?)(acfcloneindex)/g, '$1' + new_id),
 				$html = $( html );
-				
+			
+			
+			// remove clone class
+			$html.removeClass('clone');
+			
 			
 			// enable inputs
 			$html.find('[name]').removeAttr('disabled');
@@ -383,6 +387,12 @@
 			}
 						
 			
+			// disable clone inputs
+			// Note: Previous attempted to check if input was already disabled, however the browser caches this attribute, 
+			// so a refresh would cause the code to fail.
+			this.$clones.find('[name]').attr('disabled', 'disabled');
+			
+			
 			// render
 			this.render();
 			
@@ -570,12 +580,16 @@
 			
 			// create and add the new field
 			var new_id = acf.get_uniqid(),
-				html = this.$clones.children('.layout[data-layout="' + layout + '"]').html();
+				html = this.$clones.children('.layout[data-layout="' + layout + '"]').outerHTML();
 				
 				
-			// replace [acfcloneindex]
-			var html = html.replace(/(="[\w-\[\]]*?)(\[acfcloneindex\])/g, '$1' + '[' + new_id + ']'),
-				$html = $('<div class="layout" data-layout="' + layout + '"></div>').append( html );
+			// replace acfcloneindex
+			var html = html.replace(/(="[\w-\[\]]+?)(acfcloneindex)/g, '$1' + new_id),
+				$html = $( html );
+				
+			
+			// enable inputs
+			$html.find('[name]').removeAttr('disabled');
 			
 							
 			// hide no values message

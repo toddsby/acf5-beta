@@ -950,7 +950,7 @@ var acf = {
     acf.add_filter('is_field_ready_for_js', function( ready, $field ){
 		
 		// repeater sub field
-		if( $field.parents('.acf-row[data-id="acfcloneindex"]').exists() )
+		if( $field.parents('.acf-row.clone').exists() )
 		{
 			ready = false;
 		}

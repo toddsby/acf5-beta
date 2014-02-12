@@ -211,7 +211,7 @@ class acf_field_repeater extends acf_field
 			
 			<tbody>
 				<?php foreach( $field['value'] as $i => $row ): ?>
-					<tr class="acf-row" data-id="<?php echo $i; ?>">
+					<tr class="acf-row<?php echo ($i === 'acfcloneindex') ? ' clone' : ''; ?>">
 						
 						<?php if( $show_order ): ?>
 							<td class="order" title="<?php _e('Drag to reorder','acf'); ?>"><?php echo intval($i) + 1; ?></td>
@@ -240,10 +240,6 @@ class acf_field_repeater extends acf_field
 							
 							// update prefix to allow for nested values
 							$sub_field['prefix'] = "{$field['name']}[{$i}]";
-							
-							
-							// update id attribute
-							$sub_field['id'] = str_replace('acf-field', "acf-field-{$field['field_name']}-{$i}", $sub_field['id']);
 							
 							
 							// render input

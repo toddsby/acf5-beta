@@ -273,6 +273,10 @@ function acf_render_field_wrap( $field, $el = 'div', $instruction = 'label', $at
 	$field = acf_get_valid_field( $field );
 	
 	
+	// prepare field for input
+	$field = acf_prepare_field( $field );
+	
+	
 	// el
 	$elements = apply_filters('acf/render_field_wrap/elements', array(
 		'div'	=> 'div',
@@ -294,7 +298,7 @@ function acf_render_field_wrap( $field, $el = 'div', $instruction = 'label', $at
 	// atts
 	$atts = acf_parse_args($atts, array(
 		'class'		=> '',
-		'data-name'	=> $field['field_name'],
+		'data-name'	=> $field['name'],
 		'data-type'	=> $field['type'],
 	));
 	
