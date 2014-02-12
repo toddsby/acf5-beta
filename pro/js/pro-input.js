@@ -74,6 +74,12 @@
 			}
 			
 			
+			// disable clone inputs
+			// Note: Previous attempted to check if input was already disabled, however the browser caches this attribute, 
+			// so a refresh would cause the code to fail.
+			this.$clone.find('[name]').attr('disabled', 'disabled');
+						
+			
 			// render
 			this.render();
 					
@@ -88,7 +94,7 @@
 				
 			});
 			
-			console.log( this.o.row_count );
+			
 			// empty?
 			if( this.o.row_count == 0 )
 			{
@@ -130,14 +136,18 @@
 		
 			// create and add the new field
 			var new_id = acf.get_uniqid(),
-				html = this.$clone.html();
+				html = this.$clone.outerHTML();
 				
 				
-			// replace [acfcloneindex]
-			var html = html.replace(/(="[\w-\[\]]*?)(\[acfcloneindex\])/g, '$1' + '[' + new_id + ']'),
-				$html = $('<tr class="acf-row" data-id="' + new_id + '"></tr>').append( html );
+			// replace acfcloneindex
+			var html = html.replace(/(="[\w-\[\]]*?)(acfcloneindex)/g, '$1' + new_id),
+				$html = $( html );
 				
-						
+			
+			// enable inputs
+			$html.find('[name]').removeAttr('disabled');
+			
+					
 			// add row
 			if( !$before.exists() )
 			{
