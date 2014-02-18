@@ -740,7 +740,8 @@ var acf_field_group = {};
 						'ű': 'u',
 						'í': 'i',
 						' ' : '_',
-						'\'' : ''
+						'\'' : '',
+						'\\?' : ''
 					};
 				
 				$.each( replace, function(k, v){
