@@ -161,6 +161,10 @@ class acf_controller_post {
 				}
 				
 				
+				// filter for 3rd party customization
+				$priority = apply_filters('acf/input/meta_box_priority', $priority, $field_group);
+				
+				
 				// add meta box
 				add_meta_box( $id, $title, array($this, 'render_meta_box'), $this->typenow, $context, $priority, $args );
 				
