@@ -722,6 +722,9 @@ img.acf-fw {
 	border: 0 none;
 }
 
+.acf-postbox.seamless.closed .inside {
+	display: block;
+}
 
 /*---------------------------------------------------------------------------------------------
 *
