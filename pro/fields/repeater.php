@@ -218,7 +218,7 @@ class acf_field_repeater extends acf_field
 						<?php endif; ?>
 						
 						<?php if( $field['layout'] == 'row' ): ?>
-							<td class="">
+							<td class="acf-table-wrap">
 								<table class="acf-table">
 						<?php endif; ?>
 						
@@ -340,6 +340,7 @@ class acf_field_repeater extends acf_field
 			'instructions'	=> '',
 			'type'			=> 'radio',
 			'name'			=> 'layout',
+			'prefix'		=> $field['prefix'],
 			'value'			=> $field['layout'],
 			'layout'		=> 'horizontal',
 			'choices'		=> array(
