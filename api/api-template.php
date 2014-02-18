@@ -352,10 +352,10 @@ function get_field_object( $selector, $post_id = false, $format_value = true, $l
 *  @return	array	$return: an array containin the field values
 */
 
-function get_fields( $post_id = false ) {
+function get_fields( $post_id = false, $format_value = true ) {
 	
 	// vars
-	$fields = get_field_objects( $post_id );
+	$fields = get_field_objects( $post_id, $format_value );
 	$return = array();
 	
 	
