@@ -419,6 +419,11 @@ ul.acf-radio-list.pill li label input {
 	margin: 0 5px 0 0;
 }
 
+.acf-relationship .list .acf-relationship-item .thumbnail img {
+	width: 17px;
+	height: 17px;
+}
+
 .acf-relationship .choices .list .acf-relationship-item:hover {
 	background: #3875D7;
 	color: #fff;
