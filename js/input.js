@@ -4869,7 +4869,7 @@ acf.add_action('ready append', function( $el ){
 			tinyMCE.settings.theme_advanced_buttons3 = '';
 			tinyMCE.settings.theme_advanced_buttons4 = '';
 			
-			if( acf.isset_object( this.toolbars, this.o.toolbar ) )
+			if( acf.isset( this, 'toolbars', this.o.toolbar ) )
 			{
 				$.each( this.toolbars[ this.o.toolbar ], function( k, v ){
 					tinyMCE.settings[ k ] = v;
