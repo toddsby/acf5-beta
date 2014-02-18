@@ -256,9 +256,31 @@ img.acf-fw {
 }
 
 
+/* left / right */
+.acf-sprite-left {
+	background-position: -250px 0;
+	width: 7px;
+	height: 10px;
+}
+
+.acf-sprite-right {
+	background-position: -300px 0;
+	width: 7px;
+	height: 10px;
+}
+
+.acf-icon .acf-sprite-left {
+	margin: -5px 0 0 -3px;
+}
+
+.acf-icon .acf-sprite-right {
+	margin: -5px 0 0 -3px;
+}
+
+
 /* submit */
 .acf-sprite-submit {
-	background-position: -250px 0;
+	background-position: -300px 0;
 	width: 9px;
 	height: 9px;
 }

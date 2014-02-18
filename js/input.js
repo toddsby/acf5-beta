@@ -1438,9 +1438,8 @@ var acf = {
 					// create button
 					var button = $([
 						'<a href="#" class="acf-expand-details">',
-							'<span class="icon"></span>',
-							'<span class="is-closed">' + acf.l10n.core.expand_details +  '</span>',
-							'<span class="is-open">' + acf.l10n.core.collapse_details +  '</span>',
+							'<span class="is-closed"><span class="acf-icon small"><i class="acf-sprite-left"></i></span>' + acf.l10n.core.expand_details +  '</span>',
+							'<span class="is-open"><span class="acf-icon small"><i class="acf-sprite-right"></i></span>' + acf.l10n.core.collapse_details +  '</span>',
 						'</a>'
 					].join('')); 
 					
