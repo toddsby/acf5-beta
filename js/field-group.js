@@ -624,10 +624,11 @@ var acf_field_group = {};
 				$name = $el.find('tr[data-name="name"]:first input');
 					
 			
-			//$name.val('');
 			$label.val( $label.val() + ' (' + acf._e('copy') + ')' );
+			$name.val( $name.val() + '_' + acf._e('copy') );
 			
 			
+			this.save_field( $el );
 			this.render_field( $el );
 		},
 		
@@ -648,10 +649,6 @@ var acf_field_group = {};
 				ID : '',
 				key : new_id
 			});
-			
-			
-			// update class
-			$el.attr('class', $el.attr('class').replace(old_id, new_id) );
 			
 			
 			// update attributes
