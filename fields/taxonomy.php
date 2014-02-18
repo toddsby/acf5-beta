@@ -405,28 +405,26 @@ class acf_field_taxonomy extends acf_field
 		$args = apply_filters('acf/fields/taxonomy/wp_list_categories', $args, $field );
 		
 		?>
-<div class="acf-taxonomy-field">
-
-	<div class="categorychecklist-holder">
 	
-		<ul class="categorychecklist<?php if( !$field['load_save_terms'] ){ echo ' no-ajax'; } ?>">
+		<div class="categorychecklist-holder">
 		
-			<?php if( $field['field_type'] == 'radio' && $field['allow_null'] ): ?>
-				<li>
-					<label class="selectit">
-						<input type="<?php echo $field['field_type']; ?>" name="<?php echo $field['name']; ?>" value="" /> <?php _e("None", 'acf'); ?>
-					</label>
-				</li>
-			<?php endif; ?>
+			<ul class="acf-checkbox-list">
 			
-			<?php wp_list_categories( $args ); ?>
-	
-		</ul>
+				<?php if( $field['field_type'] == 'radio' && $field['allow_null'] ): ?>
+					<li>
+						<label class="selectit">
+							<input type="<?php echo $field['field_type']; ?>" name="<?php echo $field['name']; ?>" value="" /> <?php _e("None", 'acf'); ?>
+						</label>
+					</li>
+				<?php endif; ?>
+				
+				<?php wp_list_categories( $args ); ?>
 		
-	</div>
-	
-</div>
-	<?php
+			</ul>
+			
+		</div>
+		
+		<?php
 
 		
 	}
@@ -446,27 +444,35 @@ class acf_field_taxonomy extends acf_field
 	*/
 	
 	function render_field( $field )
-	{
-		if( $field['field_type'] == 'select' )
-		{
-			$field['multiple'] = 0;
-			
-			$this->render_field_select( $field );
-		}
-		elseif( $field['field_type'] == 'multi_select' )
-		{
-			$field['multiple'] = 1;
-			
-			$this->render_field_select( $field );
-		}
-		elseif( $field['field_type'] == 'radio' )
-		{
-			$this->render_field_checkbox( $field );
-		}
-		elseif( $field['field_type'] == 'checkbox' )
-		{
-			$this->render_field_checkbox( $field );
-		}	
+	{	
+		?>
+		<div class="acf-taxonomy-field" data-load_save="<?php echo $field['load_save_terms']; ?>">
+		<?php
+		
+			if( $field['field_type'] == 'select' )
+			{
+				$field['multiple'] = 0;
+				
+				$this->render_field_select( $field );
+			}
+			elseif( $field['field_type'] == 'multi_select' )
+			{
+				$field['multiple'] = 1;
+				
+				$this->render_field_select( $field );
+			}
+			elseif( $field['field_type'] == 'radio' )
+			{
+				$this->render_field_checkbox( $field );
+			}
+			elseif( $field['field_type'] == 'checkbox' )
+			{
+				$this->render_field_checkbox( $field );
+			}
+		
+		?>
+		</div>
+		<?php
 	}
 	
 	

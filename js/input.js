@@ -2103,6 +2103,52 @@ var acf = {
 			
 		},
 		
+		sync_taxonomy_terms : function(){
+			
+			// vars
+			var values = [];
+			
+			
+			$('.categorychecklist input:checked, .acf-taxonomy-field input:checked, .acf-taxonomy-field option:selected').each(function(){
+				
+				// validate
+				if( $(this).is(':hidden') || $(this).is(':disabled') )
+				{
+					return;
+				}
+				
+				
+				// validate media popup
+				if( $(this).closest('.media-frame').exists() )
+				{
+					return;
+				}
+				
+				
+				// validate acf
+				if( $(this).closest('.acf-taxonomy-field').exists() )
+				{
+					if( $(this).closest('.acf-taxonomy-field').attr('data-save') == '0' )
+					{
+						return;
+					}
+				}
+				
+				
+				// append
+				if( values.indexOf( $(this).val() ) === -1 )
+				{
+					values.push( $(this).val() );
+				}
+				
+			});
+	
+			
+			// update screen
+			this.update( 'post_taxonomy', values ).fetch();
+			
+		},
+		
 		add_events : function(){
 			
 			// reference
@@ -2153,11 +2199,21 @@ var acf = {
 			
 			
 			// post taxonmy
-			$(document).on('change', '.categorychecklist input[type="checkbox"]', function(){
+			$(document).on('change', '.categorychecklist input, .acf-taxonomy-field input, .acf-taxonomy-field select', function(){
 				
 				// a taxonomy field may trigger this change event, however, the value selected is not
 				// actually a term relatinoship, it is meta data
-				if( $(this).closest('.categorychecklist').hasClass('no-ajax') )
+				if( $(this).closest('.acf-taxonomy-field').exists() )
+				{
+					if( $(this).closest('.acf-taxonomy-field').attr('data-save') == '0' )
+					{
+						return;
+					}
+				}
+				
+				
+				// this may be triggered from editing an imgae in a popup. Popup does not support correct metaboxes so ignore this
+				if( $(this).closest('.media-frame').exists() )
 				{
 					return;
 				}
@@ -2166,32 +2222,13 @@ var acf = {
 				// set timeout to fix issue with chrome which does not register the change has yet happened
 				setTimeout(function(){
 					
-					// vars
-					var values = [];
-					
-					
-					$('.categorychecklist input[type="checkbox"]:checked').each(function(){
-						
-						if( $(this).is(':hidden') || $(this).is(':disabled') )
-						{
-							return;
-						}
-						
-						if( $.inArray( $(this).val(), values ) < 0 )
-						{
-							values.push( $(this).val() );
-						}
-						
-					});
-			
-					
-					_this.update( 'post_taxonomy', values ).fetch();
-					
+					_this.sync_taxonomy_terms();
 				
 				}, 1);
 				
 				
 			});
+			
 			
 			
 			// user role

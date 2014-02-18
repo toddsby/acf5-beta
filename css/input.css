@@ -852,3 +852,37 @@ ul.acf-radio-list.pill li label input {
 	border: #E1E1E1 solid 1px;
 }
 
+
+/*---------------------------------------------------------------------------------------------
+*
+*	Taxonomy
+*
+*---------------------------------------------------------------------------------------------*/
+
+.acf-taxonomy-field {
+	
+}
+
+.acf-taxonomy-field ul {
+	
+}
+
+.acf-taxonomy-field ul li {
+	
+}
+
+.acf-taxonomy-field .categorychecklist-holder {
+	border: #DFDFDF solid 1px;
+	border-radius: 3px;
+	max-height: 200px;
+	overflow: auto;
+}
+
+.acf-taxonomy-field .acf-checkbox-list {
+	margin: 0;
+	padding: 10px;
+}
+
+.acf-taxonomy-field ul.children {
+	padding-left: 18px;
+}
