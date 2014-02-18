@@ -773,36 +773,43 @@ function acf_verify_nonce( $nonce, $post_id = 0 ) {
 	$r = false;
 	
 	
+	// note: don't reset _acfnonce here, only when $r is set to true. This solves an issue caused by other save_post actions using this function with a different $nonce
+	
+	
 	// check
-	if( isset($_POST['_acfnonce']) && wp_verify_nonce($_POST['_acfnonce'], $nonce) )
+	if( isset($_POST['_acfnonce']) )
 	{
-		$r = true;
-		
-		
-		// remove potential for inifinite loops
-		$_POST['_acfnonce'] = false;
-		
-		
-		// if we are currently saving a revision, allow it's parent to bypass this validation
-		if( $post_id )
+
+		// verify nonce 'post|user|comment|term'
+		if( wp_verify_nonce($_POST['_acfnonce'], $nonce) )
 		{
-			if( $parent = wp_is_post_revision($post_id) )
+			$r = true;
+			
+			
+			// remove potential for inifinite loops
+			$_POST['_acfnonce'] = false;
+			
+		
+			// if we are currently saving a revision, allow it's parent to bypass this validation
+			if( $post_id )
 			{
-				// revision: set parent post_id
-				$_POST['_acfnonce'] = $parent;
-			}
-			else
-			{
-				// parent: compare parent post_id
-				if( $_POST['_acfnonce'] === $post_id )
+				if( $parent = wp_is_post_revision($post_id) )
 				{
-					$r = true;
-					
-					// remove potential for inifinite loops
-					$_POST['_acfnonce'] = false;
+					// revision: set parent post_id
+					$_POST['_acfnonce'] = $parent;
 				}
 			}
 		}
+		
+		
+		if( $_POST['_acfnonce'] === $post_id )
+		{
+			$r = true;
+			
+			// remove potential for inifinite loops
+			$_POST['_acfnonce'] = false;
+		}
+		
 	}
 	
 	
