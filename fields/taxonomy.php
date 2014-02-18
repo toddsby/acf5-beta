@@ -349,9 +349,9 @@ class acf_field_taxonomy extends acf_field
 				
 				if( !empty($terms) )
 				{
-					foreach( $terms as $t )
+					foreach( $terms as $term )
 					{
-						$field['choices'][ $t->term_id ] = $this->get_result( $term, $field );
+						$field['choices'][ $term->term_id ] = $this->get_result( $term, $field );
 					}
 				}
 				
