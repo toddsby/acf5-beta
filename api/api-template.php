@@ -182,7 +182,7 @@ function acf_get_valid_post_id( $post_id = 0 ) {
 
 function acf_is_field_key( $field_key = '' ) {
 		
-	if( strpos($field_key, "field_") !== false )
+	if( substr($field_key, 0, 6) === 'field_' )
 	{
 		return true;
 	}
