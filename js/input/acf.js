@@ -466,6 +466,33 @@ var acf = {
 			
 		},
 		
+		isset : function(){
+			
+			var a = arguments,
+		        l = a.length,
+		        c = null,
+		        undef;
+			
+		    if (l === 0) {
+		        throw new Error('Empty isset');
+		    }
+			
+			c = a[0];
+			
+		    for (i = 1; i < l; i++) {
+		    	
+		        if (a[i] === undef || c[ a[i] ] === undef) {
+		            return false;
+		        }
+		        
+		        c = c[ a[i] ];
+		        
+		    }
+		    
+		    return true;	
+			
+		},
+		
 		isset_object : function(){
 			
 			var args = Array.prototype.slice.call(arguments),
@@ -1083,9 +1110,16 @@ var acf = {
 		init : function(){
 			
 			// bail early if wp.media does not exist (field group edit page)
-			if( typeof(wp.media) == 'undefined' )
+			if( typeof wp == 'undefined' )
 			{
 				return false;
+			}
+			
+			
+			// validate prototype
+			if( ! acf.isset(wp, 'media', 'view', 'AttachmentCompat', 'prototype') )
+			{
+				return false;	
 			}
 			
 			
