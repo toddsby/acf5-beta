@@ -949,18 +949,21 @@ function acf_get_taxonomies() {
 
 	// get all taxonomies
 	$taxonomies = get_taxonomies( false, 'objects' );
+	$ignore = array( 'nav_menu', 'link_category' );
 	$r = array();
 	
 	
 	// populate $r
 	foreach( $taxonomies as $taxonomy )
 	{
-		$r[ $taxonomy->name ] = "{$taxonomy->labels->singular_name}"; // ({$taxonomy->name})
-	}
+		if( in_array($taxonomy->name, $ignore) )
+		{
+			continue;
 		
-	
-	// remove
-	unset($r['post_format']);
+		}
+		
+		$r[ $taxonomy->name ] = $taxonomy->name; //"{$taxonomy->labels->singular_name}"; // ({$taxonomy->name})
+	}
 	
 	
 	// return
