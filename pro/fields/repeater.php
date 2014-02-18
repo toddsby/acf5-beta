@@ -312,6 +312,12 @@ class acf_field_repeater extends acf_field
 		<?php
 		
 		
+		// rows
+		$field['min'] = empty($field['min']) ? '' : $field['min'];
+		$field['max'] = empty($field['max']) ? '' : $field['max'];
+		
+		
+		
 		// min
 		acf_render_field_option( $this->name, array(
 			'label'			=> __('Minimum Rows','acf'),
@@ -320,6 +326,7 @@ class acf_field_repeater extends acf_field
 			'name'			=> 'min',
 			'prefix'		=> $field['prefix'],
 			'value'			=> $field['min'],
+			'placeholder'	=> '0',
 		));
 		
 		
@@ -331,6 +338,7 @@ class acf_field_repeater extends acf_field
 			'name'			=> 'max',
 			'prefix'		=> $field['prefix'],
 			'value'			=> $field['max'],
+			'placeholder'	=> '0',
 		));
 		
 		
@@ -360,83 +368,6 @@ class acf_field_repeater extends acf_field
 			'value'			=> $field['button_label'],
 		));
 		
-	}
-	
-	
-	/*
-	*  update_value()
-	*
-	*  This filter is appied to the $value before it is updated in the db
-	*
-	*  @type	filter
-	*  @since	3.6
-	*  @date	23/01/13
-	*
-	*  @param	$value - the value which will be saved in the database
-	*  @param	$field - the field array holding all the field options
-	*  @param	$post_id - the $post_id of which the value will be saved
-	*
-	*  @return	$value - the modified value
-	*/
-	
-	function update_value( $value, $post_id, $field )
-	{
-		$total = 0;
-		
-		if( !empty($value) )
-		{
-			// remove dummy field
-			unset( $value['acfcloneindex'] );
-			
-			$i = -1;
-			
-			// loop through rows
-			foreach( $value as $row )
-			{	
-				$i++;
-				
-				// increase total
-				$total++;
-				
-				// loop through sub fields
-				foreach( $field['sub_fields'] as $sub_field )
-				{
-					// get sub field data
-					$v = isset( $row[$sub_field['key']] ) ? $row[$sub_field['key']] : false;
-					
-					
-					// modify name for save
-					$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
-					
-					
-					// update field
-					acf_update_value( $v, $post_id, $sub_field );
-					
-				}
-			}
-		}
-		
-		
-		// remove old data
-		$old_total = intval( acf_get_value( $post_id, $field ) );
-		
-		if( $old_total > $total )
-		{
-			for ( $i = $total; $i < $old_total; $i++ )
-			{
-				foreach( $field['sub_fields'] as $sub_field )
-				{
-					acf_delete_value( $post_id, "{$field['name']}_{$i}_{$sub_field['name']}" );
-				}
-			}
-		}
-
-		
-		// update $value and return to allow for the normal save function to run
-		$value = $total;
-		
-		
-		return $value;
 	}
 	
 	
@@ -560,6 +491,83 @@ class acf_field_repeater extends acf_field
 		
 		return $valid;
 		
+	}
+	
+	
+	/*
+	*  update_value()
+	*
+	*  This filter is appied to the $value before it is updated in the db
+	*
+	*  @type	filter
+	*  @since	3.6
+	*  @date	23/01/13
+	*
+	*  @param	$value - the value which will be saved in the database
+	*  @param	$field - the field array holding all the field options
+	*  @param	$post_id - the $post_id of which the value will be saved
+	*
+	*  @return	$value - the modified value
+	*/
+	
+	function update_value( $value, $post_id, $field )
+	{
+		$total = 0;
+		
+		if( !empty($value) )
+		{
+			// remove dummy field
+			unset( $value['acfcloneindex'] );
+			
+			$i = -1;
+			
+			// loop through rows
+			foreach( $value as $row )
+			{	
+				$i++;
+				
+				// increase total
+				$total++;
+				
+				// loop through sub fields
+				foreach( $field['sub_fields'] as $sub_field )
+				{
+					// get sub field data
+					$v = isset( $row[$sub_field['key']] ) ? $row[$sub_field['key']] : false;
+					
+					
+					// modify name for save
+					$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
+					
+					
+					// update field
+					acf_update_value( $v, $post_id, $sub_field );
+					
+				}
+			}
+		}
+		
+		
+		// remove old data
+		$old_total = intval( acf_get_value( $post_id, $field ) );
+		
+		if( $old_total > $total )
+		{
+			for ( $i = $total; $i < $old_total; $i++ )
+			{
+				foreach( $field['sub_fields'] as $sub_field )
+				{
+					acf_delete_value( $post_id, "{$field['name']}_{$i}_{$sub_field['name']}" );
+				}
+			}
+		}
+
+		
+		// update $value and return to allow for the normal save function to run
+		$value = $total;
+		
+		
+		return $value;
 	}
 
 }
