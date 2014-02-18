@@ -102,24 +102,23 @@ $readonly = $active ? 1 : 0;
 							<?php endif; ?>
 						</td>
 					</tr>
-					<?php if( $update_available ): ?>
+					<?php if( $changelog ): ?>
 					<tr>
                     	<th>
                     		<label>Changelog</label>
                     	</th>
 						<td>
-							<?php 
-							
-							$changelog_sections = explode('<h4>', $changelog);
-							$changelog_sections = array_slice($changelog_sections, 0, 2);
-							
-							foreach( $changelog_sections as $section )
-							{
-								$section = str_replace('<ul>', '<ul class="ul-disc">', $section);
-								echo "<h4>{$section}"; 
-							}
-							
-							?>
+							<?php echo $changelog; ?>
+						</td>
+					</tr>
+					<?php endif; ?>
+					<?php if( $upgrade_notice ): ?>
+					<tr>
+                    	<th>
+                    		<label>Upgrade Notice</label>
+                    	</th>
+						<td>
+							<?php echo $upgrade_notice; ?>
 						</td>
 					</tr>
 					<?php endif; ?>

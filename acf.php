@@ -57,8 +57,8 @@ class acf {
 			
 			// basic
 			'name'			=> __('Advanced Custom Fields Pro', 'acf'),
-			'version'		=> '5.0.0 beta',
-			'upgrade'		=> '5.0.0 beta',
+			'version'		=> '4.0.0',
+			'upgrade'		=> '5.0.0',
 			
 			// urls
 			'basename'		=> plugin_basename( __FILE__ ),

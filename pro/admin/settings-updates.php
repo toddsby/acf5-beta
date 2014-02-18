@@ -84,7 +84,8 @@ class acf_settings_updates {
 			'current_version'	=> acf_get_setting('version'),
 			'remote_version'	=> '',
 			'update_available'	=> false,
-			'changelog'			=> ''
+			'changelog'			=> '',
+			'upgrade_notice'	=> ''
 		);
 		
 		
@@ -122,8 +123,61 @@ class acf_settings_updates {
         // add changelog if the remote version is '>' than the current version
 		if( version_compare($this->view['remote_version'], $this->view['current_version'], '>') )
         {
-        	 $this->view['update_available'] = true;
-        	 $this->view['changelog'] = $info['changelog'];
+        	$this->view['update_available'] = true;
+        	 
+        	 
+        	// changelog
+        	$changelogs = explode('<h4>', $info['changelog']);
+        	
+        	foreach( $changelogs as $changelog )
+        	{
+        		// validate (first segment is always empty due to explode)
+	        	if( empty($changelog) )
+	        	{
+		        	continue;
+	        	}
+	        	
+	        	
+        	 	// explode
+	        	$changelog = explode('</h4>', $changelog);
+	        	$changelog_version = trim($changelog[0]);
+	        	$changelog_text = trim($changelog[1]);
+	        	$changelog_text = str_replace('<ul>', '<ul class="ul-disc">', $changelog_text);
+	        	
+	        	if( version_compare($this->view['remote_version'], $changelog_version, '==') )
+	        	{
+		        	$this->view['changelog'] = $changelog_text;
+		        	break;
+	        	}
+	        	
+        	}
+        	 
+        	 
+        	// upgrade_notice
+        	$upgrade_notices = explode('<h4>', $info['upgrade_notice']);
+        	
+        	foreach( $upgrade_notices as $upgrade_notice )
+        	{
+        		// validate (first segment is always empty due to explode)
+	        	if( empty($upgrade_notice) )
+	        	{
+		        	continue;
+	        	}
+	        	
+	        	
+        	 	// explode
+	        	$upgrade_notice = explode('</h4>', $upgrade_notice);
+	        	$upgrade_version = trim($upgrade_notice[0]);
+	        	$upgrade_text = trim($upgrade_notice[1]);
+	        	$upgrade_text = str_replace('<ul>', '<ul class="ul-disc">', $upgrade_text);
+	        	
+	        	if( version_compare($this->view['current_version'], $upgrade_version, '<') )
+	        	{
+		        	$this->view['upgrade_notice'] = $upgrade_text;
+		        	break;
+	        	}
+	        	
+        	 }
         }
 		
 		
