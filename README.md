@@ -72,7 +72,6 @@ Please keep in mind that this is quite an early beta release and many core featu
 * Migration from v4 to v5 has not yet been added
 * Page link field has not yet been added
 * Options page add-on has not yet been added
-* Revisions functionalty has not yet been added
 
 Thank you
 ---------
