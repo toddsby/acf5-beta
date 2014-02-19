@@ -234,6 +234,7 @@ class acf {
 	function include_admin() {
 		
 		include_once('admin/admin.php');
+		include_once('admin/revisions.php');
 		include_once('admin/field-group.php');
 		include_once('admin/field-groups.php');
 		

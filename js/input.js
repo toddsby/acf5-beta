@@ -296,12 +296,6 @@ var acf = {
 	apply_filters		: null,
 	
 	
-	// helper functions
-	helpers				:	{
-		is_clone_field	:	null,
-	},
-	
-	
 	// modules
 	validation			:	null,
 	conditional_logic	:	null,
@@ -753,22 +747,6 @@ var acf = {
 			
 		},
 		
-		isset_object : function(){
-			
-			var args = Array.prototype.slice.call(arguments),
-				obj = args.shift();
-			
-			for (var i = 0; i < args.length; i++) {
-				if (!obj.hasOwnProperty(args[i])) {
-					return false;
-				}
-				obj = obj[args[i]];
-			}
-			
-			return true;
-				
-		},
-		
 		open_popup : function( args ){
 			
 			// vars
@@ -1005,27 +983,6 @@ var acf = {
 		return ready;
 	    
     });
-    
-    
-	/*
-	*  is_clone_field
-	*
-	*  @description: 
-	*  @since: 3.5.8
-	*  @created: 17/01/13
-	*/
-	
-	acf.helpers.is_clone_field = function( input )
-	{
-		// sub field
-		if( input.attr('name') && input.attr('name').indexOf('[acfcloneindex]') != -1 )
-		{
-			return true;
-		}
-		
-
-		return false;
-	};
 	
 	
 	/*
@@ -1874,6 +1831,19 @@ var acf = {
 	}; 
 	
 	
+	/*
+	*  ready
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	19/02/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
 	$(document).ready(function(){
 		
 		acf.do_action('ready', $('body'));
@@ -1885,6 +1855,32 @@ var acf = {
 	});
 	
 	
+	
+	/*
+	*  Force revisions
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	19/02/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	$(document).on('change', '.acf-field input, .acf-field textarea, .acf-field select', function(){
+		
+		// preview hack
+		if( $('#acf-form-data input[name="_acfchanged"]').exists() )
+		{
+			$('#acf-form-data input[name="_acfchanged"]').val(1);
+		}
+		
+	});
+			
+			
+			
 	/*
 	*  window load
 	*
