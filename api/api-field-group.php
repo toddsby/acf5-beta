@@ -186,9 +186,13 @@ function acf_get_field_group( $selector = false ) {
 	{
 		$v = $selector->ID;
 	}
-	else
+	elseif( get_post() )
 	{
 		$v = get_the_ID();
+	}
+	else
+	{
+		return false;
 	}
 	
 	

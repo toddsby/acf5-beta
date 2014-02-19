@@ -333,9 +333,13 @@ function acf_get_field( $selector = null ) {
 	{
 		$v = $selector->ID;
 	}
-	else
+	elseif( get_post() )
 	{
 		$v = get_the_ID();
+	}
+	else
+	{
+		return false;
 	}
 	
 	
