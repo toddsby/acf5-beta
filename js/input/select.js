@@ -114,7 +114,7 @@
 
 			
 			// re-order options
-			$.each( selection.reverse(), function( k, value ){
+			$.each( selection, function( k, value ){
 				
 				$.each( args.data, function( i, choice ){
 					
@@ -246,6 +246,12 @@
 		});
 		
 		acf.get_fields({ type : 'post_object'}, $el).each(function(){
+			
+			acf.fields.select.init( $(this).find('select') );
+			
+		});
+		
+		acf.get_fields({ type : 'page_link'}, $el).each(function(){
 			
 			acf.fields.select.init( $(this).find('select') );
 			
