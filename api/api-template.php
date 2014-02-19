@@ -293,6 +293,10 @@ function get_field_object( $selector, $post_id = false, $format_value = true, $l
 	}
 	
 	
+	// vars
+	$override_name = false;
+	
+	
 	// filter post_id
 	$post_id = acf_get_valid_post_id( $post_id );
 	
@@ -300,6 +304,7 @@ function get_field_object( $selector, $post_id = false, $format_value = true, $l
 	// load field reference if not a field_key
 	if( !acf_is_field_key($selector) )
 	{
+		$override_name = $selector;
 		$selector = get_field_reference( $selector, $post_id );
 	}
 	
@@ -318,6 +323,14 @@ function get_field_object( $selector, $post_id = false, $format_value = true, $l
 		));
 		
 		$format_value = false;
+	}
+	
+	
+	// override name?
+	// This allows the $selector to be a sub field (images_0_image)
+	if( $override_name )
+	{
+		$field['name'] = $override_name;	
 	}
 	
 	
