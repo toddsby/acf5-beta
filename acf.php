@@ -183,6 +183,7 @@ class acf {
 		include_once('fields/true_false.php');
 		
 		include_once('fields/post_object.php');
+		include_once('fields/page_link.php');
 		include_once('fields/relationship.php');
 		include_once('fields/taxonomy.php');
 		include_once('fields/user.php');
