@@ -239,6 +239,17 @@ class acf_field_flexible_content extends acf_field
 					</p>
 				</td>
 				<td class="acf-input">
+					<div class="acf-hidden">
+						<?php 
+						
+						acf_hidden_input(array(
+							'name'		=> "{$layout_prefix}[key]",
+							'data-name'	=> 'layout-key',
+							'value'		=> $layout['key']
+						));
+						
+						?>
+					</div>
 					<table class="acf-table acf-clear-table acf-fc-meta">
 						<tbody>
 							<tr>
@@ -391,16 +402,6 @@ class acf_field_flexible_content extends acf_field
 
 	function update_field( $field ) {
 	
-		// append key
-		if( is_array($field['layouts']) )
-		{
-			foreach( array_keys($field['layouts']) as $k )
-			{
-				$field['layouts'][ $k ]['key'] = $k;
-			}
-		}
-		
-		
 		// normalize layout array keys
 		$field['layouts'] = array_values($field['layouts']);
 		

@@ -458,6 +458,7 @@
 			
 			// give field a new id
 			$tr.attr('data-key', new_key);
+			$tr.find('> .acf-input > .acf-hidden [data-name="layout-key"]').val(new_key);
 			
 			
 			// update attributes
