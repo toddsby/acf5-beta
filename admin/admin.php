@@ -86,9 +86,20 @@ class acf_admin {
 		{
 			foreach( $admin_notices as $notice )
 			{
+				$open = '';
+				$close = '';
+				
+				if( $notice['wrap'] )
+				{
+					$open = "<{$notice['wrap']}>";
+					$close = "</{$notice['wrap']}>";
+				}
+				
+				
+				if( substr($notice['text'], 0, 1) == '<' )
 				?>
 			    <div class="<?php echo $notice['class']; ?>">
-			        <p><?php echo $notice['text']; ?></p>
+			        <?php echo $open . $notice['text'] . $close; ?>
 			    </div>
 			    <?php
 			}
