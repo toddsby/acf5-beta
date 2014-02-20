@@ -57,9 +57,8 @@ class acf {
 			
 			// basic
 			'name'			=> __('Advanced Custom Fields Pro', 'acf'),
-			'version'		=> '4.0.0',
-			'upgrade'		=> '5.0.0',
-			
+			'version'		=> '5.0.0',
+						
 			// urls
 			'basename'		=> plugin_basename( __FILE__ ),
 			'path'			=> plugin_dir_path( __FILE__ ),
@@ -236,6 +235,7 @@ class acf {
 		
 		include_once('admin/admin.php');
 		include_once('admin/revisions.php');
+		include_once('admin/update.php');
 		include_once('admin/field-group.php');
 		include_once('admin/field-groups.php');
 		

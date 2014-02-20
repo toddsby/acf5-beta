@@ -1151,6 +1151,35 @@ img.acf-fw {
 	margin: -10px 0 0 -10px;
 }
 
+
+/*--------------------------------------------------------------------------------------------
+*
+*	admin notice
+*
+*--------------------------------------------------------------------------------------------*/
+
+.updated.acf-update-notice {
+	border-left-color: #3a93b2;
+	background: #52ACCC;
+	color: #fff;
+}
+
+.updated.acf-update-notice h4 {
+	line-height: 1.4em;
+	padding: 0;
+	margin: 1em 0 0.5em;
+}
+
+.updated.acf-update-notice p {
+	line-height: 1.4em;
+	padding: 0;
+	margin: 0.5em 0 0.75em;
+}
+
+.updated.acf-update-notice .acf-button {
+	margin-left: 10px;
+}
+
 /*---------------------------------------------------------------------------------------------
 *
 *  Retina
