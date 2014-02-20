@@ -60,6 +60,7 @@ New features in ACF5
 * New field group functionality allows you to move a field between parents (repeater)
 * New Add-ons page uses an external JSON file to read in data (easy to add 3rd party fields)
 * Huge improvements to core functionality resulting in faster load times!
+* New archives group in page_link field selection
 
 Missing features in ACF5
 ------------------------
