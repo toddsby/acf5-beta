@@ -615,7 +615,9 @@ function acf_esc_attr_e( $atts ) {
 */
 
 function acf_get_hidden_input( $atts ) {
-
+	
+	$atts['type'] = 'hidden';
+	
 	return '<input ' . acf_esc_attr( $atts ) . ' />';
 	
 }
@@ -833,7 +835,7 @@ function acf_verify_nonce( $nonce, $post_id = 0 ) {
 *  @return	(int) message ID (array position)
 */
 
-function acf_add_admin_notice( $text, $class = '' )
+function acf_add_admin_notice( $text, $class = '', $wrap = 'p' )
 {
 	// vars
 	$admin_notices = acf_get_admin_notices();
@@ -842,7 +844,8 @@ function acf_add_admin_notice( $text, $class = '' )
 	// add to array
 	$admin_notices[] = array(
 		'text'	=> $text,
-		'class'	=> "updated {$class}"
+		'class'	=> "updated {$class}",
+		'wrap'	=> $wrap
 	);
 	
 	
