@@ -70,7 +70,6 @@ Please keep in mind that this is quite an early beta release and many core featu
 * Conditional logic has not yet been added
 * WPML has not yet been tested
 * 3rd party fields are currently not supported
-* Migration from v4 to v5 has not yet been added
 * Options page add-on has not yet been added
 
 Thank you
