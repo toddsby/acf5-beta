@@ -1169,10 +1169,6 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 				$select.val( val );
 			}
 			
-			
-			// trigger change
-			$select.trigger('change');
-			
 		},
 		
 		render : function( $field ){
@@ -1244,7 +1240,9 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			$tr.find('.conditional-logic-field').each(function(){
 				
 				_this.update_select( $(this), choices );
-					
+				
+				_this.change_trigger( $(this) );
+				
 			});
 			
 		},
@@ -1259,10 +1257,12 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			if( val == "1" )
 			{
 				$td.find('.location-groups').show();
+				$td.find('.location-groups').find('[name]').removeAttr('disabled');
 			}
 			else
 			{
 				$td.find('.location-groups').hide();
+				$td.find('.location-groups').find('[name]').attr('disabled', 'disabled');
 			}
 			
 		},
