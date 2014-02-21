@@ -206,50 +206,50 @@
 *
 *---------------------------------------------------------------------------------------------*/
 
-#acf-field-group-locations .location-groups {
+.location-groups .location-groups {
 	padding: 5px 0;
 } 
 
-#acf-field-group-locations h4 {
+.location-groups h4 {
 	margin: 15px 0 5px;
 }
 
-#acf-field-group-locations .location-group {
+.location-groups .location-group {
 	margin: 0 0 15px;
 }
 
-#acf-field-group-locations .location-group h4 {
+.location-groups .location-group h4 {
 	margin: 0 0 3px;;
 }
 
-#acf-field-group-locations .location-group td.param {
+.location-groups .location-group td.param {
 	width: 40%;
 }
 
-#acf-field-group-locations .location-group td.operator {
+.location-groups .location-group td.operator {
 	width: 20%;
 }
 
-#acf-field-group-locations .location-group td.add {
+.location-groups .location-group td.add {
 	width: 40px;
 }
 
-#acf-field-group-locations .location-group td.remove {
+.location-groups .location-group td.remove {
 	width: 24px;
 	vertical-align: middle;
 }
 
-#acf-field-group-locations .location-group tr .location-remove-rule {
+.location-groups .location-group tr .location-remove-rule {
 	display: none;
 }
 
-#acf-field-group-locations .location-group tr:hover .location-remove-rule {
+.location-groups .location-group tr:hover .location-remove-rule {
 	display: block;
 }
 
 
 /* Don't allow user to delete the first field group */
-#acf-field-group-locations .location-group:first-child tr:first-child .location-remove-rule {
+.location-groups .location-group:first-child tr:first-child .location-remove-rule {
 	display: none !important;
 }
 

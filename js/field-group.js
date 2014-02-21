@@ -872,7 +872,7 @@ var acf_field_group = {};
 			});
 			
 			
-			// add rule
+			// add group
 			_this.$el.on('click', '.location-add-group', function( e ){
 				
 				e.preventDefault();
@@ -1055,7 +1055,6 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 		
 		init : function(){
 			
-			
 			// vars
 			this.$el = acf_field_group.fields.$el;
 			
@@ -1072,7 +1071,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			
 			});
 			
-			this.$el.on('change', 'tr[data-name="label"] input', function(){
+			_this.$el.on('change', 'tr[data-name="label"] input', function(){
 				
 				// render all open fields
 				_this.$el.find('.field.open').each(function(){
@@ -1083,7 +1082,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 				
 			});
 			
-			this.$el.on('change', 'tr.conditional-logic input[type="radio"]', function( e ){
+			_this.$el.on('change', 'tr[data-name="conditional_logic"] input[type="radio"]', function( e ){
 				
 				e.preventDefault();
 				
@@ -1091,7 +1090,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 				
 			});
 	
-			this.$el.on('change', 'select.conditional-logic-field', function( e ){
+			_this.$el.on('change', '.conditional-logic-field', function( e ){
 				
 				e.preventDefault();
 				
@@ -1099,21 +1098,80 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 				
 			});
 			
-			this.$el.on('click', 'tr.conditional-logic .acf-button-add', function( e ){
-		
+			
+			// add rule
+			_this.$el.on('click', '.location-add-rule', function( e ){
+				
 				e.preventDefault();
 				
-				_this.add( $(this).closest('tr') );
-				
+				_this.add_rule( $(this).closest('tr') );
+								
 			});
 			
-			this.$el.on('click', 'tr.conditional-logic .acf-button-remove', function( e ){
-		
+			
+			// remove rule
+			_this.$el.on('click', '.location-remove-rule', function( e ){
+					
 				e.preventDefault();
-				
-				_this.remove( $(this).closest('tr') );
-				
+						
+				_this.remove_rule( $(this).closest('tr') );
+								
 			});
+			
+			
+			// add group
+			_this.$el.on('click', '.location-add-group', function( e ){
+				
+				e.preventDefault();
+							
+				_this.add_group( $(this).closest('.location-groups') );
+								
+			});
+			
+		},
+		
+		update_select : function( $select, choices ){
+			
+			// vars
+			var val = $select.val();
+			
+			
+			// clear choices
+			$select.html('');
+			
+			
+			// populate choices
+			$.each(choices, function( k, v ){
+				
+				var $optgroup = $select;
+				
+				if( v.group )
+				{
+					$optgroup = $select.find('optgroup[label="' + v.group + '"]');
+					
+					if( ! $optgroup.exists() )
+					{
+						$optgroup = $('<optgroup label="' + v.group + '"></optgroup>');
+						
+						$select.append( $optgroup );
+					}
+				}
+				
+				
+				// append select
+				$optgroup.append( '<option value="' + v.value + '">' + v.label + '</option>' );
+			});
+			
+			
+			// reset val
+			if( $select.find('option[value="' + val + '"]').exists() )
+			{
+				$select.val( val );
+			}
+			
+			
+			// trigger change
+			$select.trigger('change');
 			
 		},
 		
@@ -1125,9 +1183,9 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			
 			// vars
 			var choices		= [],
-				key			= $field.attr('data-id'),
-				$ancestors	= $field.parents('.fields'),
-				$tr			= $field.find('> .field_form_mask > .field_form > table > tbody > tr.conditional-logic');
+				key			= $field.attr('data-key'),
+				$ancestors	= $field.parents('.acf-field-list'),
+				$tr			= $field.find('tr[data-name="conditional_logic"]:first');
 				
 			
 			$.each( $ancestors, function( i ){
@@ -1139,18 +1197,18 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 					
 					// vars
 					var $this_field	= $(this),
-						this_id		= $this_field.attr('data-id'),
+						this_key	= $this_field.attr('data-key'),
 						this_type	= $this_field.attr('data-type'),
-						this_label	= $this_field.find('tr.field_label input').val();
+						this_label	= $this_field.find('tr[data-name="label"]:first input').val();
 					
 					
 					// validate
-					if( this_id == 'field_clone' )
+					if( this_key == 'acfcloneindex' )
 					{
 						return;
 					}
 					
-					if( this_id == key )
+					if( this_key == key )
 					{
 						return;
 					}
@@ -1160,7 +1218,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 					if( this_type == 'select' || this_type == 'checkbox' || this_type == 'true_false' || this_type == 'radio' )
 					{
 						choices.push({
-							value	: this_id,
+							value	: this_key,
 							label	: this_label,
 							group	: group
 						});
@@ -1184,27 +1242,8 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			
 			// create select fields
 			$tr.find('.conditional-logic-field').each(function(){
-			
-				var val = $(this).val(),
-					name = $(this).attr('name');
 				
-				
-				// create select
-				var $select = acf.helpers.create_field({
-					'type'		: 'select',
-					'classname'	: 'conditional-logic-field',
-					'name'		: name,
-					'value'		: val,
-					'choices'	: choices
-				});
-				
-				
-				// update select
-				$(this).replaceWith( $select );
-				
-				
-				// trigger change
-				$select.trigger('change');
+				_this.update_select( $(this), choices );
 					
 			});
 			
@@ -1214,16 +1253,16 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			
 			// vars
 			var val = $input.val(),
-				$tr = $input.closest('tr.conditional-logic');
+				$td = $input.closest('.acf-input');
 				
 			
 			if( val == "1" )
 			{
-				$tr.find('.contional-logic-rules-wrapper').show();
+				$td.find('.location-groups').show();
 			}
 			else
 			{
-				$tr.find('.contional-logic-rules-wrapper').hide();
+				$td.find('.location-groups').hide();
 			}
 			
 		},
@@ -1232,7 +1271,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			
 			// vars
 			var val			= $select.val(),
-				$trigger	= $('.field_key-' + val),
+				$trigger	= this.$el.find('.field[data-key="' + val + '"]'),
 				type		= $trigger.attr('data-type'),
 				$value		= $select.closest('tr').find('.conditional-logic-value'),
 				choices		= [];
@@ -1248,7 +1287,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			}
 			else if( type == "select" || type == "checkbox" || type == "radio" )
 			{
-				var field_choices = $trigger.find('.field_option-choices').val().split("\n");
+				var field_choices = $trigger.find('tr[data-name="choices"] textarea').val().split("\n");
 							
 				if( field_choices )
 				{
@@ -1273,77 +1312,99 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			}
 			
 			
-			// create select
-			var $select = acf.helpers.create_field({
-				'type'		: 'select',
-				'classname'	: 'conditional-logic-value',
-				'name'		: $value.attr('name'),
-				'value'		: $value.val(),
-				'choices'	: choices
-			});
-			
-			$value.replaceWith( $select );
-			
-			$select.trigger('change');
+			// update select
+			this.update_select( $value, choices );
 			
 		},
 		
-		add : function( $old_tr ){
+		add_rule : function( $tr ){
 			
 			// vars
-			var $new_tr = $old_tr.clone(),
-				old_i = parseFloat( $old_tr.attr('data-i') ),
-				new_i = acf.helpers.uniqid();
+			var $tr2 = $tr.clone(),
+				old_id = $tr2.attr('data-id'),
+				new_id = acf.get_uniqid();
 			
 			
 			// update names
-			$new_tr.find('[name]').each(function(){
+			$tr2.find('[name]').each(function(){
 				
-				// flexible content uses [0], [1] as the layout index. To avoid conflict, make sure we search for the entire conditional logic string in the name and id
-				var find = '[conditional_logic][' + old_i + ']',
-					replace = '[conditional_logic][' + new_i + ']';
-				
-				$(this).attr('name', $(this).attr('name').replace(find, replace) );
-				$(this).attr('id', $(this).attr('id').replace(find, replace) );
+				$(this).attr('name', $(this).attr('name').replace( old_id, new_id ));
+				$(this).attr('id', $(this).attr('id').replace( old_id, new_id ));
 				
 			});
 				
 				
 			// update data-i
-			$new_tr.attr('data-i', new_i);
+			$tr2.attr( 'data-id', new_id );
 			
 			
 			// add tr
-			$old_tr.after( $new_tr );
+			$tr.after( $tr2 );
+					
 			
-			
-			// remove disabled
-			$old_tr.closest('table').removeClass('remove-disabled');
+			return false;
 			
 		},
 		
-		remove : function( $tr ){
+		remove_rule : function( $tr ){
 			
-			var $table = $tr.closest('table');
-		
-			// validate
-			if( $table.hasClass('remove-disabled') )
+			// vars
+			var siblings = $tr.siblings('tr').length;
+
+			
+			if( siblings == 0 )
 			{
-				return false;
+				// remove group
+				this.remove_group( $tr.closest('.location-group') );
 			}
-			
-			
-			// remove tr
-			$tr.remove();
-			
-			
-			// add clas to table
-			if( $table.find('tr').length <= 1 )
+			else
 			{
-				$table.addClass('remove-disabled');
+				// remove tr
+				$tr.remove();
 			}
 			
 		},
+		
+		add_group : function( $groups ){
+			
+			// vars
+			var $group = $groups.find('.location-group:last'),
+				$group2 = $group.clone(),
+				old_id = $group2.attr('data-id'),
+				new_id = acf.get_uniqid();
+			
+			
+			// update names
+			$group2.find('[name]').each(function(){
+				
+				$(this).attr('name', $(this).attr('name').replace( old_id, new_id ));
+				$(this).attr('id', $(this).attr('id').replace( old_id, new_id ));
+				
+			});
+			
+			
+			// update data-i
+			$group2.attr( 'data-id', new_id );
+			
+			
+			// update h4
+			$group2.find('h4').text( acf.l10n.or );
+			
+			
+			// remove all tr's except the first one
+			$group2.find('tr:not(:first)').remove();
+			
+			
+			// add tr
+			$group.after( $group2 );
+		
+			
+		},
+		remove_group : function( $group ){
+			
+			$group.remove();
+			
+		}
 		
 	};
 	

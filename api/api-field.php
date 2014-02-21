@@ -551,9 +551,14 @@ function acf_update_field( $field = false, $specific = false ) {
 	
 	
 	// clean up conditional logic keys
-	if( is_array($field['conditional_logic']) )
+	if( !empty($field['conditional_logic']) )
 	{
 		$field['conditional_logic'] = array_values( $field['conditional_logic'] );
+		
+		foreach( array_keys($field['conditional_logic']) as $key )
+		{
+			$field['conditional_logic'][ $key ] = array_values( $field['conditional_logic'][ $key ] );
+		}
 	}
 	
 	

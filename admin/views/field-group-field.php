@@ -123,6 +123,11 @@ $atts = array(
 				// custom field options
 				acf_render_field_options( $field );
 				
+				
+				// load view
+				acf_get_view('field-group-field-conditional-logic', array( 'field' => $field ));
+				
+				
 				?>
 				<tr class="field_save">
 					<td class="acf-label"></td>
