@@ -161,25 +161,6 @@ function acf_render_field( $field = false ) {
 	do_action( "acf/render_field", $field );
 	do_action( "acf/render_field/type={$field['type']}", $field );
 	
-	
-	// conditional logic (todo: move away from this function maybe)
-	/*
-if( is_array($field['conditional_logic']) && $field['conditional_logic']['status'] )
-	{
-		$field['conditional_logic']['field'] = $field['key'];
-		
-		?>
-		<script type="text/javascript">
-		(function($) {
-			
-			acf.conditional_logic.items.push(<?php echo json_encode($field['conditional_logic']); ?>);
-			
-		})(jQuery);	
-		</script>
-		<?php
-	}
-*/
-	
 }
 
 

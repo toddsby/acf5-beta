@@ -268,7 +268,7 @@
 *
 *  @param	N/A
 *  @return	N/A
-*/ 
+*/
 
 var acf = {
 	
@@ -425,7 +425,7 @@ var acf = {
 			
 			
 			// get fields
-			$fields = this.get_fields({ key : field_key }, $el);
+			var $fields = this.get_fields({ key : field_key }, $el);
 			
 			
 			// validate
@@ -455,7 +455,7 @@ var acf = {
 			// vars
 			$field = this.get_field_wrap( $el );
 			
-			console.log( $field );
+			
 			// return
 			return this.get_data( $field, name );
 			
@@ -544,6 +544,17 @@ var acf = {
 			
 			// return
 			return r;
+			
+		},
+		
+		is_sub_field : function( $field ) {
+			
+			if( $field.closest('.acf-field').exists() )
+			{
+				return true;
+			}
+			
+			return false;
 			
 		},
 		
@@ -1500,19 +1511,26 @@ var acf = {
 	
 	
 	/*
-	*  Conditional Logic Calculate
+	*  conditional_logic
 	*
-	*  @description: 
-	*  @since 3.5.1
-	*  @created: 15/10/12
+	*  description
+	*
+	*  @type	function
+	*  @date	21/02/2014
+	*  @since	3.5.1
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
 	*/
-	
+		
 	acf.conditional_logic = {
 		
-		items : [],
+		items : {},
+		triggers : {},
 		
 		init : function(){
 			
+			console.log( this );
 			// reference
 			var _this = this;
 			
@@ -1520,224 +1538,261 @@ var acf = {
 			// events
 			$(document).on('change', '.acf-field input, .acf-field textarea, .acf-field select', function(){
 				
-				// preview hack
-				if( $('#acf-has-changed').exists() )
-				{
-					$('#acf-has-changed').val(1);
-				}
-				
 				_this.change( $(this) );
 				
 			});
 			
 			
-			acf.add_action('ready', function( $el ){
+			// actions
+			acf.add_action('append', function( $el ){
 				
 				//console.log('acf/setup_fields calling acf.conditional_logic.refresh()');
-				_this.refresh( $(el) );
+				_this.render( $el );
 				
 			});
 			
 			
 			//console.log('acf.conditional_logic.init() calling acf.conditional_logic.refresh()');
-			_this.refresh();
+			_this.render();
 			
 		},
-		change : function( $el ){
+		
+		add : function( key, groups ){
 			
-			//console.log('change %o', $el);
 			// reference
 			var _this = this;
 			
 			
-			// vars
-			var $field	= acf.get_field_wrap($el),
-				key		= acf.get_data($field, 'key');
+			// append items
+			_this.items[ key ] = groups;
 			
 			
-			// loop through items and find rules where this field key is a trigger
-			$.each(this.items, function( k, item ){
+			// populate triggers
+			$.each(groups, function( k1, group ){
 				
-				$.each(item.rules, function( k2, rule ){
+				$.each(group, function( k2, rule ){
 					
-					// compare rule against the changed $field
-					if( rule.field == key )
+					// add rule.field to triggers
+					if( !acf.isset(_this, 'triggers', rule.field) )
 					{
-						_this.refresh_field( item );
+						_this.triggers[ rule.field ] = [];
 					}
 					
+					
+					// add key to this trigger
+					if( _this.triggers[ rule.field ].indexOf(key) === -1 )
+					{
+						 _this.triggers[ rule.field ].push( key );
+					}
+										
 				});
 				
 			});
 			
 		},
 		
-		refresh_field : function( item ){
+		change : function( $el ){
 			
-			//console.log( 'refresh_field: %o ', item );
+			console.log('change %o', $el);
+			
+			
 			// reference
 			var _this = this;
 			
 			
 			// vars
-			var $targets = acf.get_fields({key : item.field});
-
+			var key = acf.get_field_data($el, 'key');
+			
+			
+			// does this field trigger any actions
+			if( acf.isset(_this, 'triggers', key) )
+			{
+				// update visibiliy
+				$.each(_this.triggers[ key ], function( i, target ){
+					
+					_this.render_field( target );
+					
+				});
+			}
+			
+		},
+		
+		render_field : function( key ){
+			
+			// reference
+			var _this = this;
+			
+			
+			// get conditional logic
+			var groups = this.items[ key ];
+			
+			
+			// get targets
+			var $targets = acf.get_fields({key : key});
+			
 			
 			// may be multiple targets (sub fields)
 			$targets.each(function(){
-				
-				//console.log('target %o', $(this));
-				
+			
 				// vars
-				var show = true;
+				var visibility = false;
 				
 				
-				// if 'any' was selected, start of as false and any match will result in show = true
-				if( item.allorany == 'any' )
-				{
-					show = false;
-				}
+				// $el
+				var $target = $(this);
 				
 				
-				// vars
-				var $target		=	$(this),
-					hide_all	=	true;
-				
-				
-				// loop through rules
-				$.each(item.rules, function( k2, rule ){
+				// loop over groups
+				$.each( groups, function( k, group ){
 					
-					// vars
-					var $toggle = acf.get_fields({key : rule.field});
+					var match_group = true;
 					
 					
-					// are any of $toggle a sub field?
-					if( $toggle.hasClass('sub_field') )
-					{
-						// toggle may be a sibling sub field.
-						// if so ,show an empty td but keep the column
-						$toggle = $target.siblings('.field_key-' + rule.field);
-						hide_all = false;
+					// loop over rules
+					$.each( group, function( k2, rule ){
 						
-						
-						// if no toggle was found, we need to look at parent sub fields.
-						// if so, hide the entire column
-						if( ! $toggle.exists() )
+						if( !_this.get_visibility( $target, rule) )
 						{
-							// loop through all the parents that could contain sub fields
-							$target.parents('tr').each(function(){
-								
-								// attempt to update $toggle to this parent sub field
-								$toggle = $(this).find('.field_key-' + rule.field)
-								
-								// if the parent sub field actuallly exists, great! Stop the loop
-								if( $toggle.exists() )
-								{
-									return false;
-								}
-								
-							});
-
-							hide_all = true;
-						}
-						
-					}
-					
-					
-					// if this sub field is within a flexible content layout, hide the entire column because 
-					// there will never be another row added to this table
-					var parent = $target.parent('tr').parent().parent('table').parent('.layout');
-					if( parent.exists() )
-					{
-						hide_all = true;
-						
-						if( $target.is('th') && $toggle.is('th') )
-						{
-							$toggle = $target.closest('.layout').find('td.field_key-' + rule.field);
-						}
-
-					}
-					
-					// if this sub field is within a repeater field which has a max row of 1, hide the entire column because 
-					// there will never be another row added to this table
-					var parent = $target.parent('tr').parent().parent('table').parent('.repeater');
-					if( parent.exists() && parent.attr('data-max_rows') == '1' )
-					{
-						hide_all = true;
-						
-						if( $target.is('th') && $toggle.is('th') )
-						{
-							$toggle = $target.closest('table').find('td.field_key-' + rule.field);
-						}
-
-					}
-					
-					
-					var calculate = _this.calculate( rule, $toggle, $target );
-					
-					if( item.allorany == 'all' )
-					{
-						if( calculate == false )
-						{
-							show = false;
-							
-							// end loop
+							match_group = false;
 							return false;
 						}
-					}
-					else
+						
+					});
+					
+					
+					if( match_group )
 					{
-						if( calculate == true )
-						{
-							show = true;
-							
-							// end loop
-							return false;
-						}
+						visibility = true;
+						return false;
 					}
 					
 				});
-				// $.each(item.rules, function( k2, rule ){
-				
-				
-				// clear classes
-				$target.removeClass('acf-conditional_logic-hide acf-conditional_logic-show acf-show-blank');
 				
 				
 				// hide / show field
-				if( show )
+				if( visibility )
 				{
-					// remove "disabled"
-					$target.find('input, textarea, select').removeAttr('disabled');
-					
-					$target.addClass('acf-conditional_logic-show');
-					
-					// hook
-					$(document).trigger('acf/conditional_logic/show', [ $target, item ]);
-					
+					_this.show_field( $target );					
 				}
 				else
 				{
-					// add "disabled"
-					$target.find('input, textarea, select').attr('disabled', 'disabled');
-					
-					$target.addClass('acf-conditional_logic-hide');
-					
-					if( !hide_all )
-					{
-						$target.addClass('acf-show-blank');
-					}
-					
-					// hook
-					$(document).trigger('acf/conditional_logic/hide', [ $target, item ]);
+					_this.hide_field( $target );
 				}
 				
 				
 			});
 			
+			
 		},
 		
-		refresh : function( $el ){
+		
+		show_field : function( $field ){
+			
+			// vars
+			var key = acf.get_data($field, 'key'),
+				c = 'hidden-by-conditional-logic';
+			
+			
+			if( acf.is_sub_field($field) )
+			{
+				var $repeater = $field.closest('table').parent('.acf-repeater');
+				
+				if( $repeater.exists() && acf.get_data($repeater, 'max') != 1)
+				{
+					c += ' appear-empty';
+					
+					$repeater.find('> table > thead th[data-key="' + key + '"]').removeClass( c );
+				}
+				
+			}
+			
+			
+			// add class
+			$field.removeClass( c );
+			
+			
+			// remove "disabled"
+			$field.find('input, textarea, select').removeAttr('disabled');
+			
+			
+			// hook
+			acf.do_action('conditional_logic_show', $field );
+			
+		},
+		
+		hide_field : function( $field ){
+			
+			// vars
+			var key = acf.get_data($field, 'key'),
+				c = 'hidden-by-conditional-logic';
+			
+			
+			if( acf.is_sub_field($field) )
+			{
+				var $repeater = $field.closest('table').parent('.acf-repeater');
+				
+				if( $repeater.exists() && acf.get_data($repeater, 'max') != 1)
+				{
+					c += ' appear-empty';
+					
+					$repeater.find('> table > thead th[data-key="' + key + '"]').addClass( c );
+				}
+				
+			}
+			
+			
+			// add class
+			$field.addClass( c );
+			
+			
+			// add "disabled"
+			$field.find('input, textarea, select').attr('disabled', 'disabled');
+			
+			
+			// hook
+			acf.do_action('conditional_logic_hide', $field );
+			
+		},
+		
+		get_visibility : function( $target, rule ){
+			
+			// vars
+			var $search = acf.is_sub_field( $target ) ? $target.parent() : $('body');
+			
+			
+			// vars
+			var $trigger = acf.get_fields({key : rule.field}, $search);
+			
+			
+			if( !$trigger.exists() )
+			{
+				// loop through all the parents that could contain sub fields
+				$target.parents('tr').each(function(){
+					
+					$trigger = acf.get_fields({key : rule.field}, $(this));
+					
+					if( $trigger.length == 1 )
+					{
+						return false;
+					}
+					
+				});
+				
+			}
+			
+						
+			//console.log('this.calculate( %o, %o, %o );', rule, $trigger, $target);
+			
+			
+			// calculate
+			var visibility = this.calculate( rule, $trigger, $target );
+			
+			
+			// return
+			return visibility;
+		},
+		
+		render : function( $el ){
 			
 			// defaults
 			$el = $el || $('body');
@@ -1747,35 +1802,36 @@ var acf = {
 			var _this = this;
 			
 			
-			// loop through items and find rules where this field key is a trigger
-			$.each(this.items, function( k, item ){
+			acf.get_fields({},$el).each(function(){
 				
-				$.each(item.rules, function( k2, rule ){
-					
-					// is this field within the $el
-					// this will increase performance by ignoring conditional logic outside of this newly appended element ($el)
-					if( ! $el.find('.field[data-field_key="' + item.field + '"]').exists() )
-					{
-						return;
-					}
-					
-					_this.refresh_field( item );
-					
-				});
+				var key = acf.get_data($(this), 'key');
+				
+				if( acf.isset(_this, 'items', key) )
+				{
+					_this.render_field( key );
+				}
+				/*
+else if( acf.isset(_this, 'triggers', key) )
+				{
+					key = _this.triggers[ key ];
+					_this.render_field( key );
+				}
+*/
 				
 			});
 			
 		},
-		calculate : function( rule, $toggle, $target ){
+		
+		calculate : function( rule, $trigger, $target ){
 			
 			// vars
 			var r = false;
 			
 
 			// compare values
-			if( $toggle.hasClass('field_type-true_false') || $toggle.hasClass('field_type-checkbox') || $toggle.hasClass('field_type-radio') )
+			if( $trigger.hasClass('field_type-true_false') || $trigger.hasClass('field_type-checkbox') || $trigger.hasClass('field_type-radio') )
 			{
-				var exists = $toggle.find('input[value="' + rule.value + '"]:checked').exists();
+				var exists = $trigger.find('input[value="' + rule.value + '"]:checked').exists();
 				
 				
 				if( rule.operator == "==" )
@@ -1797,7 +1853,7 @@ var acf = {
 			else
 			{
 				// get val and make sure it is an array
-				var val = $toggle.find('input, textarea, select').last().val();
+				var val = $trigger.find('input, textarea, select').last().val();
 				
 				if( ! $.isArray(val) )
 				{
@@ -1846,11 +1902,12 @@ var acf = {
 	
 	$(document).ready(function(){
 		
+		// fire ready
 		acf.do_action('ready', $('body'));
 		
 		
-		// conditional logic
-		//acf.conditional_logic.init();
+		// initialize conditional logic
+		acf.conditional_logic.init();
 		
 	});
 	

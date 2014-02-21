@@ -1108,3 +1108,25 @@ ul.acf-radio-list.pill li label input {
 	}
 	
 }
+
+
+/*--------------------------------------------------------------------------
+*
+*	Conditional Logic
+*	
+*-------------------------------------------------------------------------*/
+
+/* Hide */
+.hidden-by-conditional-logic {
+    display: none !important;
+}
+
+
+/* Hide (appear empty) */
+.hidden-by-conditional-logic.appear-empty {
+    display: table-cell !important;
+}
+
+.hidden-by-conditional-logic.appear-empty .acf-input {
+	display: none !important;
+}

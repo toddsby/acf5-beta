@@ -3,7 +3,7 @@
 // vars
 $field = acf_extract_var( $args, 'field');
 $groups = acf_extract_var( $field, 'conditional_logic');
-$have_groups = empty($groups) ? 0 : 1;
+$disabled = empty($groups) ? 1 : 0;
 
 
 // UI needs at least 1 conditional logic rule
@@ -37,7 +37,7 @@ if( empty($groups) )
 			'type'			=> 'radio',
 			'name'			=> 'conditional_logic',
 			'prefix'		=> $field['prefix'],
-			'value'			=> $have_groups,
+			'value'			=> $disabled ? 0 : 1,
 			'choices'		=> array(
 								1	=> __("Yes",'acf'),
 								0	=> __("No",'acf'),
@@ -46,7 +46,7 @@ if( empty($groups) )
 		));
 		
 		?>
-		<div class="location-groups" <?php if(!$have_groups): ?>style="display:none;"<?php endif; ?>>
+		<div class="location-groups" <?php if($disabled): ?>style="display:none;"<?php endif; ?>>
 			
 			<?php foreach( $groups as $group_id => $group ): 
 				
@@ -88,6 +88,7 @@ if( empty($groups) )
 										'value'		=> $rule['field'],
 										'choices'	=> $choices,
 										'class'		=> 'conditional-logic-field',
+										'disabled'	=> $disabled,
 									));										
 		
 									?>
@@ -109,6 +110,7 @@ if( empty($groups) )
 										'value'		=> $rule['operator'],
 										'choices' 	=> $choices,
 										'class'		=> 'conditional-logic-operator',
+										'disabled'	=> $disabled,
 									)); 	
 									
 									?>
@@ -127,6 +129,7 @@ if( empty($groups) )
 										'value'		=> $rule['value'],
 										'choices'	=> $choices,
 										'class'		=> 'conditional-logic-value',
+										'disabled'	=> $disabled,
 									));
 									
 									?>

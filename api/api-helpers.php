@@ -351,6 +351,16 @@ function acf_render_field_wrap( $field, $el = 'div', $instruction = 'label', $at
 				<p class="description"><?php echo $field['instructions']; ?></p>
 			<?php endif; ?>
 			
+			<?php if( !empty($field['conditional_logic'])): ?>
+			<script type="text/javascript">
+			(function($) {
+				
+				acf.conditional_logic.add( '<?php echo $field['key']; ?>', <?php echo json_encode($field['conditional_logic']); ?>);
+				
+			})(jQuery);	
+			</script>
+			<?php endif; ?>
+			
 		</<?php echo $elements[ $el ]; ?>>
 	</<?php echo $el; ?>><?php
 }
