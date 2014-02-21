@@ -24,7 +24,9 @@ class acf_field_select extends acf_field
 			'default_value'	=>	'',
 			'ui'			=>	0,
 			'ajax'			=>	0,
-			'placeholder'	=>	''
+			'placeholder'	=>	'',
+			'disabled'		=>	0,
+			'readonly'		=>	0,
 		);
 		
 		
@@ -182,6 +184,7 @@ class acf_field_select extends acf_field
 		);
 		
 		
+		
 		// hidden input
 		if( $field['ui'] )
 		{
@@ -216,6 +219,18 @@ class acf_field_select extends acf_field
 			$atts['size'] = 5;
 			$atts['name'] .= '[]';
 		} 
+		
+		
+		// special atts
+		$s = array( 'readonly', 'disabled' );
+		
+		foreach( $s as $k )
+		{
+			if( $field[ $k ] )
+			{
+				$atts[ $k ] = $k;
+			}
+		}
 		
 		
 		// html
