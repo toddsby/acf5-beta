@@ -151,7 +151,7 @@
 			// enable inputs
 			$html.find('[name]').removeAttr('disabled');
 			
-					
+			
 			// add row
 			if( !$before.exists() )
 			{
@@ -256,9 +256,15 @@
 		// vars
 		var $a		= $(this),
 			$field	= acf.get_field_wrap( $a ),
+			$before	= $();
+			
+		
+		if( $a.is('.acf-icon') )
+		{
 			$before	= $a.closest('.acf-row');
-			
-			
+		}
+		
+		
 		// remove
 		acf.fields.repeater.set( $field ).add( $before );
 		
