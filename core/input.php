@@ -505,20 +505,13 @@ function acf_validate_save_post( $show_errors = false ) {
 
 function acf_validate_value( $value, $field, $input ) {
 	
-	// check required
-	if( !$field['required'] )
-	{
-		return true;
-	}
-	
-	
 	// vars
 	$valid = true;
-	$message = "{$field['label']} value is required";
+	$message = sprintf( __( '%s value is required', 'acf' ), $field['label'] );
 	
 	
 	// valid
-	if( empty($value) )
+	if( $field['required'] && empty($value) )
 	{
 		$valid = false;
 	}
