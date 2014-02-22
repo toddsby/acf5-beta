@@ -4706,6 +4706,17 @@ acf.add_action('ready append', function( $el ){
 			acf.do_action('remove_field_error', $field);
 		},
 		
+		add_warning : function( $field, message ){
+			
+			this.add_error( $field, message );
+			
+			setTimeout(function(){
+				
+				acf.validation.remove_error( $field )
+				
+			}, 1000);
+		},
+		
 		fetch : function( $form ){
 			
 			// reference

@@ -443,3 +443,11 @@
 	height: 60px;
 }
 
+/* selected */
+.attachment.acf-selected {
+	opacity: 0.3;
+}
+
+.attachment.acf-selected .check {
+	display: block;
+}

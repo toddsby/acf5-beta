@@ -620,7 +620,8 @@ img.acf-fw {
 	box-shadow: none;
 }
 
-.acf-button[disabled] {
+.acf-button[disabled],
+.acf-button.disabled {
 	background: #F7F7F7 !important;
     border-color: #DDDDDD !important;
     box-shadow: none !important;
@@ -655,13 +656,13 @@ img.acf-fw {
 	background-color: #298CBA;
 }
 
-.acf-button.blue[disabled] {
+.acf-button.blue[disabled],
+.acf-button.blue.disabled {
 	background: #298CBA !important;
     border-color: #1B607F !important;
     box-shadow: none !important;
     color: #94CDE7 !important;
 }
-
 
 
 /* orange */

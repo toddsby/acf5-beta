@@ -19,17 +19,17 @@ class acf_field_gallery extends acf_field
 		$this->label = __("Gallery",'acf');
 		$this->category = __("Content",'acf');
 		$this->defaults = array(
-			'preview_size'	=>	'thumbnail',
-			'library'		=>	'all'
+			'preview_size'	=> 'thumbnail',
+			'library'		=> 'all',
+			'min'			=> 0,
+			'max'			=> 0,
 		);
 		$this->l10n = array(
 			'select'		=>	__("Add Image to Gallery",'acf'),
 			'edit'			=>	__("Edit Image",'acf'),
 			'update'		=>	__("Update Image",'acf'),
 			'uploadedTo'	=>	__("uploaded to this post",'acf'),
-			'count_0'		=>	__("No images selected",'acf'),
-			'count_1'		=>	__("1 image selected",'acf'),
-			'count_2'		=>	__("%d images selected",'acf'),
+			'max'			=>	__("Maximum selection reached",'acf'),
 			
 			'tmpl'			=> '<div data-id="<%= id %>" class="acf-gallery-attachment">
 									<input type="hidden" value="<%= id %>" name="<%= name %>[]">
@@ -331,6 +331,8 @@ class acf_field_gallery extends acf_field
 			'class'				=> "acf-gallery {$field['class']}",
 			'data-preview_size'	=> $field['preview_size'],
 			'data-library'		=> $field['library'],
+			'data-min'			=> $field['min'],
+			'data-max'			=> $field['max'],
 		);
 		
 		?>
@@ -446,6 +448,35 @@ class acf_field_gallery extends acf_field
 	
 	function render_field_options( $field ) {
 		
+		// min / max
+		$field['min'] = empty($field['min']) ? '' : $field['min'];
+		$field['max'] = empty($field['max']) ? '' : $field['max'];
+		
+		
+		// min
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Minimum Selection','acf'),
+			'instructions'	=> '',
+			'type'			=> 'number',
+			'name'			=> 'min',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['min'],
+			'placeholder'	=> '0',
+		));
+		
+		
+		// max
+		acf_render_field_option( $this->name, array(
+			'label'			=> __('Maximum Selection','acf'),
+			'instructions'	=> '',
+			'type'			=> 'number',
+			'name'			=> 'max',
+			'prefix'		=> $field['prefix'],
+			'value'			=> $field['max'],
+			'placeholder'	=> '0',
+		));
+		
+		
 		// preview_size
 		acf_render_field_option( $this->name, array(
 			'label'			=> __('Preview Size','acf'),
@@ -512,6 +543,39 @@ class acf_field_gallery extends acf_field
 		
 		// return
 		return $value;
+	}
+	
+	
+	/*
+	*  validate_value
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	11/02/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function validate_value( $valid, $value, $field, $input ){
+		
+		if( empty($value) || !is_array($value) )
+		{
+			$value = array();
+		}
+		
+		
+		if( count($value) < $field['min'] )
+		{
+			$valid = _n( '%s requires at least %s selection', '%s requires at least %s selections', $field['min'], 'acf' );
+			$valid = sprintf( $valid, $field['label'], $field['min'] );
+		}
+		
+				
+		return $valid;
+		
 	}
 
 	
