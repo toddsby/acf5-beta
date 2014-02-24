@@ -226,7 +226,7 @@ class acf_field_select extends acf_field
 		
 		foreach( $s as $k )
 		{
-			if( $field[ $k ] )
+			if( !empty($field[ $k ]) )
 			{
 				$atts[ $k ] = $k;
 			}
