@@ -61,6 +61,7 @@ New features in ACF5
 * New Add-ons page uses an external JSON file to read in data (easy to add 3rd party fields)
 * Huge improvements to core functionality resulting in faster load times!
 * New archives group in page_link field selection
+* New functions for options page allow for both parent and child menu pages
 
 Missing features in ACF5
 ------------------------
@@ -69,7 +70,6 @@ Please keep in mind that this is quite an early beta release and many core featu
 
 * WPML has not yet been tested
 * 3rd party fields are currently not supported
-* Options page add-on has not yet been added
 
 Thank you
 ---------
