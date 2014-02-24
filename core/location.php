@@ -53,9 +53,6 @@ class acf_location {
 		add_filter( 'acf/location/rule_match/comment',			array($this, 'rule_match_comment'), 10, 3 );
 		add_filter( 'acf/location/rule_match/widget',			array($this, 'rule_match_widget'), 10, 3 );
 		
-		
-		// Options Page
-		add_filter( 'acf/location/rule_match/options_page',		array($this, 'rule_match_options_page'), 10, 3 );
 	}
 	
 	
@@ -511,54 +508,6 @@ function match_field_groups_ajax()
 				$match = ( ! in_array( $rule['value'], $user->roles ) );
 			}
 		}
-        
-        return $match;
-        
-    }
-    
-    
-    /*
-	*  rule_match_user_type
-	*
-	*  @description: 
-	*  @since: 3.5.7
-	*  @created: 3/01/13
-	*/
-	
-	function rule_match_options_page( $match, $rule, $options )
-	{
-		global $plugin_page;
-		    	
-		    	
-		// older location rules may be "options-pagename"
-		if( substr($rule['value'], 0, 8) == 'options-' )
-		{
-			$rule['value'] = 'acf-' . $rule['value'];
-		}
-		
-		
-		// older location ruels may be "Pagename"
-		if( substr($rule['value'], 0, 11) != 'acf-options' )
-		{
-			$rule['value'] = 'acf-options-' . sanitize_title( $rule['value'] );
-			
-			// value may now be wrong (acf-options-options)
-			if( $rule['value'] == 'acf-options-options' )
-			{
-				$rule['value'] = 'acf-options';
-			}
-		}
-		
-		
-		if($rule['operator'] == "==")
-        {
-        	$match = ( $plugin_page === $rule['value'] );
-        }
-        elseif($rule['operator'] == "!=")
-        {
-        	$match = ( $plugin_page !== $rule['value'] );
-        }
-        
         
         return $match;
         
