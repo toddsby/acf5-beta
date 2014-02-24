@@ -106,6 +106,9 @@ class acf_pro {
 		// settings
 		include_once('admin/settings-updates.php');
 		
+		// options page
+		include_once('admin/options-page.php');
+		
 		
 	}
 	

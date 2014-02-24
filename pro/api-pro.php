@@ -203,4 +203,189 @@ function acf_pro_update_license( $license ) {
 	
 }
 
+
+/*
+*  acf_get_valid_options_page
+*
+*  description
+*
+*  @type	function
+*  @date	24/02/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_get_valid_options_page( $page = '' ) {
+	
+	// allow for string
+	if( is_string($page) )
+	{
+		$page_title = $page;
+		
+		$page = array(
+			'page_title' => $page_title,
+			'menu_title' => $page_title
+		);
+	}
+	
+	
+	// defaults
+	$page = acf_parse_args($page, array(
+		'page_title' 	=> '',
+		'menu_title'	=> '',
+		'menu_slug' 	=> '',
+		'capability'	=> 'edit_posts',
+		'parent_slug'	=> false,
+		'position'		=> false,
+		'icon_url'		=> false,
+	));
+	
+	
+	// slug
+	if( $page['menu_slug'] == '' )
+	{
+		$page['menu_slug'] = sanitize_title( $page['menu_slug'] );
+	}
+	
+	
+	// return
+	return $page;
+	
+}
+
+/*
+*  acf_pro_get_option_pages
+*
+*  description
+*
+*  @type	function
+*  @date	24/02/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_get_options_pages() {
+	
+	// vars
+	$pages = false;
+	
+	
+	// get pages
+	if( !empty($GLOBALS['acf_options_pages']) )
+	{
+		$pages = $GLOBALS['acf_options_pages'];
+	}
+	
+	
+	// return
+	return $pages;
+	
+}
+
+
+/*
+*  acf_pro_get_option_page
+*
+*  description
+*
+*  @type	function
+*  @date	24/02/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_get_options_page( $slug ) {
+	
+	// vars
+	$page = false;
+	
+	
+	// get pages
+	if( !empty($GLOBALS['acf_options_pages'][ $slug ]) )
+	{
+		$page = $GLOBALS['acf_options_pages'][ $slug ];
+	}
+	
+	
+	// return
+	return $page;
+	
+}
+
+
+/*
+*  acf_add_options_page
+*
+*  description
+*
+*  @type	function
+*  @date	24/02/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_add_options_page( $page = '' ) {
+	
+	// validate
+	$page = acf_get_valid_options_page( $page );
+	
+	
+	// instantiate globals
+	if( empty($GLOBALS['acf_options_pages']) )
+	{
+		$GLOBALS['acf_options_pages'] = array();
+	}
+	
+	
+	// append
+	$GLOBALS['acf_options_pages'][ $page['menu_slug'] ] = $page;
+	
+	
+	// return
+	return $page;
+	
+}
+
+
+/*
+*  acf_add_options_page
+*
+*  description
+*
+*  @type	function
+*  @date	24/02/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_add_options_sub_page( $page = '' ) {
+	
+	// validate
+	$page = acf_get_valid_options_page( $page );
+	
+	
+	// parent
+	if( empty($page['parent_slug']) )
+	{
+		$page['parent_slug'] = 'acf-options';
+	}
+	
+	
+	// return
+	return acf_add_options_page( $page );
+	
+}
+
+
+
 ?>
