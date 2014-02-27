@@ -87,8 +87,8 @@ function acf_get_valid_field( $field = false ) {
 *  @date	12/02/2014
 *  @since	5.0.0
 *
-*  @param	$post_id (int)
-*  @return	$post_id (int)
+*  @param	$field (array)
+*  @return	$field (array)
 */
 
 function acf_prepare_field( $field ) {
@@ -135,12 +135,12 @@ function acf_prepare_field( $field ) {
 *
 *  This function will render a field input
 *
-*  @type	action (acf/render_field)
+*  @type	function
 *  @date	28/09/13
 *  @since	5.0.0
 *
 *  @param	$field (array)
-*  @return	N/A
+*  @return	n/a
 */
 
 function acf_render_field( $field = false ) {
@@ -199,7 +199,7 @@ function acf_render_field_options( $field ) {
 *  @date	30/09/13
 *  @since	5.0.0
 *
-*  @param	$parent (array)
+*  @param	$parent (array) a field or field group
 *  @return	(array)
 */
 
@@ -239,6 +239,20 @@ function acf_get_fields( $parent = false ) {
 	return apply_filters('acf/get_fields', $fields, $parent);
 	
 }
+
+
+/*
+*  acf_get_fields_by_id
+*
+*  This function will get all fields for the given parent
+*
+*  @type	function
+*  @date	27/02/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$fields (array)
+*/
 
 function acf_get_fields_by_id( $id ) {
 	
@@ -289,7 +303,7 @@ function acf_get_fields_by_id( $id ) {
 *  @since	5.0.0
 *
 *  @param	$selector (mixed)
-*  @return	(array)
+*  @return	$field (array)
 */
 
 function acf_get_field( $selector = null ) {
@@ -372,6 +386,19 @@ function acf_get_field( $selector = null ) {
 }
 
 
+/*
+*  _acf_get_field_by_id
+*
+*  This function will get a field via it's ID
+*
+*  @type	function
+*  @date	27/02/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$field (array)
+*/
+
 function _acf_get_field_by_id( $post_id = 0 ) {
 	
 	// vars
@@ -442,6 +469,19 @@ function _acf_get_field_by_id( $post_id = 0 ) {
 }
 
 
+/*
+*  _acf_get_field_by_key
+*
+*  This function will get a field via it's key
+*
+*  @type	function
+*  @date	27/02/2014
+*  @since	5.0.0
+*
+*  @param	$key (string)
+*  @return	$field (array)
+*/
+
 function _acf_get_field_by_key( $key = '' ) {
 	
 	// vars
@@ -493,18 +533,18 @@ function _acf_get_field_by_key( $key = '' ) {
 }
 
 
-
 /*
 *  acf_update_field
 *
-*  This function will update a field into the DB
+*  This function will update a field into the DB.
+*  The returned field will always contain an ID
 *
 *  @type	function
 *  @date	1/10/13
 *  @since	5.0.0
 *
 *  @param	$field (array)
-*  @return	(int)
+*  @return	$field (array)
 */
 
 function acf_update_field( $field = false, $specific = false ) {
@@ -661,8 +701,9 @@ function acf_update_field_wp_unique_post_slug( $slug, $post_ID, $post_status, $p
 *  @date	17/10/13
 *  @since	5.0.0
 *
-*  @param	$post_id (int)
-*  @return	$post_id (int)
+*  @param	$selector (int)
+*  @param	$parent_id (int)
+*  @return	$field (array) the new field
 */
 
 function acf_duplicate_field( $selector = 0, $parent_id = 0 ){
@@ -819,8 +860,5 @@ function acf_untrash_field( $selector = 0 ) {
 	// return
 	return true;
 }
-
-
-
 
 ?>
