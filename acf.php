@@ -10,6 +10,8 @@ License: GPL
 Copyright: Elliot Condon
 */
 
+// Current with acf v4 as of 27th Feb 1dde13a0bb8af763ef086f2ca0be4553ac955346
+
 if( !class_exists('acf') ):
 
 class acf {
