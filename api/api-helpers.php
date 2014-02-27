@@ -44,8 +44,9 @@ function acf_get_setting( $name ) {
 *  @date	28/09/13
 *  @since	5.0.0
 *
-*  @param	$name (string) the setting name to return
-*  @return	(mixed)
+*  @param	$name (string)
+*  @param	$value (mixed)
+*  @return	n/a
 */
 
 function acf_update_setting( $name, $value )
@@ -63,8 +64,9 @@ function acf_update_setting( $name, $value )
 *  @date	28/09/13
 *  @since	5.0.0
 *
-*  @param	$name (string) the setting name to return
-*  @return	(mixed)
+*  @param	$name (string)
+*  @param	$value (mixed)
+*  @return	n/a
 */
 
 function acf_append_setting( $name, $value ) {
@@ -376,8 +378,11 @@ function acf_render_field_wrap( $field, $el = 'div', $instruction = 'label', $at
 *  @date	8/10/13
 *  @since	5.0.0
 *
-*  @param	$post_id (int)
-*  @return	$post_id (int)
+*  @param	$post_id (int) the post to load values from
+*  @param	$fields (array) the fields to render
+*  @param	$el (string) the wrapping element type
+*  @param	$instruction (int) the instructions position
+*  @return	n/a
 */
 
 function acf_render_fields( $post_id = 0, $fields, $el = 'div', $instruction = 'label' ) {
@@ -414,24 +419,24 @@ function acf_render_fields( $post_id = 0, $fields, $el = 'div', $instruction = '
 *  @date	4/11/2013
 *  @since	5.0.0
 *
-*  @param	$post_id (int)
-*  @return	$post_id (int)
+*  @param	$field (array)
+*  @return	$label (string)
 */
 
 function acf_get_field_label( $field ) {
 	
 	// vars
-	$r = $field['label'];
+	$label = $field['label'];
 	
 	
 	if( $field['required'] )
 	{
-		$r .= ' <span class="acf-required">*</span>'; 
+		$label .= ' <span class="acf-required">*</span>'; 
 	}
 	
 	
 	// return
-	return $r;
+	return $label;
 
 }
 
@@ -440,44 +445,6 @@ function acf_the_field_label( $field ) {
 	echo acf_get_field_label( $field );
 	
 }
-
-/*
-*  acf_render_option
-*
-*  This function will render a tr element containing a label and field cell
-*
-*  @type	function
-*  @date	28/09/13
-*  @since	5.0.0
-*
-*  @param	$field (array)
-*  @return	N/A
-*/
-
-/*
-function acf_render_option( $field, $options = array() )
-{
-	$options = wp_parse_args($options, array(
-		'class' => ''
-	));
-	
-	
-	// get valid field
-	$field = acf_get_valid_field( $field );
-	
-	
-	// vars
-	$class = 'tr-' . sanitize_title_with_dashes( $field['label'] );
-	
-	if( $options['class'] )
-	{
-		$class .= ' ' . $options['class'];
-	}
-	
-	acf_render_field_wrap( $field, 'tr' );
-	
-}
-*/
 
 
 /*
@@ -489,7 +456,7 @@ function acf_render_option( $field, $options = array() )
 *  @date	28/09/13
 *  @since	5.0.0
 *
-*  @param	$type (string)
+*  @param	$type (string) the origional field_type (not $field['type'])
 *  @param	$field (array)
 *  @return	N/A
 */
@@ -745,28 +712,6 @@ function acf_get_post_types( $exclude = array(), $include = array() )
 
 
 /*
-*  acf_extract_post_id
-*
-*  This functoin will return an array containing the ID and type for a given post_id
-*
-*  @type	function
-*  @date	15/10/13
-*  @since	5.0.0
-*
-*  @param	$post_id (mixed)
-*  @return	(array)
-*/
-
-/*
-function acf_extract_post_id( $post_id = 0 ) {
-	
-	
-	
-}
-*/
-
-
-/*
 *  acf_verify_nonce
 *
 *  This function will look at the $_POST['_acfnonce'] value and return true or false
@@ -879,7 +824,7 @@ function acf_add_admin_notice( $text, $class = '', $wrap = 'p' )
 *  @since	5.0.0
 *
 *  @param	n/a
-*  @return	n/a
+*  @return	(array)
 */
 
 function acf_get_admin_notices()
@@ -953,8 +898,7 @@ function acf_get_image_sizes() {
 *  @date	7/10/13
 *  @since	5.0.0
 *
-*  @param	$exclude (array)
-*  @param	$include (array)
+*  @param	n/a
 *  @return	(array)
 */
 
@@ -994,8 +938,7 @@ function acf_get_taxonomies() {
 *  @date	7/10/13
 *  @since	5.0.0
 *
-*  @param	$exclude (array)
-*  @param	$include (array)
+*  @param	$taxonomies (array)
 *  @return	(array)
 */
 
@@ -1036,6 +979,19 @@ function acf_get_taxonomy_terms( $taxonomies = false ) {
 	
 }
 
+
+/*
+*  acf_decode_taxonomy_terms
+*
+*  This function decodes the $taxonomy:$term strings into a nested array
+*
+*  @type	function
+*  @date	27/02/2014
+*  @since	5.0.0
+*
+*  @param	$terms (array)
+*  @return	(array)
+*/
 
 function acf_decode_taxonomy_terms( $terms = false ) {
 	
@@ -1087,6 +1043,7 @@ function acf_decode_taxonomy_terms( $terms = false ) {
 *  @return	$post_id (int)
 */
 
+/*
 function acf_cache_get( $key, &$found ) {
 	
 	// vars
@@ -1115,6 +1072,7 @@ function acf_cache_get( $key, &$found ) {
 	return $cache;
 	
 }
+*/
 
 
 /*
@@ -1126,8 +1084,8 @@ function acf_cache_get( $key, &$found ) {
 *  @date	4/02/2014
 *  @since	5.0.0
 *
-*  @param	$post_id (int)
-*  @return	$post_id (int)
+*  @param	$var (mixed)
+*  @return	(array)
 */
 
 function acf_force_type_array( $var ) {
@@ -1154,14 +1112,15 @@ function acf_force_type_array( $var ) {
 /*
 *  acf_get_posts
 *
-*  description
+*  This function will return all posts grouped by post_type
+*  This is handy for select settings
 *
 *  @type	function
 *  @date	27/02/2014
 *  @since	5.0.0
 *
-*  @param	$post_id (int)
-*  @return	$post_id (int)
+*  @param	$args (array)
+*  @return	(array)
 */
 
 function acf_get_posts( $args ) {
