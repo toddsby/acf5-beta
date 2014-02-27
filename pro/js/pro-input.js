@@ -351,12 +351,19 @@
 			this.o = acf.get_data( this.$el );
 			
 			
-			// add layout_count
-			this.o.layout_count = this.$values.children('.layout').length;	
+			// min / max
+			this.o.min = this.o.min || 0;
+			this.o.max = this.o.max || 0;
 			
 			
 			// return this for chaining
 			return this;
+			
+		},
+		
+		count : function(){
+			
+			return this.$values.children('.layout').length;
 			
 		},
 		
@@ -404,44 +411,6 @@
 			// render
 			this.render();
 			
-			
-			// make field required if has min
-			var add_required = false;
-			
-			if( this.o.min > 0 )
-			{
-				add_required = true;
-			}
-			else
-			{
-				// vars
-				var $popup = $( this.$el.children('.tmpl-popup').html() );
-				
-				
-				$popup.find('a').each(function(){
-					
-					// vars
-					var min = parseInt( $(this).attr('data-min') );
-					
-					
-					if( min > 0 )
-					{
-						add_required = true;
-						
-						// end loop
-						return false;	
-					}
-					
-				});
-
-				
-			}
-			
-			if( add_required )
-			{
-				this.$field.addClass('required');
-			}		
-			
 		},
 		
 		render : function(){
@@ -455,7 +424,7 @@
 			
 			
 			// empty?
-			if( this.o.layout_count == 0 )
+			if( this.count() == 0 )
 			{
 				this.$el.addClass('empty');
 			}
@@ -466,7 +435,7 @@
 			
 			
 			// row limit reached
-			if( this.o.layout_count >= this.o.max )
+			if( this.o.max > 0 && this.count() >= this.o.max )
 			{
 				this.$el.addClass('disabled');
 				this.$el.find('> .acf-hl .acf-button').addClass('disabled');
@@ -484,8 +453,7 @@
 			var r = true;
 			
 			// vadiate max
-			this.o.max = parseInt(this.o.max);
-			if( this.o.max > 0 && this.o.layout_count >= this.o.max )
+			if( this.o.max > 0 && this.count() >= this.o.max )
 			{
 				var identifier	= ( this.o.max == 1 ) ? 'layout' : 'layouts',
 					s 			= acf._e('flexible_content', 'max');
@@ -532,8 +500,7 @@
 		validate_remove : function( layout ){
 			
 			// vadiate min
-			this.o.min = parseInt(this.o.min);
-			if( this.o.min > 0 && this.o.layout_count <= this.o.min )
+			if( this.o.min > 0 && this.count() <= this.o.min )
 			{
 				var identifier	= ( this.o.min == 1 ) ? 'layout' : 'layouts',
 					s 			= acf._e('flexible_content', 'min') + ', ' + acf._e('flexible_content', 'remove');

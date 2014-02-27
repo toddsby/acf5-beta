@@ -521,7 +521,6 @@ class acf_field_flexible_content extends acf_field
 		}
 		
 		
-		
 		// check sub fields
 		if( !empty($field['layouts']) && !empty($value) )
 		{
