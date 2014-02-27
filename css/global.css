@@ -756,10 +756,7 @@ img.acf-fw {
 *---------------------------------------------------------------------------------------------*/
 
 /* Menu */
-#adminmenu #toplevel_page_edit-post_type-acf-field-group a[href="edit.php?post_type=acf&page=acf-upgrade"]{ display: none; }
-#adminmenu #toplevel_page_edit-post_type-acf-field-group .wp-menu-image { background-position: 1px -33px; }
-#adminmenu #toplevel_page_edit-post_type-acf-field-group:hover .wp-menu-image,
-#adminmenu #toplevel_page_edit-post_type-acf-field-group.wp-menu-open .wp-menu-image { background-position: 1px -1px; }
+#adminmenu a[href="edit.php?post_type=acf-field-group&page=acf-upgrade"]{ display: none; }
 
 
 /*---------------------------------------------------------------------------------------------
