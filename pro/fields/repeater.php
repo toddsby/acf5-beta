@@ -455,7 +455,7 @@ class acf_field_repeater extends acf_field
 		
 		
 		// valid
-		if( empty($value) )
+		if( $field['required'] && empty($value) )
 		{
 			$valid = false;
 		}
