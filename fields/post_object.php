@@ -68,11 +68,11 @@ class acf_field_post_object extends acf_field
 		$args = array(
 			'posts_per_page'			=>	-1,
 			'post_type'					=> 'post',
-			'orderby'					=>	'menu_order title',
-			'order'						=>	'ASC',
-			'post_status'				=>	'any',
-			'suppress_filters'			=>	false,
-			'update_post_meta_cache'	=>	false,
+			'orderby'					=> 'menu_order title',
+			'order'						=> 'ASC',
+			'post_status'				=> 'any',
+			'suppress_filters'			=> false,
+			'update_post_meta_cache'	=> false,
 		);
 		
 		

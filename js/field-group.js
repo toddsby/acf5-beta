@@ -889,15 +889,7 @@ var acf_field_group = {};
 				var $tr = $(this).closest('tr'),
 					rule_id = $tr.attr('data-id'),
 					$group = $tr.closest('.location-group'),
-					group_id = $group.attr('data-id'),
-					ajax_data = {
-						'action'	: 'acf/field_group/render_location_value',
-						'nonce'		: acf.o.nonce,
-						'rule_id'	: rule_id,
-						'group_id'	: group_id,
-						'value'		: '',
-						'param'		: $(this).val()
-					};
+					group_id = $group.attr('data-id');
 				
 				
 				// add loading gif
@@ -907,11 +899,17 @@ var acf_field_group = {};
 				
 				// load location html
 				$.ajax({
-					url: acf.o.ajaxurl,
-					data: ajax_data,
-					type: 'post',
-					dataType: 'html',
-					success: function(html){
+					url			: acf.get('ajaxurl'),
+					data		: acf.prepare_for_ajax({
+						'action'	: 'acf/field_group/render_location_value',
+						'rule_id'	: rule_id,
+						'group_id'	: group_id,
+						'value'		: '',
+						'param'		: $(this).val(),
+					}),
+					type		: 'post',
+					dataType	: 'html',
+					success		: function(html){
 		
 						div.replaceWith(html);
 		

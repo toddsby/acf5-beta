@@ -151,7 +151,7 @@ class acf_field_group {
 		
 		$o = array(
 			'post_id'			=>	$post->ID,
-			'nonce'				=>	wp_create_nonce( 'acf-nonce' ),
+			'nonce'				=>	wp_create_nonce( 'acf_nonce' ),
 			'admin_url'			=>	admin_url(),
 			'ajaxurl'			=>	admin_url( 'admin-ajax.php' )
 		);
@@ -400,17 +400,15 @@ class acf_field_group {
 	*  @return	N/A
 	*/
 	
-	function render_location_value( $options )
-	{
+	function render_location_value( $options ) {
+		
 		// vars
-		$defaults = array(
+		$options = wp_parse_args( $options, array(
 			'group_id'	=> 0,
 			'rule_id'	=> 0,
 			'value'		=> null,
 			'param'		=> null,
-		);
-		
-		$options = wp_parse_args( $options, $defaults );
+		));
 		
 		
 		// vars
@@ -426,6 +424,10 @@ class acf_field_group {
 		
 		switch( $options['param'] )
 		{
+			/*
+			*  Basic
+			*/
+			
 			case "post_type" :
 				
 				// all post types except attachment
@@ -434,146 +436,43 @@ class acf_field_group {
 				break;
 			
 			
-			case "page" :
+			case "user_type" :
 				
-				$post_type = 'page';
-				$posts = get_posts(array(
-					'posts_per_page'			=>	-1,
-					'post_type'					=> $post_type,
-					'orderby'					=> 'menu_order title',
-					'order'						=> 'ASC',
-					'post_status'				=> 'any',
-					'suppress_filters'			=> false,
-					'update_post_meta_cache'	=> false,
-				));
+				global $wp_roles;
 				
-				if( $posts )
+				$choices = $wp_roles->get_names();
+
+				if( is_multisite() )
 				{
-					// sort into hierachial order!
-					if( is_post_type_hierarchical( $post_type ) )
-					{
-						$posts = get_page_children( 0, $posts );
-					}
-					
-					foreach( $posts as $p )
-					{
-						// vars
-						$title = '';
-						
-						
-						// ancestors?
-						if( $ancestors = get_post_ancestors( $p ) )
-						{
-							$title .= str_repeat('-', count($ancestors) ) . ' ';
-						}
-						
-						
-						// title
-						$title .= get_the_title( $p );
-						
-						
-						// status
-						if( get_post_status($p) != "publish" )
-						{
-							$title .= " ({$p->post_status})";
-						}
-						
-						
-						// append to choices
-						$choices[ $p->ID ] = $title;
-						
-					}
-					// foreach($pages as $page)
-				
+					$choices['super_admin'] = __('Super Admin');
 				}
-				
-				break;
-				
-			
-			case "page_type" :
-				
-				$choices = array(
-					'front_page'	=>	__("Front Page",'acf'),
-					'posts_page'	=>	__("Posts Page",'acf'),
-					'top_level'		=>	__("Top Level Page (parent of 0)",'acf'),
-					'parent'		=>	__("Parent Page (has children)",'acf'),
-					'child'			=>	__("Child Page (has parent)",'acf'),
-				);
 								
 				break;
 				
-			case "page_template" :
-				
-				$choices = array(
-					'default'	=>	__("Default Template",'acf'),
-				);
-				
-				$templates = get_page_templates();
-				
-				foreach( $templates as $k => $v )
-				{
-					$choices[ $v ] = $k;
-				}
-				
-				break;
+			
+			/*
+			*  Post
+			*/
 			
 			case "post" :
 				
 				$post_types = get_post_types();
-				unset( $post_types['page'], $post_types['attachment'], $post_types['revision'] , $post_types['nav_menu_item'], $post_types['acf-field'], $post_types['acf-field-group']  );
 				
-				if( $post_types )
-				{
-					foreach( $post_types as $post_type )
-					{
-						
-						$posts = get_posts(array(
-							'numberposts' => '-1',
-							'post_type' => $post_type,
-							'post_status' => array('publish', 'private', 'draft', 'inherit', 'future'),
-							'suppress_filters' => false,
-						));
-						
-						
-						if( $posts )
-						{
-							$choices[ $post_type ] = array();
-							
-							foreach( $posts as $p )
-							{
-								// title
-								$title = get_the_title( $p );
-								
-								
-								// status
-								if( get_post_status($p) != "publish" )
-								{
-									$title .= " ({$p->post_status})";
-								}
-								
-								
-								// append to choices
-								$choices[ $post_type ][ $p->ID ] = $title;
-								
-							}
-							// foreach($pages as $page)
-						}
-						// if( $pages )
-					}
-					// foreach( $post_types as $post_type )
-					
-					
-					//  only 1 post type?
-					if( count($post_types) == 1 )
-					{
-						$choices = array_pop( $choices );
-					}
-					
-				}
-				// if( $post_types )
+				unset( 
+					$post_types['page'], 
+					$post_types['attachment'], 
+					$post_types['revision'], 
+					$post_types['nav_menu_item'],
+					$post_types['acf-field'],
+					$post_types['acf-field-group']
+				);
 				
-				
+				$choices = acf_get_posts(array(
+					'post_type' => $post_types
+				));
+								
 				break;
+			
 			
 			case "post_category" :
 				
@@ -587,11 +486,13 @@ class acf_field_group {
 				
 				break;
 			
+			
 			case "post_format" :
 				
 				$choices = get_post_format_strings();
 								
 				break;
+			
 			
 			case "post_status" :
 				
@@ -607,65 +508,72 @@ class acf_field_group {
 								
 				break;
 			
-			case "user_type" :
-				
-				global $wp_roles;
-				
-				$choices = $wp_roles->get_names();
-
-				if( is_multisite() )
-				{
-					$choices['super_admin'] = __('Super Admin');
-				}
-								
-				break;
 			
 			case "post_taxonomy" :
 				
-				$choices = array();
-				//$simple_value = true;
-				//$choices = apply_filters('acf/get_taxonomies_for_select', $choices, $simple_value);
-								
-				break;
-			
-			case "taxonomy" :
+				$choices = acf_get_taxonomies();
 				
-				$choices = array(
-					'all' => __('All', 'acf')
-				);
-				
-				
-				// load available taxonomies
-				$taxonomies = get_taxonomies( array('public' => true), 'objects' );
-				
-				foreach( $taxonomies as $taxonomy )
-				{
-					$choices[ $taxonomy->name ] = $taxonomy->labels->name;
-				}
-				
-				
-				// unset post_format (why is this a public taxonomy?)
+				// unset post_format
 				if( isset($choices['post_format']) )
 				{
 					unset( $choices['post_format']) ;
 				}
+							
+				break;
 			
+			
+			/*
+			*  Page
+			*/
+			
+			case "page" :
+				
+				$choices = acf_get_posts(array(
+					'post_type' => 'page'
+				));
+				
+				break;
+				
+			
+			case "page_type" :
+				
+				$choices = array(
+					'front_page'	=>	__("Front Page",'acf'),
+					'posts_page'	=>	__("Posts Page",'acf'),
+					'top_level'		=>	__("Top Level Page (parent of 0)",'acf'),
+					'parent'		=>	__("Parent Page (has children)",'acf'),
+					'child'			=>	__("Child Page (has parent)",'acf'),
+				);
 								
 				break;
-				
-			case "media" :
-				
-				$choices = array('all' => __('All', 'acf'));
 			
+			
+			case "page_parent" :
+				
+				// refer to "page"
+				
 				break;
 			
 			
-			case "comment" :
+			case "page_template" :
 				
-				$choices = array('all' => __('All', 'acf'));
-			
+				$choices = array(
+					'default'	=>	__("Default Template",'acf'),
+				);
+				
+				$templates = get_page_templates();
+				
+				foreach( $templates as $k => $v )
+				{
+					$choices[ $v ] = $k;
+				}
+				
 				break;
+				
 			
+			/*
+			*  User
+			*/
 			
 			case "user_role" :
 				
@@ -685,6 +593,39 @@ class acf_field_group {
 				);
 			
 				break;
+				
+			
+			/*
+			*  Forms
+			*/
+			
+			case "media" :
+				
+				$choices = array('all' => __('All', 'acf'));
+			
+				break;
+				
+				
+			case "taxonomy" :
+				
+				$choices = array_merge( array('all' => __('All', 'acf')), acf_get_taxonomies() );
+				
+								
+				// unset post_format
+				if( isset($choices['post_format']) )
+				{
+					unset( $choices['post_format']) ;
+				}
+							
+				break;
+				
+				
+			case "comment" :
+				
+				$choices = array('all' => __('All', 'acf'));
+			
+				break;
+			
 			
 			case "widget" :
 				
@@ -739,10 +680,10 @@ class acf_field_group {
 	
 	function ajax_render_location_value() {
 		
-		// verify nonce
-		if( !isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'acf-nonce') )
+		// validate
+		if( ! wp_verify_nonce($_POST['nonce'], 'acf_nonce') )
 		{
-			die( 0 );
+			die();
 		}
 		
 		

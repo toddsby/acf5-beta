@@ -50,8 +50,8 @@ class acf {
 	*  @return	$post_id (int)
 	*/
 		
-	function initialize()
-	{
+	function initialize() {
+		
 		// vars
 		$this->settings = array(
 			
@@ -81,11 +81,8 @@ class acf {
 		$this->include_pro();
 		
 		
-		// includes (admin only)
-		if( is_admin() && acf_get_setting('show_admin') )
-		{
-			$this->include_admin();
-		}
+		// includes (after theme)
+		add_action('after_setup_theme', array($this, 'after_setup_theme'));
 		
 		
 		// set text domain
@@ -95,6 +92,7 @@ class acf {
 		// actions
 		add_action('init', array($this, 'wp_init'), 1);
 		add_filter('posts_where', array($this, 'wp_posts_where'), 0, 2 );
+		
 		//add_filter('posts_join', array($this, 'wp_posts_join'), 0, 2 );
 		//add_filter('posts_request', array($this, 'posts_request'), 0, 1 );
 	}
@@ -145,6 +143,7 @@ class acf {
 		include_once('core/comment.php');
 		include_once('core/widget.php');
 		include_once('core/user.php');
+		
 	}
 	
 	
@@ -219,32 +218,43 @@ class acf {
 	
 	
 	/*
-	*  include_admin
+	*  after_setup_theme
 	*
-	*  This function will include all admin files
+	*  description
 	*
 	*  @type	function
-	*  @date	28/09/13
+	*  @date	26/02/2014
 	*  @since	5.0.0
 	*
-	*  @param	N/A
-	*  @return	N/A
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
 	*/
 	
-	function include_admin() {
+	function after_setup_theme() {
 		
-		include_once('admin/admin.php');
-		include_once('admin/revisions.php');
-		include_once('admin/update.php');
-		include_once('admin/field-group.php');
-		include_once('admin/field-groups.php');
+		// admin
+		if( is_admin() && acf_get_setting('show_admin') )
+		{
+			include_once('admin/admin.php');
+			include_once('admin/revisions.php');
+			include_once('admin/update.php');
+			include_once('admin/field-group.php');
+			include_once('admin/field-groups.php');
+			
+			include_once('admin/post.php');
+			include_once('admin/taxonomy.php');
+			
+			// settings
+			include_once('admin/settings-export.php');
+			include_once('admin/settings-addons.php');
+		}
 		
-		include_once('admin/post.php');
-		include_once('admin/taxonomy.php');
 		
-		// settings
-		include_once('admin/settings-export.php');
-		include_once('admin/settings-addons.php');
+		// wpml
+		if( defined('ICL_SITEPRESS_VERSION') )
+		{
+			include_once('core/wpml.php');
+		}
 		
 	}
 	

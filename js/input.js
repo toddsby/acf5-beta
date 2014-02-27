@@ -874,6 +874,21 @@ var acf = {
 			}
 			
 			
+		},
+		
+		prepare_for_ajax : function( args ) {
+			
+			// nonce
+			args.nonce = acf.get('nonce');
+			
+			
+			// filter for 3rd party customization
+			args = acf.apply_filters('prepare_for_ajax', args);	
+			
+			
+			// return
+			return args;
+			
 		}
 		
 	});

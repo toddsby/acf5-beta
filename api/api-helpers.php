@@ -1152,6 +1152,141 @@ function acf_force_type_array( $var ) {
 
 
 /*
+*  acf_get_posts
+*
+*  description
+*
+*  @type	function
+*  @date	27/02/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_get_posts( $args ) {
+	
+	// vars
+	$r = array();
+	
+	
+	// defaults
+	$args = acf_parse_args( $args, array(
+		'posts_per_page'			=>	-1,
+		'post_type'					=> 'post',
+		'orderby'					=> 'menu_order title',
+		'order'						=> 'ASC',
+		'post_status'				=> 'any',
+		'suppress_filters'			=> false,
+	));
+
+	
+	// find array of post_type
+	$post_types = $args['post_type'];
+	
+	if( !is_array($post_types) )
+	{
+		$post_types = array( $post_types );
+	}
+	
+	
+	// get posts
+	$posts = get_posts( $args );
+	
+	
+	// loop
+	foreach( $post_types as $post_type )
+	{
+		// vars
+		$this_posts = array();
+		$this_optgroup = array();
+		
+		
+		$keys = array_keys($posts);
+		foreach( $keys as $key )
+		{
+			if( $posts[ $key ]->post_type == $post_type )
+			{
+				$this_posts[] = acf_extract_var( $posts, $key );
+			}
+		}
+		
+		
+		// bail early if no posts for this post type
+		if( empty($this_posts) )
+		{
+			continue;
+		}
+		
+		
+		// sort into hierachial order!
+		if( is_post_type_hierarchical( $post_type ) )
+		{
+			// this will fail if a search has taken place because parents wont exist
+			if( empty($args['s']) )
+			{
+				$this_posts = get_page_children( 0, $this_posts );
+			}
+		}
+		
+		
+		foreach( $this_posts as $post )
+		{
+			// title
+			$title = '';
+			$ancestors = get_ancestors( $post->ID, $post->post_type );
+			
+			if( !empty($ancestors) )
+			{
+				foreach( $ancestors as $a )
+				{
+					$title .= '- ';
+				}
+			}
+			
+			
+			// title
+			$title .= get_the_title( $post->ID );
+			
+			
+			// status
+			if( get_post_status( $post->ID ) != "publish" )
+			{
+				$title .= ' (' . get_post_status( $post->ID ) . ')';
+			}
+			
+			
+			// add to optgroup
+			$this_optgroup[ $post->ID ] = $title;
+
+		}
+		
+		
+		// add as optgroup or results
+		if( count($post_types) == 1 )
+		{
+			$r = $this_optgroup;
+		}
+		else
+		{
+			// group by post type
+			$post_type_object = get_post_type_object( $post_type );
+			$post_type_name = $post_type_object->labels->name;
+			
+			$r[ $post_type_name ] = $this_optgroup;
+		}
+		
+		
+		
+		// return
+		return $r;
+					
+	}
+	
+}
+
+
+/*
 *  Hacks
 *
 *  description

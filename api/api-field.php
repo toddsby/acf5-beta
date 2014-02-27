@@ -252,7 +252,7 @@ function acf_get_fields_by_id( $id ) {
 		'post_type'			=> 'acf-field',
 		'orderby'			=> 'menu_order',
 		'order'				=> 'ASC',
-		'suppress_filters'	=> false,
+		'suppress_filters'	=> true, // allows WPML to work
 		'post_parent'		=> $id,
 		'post_status'		=> 'publish, trash' // 'any' won't get trashed fields
 	);

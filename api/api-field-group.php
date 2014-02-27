@@ -447,7 +447,7 @@ function acf_update_field_group( $field_group = array() ) {
 *  @return	(int)
 */
 
-function acf_duplicate_field_group( $selector = 0 ) {
+function acf_duplicate_field_group( $selector = 0, $new_post_id = 0 ) {
 	
 	// disable JSON to avoid conflicts between DB and JSON
 	acf_update_setting('json', false);
@@ -469,7 +469,7 @@ function acf_duplicate_field_group( $selector = 0 ) {
 	
 	
 	// update ID
-	$field_group['ID'] = false;
+	$field_group['ID'] = $new_post_id;
 	$field_group['key'] = uniqid('group_');
 	
 	
@@ -521,7 +521,7 @@ function acf_get_field_count( $field_group_id ) {
 		'post_type'			=> 'acf-field',
 		'orderby'			=> 'menu_order',
 		'order'				=> 'ASC',
-		'suppress_filters'	=> false,
+		'suppress_filters'	=> true, // allows WPML to work
 		'post_parent'		=> $field_group_id,
 		'fields'			=> 'ids',
 		'post_status'		=> 'publish, trash' // 'any' won't get trashed fields
