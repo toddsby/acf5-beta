@@ -220,7 +220,8 @@ class acf {
 	/*
 	*  after_setup_theme
 	*
-	*  description
+	*  This function will include all files AFTER the theme has been setup.
+	*  By this point, the user can modify the acf settings via filters
 	*
 	*  @type	function
 	*  @date	26/02/2014
@@ -395,7 +396,7 @@ class acf {
 	/*
 	*  wp_posts_where
 	*
-	*  This function will add in some new parameters to the WP_Query args
+	*  This function will add in some new parameters to the WP_Query args allowing fields to be found via key / name
 	*
 	*  @type	filter
 	*  @date	5/12/2013
@@ -424,18 +425,12 @@ class acf {
 		{
 			$where .= $wpdb->prepare(" AND {$wpdb->posts}.post_excerpt = %s", $field_name );
 			
-			 // acf_post_id
+			// acf_post_id
 		    if( $post_id = $wp_query->get('acf_post_id') )
 			{
 				$where .= $wpdb->prepare(" AND {$wpdb->postmeta}.post_id = %d", $post_id );
 			}
-		    
-		
-		    
 	    }
-	    
-	    
-	    
 	    
 	    
 	    // acf_group_key
@@ -448,6 +443,20 @@ class acf {
 	    return $where;
 	    
 	}
+	
+	
+	/*
+	*  debug SQL
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	27/02/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
 	
 	function wp_posts_join( $join, $wp_query ) {
 		

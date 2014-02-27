@@ -113,8 +113,9 @@ function acf_get_field_groups( $args = false ) {
 *  @date	29/11/2013
 *  @since	5.0.0
 *
-*  @param	$post_id (int)
-*  @return	$post_id (int)
+*  @param	$field_groups (array)
+*  @param	$args (array)
+*  @return	$field_groups (array)
 */
 
 function acf_filter_field_groups( $field_groups, $args = false ) {
@@ -147,7 +148,6 @@ function acf_filter_field_groups( $field_groups, $args = false ) {
 	return $field_groups;
 	
 }
-
 
 
 /*
@@ -234,6 +234,19 @@ function acf_get_field_group( $selector = false ) {
 }
 
 
+/*
+*  _acf_get_field_group_by_id
+*
+*  This function will get a field group by it's ID
+*
+*  @type	function
+*  @date	27/02/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$field_group (array)
+*/
+
 function _acf_get_field_group_by_id( $post_id = 0 ) {
 	
 	// vars
@@ -298,6 +311,20 @@ function _acf_get_field_group_by_id( $post_id = 0 ) {
 }
 
 
+/*
+*  _acf_get_field_group_by_key
+*
+*  This function will get a field group by it's key
+*
+*  @type	function
+*  @date	27/02/2014
+*  @since	5.0.0
+*
+*  @param	$key (string)
+*  @return	$field_group (array)
+*/
+
+
 function _acf_get_field_group_by_key( $key = '' ) {
 	
 	// vars
@@ -353,14 +380,15 @@ function _acf_get_field_group_by_key( $key = '' ) {
 /*
 *  acf_update_field_group
 *
-*  This function will update a field group into the database
+*  This function will update a field group into the database.
+*  The returned field group will always contain an ID
 *
 *  @type	function
 *  @date	28/09/13
 *  @since	5.0.0
 *
 *  @param	$field_group (array)
-*  @return	(int)
+*  @return	$field_group (array)
 */
 
 function acf_update_field_group( $field_group = array() ) {
@@ -443,8 +471,9 @@ function acf_update_field_group( $field_group = array() ) {
 *  @date	28/09/13
 *  @since	5.0.0
 *
-*  @param	$id (int)
-*  @return	(int)
+*  @param	$selector (mixed)
+*  @param	$new_post_id (int) allow specific ID to override (good for WPML translations)
+*  @return	$field_group (array)
 */
 
 function acf_duplicate_field_group( $selector = 0, $new_post_id = 0 ) {
@@ -540,14 +569,14 @@ function acf_get_field_count( $field_group_id ) {
 /*
 *  acf_delete_field_group
 *
-*  description
+*  This function will delete the field group and it's fields from the DB
 *
 *  @type	function
 *  @date	5/12/2013
 *  @since	5.0.0
 *
-*  @param	$post_id (int)
-*  @return	$post_id (int)
+*  @param	$selector (mixed)
+*  @return	(boolean)
 */
 
 function acf_delete_field_group( $selector = 0 ) {
@@ -592,14 +621,14 @@ function acf_delete_field_group( $selector = 0 ) {
 /*
 *  acf_trash_field_group
 *
-*  description
+*  This function will trash the field group and it's fields
 *
 *  @type	function
 *  @date	5/12/2013
 *  @since	5.0.0
 *
-*  @param	$post_id (int)
-*  @return	$post_id (int)
+*  @param	$selector (mixed)
+*  @return	(boolean)
 */
 
 function acf_trash_field_group( $selector = 0 ) {
@@ -644,14 +673,14 @@ function acf_trash_field_group( $selector = 0 ) {
 /*
 *  acf_untrash_field_group
 *
-*  description
+*  This function will restore from trash the field group and it's fields
 *
 *  @type	function
 *  @date	5/12/2013
 *  @since	5.0.0
 *
-*  @param	$post_id (int)
-*  @return	$post_id (int)
+*  @param	$selector (mixed)
+*  @return	(boolean)
 */
 
 function acf_untrash_field_group( $selector = 0 ) {
