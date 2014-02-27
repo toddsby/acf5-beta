@@ -725,7 +725,7 @@ class acf_field_group {
 		
 		
 		// verify nonce
-		if( ! wp_verify_nonce($options['nonce'], 'acf-nonce') )
+		if( ! wp_verify_nonce($options['nonce'], 'acf_nonce') )
 		{
 			die(0);
 		}
@@ -782,7 +782,7 @@ class acf_field_group {
 		
 		
 		// verify nonce
-		if( ! wp_verify_nonce($args['nonce'], 'acf-nonce') )
+		if( ! wp_verify_nonce($args['nonce'], 'acf_nonce') )
 		{
 			die();
 		}
