@@ -28,15 +28,18 @@
 			// get options
 			this.o = acf.get_data( this.$el );
 			
-
-			// add layout_count
-			this.o.row_count = this.$el.find('> table > tbody > tr').length - 1;	
-			
 			
 			// return this for chaining
 			return this;
 			
 		},
+		
+		count : function(){
+			
+			return this.$el.find('> table > tbody > tr').length - 1;
+			
+		},
+
 		
 		init : function(){
 			
@@ -96,7 +99,7 @@
 			
 			
 			// empty?
-			if( this.o.row_count == 0 )
+			if( this.count() == 0 )
 			{
 				this.$el.addClass('empty');
 			}
@@ -107,7 +110,7 @@
 			
 			
 			// row limit reached
-			if( this.o.row_count >= this.o.max_rows )
+			if( this.count() >= this.o.max_rows )
 			{
 				this.$el.addClass('disabled');
 				this.$el.find('> .acf-hl .acf-button').addClass('disabled');
@@ -127,7 +130,7 @@
 			
 			
 			// validate
-			if( this.o.row_count >= this.o.max_rows )
+			if( this.count() >= this.o.max_rows )
 			{
 				alert( acf._e('repeater','max').replace('{max}', this.o.max_rows) );
 				return false;
@@ -166,16 +169,15 @@
 			
 			
 			// update order
-			// remember to reset field so that row_number is updated
-			this.set( $field ).render();
+			this.render();
+			
+			
+			// validation
+			acf.validation.remove_error( this.$field );
 			
 			
 			// setup fields
 			acf.do_action('append', $html);
-	
-			
-			// validation
-			acf.validation.remove_error( this.$field );
 			
 		},
 		
@@ -186,7 +188,7 @@
 			
 			
 			// validate
-			if( this.o.row_count <= this.o.max_rows )
+			if( this.o.count() <= this.o.max_rows )
 			{
 				alert( acf._e('repeater','min').replace('{min}', this.o.min_rows) );
 				return false;

@@ -30,7 +30,6 @@
 	    	
     	},
     	
-    	
     	render_field : function( $el ){
 	    	
 	    	// vars
