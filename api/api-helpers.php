@@ -357,7 +357,10 @@ function acf_render_field_wrap( $field, $el = 'div', $instruction = 'label', $at
 			<script type="text/javascript">
 			(function($) {
 				
+			if( typeof acf !== 'undefined' )
+			{
 				acf.conditional_logic.add( '<?php echo $field['key']; ?>', <?php echo json_encode($field['conditional_logic']); ?>);
+			}
 				
 			})(jQuery);	
 			</script>
