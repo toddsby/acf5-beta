@@ -522,7 +522,7 @@ function acf_validate_value( $value, $field, $input ) {
 	$valid = apply_filters( "acf/validate_value/type={$field['type']}", $valid, $value, $field, $input );
 	$valid = apply_filters( "acf/validate_value/name={$field['name']}", $valid, $value, $field, $input );
 	$valid = apply_filters( "acf/validate_value/key={$field['key']}", $valid, $value, $field, $input );
-		
+	
 	
 	// allow $valid to be a custom error message
 	if( !empty($valid) && is_string($valid) )

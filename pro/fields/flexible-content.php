@@ -126,7 +126,14 @@ class acf_field_flexible_content extends acf_field
 			$layouts[ $layout['name'] ] = acf_extract_var( $field['layouts'], $k );
 		}
 		
-
+		
+		// hidden input
+		acf_hidden_input(array(
+			'type'	=> 'hidden',
+			'name'	=> $field['name'],
+		));
+		
+		
 		?>
 		<div <?php acf_esc_attr_e(array( 'class' => 'acf-flexible-content', 'data-min' => $field['min'], 'data-max'	=> $field['max'] )); ?>>
 			
@@ -409,6 +416,145 @@ class acf_field_flexible_content extends acf_field
 		// return		
 		return $field;
 	}
+		
+	
+	/*
+	*  format_value()
+	*
+	*  This filter is appied to the $value after it is loaded from the db and before it is passed to the render_field action
+	*
+	*  @type	filter
+	*  @since	3.6
+	*  @date	23/01/13
+	*
+	*  @param	$value (mixed) the value which was loaded from the database
+	*  @param	$post_id (mixed) the $post_id from which the value was loaded
+	*  @param	$field (array) the field array holding all the field options
+	*  @param	$template (boolean) true if value requires formatting for front end template function
+	*
+	*  @return	$value (mixed) the modified value
+	*/
+	
+	function format_value( $value, $post_id, $field, $template ) {
+		
+		// vars
+		$values = false;
+		$format = true;
+		$format_template = $template;
+		
+		
+		// sort layouts into names
+		$layouts = array();
+		
+		foreach( $field['layouts'] as $k => $layout )
+		{
+			$layouts[ $layout['name'] ] = acf_extract_var( $field['layouts'], $k );
+		}
+		
+		
+		// loop through and load values
+		if( is_array($value) && !empty($value) )
+		{
+			$i = -1;
+			$values = array();
+			
+			
+			// loop through rows
+			foreach( $value as $layout )
+			{
+				$i++;
+				$values[ $i ] = array();
+				$values[ $i ]['acf_fc_layout'] = $layout;
+				
+				
+				// check if layout still exists
+				if( isset($layouts[ $layout ]) )
+				{
+					// loop through sub fields
+					if( !empty($layouts[ $layout ]['sub_fields']) ){ foreach( $layouts[ $layout ]['sub_fields'] as $sub_field ){
+						
+						// update full name
+						$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
+						
+						
+						// get value
+						$values[ $i ][ $sub_field['key'] ] = acf_get_value( $post_id, $sub_field, $format, $format_template );
+
+					}}
+				}
+			}
+		}
+		
+		
+		// return
+		return $values;
+	}
+	
+	
+	/*
+	*  validate_value
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	11/02/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function validate_value( $valid, $value, $field, $input ){
+		
+		
+		// remove acfcloneindex
+		if( isset($value['acfcloneindex']) )
+		{
+			unset($value['acfcloneindex']);
+		}
+		
+		
+		// valid
+		if( $field['required'] && empty($value) )
+		{
+			$valid = false;
+		}
+		
+		
+		
+		// check sub fields
+		if( !empty($field['layouts']) && !empty($value) )
+		{
+			$keys = array_keys($value);
+			
+			foreach( $keys as $i )
+			{
+				foreach( $field['layouts'] as $layout )
+				{
+					foreach( $layout['sub_fields'] as $sub_field )
+					{
+						// vars
+						$k = $sub_field['key'];
+						
+						
+						// test sub field exists
+						if( !isset($value[ $i ][ $k ]) )
+						{
+							continue;
+						}
+						
+						
+						// validate
+						acf_validate_value( $value[ $i ][ $k ], $sub_field, "{$input}[{$i}][{$k}]" );
+					}
+				}
+			}
+			
+		}
+		
+		return $valid;
+		
+	}
 	
 	
 	/*
@@ -501,79 +647,6 @@ class acf_field_flexible_content extends acf_field
 		
 		
 		return $value;
-	}
-		
-	
-	/*
-	*  format_value()
-	*
-	*  This filter is appied to the $value after it is loaded from the db and before it is passed to the render_field action
-	*
-	*  @type	filter
-	*  @since	3.6
-	*  @date	23/01/13
-	*
-	*  @param	$value (mixed) the value which was loaded from the database
-	*  @param	$post_id (mixed) the $post_id from which the value was loaded
-	*  @param	$field (array) the field array holding all the field options
-	*  @param	$template (boolean) true if value requires formatting for front end template function
-	*
-	*  @return	$value (mixed) the modified value
-	*/
-	
-	function format_value( $value, $post_id, $field, $template ) {
-		
-		// vars
-		$values = false;
-		$format = true;
-		$format_template = $template;
-		
-		
-		// sort layouts into names
-		$layouts = array();
-		
-		foreach( $field['layouts'] as $k => $layout )
-		{
-			$layouts[ $layout['name'] ] = acf_extract_var( $field['layouts'], $k );
-		}
-		
-		
-		// loop through and load values
-		if( is_array($value) && !empty($value) )
-		{
-			$i = -1;
-			$values = array();
-			
-			
-			// loop through rows
-			foreach( $value as $layout )
-			{
-				$i++;
-				$values[ $i ] = array();
-				$values[ $i ]['acf_fc_layout'] = $layout;
-				
-				
-				// check if layout still exists
-				if( isset($layouts[ $layout ]) )
-				{
-					// loop through sub fields
-					if( !empty($layouts[ $layout ]['sub_fields']) ){ foreach( $layouts[ $layout ]['sub_fields'] as $sub_field ){
-						
-						// update full name
-						$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
-						
-						
-						// get value
-						$values[ $i ][ $sub_field['key'] ] = acf_get_value( $post_id, $sub_field, $format, $format_template );
-
-					}}
-				}
-			}
-		}
-		
-		
-		// return
-		return $values;
 	}
 	
 }

@@ -159,7 +159,8 @@ class acf_field_repeater extends acf_field
 		{
 			$el = 'tr';
 		}
-	
+		
+		
 		// hidden input
 		acf_hidden_input(array(
 			'type'	=> 'hidden',
