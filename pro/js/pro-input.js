@@ -1035,6 +1035,11 @@
 			this.o = acf.get_data( this.$el );
 			
 			
+			// min / max
+			this.o.min = this.o.min || 0;
+			this.o.max = this.o.max || 0;
+			
+			
 			// return this for chaining
 			return this;
 			
@@ -1084,16 +1089,7 @@
 			
 			
 			// disable select
-			if( this.count() > 0 )
-			{
-				$select.removeAttr('disabled');
-			}
-			else
-			{
-				$select.attr('disabled', 'disabled');
-			}
-			
-			if( this.count() >= this.o.max )
+			if( this.o.max > 0 && this.count() >= this.o.max )
 			{
 				$a.addClass('disabled');
 			}
@@ -1318,7 +1314,7 @@ close : function( $a ){
 		add : function( image ){
 			
 			// validate
-			if( this.count() >= this.o.max )
+			if( this.o.max > 0 && this.count() >= this.o.max )
 			{
 				acf.validation.add_warning( this.$field, acf._e('gallery', 'max'));
 				return false;
@@ -1412,7 +1408,7 @@ close : function( $a ){
 		popup : function(){
 			
 			// validate
-			if( this.count() >= this.o.max )
+			if( this.o.max > 0 && this.count() >= this.o.max )
 			{
 				acf.validation.add_warning( this.$field, acf._e('gallery', 'max'));
 				return false;
