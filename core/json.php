@@ -19,7 +19,7 @@ class acf_json_actions {
 		// validate
 		if( !acf_get_setting('json') )
 		{
-			return;
+			return $field_group;
 		}
 		
 		
@@ -110,6 +110,13 @@ class acf_json_actions {
 	*/
 	
 	function get_field_groups( $field_groups ) {
+		
+		// validate
+		if( !acf_get_setting('json') )
+		{
+			return $field_groups;
+		}
+		
 		
 		// vars
 		$ignore = array();
