@@ -721,7 +721,7 @@ function acf_get_field_group_style( $field_group )
 	
 	
 	// add style to html
-	if( in_array('permalink',$options['hide_on_screen']) )
+	if( in_array('permalink',$field_group['hide_on_screen']) )
 	{
 		$html .= '#edit-slug-box {display: none;} ';
 	}
