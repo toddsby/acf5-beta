@@ -188,7 +188,7 @@
 			
 			
 			// validate
-			if( this.o.count() <= this.o.max_rows )
+			if( this.count() <= this.o.max_rows )
 			{
 				alert( acf._e('repeater','min').replace('{min}', this.o.min_rows) );
 				return false;
