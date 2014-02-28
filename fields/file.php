@@ -198,6 +198,10 @@ class acf_field_file extends acf_field
 		}
 		
 		
+		// convert to int
+		$value = intval($value);
+		
+		
 		// bail early if not formatting for template use
 		if( !$template )
 		{
@@ -206,11 +210,11 @@ class acf_field_file extends acf_field
 		
 		
 		// format
-		if( $field['save_format'] == 'url' )
+		if( $field['return_format'] == 'url' )
 		{
 			$value = wp_get_attachment_url($value);
 		}
-		elseif( $field['save_format'] == 'object' )
+		elseif( $field['return_format'] == 'object' )
 		{
 			$attachment = get_post( $value );
 			
