@@ -10,10 +10,9 @@
 *  @since	3.6
 *  @date	29/01/13
 *
-*  @param	mixed	$field_name: the name of the field - 'sub_heading'
-*  @param	int		$post_id: the post_id of which the value is saved against
-*
-*  @return	string	$return:  a string containing the field_key
+*  @param	$field_name (mixed) the name of the field. eg 'sub_heading'
+*  @param	$post_id (int) the post_id of which the value is saved against
+*  @return	$reference (string)	a string containing the field_key
 */
 
 function get_field_reference( $field_name, $post_id ) {
@@ -96,13 +95,13 @@ function get_field_reference( $field_name, $post_id ) {
 /*
 *  acf_get_valid_post_id
 *
-*  description
+*  This function will return a valid post_id based on the current screen / parameter
 *
 *  @type	function
 *  @date	8/12/2013
 *  @since	5.0.0
 *
-*  @param	$post_id (int)
+*  @param	$post_id (mixed) can be a post ID, comment / user / widget / options, or even an object 
 *  @return	$post_id (int)
 */
 
@@ -170,14 +169,14 @@ function acf_get_valid_post_id( $post_id = 0 ) {
 /*
 *  acf_is_field_key
 *
-*  description
+*  This function will return true or false for the given $field_key parameter
 *
 *  @type	function
 *  @date	6/12/2013
 *  @since	5.0.0
 *
-*  @param	$post_id (int)
-*  @return	$post_id (int)
+*  @param	$field_key (string)
+*  @return	(boolean)
 */
 
 function acf_is_field_key( $field_key = '' ) {
@@ -201,15 +200,14 @@ function acf_is_field_key( $field_key = '' ) {
 *  @since	1.0.3
 *  @date	29/01/13
 *
-*  @param	string		$field_name: the name of the field - 'sub_heading'
-*  @param	mixed		$post_id: the post_id of which the value is saved against
-*
-*  @return	string		$value
+*  @param	$selector (string) the field name or key
+*  @param	$post_id (mixed) the post_id of which the value is saved against
+*  @return	n/a
 */
 
-function the_field( $field_name, $post_id = false )
-{
-	$value = get_field($field_name, $post_id);
+function the_field( $selector, $post_id = false, $format_value = true ) {
+	
+	$value = get_field($selector, $post_id, $format_value);
 	
 	if( is_array($value) )
 	{
@@ -224,18 +222,17 @@ function the_field( $field_name, $post_id = false )
 *  get_field()
 *
 *  This function will return a custom field value for a specific field name/key + post_id.
-*  There is a 3rd parameter to turn on/off formating. This means that an Image field will not use 
+*  There is a 3rd parameter to turn on/off formating. This means that an image field will not use 
 *  its 'return option' to format the value but return only what was saved in the database
 *
 *  @type	function
 *  @since	3.6
 *  @date	29/01/13
 *
-*  @param	string		$field_key: string containing the name of teh field name / key ('sub_field' / 'field_1')
-*  @param	mixed		$post_id: the post_id of which the value is saved against
-*  @param	boolean		$format_value: whether or not to format the value as described above
-*
-*  @return	mixed		$value: the value found
+*  @param	$selector (string) the field name or key
+*  @param	$post_id (mixed) the post_id of which the value is saved against
+*  @param	$format_value (boolean) whether or not to format the value as described above
+*  @return	(mixed)
 */
  
 function get_field( $selector, $post_id = false, $format_value = true ) {
@@ -270,13 +267,11 @@ function get_field( $selector, $post_id = false, $format_value = true ) {
 *  @since	3.6
 *  @date	3/02/13
 *
-*  @param	string		$field_key: string containing the name of teh field name / key ('sub_field' / 'field_1')
-*  @param	mixed		$post_id: the post_id of which the value is saved against
-*  @param	array		$options: an array containing options
-*			boolean		+ load_value: load the field value or not. Defaults to true
-*			boolean		+ format_value: format the field value or not. Defaults to true
-*
-*  @return	array		$return: an array containin the field groups
+*  @param	$selector (string) the field name or key
+*  @param	$post_id (mixed) the post_id of which the value is saved against
+*  @param	$format_value (boolean) whether or not to format the field value
+*  @param	$load_value (boolean) whether or not to load the field value
+*  @return	$field (array)
 */
 
 function get_field_object( $selector, $post_id = false, $format_value = true, $load_value = true ) {
@@ -348,8 +343,6 @@ function get_field_object( $selector, $post_id = false, $format_value = true, $l
 }
 
 
-
-
 /*
 *  get_fields()
 *
@@ -360,9 +353,9 @@ function get_field_object( $selector, $post_id = false, $format_value = true, $l
 *  @since	3.6
 *  @date	29/01/13
 *
-*  @param	mixed	$post_id: the post_id of which the value is saved against
-*
-*  @return	array	$return: an array containin the field values
+*  @param	$post_id (mixed) the post_id of which the value is saved against
+*  @param	$format_value (boolean) whether or not to format the field value
+*  @return	(array)	associative array where field name => field value
 */
 
 function get_fields( $post_id = false, $format_value = true ) {
@@ -397,9 +390,10 @@ function get_fields( $post_id = false, $format_value = true ) {
 *  @since	3.6
 *  @date	29/01/13
 *
-*  @param	mixed	$post_id: the post_id of which the value is saved against
-*
-*  @return	array	$return: an array containin the field groups
+*  @param	$post_id (mixed) the post_id of which the value is saved against
+*  @param	$format_value (boolean) whether or not to format the field value
+*  @param	$load_value (boolean) whether or not to load the field value
+*  @return	(array)	associative array where field name => field
 */
 
 function get_field_objects( $post_id = false, $format_value = true, $load_value = true ) {
@@ -495,12 +489,12 @@ function get_field_objects( $post_id = false, $format_value = true, $load_value 
 *  @date	2/09/13
 *  @since	4.3.0
 *
-*  @param	$field_name (string) the name of the field - 'images'
-*  @return	$post_id (mixed) the post_id of which the value is saved against
+*  @param	$field_name (string) the field name
+*  @param	$post_id (mixed) the post_id of which the value is saved against
+*  @return	(boolean)
 */
 
-function have_rows( $field_name, $post_id = false )
-{
+function have_rows( $field_name, $post_id = false ) {
 	
 	// vars
 	$depth = 0;
@@ -649,7 +643,7 @@ function have_rows( $field_name, $post_id = false )
 *  @since	4.3.0
 *
 *  @param	N/A
-*  @return	N/A
+*  @return	(array) the current row data
 */
 
 function the_row() {
@@ -657,7 +651,6 @@ function the_row() {
 	// vars
 	$depth = count( $GLOBALS['acf_field'] ) - 1;
 
-	
 	
 	// increase row
 	$GLOBALS['acf_field'][ $depth ]['i']++;
@@ -683,8 +676,8 @@ function the_row() {
 *  @date	26/10/13
 *  @since	5.0.0
 *
-*  @param	$post_id (int)
-*  @return	$post_id (int)
+*  @param	$hard_reset (boolean) completely wipe the global variable, or just unset the active row
+*  @return	(boolean)
 */
 
 function reset_rows( $hard_reset = false ) {
@@ -727,14 +720,13 @@ function reset_rows( $hard_reset = false ) {
 *  @since	1.0.3
 *  @date	29/01/13
 *
-*  @param	string	$field_name: the name of the field - 'sub_heading'
-*  @param	mixed	$post_id: the post_id of which the value is saved against
-*
-*  @return	bool
+*  @param	$field_name (string) the field name
+*  @param	$post_id (mixed) the post_id of which the value is saved against
+*  @return	(boolean)
 */
 
-function has_sub_field( $field_name, $post_id = false )
-{
+function has_sub_field( $field_name, $post_id = false ) {
+	
 	// vars
 	$r = have_rows( $field_name, $post_id );
 	
@@ -748,27 +740,13 @@ function has_sub_field( $field_name, $post_id = false )
 	
 	// return
 	return $r;
+	
 }
 
-
-/*
-*  has_sub_fields()
-*
-*  This function is a replica of 'has_sub_field'
-*
-*  @type	function
-*  @since	4.0.0
-*  @date	29/01/13
-*
-*  @param	string	$field_name: the name of the field - 'sub_heading'
-*  @param	mixed	$post_id: the post_id of which the value is saved against
-*
-*  @return	bool
-*/
-
-function has_sub_fields( $field_name, $post_id = false )
-{
+function has_sub_fields( $field_name, $post_id = false ) {
+	
 	return has_sub_field( $field_name, $post_id );
+	
 }
 
 
@@ -781,9 +759,8 @@ function has_sub_fields( $field_name, $post_id = false )
 *  @since	1.0.3
 *  @date	29/01/13
 *
-*  @param	string	$field_name: the name of the field - 'sub_heading'
-*
-*  @return	mixed	$value
+*  @param	$field_name (string) the field name
+*  @return	(mixed)
 */
 
 function get_sub_field( $field_name ) {
@@ -812,7 +789,7 @@ function get_sub_field( $field_name ) {
 
 
 /*
-*  get_sub_field()
+*  the_sub_field()
 *
 *  This function is the same as echo get_sub_field
 *
@@ -820,14 +797,13 @@ function get_sub_field( $field_name ) {
 *  @since	1.0.3
 *  @date	29/01/13
 *
-*  @param	string	$field_name: the name of the field - 'sub_heading'
-*
-*  @return	string	$value
+*  @param	$field_name (string) the field name
+*  @return	n/a
 */
 
-function the_sub_field($field_name)
-{
-	$value = get_sub_field($field_name);
+function the_sub_field( $field_name ) {
+	
+	$value = get_sub_field( $field_name );
 	
 	if(is_array($value))
 	{
@@ -847,13 +823,12 @@ function the_sub_field($field_name)
 *  @since	3.5.8.1
 *  @date	29/01/13
 *
-*  @param	string	$field_name: the name of the field - 'sub_heading'
-*
-*  @return	array	$sub_field	
+*  @param	$child_name (string) the field name
+*  @return	(array)	
 */
 
-function get_sub_field_object( $child_name )
-{
+function get_sub_field_object( $child_name ) {
+	
 	// no field?
 	if( empty($GLOBALS['acf_field']) )
 	{
@@ -863,7 +838,7 @@ function get_sub_field_object( $child_name )
 
 	// vars
 	$depth = count( $GLOBALS['acf_field'] ) - 1;
-	$parent = $GLOBALS['acf_field'][$depth]['field'];
+	$parent = $GLOBALS['acf_field'][ $depth ]['field'];
 
 
 	// return
@@ -881,14 +856,13 @@ function get_sub_field_object( $child_name )
 *  @since	3.5.8.1
 *  @date	29/01/13
 *
-*  @param	string	$child_name: the name of the field - 'sub_heading'
-*  @param	array	$parent: the parent field object
-*
-*  @return	array	$sub_field	
+*  @param	$child_name (string) the field name
+*  @param	$parent (array) the parent field
+*  @return	(array)	
 */
 
-function acf_get_child_field_from_parent_field( $child_name, $parent )
-{
+function acf_get_child_field_from_parent_field( $child_name, $parent ) {
+	
 	// vars
 	$return = false;
 	
@@ -936,22 +910,20 @@ function acf_get_child_field_from_parent_field( $child_name, $parent )
 /*
 *  get_row_layout()
 *
-*  This function will return a string representation of the current row layout within a 'has_sub_field' loop
+*  This function will return a string representation of the current row layout within a 'have_rows' loop
 *
 *  @type	function
 *  @since	3.0.6
 *  @date	29/01/13
 *
-*  @return	$value - string containing the layout
+*  @param	n/a
+*  @return	(string)
 */
 
-function get_row_layout()
-{
-	// vars
-	$value = get_sub_field('acf_fc_layout');
+function get_row_layout() {
 	
+	return get_sub_field('acf_fc_layout');
 	
-	return $value;
 }
 
 
@@ -959,42 +931,37 @@ function get_row_layout()
 *  acf_shortcode()
 *
 *  This function is used to add basic shortcode support for the ACF plugin
+*  eg. [acf field="heading" post_id="123" format_value="1"]
 *
 *  @type	function
 *  @since	1.1.1
 *  @date	29/01/13
 *
-*  @param	array	$atts: an array holding the shortcode options
-*			string	+ field: the field name
-*			mixed	+ post_id: the post_id to load from
-*
-*  @return	string	$value: the value found by get_field
+*  @param	$field (string) the field name or key
+*  @param	$post_id (mixed) the post_id of which the value is saved against
+*  @param	$format_value (boolean) whether or not to format the field value
+*  @return	(string)
 */
 
 function acf_shortcode( $atts )
 {
 	// extract attributs
 	extract( shortcode_atts( array(
-		'field' => "",
-		'post_id' => false,
+		'field'			=> '',
+		'post_id'		=> false,
+		'format_value'	=> true
 	), $atts ) );
 	
 	
-	// $field is requird
-	if( !$field || $field == "" )
-	{
-		return "";
-	}
-	
-	
 	// get value and return it
-	$value = get_field( $field, $post_id );
+	$value = get_field( $field, $post_id, $format_value );
 	
 	
 	if( is_array($value) )
 	{
-		$value = @implode( ', ',$value );
+		$value = @implode( ', ', $value );
 	}
+	
 	
 	return $value;
 }
@@ -1010,57 +977,42 @@ add_shortcode( 'acf', 'acf_shortcode' );
 *  @since	1.1.4
 *  @date	29/01/13
 *
-*  @param	N/A
-*
-*  @return	N/A
+*  @param	n/a
+*  @return	n/a
 */
 
-function acf_form_head()
-{
-	// global vars
-	global $post_id;
-	
+function acf_form_head() {
 	
 	// verify nonce
-	if( isset($_POST['acf_nonce']) && wp_verify_nonce($_POST['acf_nonce'], 'input') )
+	if( acf_verify_nonce('input') )
 	{
-		// $post_id to save against
-		$post_id = $_POST['post_id'];
-		
-		
-		// allow for custom save
-		$post_id = apply_filters('acf/pre_save_post', $post_id);
-		
-		
-		// save the data
-		do_action('acf/save_post', $post_id);	
-
-
-		// redirect
-		if(isset($_POST['return']))
+		// validate data
+	    if( acf_validate_save_post(true) )
 		{
-			wp_redirect($_POST['return']);
-			exit;
+			// $post_id to save against
+			$post_id = $_POST['post_id'];
+			
+			
+			// allow for custom save
+			$post_id = apply_filters('acf/pre_save_post', $post_id);
+			
+			
+			// save
+			acf_save_post( $post_id );
+			
+			
+			// redirect
+			if( !empty($_POST['return']) )
+			{
+				wp_redirect( $_POST['return'] );
+				exit;
+			}
 		}
 	}
 	
 	
-	// need wp styling
-	wp_enqueue_style(array(
-		'colors-fresh'
-	));
-	
-		
-	// actions
-	do_action('acf/input/admin_enqueue_scripts');
-
-	add_action('wp_head', 'acf_form_wp_head');
-	
-}
-
-function acf_form_wp_head()
-{
-	do_action('acf/input/admin_head');
+	// load acf scripts
+	acf_enqueue_scripts();
 }
 
 
@@ -1088,151 +1040,141 @@ function acf_form_wp_head()
 *  @return	N/A
 */
 
-function acf_form( $options = array() )
-{
-	global $post;
-	
+function acf_form( $args = array() ) {
 	
 	// defaults
-	$defaults = array(
-		'post_id' => false,
-		'field_groups' => array(),
-		'form' => true,
-		'form_attributes' => array(
-			'id' => 'post',
-			'class' => '',
-			'action' => '',
-			'method' => 'post',
+	$args = acf_parse_args( $args, array(
+		'id'					=> 'acf-form-1',
+		'post_id'				=> false,
+		'post_type'				=> false,
+		'field_groups'			=> false,
+		'fields'				=> false,
+		'form'					=> true,
+		'form_attributes'		=> array(
+			'id'					=> 'post',
+			'class'					=> '',
+			'action'				=> '',
+			'method'				=> 'post',
 		),
-		'return' => add_query_arg( 'updated', 'true', get_permalink() ),
-		'html_before_fields' => '',
-		'html_after_fields' => '',
-		'submit_value' => __("Update", 'acf'),
-		'updated_message' => __("Post updated", 'acf'), 
-	);
-	
-	
-	// merge defaults with options
-	$options = array_merge($defaults, $options);
-	
-	
-	// merge sub arrays
-	foreach( $options as $k => $v )
-	{
-		if( is_array($v) )
-		{
-			$options[ $k ] = array_merge($defaults[ $k ], $options[ $k ]);
-		}
-	}
+		'return'				=> add_query_arg( 'updated', 'true', get_permalink() ),
+		'html_before_fields'	=> '',
+		'html_after_fields'		=> '',
+		'submit_value'			=> __("Update", 'acf'),
+		'updated_message'		=> __("Post updated", 'acf'),
+		'label_placement'		=> 'top',
+		'instruction_placement'	=> 'label' 
+	));
 	
 	
 	// filter post_id
-	$options['post_id'] = apply_filters('acf/get_post_id', $options['post_id'] );
+	$args['post_id'] = acf_get_valid_post_id( $args['post_id'] );
 	
 	
 	// attributes
-	$options['form_attributes']['class'] .= 'acf-form';
+	$args['form_attributes']['class'] .= " acf-form {$args['id']}";
 	
 	
+	// vars
+	$field_groups = array();
+	$fields = array();
 	
-	// register post box
-	if( empty($options['field_groups']) )
+	
+	// specific fields
+	if( !empty($args['fields']) )
 	{
-		// get field groups
-		$filter = array(
-			'post_id' => $options['post_id']
-		);
-		
-		
-		if( strpos($options['post_id'], 'user_') !== false )
+		foreach( $args['fields'] as $selector )
 		{
-			$user_id = str_replace('user_', '', $options['post_id']);
-			$filter = array(
-				'ef_user' => $user_id
-			);
+			$fields[] = acf_get_field( $selector );
 		}
-		elseif( strpos($options['post_id'], 'taxonomy_') !== false )
-		{
-			$taxonomy_id = str_replace('taxonomy_', '', $options['post_id']);
-			$filter = array(
-				'ef_taxonomy' => $taxonomy_id
-			);
-		}
-		
-		
-		$options['field_groups'] = array();
-		$options['field_groups'] = apply_filters( 'acf/location/match_field_groups', $options['field_groups'], $filter );
 	}
-
-
-	// updated message
-	if(isset($_GET['updated']) && $_GET['updated'] == 'true' && $options['updated_message'])
+	elseif( !empty($args['field_groups']) )
 	{
-		echo '<div id="message" class="updated"><p>' . $options['updated_message'] . '</p></div>';
+		foreach( $args['field_groups'] as $selector )
+		{
+			$field_groups[] = acf_get_field_group( $selector );
+		}
+	}
+	elseif( $args['post_id'] == 'new' )
+	{
+		$field_groups = acf_get_field_groups(array(
+			'post_type' => $args['post_type']
+		));
+	}
+	else
+	{
+		$field_groups = acf_get_field_groups(array(
+			'post_id' => $args['post_id']
+		));
+	}
+	
+	
+	//load fields based on field groups
+	if( !empty($field_groups) )
+	{
+		foreach( $field_groups as $field_group )
+		{
+			$fields = array_merge($fields, acf_get_fields( $field_group ));
+		}
+	}
+	
+	
+	// updated message
+	if( !empty($_GET['updated']) && $args['updated_message'] )
+	{
+		echo '<div id="message" class="updated"><p>' . $args['updated_message'] . '</p></div>';
 	}
 	
 	
 	// display form
 	if( $options['form'] ): ?>
-	<form <?php if($options['form_attributes']){foreach($options['form_attributes'] as $k => $v){echo $k . '="' . $v .'" '; }} ?>>
-	<?php endif; ?>
+	<form <?php acf_esc_attr_e( $args['form_attributes']); ?>>
+	<?php endif; 
+		
+		
+	// render post data
+	acf_form_data(array( 
+		'post_id'	=> $args['post_id'], 
+		'nonce'		=> 'post' 
+	));
 	
-	<div style="display:none">
-		<script type="text/javascript">
-			acf.o.post_id = <?php echo is_numeric($options['post_id']) ? $options['post_id'] : '"' . $options['post_id'] . '"'; ?>;
-		</script>
-		<input type="hidden" name="acf_nonce" value="<?php echo wp_create_nonce( 'input' ); ?>" />
-		<input type="hidden" name="post_id" value="<?php echo $options['post_id']; ?>" />
-		<input type="hidden" name="return" value="<?php echo $options['return']; ?>" />
-		<?php wp_editor('', 'acf_settings'); ?>
+	?>
+	<div class="acf-hidden">
+		<input type="hidden" name="return" value="<?php echo $args['return']; ?>" />
 	</div>
 	
 	<div id="poststuff">
 	<?php
 	
 	// html before fields
-	echo $options['html_before_fields'];
+	echo $args['html_before_fields'];
 	
 	
-	$acfs = apply_filters('acf/get_field_groups', array());
-	
-	if( is_array($acfs) ){ foreach( $acfs as $acf ){
-		
-		// only add the chosen field groups
-		if( !in_array( $acf['id'], $options['field_groups'] ) )
-		{
-			continue;
-		}
-		
-		
-		// load options
-		$acf['options'] = apply_filters('acf/field_group/get_options', array(), $acf['id']);
-		
-		
-		// load fields
-		$fields = apply_filters('acf/field_group/get_fields', array(), $acf['id']);
-		
-		
-		echo '<div id="acf_' . $acf['id'] . '" class="postbox acf_postbox ' . $acf['options']['layout'] . '">';
-		echo '<h3 class="hndle"><span>' . $acf['title'] . '</span></h3>';
-		echo '<div class="inside">';
-							
-		do_action('acf/create_fields', $fields, $options['post_id']);
-		
-		echo '</div></div>';
-		
-	}}
+	// render
+	if( $args['label_placement'] == 'left' )
+	{
+		?>
+		<table class="acf-table">
+			<tbody>
+				<?php acf_render_fields( $args['post_id'], $fields, 'tr', $args['instruction_placement'] ); ?>
+			</tbody>
+		</table>
+		<?php
+	}
+	else
+	{
+		acf_render_fields( $args['post_id'], $fields, 'div', $args['instruction_placement'] );
+	}
 	
 	
 	// html after fields
-	echo $options['html_after_fields'];
+	echo $args['html_after_fields'];
 	
 	?>
 	
-	<?php if( $options['form'] ): ?>
+	<?php if( $args['form'] ): ?>
 	<!-- Submit -->
-	<div class="field">
-		<input type="submit" value="<?php echo $options['submit_value']; ?>" />
+	<div id="acf-form-submit">
+		<input class="acf-button blue" type="submit" value="<?php echo $options['submit_value']; ?>" />
 	</div>
 	<!-- / Submit -->
 	<?php endif; ?>
@@ -1254,26 +1196,20 @@ function acf_form( $options = array() )
 *  @since	3.1.9
 *  @date	29/01/13
 *
-*  @param	mixed	$field_name: the name of the field - 'sub_heading'
-*  @param	mixed	$value: the value to save in the database. The variable type is dependant on the field type
-*  @param	mixed	$post_id: the post_id of which the value is saved against
-*
-*  @return	N/A
+*  @param	$selector (string) the field name or key
+*  @param	$value (mixed) the value to save in the database
+*  @param	$post_id (mixed) the post_id of which the value is saved against
+*  @return	(boolean)
 */
 
-function update_field( $field_key, $value, $post_id = false )
-{
+function update_field( $selector, $value, $post_id = false ) {
+	
 	// filter post_id
-	$post_id = apply_filters('acf/get_post_id', $post_id );
+	$post_id = acf_get_valid_post_id( $post_id );
 	
 	
-	// vars
-	$options = array(
-		'load_value' => false,
-		'format_value' => false
-	);
-	
-	$field = get_field_object( $field_key, $post_id, $options);
+	// get field
+	$field = get_field_object( $selector, $post_id, false, false);
 
 	
 	// sub fields? They need formatted data
@@ -1294,10 +1230,7 @@ function update_field( $field_key, $value, $post_id = false )
 	
 	
 	// save
-	do_action('acf/update_value', $value, $post_id, $field );
-	
-	
-	return true;
+	return acf_update_value( $value, $post_id, $field );
 	
 }
 
@@ -1311,15 +1244,24 @@ function update_field( $field_key, $value, $post_id = false )
 *  @since	3.1.9
 *  @date	29/01/13
 *
-*  @param	mixed	$field_name: the name of the field - 'sub_heading'
-*  @param	mixed	$post_id: the post_id of which the value is saved against
-*
-*  @return	N/A
+*  @param	$selector (string) the field name or key
+*  @param	$post_id (mixed) the post_id of which the value is saved against
+*  @return	(boolean)
 */
 
-function delete_field( $field_name, $post_id )
-{
-	do_action('acf/delete_value', $post_id, $field_name );
+function delete_field( $selector, $post_id = false ) {
+	
+	// filter post_id
+	$post_id = acf_get_valid_post_id( $post_id );
+	
+	
+	// get field
+	$field = get_field_object( $selector, $post_id, false, false);
+	
+	
+	// delete
+	return acf_delete_value( $post_id, $field['name'] );
+	
 }
 
 
@@ -1337,9 +1279,14 @@ function delete_field( $field_name, $post_id )
 *  @return	N/A
 */
 
-function create_field( $field )
-{
-	do_action('acf/create_field', $field );
+function create_field( $field ) {
+
+	acf_render_field( $field );
+}
+
+function render_field( $field ) {
+
+	acf_render_field( $field );
 }
 
 
