@@ -205,25 +205,6 @@ class acf_input {
 	
 	function ajax_validate_save_post() {
 		
-		// vars
-		/*
-$json = array(
-			'result'	=> 0,
-			'message'	=> __('Validation failed', 'acf'),
-			'errors'	=> 0
-		);
-*/
-		
-		 
-		// defaults
-   		/*
-	   	$_POST = acf_parse_args( $_POST, array(
-			'post_ID'	=> 0,
-			'_acfnonce'	=> '',
-		));
-		*/
-   		
-		
 		// validate
 		if( !isset($_POST['_acfnonce']) )
 		{
