@@ -1,22 +1,6 @@
 <?php
 
-/*
-*  acf_field
-*
-*  @description: This is the base class for all fields.
-*  @since: 3.6
-*  @created: 30/01/13
-*/
- 
-class acf_field
-{
-	/*
-	*  Vars
-	*
-	*  @description: 
-	*  @since: 3.6
-	*  @created: 30/01/13
-	*/
+class acf_field {
 	
 	var $name,
 		$title,
