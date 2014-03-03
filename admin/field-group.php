@@ -331,8 +331,12 @@ class acf_field_group {
 	
 	function mb_fields() {
 		
+		// global
+		global $post;
+
+		
 		// vars
-		$field_group = acf_get_field_group();
+		$field_group = acf_get_field_group( $post );
 		
 		
 		// get fields
