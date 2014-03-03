@@ -1,6 +1,41 @@
 <?php
 
 /*
+*  acf_is_field_key
+*
+*  This function will return true or false for the given $field_key parameter
+*
+*  @type	function
+*  @date	6/12/2013
+*  @since	5.0.0
+*
+*  @param	$field_key (string)
+*  @return	(boolean)
+*/
+
+function acf_is_field_key( $field_key = '' ) {
+	
+	// validate type
+	if( ! is_string($field_key) )
+	{
+		return false;
+	}
+	
+	
+	// search for 'field_'
+	if( substr($field_key, 0, 6) === 'field_' )
+	{
+		return true;
+	}
+	
+	
+	// return
+	return false;
+	
+}
+
+
+/*
 *  acf_get_valid_field
 *
 *  This function will fill in any missing keys to the $field array making it valid
@@ -321,16 +356,20 @@ function acf_get_field( $selector = null ) {
 	}
 	elseif( is_string($selector) )
 	{
-		$k = 'key';
+		if( acf_is_field_key($selector) )
+		{
+			$k = 'key';
+		}
+		else
+		{
+			$k = 'name';	
+		}
+		
 		$v = $selector;
 	}
 	elseif( is_object($selector) )
 	{
 		$v = $selector->ID;
-	}
-	elseif( get_post() )
-	{
-		$v = get_the_ID();
 	}
 	else
 	{
@@ -356,6 +395,10 @@ function acf_get_field( $selector = null ) {
 	if( $k == 'ID' )
 	{
 		$field = _acf_get_field_by_id( $v );
+	}
+	elseif( $k == 'name' )
+	{
+		$field = _acf_get_field_by_name( $v );
 	}
 	else
 	{
@@ -509,6 +552,57 @@ function _acf_get_field_by_key( $key = '' ) {
 		'order'				=> 'ASC',
 		'suppress_filters'	=> false,
 		'acf_field_key'		=> $key
+	);
+	
+	
+	// load posts
+	$posts = get_posts( $args );
+	
+	
+	// validate
+	if( empty($posts) )
+	{
+		return $field;	
+	}
+	
+	
+	// load from ID
+	$field = _acf_get_field_by_id( $posts[0]->ID );
+	
+		
+	// return
+	return $field;
+	
+}
+
+
+/*
+*  _acf_get_field_by_name
+*
+*  This function will get a field via it's key
+*
+*  @type	function
+*  @date	27/02/2014
+*  @since	5.0.0
+*
+*  @param	$key (string)
+*  @return	$field (array)
+*/
+
+function _acf_get_field_by_name( $name = '' ) {
+	
+	// vars
+	$field = false;	
+	
+	
+	// vars
+	$args = array(
+		'posts_per_page'	=> 1,
+		'post_type'			=> 'acf-field',
+		'orderby' 			=> 'menu_order title',
+		'order'				=> 'ASC',
+		'suppress_filters'	=> false,
+		'acf_field_name'	=> $name
 	);
 	
 	

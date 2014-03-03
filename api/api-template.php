@@ -167,31 +167,6 @@ function acf_get_valid_post_id( $post_id = 0 ) {
 
 
 /*
-*  acf_is_field_key
-*
-*  This function will return true or false for the given $field_key parameter
-*
-*  @type	function
-*  @date	6/12/2013
-*  @since	5.0.0
-*
-*  @param	$field_key (string)
-*  @return	(boolean)
-*/
-
-function acf_is_field_key( $field_key = '' ) {
-		
-	if( substr($field_key, 0, 6) === 'field_' )
-	{
-		return true;
-	}
-	
-	return false;
-	
-}
-
-
-/*
 *  the_field()
 *
 *  This function is the same as echo get_field().
@@ -238,22 +213,33 @@ function the_field( $selector, $post_id = false, $format_value = true ) {
 function get_field( $selector, $post_id = false, $format_value = true ) {
 	
 	// vars
-	$load_value = true;
+	$load_false = true;
+	$value = false;
 	
 	
 	// get field
-	$field = get_field_object( $selector, $post_id, $format_value, $load_value);
+	$field = get_field_object( $selector, $post_id, false, false);
 	
 	
-	// return value
-	if( is_array($field) )
+	// create dummy field
+	if( !$field )
 	{
-		return $field['value'];
+		$field = acf_get_valid_field(array(
+			'name'	=> $selector,
+			'key'	=> '',
+			'type'	=> '',
+		));
+		
+		$format_value = false;
 	}
 	
 	
+	// get value for field
+	$value = acf_get_value( $post_id, $field, $format_value, $format_value );
+	
+	
 	// return
-	return false;
+	return $value;
 	 
 }
 
@@ -308,16 +294,10 @@ function get_field_object( $selector, $post_id = false, $format_value = true, $l
 	$field = acf_get_field( $selector );
 	
 	
-	// create blank field
+	// bail early if no field found
 	if( !$field )
 	{
-		$field = acf_get_valid_field(array(
-			'name'	=> $selector,
-			'key'	=> '',
-			'type'	=> '',
-		));
-		
-		$format_value = false;
+		return false;
 	}
 	
 	
@@ -333,7 +313,6 @@ function get_field_object( $selector, $post_id = false, $format_value = true, $l
 	if( $load_value )
 	{
 		$field['value'] = acf_get_value( $post_id, $field, $format_value, $format_value );
-	
 	}
 	
 	
@@ -449,15 +428,14 @@ function get_field_objects( $post_id = false, $format_value = true, $load_value 
 			'_' . $post_id . '_%' 
 		));
 	}
-
-
+	
 	if( is_array($keys) )
 	{
 		foreach( $keys as $key )
 		{
 			$field = get_field_object( $key, $post_id, $format_value, $load_value );
 			
-			if( !is_array($field) )
+			if( empty($field) )
 			{
 				continue;
 			}
