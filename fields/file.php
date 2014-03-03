@@ -19,7 +19,7 @@ class acf_field_file extends acf_field
 		$this->label = __("File",'acf');
 		$this->category = __("Content",'acf');
 		$this->defaults = array(
-			'return_format'	=>	'array',
+			'return_format'	=>	'object',
 			'library' 		=>	'all'
 		);
 		$this->l10n = array(
@@ -147,7 +147,7 @@ class acf_field_file extends acf_field
 			'value'			=> $field['return_format'],
 			'layout'		=> 'horizontal',
 			'choices'		=> array(
-				'array'			=> __("File Array",'acf'),
+				'object'		=> __("File Array",'acf'),
 				'url'			=> __("File URL",'acf'),
 				'id'			=> __("File ID",'acf')
 			)
@@ -202,6 +202,7 @@ class acf_field_file extends acf_field
 		$value = intval($value);
 		
 		
+		
 		// bail early if not formatting for template use
 		if( !$template )
 		{
@@ -233,6 +234,7 @@ class acf_field_file extends acf_field
 				'title'			=> $attachment->post_title,
 				'caption'		=> $attachment->post_excerpt,
 				'description'	=> $attachment->post_content,
+				'mime_type'		=> $attachment->post_mime_type,
 				'url'			=> wp_get_attachment_url( $attachment->ID ),
 			);
 		}
