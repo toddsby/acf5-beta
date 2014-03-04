@@ -65,6 +65,10 @@
 *
 *---------------------------------------------------------------------------------------------*/
 
+#acf-field-group-fields {
+	padding: 0;
+}
+
 #acf-field-group-fields > .handlediv,
 #acf-field-group-fields > .hndle {
 	display: none;
