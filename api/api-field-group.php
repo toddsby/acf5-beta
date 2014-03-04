@@ -195,7 +195,7 @@ function acf_get_field_group( $selector = false ) {
 	// get cache key
 	$cache_key = "get_field_group/{$k}={$v}";
 	
-
+	
 	// get cache
 	$found = false;
 	$cache = wp_cache_get( $cache_key, 'acf', false, $found );
@@ -356,7 +356,7 @@ function _acf_get_field_group_by_key( $key = '' ) {
 	
 	
 	// validate
-	if( empty($post[0]) )
+	if( empty($posts[0]) )
 	{
 		return $field_group;	
 	}
