@@ -30,6 +30,58 @@ class acf_field_color_picker extends acf_field
 	
 	
 	/*
+	*  input_admin_enqueue_scripts
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	3/03/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function input_admin_enqueue_scripts() {
+		
+		// globals
+		global $wp_scripts;
+		
+		
+		// bail early if already set
+		if( isset($wp_scripts->registered['iris']) )
+		{
+			return;
+		}
+		
+		
+		// thanks to http://wordpress.stackexchange.com/questions/82718/how-do-i-implement-the-wordpress-iris-picker-into-my-plugin-on-the-front-end
+		wp_enqueue_style( 'wp-color-picker' );
+	    wp_enqueue_script(
+	        'iris',
+	        admin_url( 'js/iris.min.js' ),
+	        array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ),
+	        false,
+	        1
+	    );
+	    wp_enqueue_script(
+	        'wp-color-picker',
+	        admin_url( 'js/color-picker.min.js' ),
+	        array( 'iris' ),
+	        false,
+	        1
+	    );
+	    $colorpicker_l10n = array(
+	        'clear' => __( 'Clear' ),
+	        'defaultString' => __( 'Default' ),
+	        'pick' => __( 'Select Color' )
+	    );
+	    wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n ); 
+			
+	}
+	
+	
+	/*
 	*  render_field()
 	*
 	*  Create the HTML interface for your field
