@@ -272,18 +272,18 @@ class acf_input_listener {
 		
 		if( is_admin() )
 		{
-			add_action('admin_head', 			array( $this, 'admin_head'), 20 );
-			add_action('admin_footer', 			array( $this, 'admin_footer'), 20 );
+			add_action('admin_head', 			array( $this, 'admin_head'), 15 );
+			add_action('admin_footer', 			array( $this, 'admin_footer'), 5 );
 		}
 		else
 		{
-			add_action('wp_head', 				array( $this, 'admin_head'), 20 );
-			add_action('wp_footer', 			array( $this, 'admin_footer'), 20 );
+			add_action('wp_head', 				array( $this, 'admin_head'), 15 );
+			add_action('wp_footer', 			array( $this, 'admin_footer'), 5 );
 			
 			
 			// wp-login.php
-			add_action('login_head', 			array( $this, 'admin_head'), 20 );
-			add_action('login_footer', 			array( $this, 'admin_footer'), 20 );
+			add_action('login_head', 			array( $this, 'admin_head'), 15 );
+			add_action('login_footer', 			array( $this, 'admin_footer'), 5 );
 		}
 	}
 	
@@ -397,6 +397,14 @@ function acf_save_post( $post_id = 0 ) {
 		{
 			// get field
 			$field = acf_get_field( $key );
+			
+			
+			// validate field
+			if( !$field )
+			{
+				continue;
+			}
+			
 			
 			// update field
 			acf_update_value( $value, $post_id, $field );

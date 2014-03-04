@@ -61,7 +61,7 @@ class acf_field_true_false extends acf_field
 		
 		
 		// html
-		echo '<ul class="acf-checkbox-list ' . acf_esc_attr($field['class']) . '">';
+		echo '<ul class="acf-checkbox-list acf-bl ' . acf_esc_attr($field['class']) . '">';
 			echo '<input type="hidden" name="' . acf_esc_attr($field['name']) . '" value="0" />';
 			echo '<li><label><input ' . acf_esc_attr($atts) . '/>' . $field['message'] . '</label></li>';
 		echo '</ul>';

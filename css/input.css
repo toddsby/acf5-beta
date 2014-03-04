@@ -555,10 +555,6 @@ ul.acf-radio-list.pill li label input {
     margin-bottom: -1px;
 }
 
-.acf_postbox > .inside > .field_type-tab + .field {
-	border-top: 0 none;
-}
-
 .hidden-by-tab {
 	display: none;
 }

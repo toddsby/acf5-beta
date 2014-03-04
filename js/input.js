@@ -5155,7 +5155,7 @@ acf.add_action('ready append', function( $el ){
 			});
 			
 		}).add_action('load', function( $el ){
-		
+			
 			// vars
 			var wp_content = $('#wp-content-wrap').exists(),
 				wp_acf_settings = $('#wp-acf_settings-wrap').exists()

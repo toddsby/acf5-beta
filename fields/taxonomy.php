@@ -408,7 +408,7 @@ class acf_field_taxonomy extends acf_field
 	
 		<div class="categorychecklist-holder">
 		
-			<ul class="acf-checkbox-list">
+			<ul class="acf-checkbox-list acf-bl">
 			
 				<?php if( $field['field_type'] == 'radio' && $field['allow_null'] ): ?>
 					<li>
@@ -637,7 +637,7 @@ elseif( $this->field['field_type'] == 'select' )
 		// wrap element
 		if( in_array($this->field['field_type'], array('checkbox', 'radio')) )
 		{
-			$output .= '<ul class="children">' . "\n";
+			$output .= '<ul class="children acf-bl">' . "\n";
 		}
 	}
 

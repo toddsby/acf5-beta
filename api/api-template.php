@@ -962,7 +962,7 @@ add_shortcode( 'acf', 'acf_shortcode' );
 function acf_form_head() {
 	
 	// verify nonce
-	if( acf_verify_nonce('input') )
+	if( acf_verify_nonce('acf_form') )
 	{
 		// validate data
 	    if( acf_validate_save_post(true) )
@@ -995,6 +995,62 @@ function acf_form_head() {
 
 
 /*
+*  _acf_pre_save_post
+*
+*  This filter will save post data for the acf_form function
+*
+*  @type	filter
+*  @date	17/01/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+add_filter('acf/pre_save_post', '_acf_pre_save_post', 0);
+
+function _acf_pre_save_post( $post_id ) {
+	
+	// validate post_id
+	if( !is_numeric($post_id) )
+	{
+		return $post_id;
+	}
+	
+	
+	// vars
+	$save = array(
+		'ID' => $post_id
+	);
+	
+	
+	// save post_title
+	if( isset($_POST['acf']['post_title']) )
+	{
+		$save['post_title'] = acf_extract_var($_POST['acf'], 'post_title');
+	}
+	
+	
+	// save post_content
+	if( isset($_POST['acf']['post_content']) )
+	{
+		$save['post_content'] = acf_extract_var($_POST['acf'], 'post_content');
+	}
+	
+	
+	// update post
+	if( count($save) > 1 )
+	{
+		wp_update_post( $save );
+	}
+	
+	
+	// return
+	return $post_id;
+}
+
+
+/*
 *  acf_form()
 *
 *  This function is used to create an ACF form.
@@ -1020,6 +1076,10 @@ function acf_form_head() {
 
 function acf_form( $args = array() ) {
 	
+	// vars
+	$url = home_url( $_SERVER['REQUEST_URI'] );
+	
+	
 	// defaults
 	$args = acf_parse_args( $args, array(
 		'id'					=> 'acf-form-1',
@@ -1027,6 +1087,8 @@ function acf_form( $args = array() ) {
 		'post_type'				=> false,
 		'field_groups'			=> false,
 		'fields'				=> false,
+		'post_title'			=> true,
+		'post_content'			=> true,
 		'form'					=> true,
 		'form_attributes'		=> array(
 			'id'					=> 'post',
@@ -1034,13 +1096,14 @@ function acf_form( $args = array() ) {
 			'action'				=> '',
 			'method'				=> 'post',
 		),
-		'return'				=> add_query_arg( 'updated', 'true', get_permalink() ),
+		'return'				=> add_query_arg( 'updated', 'true', $url ),
 		'html_before_fields'	=> '',
 		'html_after_fields'		=> '',
 		'submit_value'			=> __("Update", 'acf'),
 		'updated_message'		=> __("Post updated", 'acf'),
 		'label_placement'		=> 'top',
-		'instruction_placement'	=> 'label' 
+		'instruction_placement'	=> 'label',
+		'field_el'				=> 'div'
 	));
 	
 	
@@ -1055,6 +1118,30 @@ function acf_form( $args = array() ) {
 	// vars
 	$field_groups = array();
 	$fields = array();
+	
+	
+	// post_title
+	if( $args['post_title'] )
+	{
+		$fields[] = acf_get_valid_field(array(
+			'name'		=> 'post_title',
+			'label'		=> 'Title',
+			'type'		=> 'text',
+			'value'		=> get_post_field('post_title', $args['post_id'])
+		));
+	}
+	
+	
+	// post_content
+	if( $args['post_content'] )
+	{
+		$fields[] = acf_get_valid_field(array(
+			'name'		=> 'post_content',
+			'label'		=> 'Content',
+			'type'		=> 'wysiwyg',
+			'value'		=> get_post_field('post_content', $args['post_id'])
+		));
+	}
 	
 	
 	// specific fields
@@ -1104,7 +1191,7 @@ function acf_form( $args = array() ) {
 	
 	
 	// display form
-	if( $options['form'] ): ?>
+	if( $args['form'] ): ?>
 	<form <?php acf_esc_attr_e( $args['form_attributes']); ?>>
 	<?php endif; 
 		
@@ -1112,35 +1199,38 @@ function acf_form( $args = array() ) {
 	// render post data
 	acf_form_data(array( 
 		'post_id'	=> $args['post_id'], 
-		'nonce'		=> 'post' 
+		'nonce'		=> 'acf_form' 
 	));
 	
 	?>
 	<div class="acf-hidden">
 		<input type="hidden" name="return" value="<?php echo $args['return']; ?>" />
+		<input type="hidden" name="post_id" value="<?php echo $args['post_id']; ?>" />
 	</div>
 	
-	<div id="poststuff">
+	<div class="acf-form-fields">
 	<?php
 	
 	// html before fields
 	echo $args['html_before_fields'];
 	
 	
-	// render
+	// start table
 	if( $args['label_placement'] == 'left' )
 	{
-		?>
-		<table class="acf-table">
-			<tbody>
-				<?php acf_render_fields( $args['post_id'], $fields, 'tr', $args['instruction_placement'] ); ?>
-			</tbody>
-		</table>
-		<?php
+		$args['field_el'] = 'tr';
+		
+		?><table class="acf-table"><tbody><?php
 	}
-	else
+	
+	
+	acf_render_fields( $args['post_id'], $fields, $args['field_el'], $args['instruction_placement'] );
+	
+	
+	// end table
+	if( $args['label_placement'] == 'left' )
 	{
-		acf_render_fields( $args['post_id'], $fields, 'div', $args['instruction_placement'] );
+		?></tbody></table><?php
 	}
 	
 	
@@ -1149,17 +1239,17 @@ function acf_form( $args = array() ) {
 	
 	?>
 	
+	</div><!-- <div id="poststuff"> -->
+	
 	<?php if( $args['form'] ): ?>
 	<!-- Submit -->
-	<div id="acf-form-submit">
-		<input class="acf-button blue" type="submit" value="<?php echo $options['submit_value']; ?>" />
+	<div class="acf-form-submit">
+		<input class="acf-button blue" type="submit" value="<?php echo $args['submit_value']; ?>" />
 	</div>
 	<!-- / Submit -->
 	<?php endif; ?>
 	
-	</div><!-- <div id="poststuff"> -->
-	
-	<?php if( $options['form'] ): ?>
+	<?php if( $args['form'] ): ?>
 	</form>
 	<?php endif;
 }
@@ -1351,79 +1441,32 @@ function acf_convert_field_names_to_keys( $value, $field )
 /*
 *  Depreceated Functions
 *
-*  @description: 
-*  @created: 23/07/12
-*/
-
-
-/*--------------------------------------------------------------------------------------
-*
-*	reset_the_repeater_field
-*
-*	@author Elliot Condon
-*	@depreciated: 3.3.4 - now use has_sub_field
-*	@since 1.0.3
-* 
-*-------------------------------------------------------------------------------------*/
-
-function reset_the_repeater_field()
-{
-	// do nothing
-}
-
-
-/*--------------------------------------------------------------------------------------
-*
-*	the_repeater_field
-*
-*	@author Elliot Condon
-*	@depreciated: 3.3.4 - now use has_sub_field
-*	@since 1.0.3
-* 
-*-------------------------------------------------------------------------------------*/
-
-function the_repeater_field($field_name, $post_id = false)
-{
-	return has_sub_field($field_name, $post_id);
-}
-
-
-/*--------------------------------------------------------------------------------------
-*
-*	the_flexible_field
-*
-*	@author Elliot Condon
-*	@depreciated: 3.3.4 - now use has_sub_field
-*	@since 3.?.?
-* 
-*-------------------------------------------------------------------------------------*/
-
-function the_flexible_field($field_name, $post_id = false)
-{
-	return has_sub_field($field_name, $post_id);
-}
-
-/*
-*  acf_filter_post_id()
-*
-*  This is a deprecated function which is now run through a filter
+*  These functions are outdated
 *
 *  @type	function
-*  @since	3.6
-*  @date	29/01/13
+*  @date	4/03/2014
+*  @since	1.0.0
 *
-*  @param	mixed	$post_id
-*
-*  @return	mixed	$post_id
+*  @param	n/a
+*  @return	n/a
 */
 
-function acf_filter_post_id( $post_id )
-{
-	return apply_filters('acf/get_post_id', $post_id );
+function reset_the_repeater_field() {
+	
+	return reset_rows();
+	
 }
 
+function the_repeater_field( $field_name, $post_id = false ) {
+	
+	return has_sub_field( $field_name, $post_id );
+	
+}
 
+function the_flexible_field( $field_name, $post_id = false ) {
+	
+	return has_sub_field( $field_name, $post_id );
+	
+}
 
-
-
- ?>
+?>
