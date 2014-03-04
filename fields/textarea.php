@@ -19,7 +19,7 @@ class acf_field_textarea extends acf_field
 		$this->label = __("Text Area",'acf');
 		$this->defaults = array(
 			'default_value'	=> '',
-			'formatting' 	=> 'br',
+			'formatting' 	=> 'html',
 			'maxlength'		=> '',
 			'placeholder'	=> '',
 			'readonly'		=> 0,
@@ -164,11 +164,12 @@ class acf_field_textarea extends acf_field
 			'prefix'		=> $field['prefix'],
 			'value'			=> $field['formatting'],
 			'choices'		=> array(
-				'none'			=> __("No formatting",'acf'),
-				'br'			=> __("Convert new lines into &lt;br /&gt; tags",'acf'),
-				'html'			=> __("Convert HTML into tags",'acf')
+				'html'			=> __("Automatically add paragraphs",'acf'),
+				'br'			=> __("Automatically add &lt;br&gt;",'acf'),
+				'none'			=> __("Plain text",'acf')
 			)
 		));
+		
 		
 		
 	}
@@ -214,12 +215,10 @@ class acf_field_textarea extends acf_field
 		}
 		elseif( $field['formatting'] == 'html' )
 		{
-			//$value = html_entity_decode($value);
-			//$value = nl2br($value);
+			$value = wpautop($value);
 		}
 		elseif( $field['formatting'] == 'br' )
 		{
-			$value = htmlspecialchars($value, ENT_QUOTES);
 			$value = nl2br($value);
 		}
 		
