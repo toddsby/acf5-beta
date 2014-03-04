@@ -123,6 +123,13 @@ class acf_settings_export {
 			$field_group = acf_get_field_group( $key );
 			
 			
+			// validate field group
+			if( empty($field_group) )
+			{
+				continue;
+			}
+			
+			
 			// load fields
 			$fields = acf_get_fields( $field_group );
 			
@@ -202,7 +209,7 @@ class acf_settings_export {
 		// validate error
 		if( $file['error'] )
 		{
-			acf_add_admin_notice('Error uploading file. Please try again', 'error');
+			acf_add_admin_notice(__('Error uploading file. Please try again', 'acf'), 'error');
 			return;
 		}
 		
@@ -210,7 +217,7 @@ class acf_settings_export {
 		// validate type
 		if( $file['type'] !== 'application/json' )
 		{
-			acf_add_admin_notice('Incorrect file type', 'error');
+			acf_add_admin_notice(__('Incorrect file type', 'acf'), 'error');
 			return;
 		}
 		
@@ -226,7 +233,7 @@ class acf_settings_export {
 		// validate json
     	if( empty($json) )
     	{
-    		acf_add_admin_notice('Import file empty', 'error');
+    		acf_add_admin_notice(__('Import file empty', 'acf'), 'error');
 	    	return;
     	}
     	
@@ -279,12 +286,18 @@ class acf_settings_export {
     	// messages
     	if( !empty($added) )
     	{
-	    	acf_add_admin_notice( '<b>Success.</b> Import tool added ' . count($added) . ' field groups: ' . implode(', ', $added));
+    		$message = __('<b>Success</b>. Import tool added %s field groups: %s', 'acf');
+    		$message = sprintf( $message, count($added), implode(', ', $added) );
+    		
+	    	acf_add_admin_notice( $mesasge );
     	}
     	
     	if( !empty($ignored) )
     	{
-	    	acf_add_admin_notice( '<b>Warning.</b> Import tool detected ' .count($ignored) . ' field groups already exist and have been ignored: ' . implode(', ', $ignored), 'error');
+    		$message = __('<b>Warning</b>. Import tool detected %s field groups already exist and have been ignored: %s', 'acf');
+    		$message = sprintf( $message, count($ignored), implode(', ', $ignored) );
+    		
+	    	acf_add_admin_notice( $message, 'error' );
     	}
     	
 		
