@@ -21,25 +21,47 @@ class acf_pro {
 		
 		// includes
 		$this->include_api();
-		$this->include_fields();
-		
+				
 		
 		// includes (admin only)
+		add_action('acf/include_field_types',					array($this, 'include_field_types'));
+		add_action('after_setup_theme',							array($this, 'include_after_theme'));
+		
+		
+		// actions
+		add_action('init',										array($this, 'wp_init'));
+		add_action('acf/input/admin_enqueue_scripts',			array($this, 'input_admin_enqueue_scripts'));
+		add_action('acf/field_group/admin_enqueue_scripts',		array($this, 'field_group_admin_enqueue_scripts'));
+		add_filter('acf/update_field',							array($this, 'update_field'), 1, 1);
+		
+		
+		// add-ons
+		add_filter('acf/is_add_on_active/slug=acf-pro',			'__return_true');
+	}
+	
+	
+	/*
+	*  include_after_theme
+	*
+	*  This function will include all files AFTER the theme has been setup.
+	*  By this point, the user can modify the acf settings via filters
+	*
+	*  @type	function
+	*  @date	26/02/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function include_after_theme() {
+		
+		// admin
 		if( is_admin() && acf_get_setting('show_admin') )
 		{
 			$this->include_admin();
 		}
 		
-		
-		// actions
-		add_action( 'init',										array( $this, 'wp_init') );
-		add_action( 'acf/input/admin_enqueue_scripts',			array( $this, 'input_admin_enqueue_scripts') );
-		add_action( 'acf/field_group/admin_enqueue_scripts',	array( $this, 'field_group_admin_enqueue_scripts') );
-		add_filter( 'acf/update_field',							array( $this, 'update_field'), 1, 1 );
-		
-		
-		// add-ons
-		add_filter('acf/is_add_on_active/slug=acf-pro', '__return_true');
 	}
 	
 	
@@ -64,7 +86,7 @@ class acf_pro {
 	
 	
 	/*
-	*  include_fields
+	*  include_field_types
 	*
 	*  This function will include all field files
 	*
@@ -76,7 +98,7 @@ class acf_pro {
 	*  @return	N/A
 	*/
 	
-	function include_fields() {
+	function include_field_types() {
 		
 		include_once('fields/repeater.php');
 		include_once('fields/flexible-content.php');

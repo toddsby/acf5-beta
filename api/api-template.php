@@ -262,6 +262,10 @@ function get_field( $selector, $post_id = false, $format_value = true ) {
 
 function get_field_object( $selector, $post_id = false, $format_value = true, $load_value = true ) {
 	
+	// include fields types
+	acf()->include_field_types();
+	
+	
 	// compatibilty
 	if( is_array($format_value) )
 	{

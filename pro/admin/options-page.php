@@ -117,7 +117,15 @@ class acf_pro_options_page {
 	function rule_match( $match, $rule, $options ) {
 		
 		// vars
-		$options_page = $options['options_page'];
+		$options_page = false;
+		
+		
+		// $options does not contain a default for "options_page"
+		if( isset($options['options_page']) )
+		{
+			$options_page = $options['options_page'];
+		}
+		
 
 		if( !$options_page )
 		{

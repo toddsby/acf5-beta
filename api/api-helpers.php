@@ -13,7 +13,7 @@
 *  @return	(mixed)
 */
 
-function acf_get_setting( $name ) {
+function acf_get_setting( $name, $allow_filter = true ) {
 	
 	// vars
 	$r = null;
@@ -27,7 +27,10 @@ function acf_get_setting( $name ) {
 	
 	
 	// filter for 3rd party customization
-	$r = apply_filters( "acf/settings/{$name}", $r );
+	if( $allow_filter )
+	{
+		$r = apply_filters( "acf/settings/{$name}", $r );
+	}
 	
 	
 	// return
