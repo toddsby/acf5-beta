@@ -578,6 +578,12 @@ var acf_field_group = {};
 		
 		duplicate : function( $field ){
 			
+			// save select values
+			$field.find('select').each(function(){
+				$(this).attr( 'data-val', $(this).val() );
+			});
+			
+			
 			// vars
 			var $el = $field.clone(),
 				$field_list	= $field.closest('.acf-field-list');
@@ -589,6 +595,12 @@ var acf_field_group = {};
 			
 			// append to table
 			$field_list.children('.field[data-key="acfcloneindex"]').before( $el );
+			
+			
+			// set select values
+			$el.find('select').each(function(){
+				$(this).val( $(this).attr('data-val') ).removeAttr('data-val');
+			});
 			
 			
 			// focus after form has dropped down
