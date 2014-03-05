@@ -63,14 +63,6 @@ New features in ACF5
 * New archives group in page_link field selection
 * New functions for options page allow for both parent and child menu pages
 
-Missing features in ACF5
-------------------------
-
-Please keep in mind that this is quite an early beta release and many core features are still missing. These will be added in over the next month and the above list will be updated.
-
-* WPML has not yet been tested
-* 3rd party fields are currently not supported
-
 Thank you
 ---------
 
