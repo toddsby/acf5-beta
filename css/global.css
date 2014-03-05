@@ -751,6 +751,13 @@ img.acf-fw {
 	display: block;
 }
 
+
+/* override WP CSS */
+.metabox-prefs label.acf-hidden {
+	display: none;
+}
+
+
 /*---------------------------------------------------------------------------------------------
 *
 *  wp-admin
