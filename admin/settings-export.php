@@ -187,7 +187,7 @@ class acf_settings_export {
 		header( "Content-Disposition: attachment; filename={$file_name}" );
 		header( "Content-Type: application/json" );
 		
-		echo json_encode($json, JSON_PRETTY_PRINT);
+		echo acf_json_encode( $json );
 		die;
 		
 	}

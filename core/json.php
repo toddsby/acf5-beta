@@ -16,13 +16,6 @@ class acf_json_actions {
 	
 	function update_field_group( $field_group ) {
 		
-		// validate
-		if( !acf_get_setting('json') )
-		{
-			return $field_group;
-		}
-		
-		
 		// vars
 		$path = acf_get_setting('save_json');
 		$file = $field_group['key'] . '.json';
@@ -66,7 +59,10 @@ class acf_json_actions {
 					'id',
 					'class',
 					'ancestors',
-					'field_group'
+					'field_group',
+					'_name',
+					'_input',
+					'_valid',
 				));
 
 				
@@ -86,7 +82,7 @@ class acf_json_actions {
 		
 		// write file
 		$f = fopen("{$path}/{$file}", 'w');
-		fwrite($f, json_encode($field_group, JSON_PRETTY_PRINT));
+		fwrite($f, acf_json_encode( $field_group ));
 		fclose($f);
 		
 		
