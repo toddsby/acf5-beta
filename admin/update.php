@@ -227,6 +227,14 @@ class acf_update {
 		$db_version = get_option('acf_version');
 
 		
+		// bail early if a new install
+		if( empty($db_version) )
+		{
+			update_option('acf_version', $plugin_version );
+			return;
+		}
+		
+		
 		// bail early if versions match
 		if( $plugin_version == $db_version )
 		{
