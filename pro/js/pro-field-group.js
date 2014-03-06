@@ -8,16 +8,13 @@
 	    	var _this = this;
 	    	
 	    	
-	    	acf.add_action('append sortstop', function( $el ){
+	    	acf.add_action('open change sortstop', function( $el ){
 			    
-			    if( $el.is('.field') )
-			    {
-			    	// If this field has been dropped in a new list, make sure the list hides the message
-			    	$el.siblings('.no-fields-message').hide();
-			    	
-			    	
-				    _this.render_field( $el );
-			    }
+			    // If this field has been dropped in a new list, make sure the list hides the message
+		    	$el.siblings('.no-fields-message').hide();
+		    	
+		    	
+			    _this.render_field( $el );
 				
 		    });
 		    
@@ -157,7 +154,7 @@
 			this.$el.on('click', '.acf-field[data-name="layout"][data-option="repeater"] input', function( e ){
 				
 				// render
-				acf_field_group.pro.repeater.render( $(this).closest('.field') );
+				_this.render( $(this).closest('.field') );
 				
 			});
 			
@@ -167,11 +164,19 @@
 		render : function( $el ){
 			
 			// vars
-			var layout = $el.find('tr[data-name="layout"]:first input:checked').val()
+			var layout = $el.find('tr[data-name="layout"]:first input:checked').val(),
+				$field_list = $el.find('tr[data-name="sub_fields"]:first .acf-field-list:first');
 			
 			
 			// add class
-			$el.find('tr[data-name="sub_fields"]:first .acf-field-list:first').removeClass('layout-row layout-table').addClass( 'layout-' + layout );
+			$field_list.removeClass('layout-row layout-table').addClass( 'layout-' + layout );
+			
+			
+			// sortable
+			if( ! $field_list.hasClass('ui-sortable') )
+			{
+				acf_field_group.fields.init_field_list( $field_list );
+			}
 			
 		}
 		

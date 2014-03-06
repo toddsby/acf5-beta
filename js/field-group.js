@@ -120,22 +120,7 @@ var acf_field_group = {};
 			
 			
 			// sortable
-			this.$el.find('.acf-field-list').sortable({
-				connectWith: '.acf-field-list',
-				update: function(event, ui){
-					
-					// vars
-					var $el = ui.item;
-					
-					
-					_this.render();
-					
-					
-					acf.do_action('sortstop', $el);
-					
-				},
-				handle: '.acf-icon'
-			});
+			this.init_field_list( this.$el.find('.acf-field-list') );
 			
 			
 			// events
@@ -203,6 +188,34 @@ var acf_field_group = {};
 				
 				_this.save_field( $(this).closest('.field') );
 				
+			});
+			
+		},
+		
+		init_field_list : function( $el ){
+			
+			// reference
+			var _this = this;
+			
+			
+			// sortable
+			$el.sortable({
+				connectWith: '.acf-field-list',
+				update: function(event, ui){
+					
+					// vars
+					var $el = ui.item;
+					
+					
+					// render
+					_this.render();
+					
+					
+					// actions
+					acf.do_action('sortstop', $el);
+					
+				},
+				handle: '.acf-icon'
 			});
 			
 		},
@@ -684,8 +697,10 @@ var acf_field_group = {};
 			
 			// update_order_numbers
 			this.$el.find('.acf-field-list').each(function(){
-			
-				$(this).children('.field').each(function( i ){
+				
+				var $fields = $(this).children('.field').not('[data-id="acfcloneindex"]');
+				
+				$fields.each(function( i ){
 					
 					// vars
 					var menu_order = _this.get_field_meta( $(this), 'menu_order' );
@@ -708,6 +723,11 @@ var acf_field_group = {};
 					$(this).find('.li-field_order:first .acf-icon').html( i+1 );
 					
 				});
+				
+				if( ! $fields.exists() )
+				{
+					$(this).children('.no-fields-message').show();
+				}
 				
 			});
 		},
