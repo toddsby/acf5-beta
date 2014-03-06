@@ -1285,7 +1285,6 @@ var acf = {
 		
 		init : function(){
 			
-			console.log( this );
 			// reference
 			var _this = this;
 			
