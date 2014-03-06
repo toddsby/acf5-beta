@@ -19,9 +19,7 @@ class acf_input {
 	function __construct() {
 		
 		add_action('acf/input/admin_enqueue_scripts', 			array($this, 'admin_enqueue_scripts'), 0, 0);
-		add_action('acf/input/admin_head', 						array($this, 'admin_head'), 0, 0);
 		add_action('acf/input/admin_footer', 					array($this, 'admin_footer'), 0, 0);
-		add_action('acf/input/form_data', 						array($this, 'form_data'), 0, 1);
 		
 		
 		// ajax
@@ -77,46 +75,7 @@ class acf_input {
 		));
 	}
 	
-	
-	/*
-	*  admin_head
-	*
-	*  action called when rendering the head of an admin screen. Used primarily for passing PHP to JS
-	*
-	*  @type	action (acf/input/admin_head)
-	*  @date	27/05/13
-	*
-	*  @param	N/A
-	*  @return	N/A
-	*/
-	
-	function admin_head() {
-		
-		
-		
-	}
-	
-	
-	/*
-	*  form_data
-	*
-	*  This function will render acf hidden data such as inputs, js and css
-	*
-	*  @type	function
-	*  @date	8/10/13
-	*  @since	5.0.0
-	*
-	*  @param	$args (array)
-	*  @return	n/a
-	*/
-	
-	function form_data( $args ) {
-		
-		
-		
-	}
-	
-	
+
 	/*
 	*  admin_footer
 	*
@@ -272,18 +231,18 @@ class acf_input_listener {
 		
 		if( is_admin() )
 		{
-			add_action('admin_head', 			array( $this, 'admin_head'), 15 );
-			add_action('admin_footer', 			array( $this, 'admin_footer'), 5 );
+			add_action('admin_head', 			array( $this, 'admin_head'), 20 );
+			add_action('admin_footer', 			array( $this, 'admin_footer'), 20 );
 		}
 		else
 		{
-			add_action('wp_head', 				array( $this, 'admin_head'), 15 );
-			add_action('wp_footer', 			array( $this, 'admin_footer'), 5 );
+			add_action('wp_head', 				array( $this, 'admin_head'), 20 );
+			add_action('wp_footer', 			array( $this, 'admin_footer'), 20 );
 			
 			
 			// wp-login.php
-			add_action('login_head', 			array( $this, 'admin_head'), 15 );
-			add_action('login_footer', 			array( $this, 'admin_footer'), 5 );
+			add_action('login_head', 			array( $this, 'admin_head'), 20 );
+			add_action('login_footer', 			array( $this, 'admin_footer'), 20 );
 		}
 	}
 	

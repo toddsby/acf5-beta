@@ -37,7 +37,7 @@ class acf_field_wysiwyg extends acf_field
 	/*
 	*  toolbars()
 	*
-	*  This filter allowsyou to customize the WYSIWYG toolbars
+	*  This filter allows you to customize the WYSIWYG toolbars
 	*
 	*  @param	$toolbars - an array of toolbars
 	*
@@ -70,6 +70,26 @@ class acf_field_wysiwyg extends acf_field
    	
    		
 	   	return $toolbars;
+   	}
+   	
+   	
+   	/*
+   	*  input_form_data
+   	*
+   	*  This function is called once on the input page between the head and footer
+   	*
+   	*  @type	function
+   	*  @date	6/03/2014
+   	*  @since	5.0.0
+   	*
+   	*  @param	$post_id (int)
+   	*  @return	$post_id (int)
+   	*/
+   	
+   	function input_form_data( $args ) {
+	   	
+		wp_editor( '', 'acf_settings' );
+	
    	}
    	
    	
@@ -120,9 +140,6 @@ class acf_field_wysiwyg extends acf_field
 		
 		})(jQuery);	
 		</script>
-		<div class="acf-hidden" style="display:none;">
-			<?php wp_editor( '', 'acf_settings' ); ?>
-		</div>
 		<?php
 	}
 	   	
