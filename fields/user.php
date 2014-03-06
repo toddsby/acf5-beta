@@ -47,8 +47,8 @@ class acf_field_user extends acf_field
 	*  @return	$post_id (int)
 	*/
 	
-	function ajax_query()
-   	{
+	function ajax_query() {
+
    		// options
    		$options = acf_parse_args( $_GET, array(
 			'post_id'					=>	0,
@@ -171,28 +171,6 @@ class acf_field_user extends acf_field
 		echo json_encode( $r );
 		die();
 			
-	}
-	
-	
-	/*
-	*  input_admin_head()
-	*
-	*  This action is called in the admin_head action on the edit screen where your field is created.
-	*  Use this action to add css and javascript to assist your render_field() action.
-	*
-	*  @info	http://codex.wordpress.org/Plugin_API/Action_Reference/admin_head
-	*  @type	action
-	*  @since	3.6
-	*  @date	23/01/13
-	*/
-
-	function input_admin_head()
-	{
-		if( ! function_exists( 'get_editable_roles' ) )
-		{ 
-			// if using front-end forms then we need to add this core file
-			require_once( ABSPATH . '/wp-admin/includes/user.php' ); 
-		}
 	}
 	
 	
