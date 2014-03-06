@@ -20,7 +20,6 @@ class acf_settings_updates {
 	
 	function __construct() {
 	
-	
 		// actions
 		add_action( 'admin_menu', 				array( $this, 'admin_menu' ), 20 );
 	}
