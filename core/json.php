@@ -19,7 +19,6 @@ class acf_json_actions {
 		// vars
 		$path = acf_get_setting('save_json');
 		$file = $field_group['key'] . '.json';
-		$id_ref = array();
 		
 		
 		// default
@@ -38,7 +37,9 @@ class acf_json_actions {
 		
 		
 		// load fields
-		$fields = acf_get_fields( $field_group );
+		$id_ref = array();
+		$fields = array();
+		$this->populate_fields( $field_group, $fields );
 		
 		
 		// extract field group ID and add to ref
@@ -74,12 +75,12 @@ class acf_json_actions {
 				$field['parent'] = $id_ref[ $field['parent'] ];
 				
 				
-				// append field
+				// append to fields
 				$field_group['fields'][] = $field;
 			}
 		}
 		
-		
+				
 		// write file
 		$f = fopen("{$path}/{$file}", 'w');
 		fwrite($f, acf_json_encode( $field_group ));
@@ -89,6 +90,29 @@ class acf_json_actions {
 		// return
 		return $field_group;
 			
+	}
+	
+	
+	function populate_fields( $parent, &$return ) {
+		
+		// get fields
+		$fields = acf_get_fields( $parent );
+		
+		
+		// load fields from DB
+		if( !empty($fields) )
+		{
+			foreach( $fields as $field )
+			{
+				// append to return
+				$return[] = $field;
+				
+				
+				// attempt next level
+				$this->populate_fields( $field, $return );
+			}
+		}
+		
 	}
 	
 	
