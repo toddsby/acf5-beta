@@ -1135,7 +1135,7 @@
 		"outputAbbreviatedPath": "\/js\/field-group.min.js",
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/js\/field-group.min.js": {
 		"fileType": 64,
@@ -1451,7 +1451,7 @@
 		"outputAbbreviatedPath": "\/pro\/js\/pro-field-group.min.js",
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/pro\/js\/pro-field-group.min.js": {
 		"fileType": 64,
@@ -1471,7 +1471,7 @@
 		"outputAbbreviatedPath": "\/pro\/js\/pro-input.min.js",
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/pro\/js\/pro-input.min.js": {
 		"fileType": 64,
