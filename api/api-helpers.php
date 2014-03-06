@@ -570,7 +570,21 @@ function acf_esc_attr( $atts )
 	// loop through and render
 	foreach( $atts as $k => $v )
 	{
-		$v = trim( $v );
+		if( is_array($v) || is_object($v) )
+		{
+			$v = '';
+		}
+		
+		if( is_bool($v) )
+		{
+			$v = $v ? 1 : 0;
+		}
+		
+		if( is_string($v) )
+		{
+			$v = trim( $v );
+		}
+		
 		$e[] = $k . '="' . esc_attr( $v ) . '"';
 	}
 	
