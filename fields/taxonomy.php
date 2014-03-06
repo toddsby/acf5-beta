@@ -16,7 +16,7 @@ class acf_field_taxonomy extends acf_field
 		// vars
 		$this->name = 'taxonomy';
 		$this->label = __("Taxonomy",'acf');
-		$this->category = __("Relational",'acf');
+		$this->category = 'relational';
 		$this->defaults = array(
 			'taxonomy' 			=> 'category',
 			'field_type' 		=> 'checkbox',

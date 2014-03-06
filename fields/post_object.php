@@ -16,7 +16,7 @@ class acf_field_post_object extends acf_field
 		// vars
 		$this->name = 'post_object';
 		$this->label = __("Post Object",'acf');
-		$this->category = __("Relational",'acf');
+		$this->category = 'relational';
 		$this->defaults = array(
 			'post_type'		=> array(),
 			'taxonomy'		=> array(),

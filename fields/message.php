@@ -17,7 +17,7 @@ class acf_field_message extends acf_field
 		// vars
 		$this->name = 'message';
 		$this->label = __("Message",'acf');
-		$this->category = __("Layout",'acf');
+		$this->category = 'layout';
 		$this->defaults = array(
 			'message'	=>	'',
 		);

@@ -16,7 +16,7 @@ class acf_field_google_map extends acf_field
 		// vars
 		$this->name = 'google_map';
 		$this->label = __("Google Map",'acf');
-		$this->category = __("jQuery",'acf');
+		$this->category = 'jquery';
 		$this->defaults = array(
 			'height'		=> '',
 			'center_lat'	=> '',

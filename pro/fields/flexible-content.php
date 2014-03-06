@@ -17,7 +17,7 @@ class acf_field_flexible_content extends acf_field
 		// vars
 		$this->name = 'flexible_content';
 		$this->label = __("Flexible Content",'acf');
-		$this->category = __("Layout",'acf');
+		$this->category = 'layout';
 		$this->defaults = array(
 			'layouts'		=>	array(),
 			'min'			=>	'',
@@ -303,7 +303,7 @@ class acf_field_flexible_content extends acf_field
 											'prefix'	=> $layout_prefix,
 											'value'		=> $layout['display'],
 											'choices'	=> array(
-												'row' 		=> __("Row",'acf'),
+												'row' 		=> __("Block",'acf'),
 												'table' 	=> __("Table",'acf'), 
 											),
 										));

@@ -17,7 +17,7 @@ class acf_field_file extends acf_field
 		// vars
 		$this->name = 'file';
 		$this->label = __("File",'acf');
-		$this->category = __("Content",'acf');
+		$this->category = 'content';
 		$this->defaults = array(
 			'return_format'	=>	'object',
 			'library' 		=>	'all'

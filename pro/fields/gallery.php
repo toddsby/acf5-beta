@@ -17,7 +17,7 @@ class acf_field_gallery extends acf_field
 		// vars
 		$this->name = 'gallery';
 		$this->label = __("Gallery",'acf');
-		$this->category = __("Content",'acf');
+		$this->category = 'content';
 		$this->defaults = array(
 			'preview_size'	=> 'thumbnail',
 			'library'		=> 'all',

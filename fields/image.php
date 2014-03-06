@@ -17,7 +17,7 @@ class acf_field_image extends acf_field
 		// vars
 		$this->name = 'image';
 		$this->label = __("Image",'acf');
-		$this->category = __("Content",'acf');
+		$this->category = 'content';
 		$this->defaults = array(
 			'return_format'	=>	'array',
 			'preview_size'	=>	'thumbnail',

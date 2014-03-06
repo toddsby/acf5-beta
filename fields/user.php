@@ -16,7 +16,7 @@ class acf_field_user extends acf_field
 		// vars
 		$this->name = 'user';
 		$this->label = __("User",'acf');
-		$this->category = __("Relational",'acf');
+		$this->category = 'relational';
 		$this->defaults = array(
 			'role' 			=> '',
 			'multiple' 		=> 0,

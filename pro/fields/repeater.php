@@ -17,7 +17,7 @@ class acf_field_repeater extends acf_field
 		// vars
 		$this->name = 'repeater';
 		$this->label = __("Repeater",'acf');
-		$this->category = __("Layout",'acf');
+		$this->category = 'layout';
 		$this->defaults = array(
 			'sub_fields'	=> array(),
 			'min'			=> 0,
@@ -354,7 +354,7 @@ class acf_field_repeater extends acf_field
 			'layout'		=> 'horizontal',
 			'choices'		=> array(
 				'table'			=> __('Table','acf'),
-				'row'			=> __('Row','acf')
+				'row'			=> __('Block','acf')
 			)
 		));
 		

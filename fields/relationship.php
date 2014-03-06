@@ -16,7 +16,7 @@ class acf_field_relationship extends acf_field
 		// vars
 		$this->name = 'relationship';
 		$this->label = __("Relationship",'acf');
-		$this->category = __("Relational",'acf');
+		$this->category = 'relational';
 		$this->defaults = array(
 			'post_type'			=> array(),
 			'taxonomy'			=> array(),

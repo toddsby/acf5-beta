@@ -17,7 +17,7 @@ class acf_field_date_picker extends acf_field
 		// vars
 		$this->name = 'date_picker';
 		$this->label = __("Date Picker",'acf');
-		$this->category = __("jQuery",'acf');
+		$this->category = 'jquery';
 		$this->defaults = array(
 			'date_format'		=> 'Ymd',
 			'display_format'	=> 'd/m/Y',

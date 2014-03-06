@@ -17,7 +17,7 @@ class acf_field_oembed extends acf_field
 		// vars
 		$this->name = 'oembed';
 		$this->label = __("oEmbed",'acf');
-		$this->category = __("Content",'acf');
+		$this->category = 'content';
 		$this->defaults = array(
 			'width'		=> '',
 			'height'	=> '',

@@ -17,7 +17,7 @@ class acf_field_tab extends acf_field
 		// vars
 		$this->name = 'tab';
 		$this->label = __("Tab",'acf');
-		$this->category = __("Layout",'acf');
+		$this->category = 'layout';
 		
 		
 		// do not delete!

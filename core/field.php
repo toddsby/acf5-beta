@@ -32,15 +32,15 @@ class acf_field {
 		// value
 		$this->add_filter("acf/load_value/type={$this->name}",			array($this, 'load_value'), 10, 3);
 		$this->add_filter("acf/update_value/type={$this->name}",		array($this, 'update_value'), 10, 3);
-		$this->add_filter("acf/delete_value/type={$this->name}",		array($this, 'delete_value'), 10, 3);
 		$this->add_filter("acf/format_value/type={$this->name}",		array($this, 'format_value'), 10, 4);
 		$this->add_filter("acf/validate_value/type={$this->name}",		array($this, 'validate_value'), 10, 4);
+		$this->add_action("acf/delete_value/type={$this->name}",		array($this, 'delete_value'), 10, 2);
 		
 		
 		// field
-		$this->add_filter("acf/load_field/type={$this->name}",				array($this, 'load_field'), 10, 3);
+		$this->add_filter("acf/load_field/type={$this->name}",				array($this, 'load_field'), 10, 1);
 		$this->add_filter("acf/update_field/type={$this->name}",			array($this, 'update_field'), 10, 1);
-		$this->add_filter("acf/delete_field/type={$this->name}",			array($this, 'delete_field'), 10, 2);
+		$this->add_filter("acf/delete_field/type={$this->name}",			array($this, 'delete_field'), 10, 1);
 		$this->add_action("acf/render_field/type={$this->name}",			array($this, 'render_field'), 10, 1);
 		$this->add_action("acf/render_field_options/type={$this->name}",	array($this, 'render_field_options'), 10, 1);
 		
@@ -125,15 +125,36 @@ class acf_field {
 	
 	function get_field_types( $fields ) {
 		
+		$l10n = array(
+			'basic'			=> __('Basic', 'acf'),
+			'content'		=> __('Content', 'acf'),
+			'choice'		=> __('Choice', 'acf'),
+			'relational'	=> __('Relational', 'acf'),
+			'jquery'		=> __('jQuery', 'acf'),
+			'layout'		=> __('Layout', 'acf'),
+		);
+		
+		
 		// defaults
 		if( !$this->category )
 		{
-			$this->category = __('Basic', 'acf');
+			$this->category = 'basic';
+		}
+		
+		
+		// cat
+		if( isset($l10n[ $this->category ]) )
+		{
+			$cat = $l10n[ $this->category ];
+		}
+		else
+		{
+			$cat = $this->category;
 		}
 		
 		
 		// add to array
-		$fields[ $this->category ][ $this->name ] = $this->label;
+		$fields[ $cat ][ $this->name ] = $this->label;
 		
 		
 		// return array

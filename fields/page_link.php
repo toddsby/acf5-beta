@@ -16,7 +16,7 @@ class acf_field_page_link extends acf_field
 		// vars
 		$this->name = 'page_link';
 		$this->label = __("Page Link",'acf');
-		$this->category = __("Relational",'acf');
+		$this->category = 'relational';
 		$this->defaults = array(
 			'post_type'		=> array(),
 			'taxonomy'		=> array(),

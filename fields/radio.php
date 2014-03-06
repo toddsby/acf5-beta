@@ -16,7 +16,7 @@ class acf_field_radio extends acf_field
 		// vars
 		$this->name = 'radio';
 		$this->label = __("Radio Button",'acf');
-		$this->category = __("Choice",'acf');
+		$this->category = 'choice';
 		$this->defaults = array(
 			'layout'			=>	'vertical',
 			'choices'			=>	array(),
