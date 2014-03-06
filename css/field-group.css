@@ -152,8 +152,7 @@
 	visibility: hidden;
 }
 
-.acf-field-list .field:hover .field-info .row-options,
-.acf-field-list .field:hover .field-info .row-options {
+.acf-field-list .field:hover > .field-info .row-options {
 	visibility: visible;
 }
 
