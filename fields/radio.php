@@ -219,8 +219,8 @@ class acf_field_radio extends acf_field
 		// default_value
 		acf_render_field_option( $this->name, array(
 			'label'			=> __('Default Value','acf'),
-			'instructions'	=> __('Enter each default value on a new line','acf'),
-			'type'			=> 'textarea',
+			'instructions'	=> __('Appears when creating a new post','acf'),
+			'type'			=> 'text',
 			'name'			=> 'default_value',
 			'prefix'		=> $field['prefix'],
 			'value'			=> $field['default_value'],
