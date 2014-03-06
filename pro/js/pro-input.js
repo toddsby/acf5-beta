@@ -110,7 +110,7 @@
 			
 			
 			// row limit reached
-			if( this.count() >= this.o.max_rows )
+			if( this.count() >= this.o.max )
 			{
 				this.$el.addClass('disabled');
 				this.$el.find('> .acf-hl .acf-button').addClass('disabled');
@@ -130,9 +130,9 @@
 			
 			
 			// validate
-			if( this.count() >= this.o.max_rows )
+			if( this.count() >= this.o.max )
 			{
-				alert( acf._e('repeater','max').replace('{max}', this.o.max_rows) );
+				alert( acf._e('repeater','max').replace('{max}', this.o.max) );
 				return false;
 			}
 			
@@ -188,9 +188,9 @@
 			
 			
 			// validate
-			if( this.count() <= this.o.max_rows )
+			if( this.count() <= this.o.min )
 			{
-				alert( acf._e('repeater','min').replace('{min}', this.o.min_rows) );
+				alert( acf._e('repeater','min').replace('{min}', this.o.min) );
 				return false;
 			}
 			
