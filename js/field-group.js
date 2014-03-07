@@ -358,7 +358,7 @@ var acf_field_group = {};
 				
 				
 				// add $tr
-				$tbody.children('.field_save').before( $tr );
+				$tbody.children('.acf-field[data-name="conditional_logic"]').before( $tr );
 				
 				
 				var ajax_data = {
