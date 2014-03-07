@@ -27,8 +27,8 @@ class acf_pro_options_page {
 		);
 		
 		
-		// add parent page
-		acf_add_options_page(array(
+		// add default options page to settings
+		acf_update_setting('options_page', array(
 			'page_title' 	=> __('Options','acf'),
 			'menu_title'	=> __('Options','acf'),
 			'menu_slug' 	=> 'acf-options',
@@ -37,7 +37,7 @@ class acf_pro_options_page {
 			'position'		=> '90.025',
 			'icon_url'		=> false,
 		));
-			
+		
 		
 		// actions
 		add_action('admin_menu', array($this,'admin_menu'), 99, 0);
@@ -171,6 +171,7 @@ class acf_pro_options_page {
 		$pages = acf_get_options_pages();
 		
 		
+		// create pages
 		if( !empty($pages) )
 		{
 			foreach( $pages as $page )

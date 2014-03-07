@@ -246,7 +246,7 @@ function acf_get_valid_options_page( $page = '' ) {
 	// slug
 	if( $page['menu_slug'] == '' )
 	{
-		$page['menu_slug'] = sanitize_title( $page['menu_slug'] );
+		$page['menu_slug'] = 'acf-options-' . sanitize_title( $page['menu_title'] );
 	}
 	
 	
@@ -271,13 +271,25 @@ function acf_get_valid_options_page( $page = '' ) {
 function acf_get_options_pages() {
 	
 	// vars
-	$pages = false;
+	$pages = array();
+	
+	
+	// add parent page
+	if( $default = acf_get_setting('options_page') )
+	{
+		$pages[ $default['menu_slug'] ] = $default;
+	}
 	
 	
 	// get pages
 	if( !empty($GLOBALS['acf_options_pages']) )
 	{
-		$pages = $GLOBALS['acf_options_pages'];
+		$keys = array_keys($GLOBALS['acf_options_pages']);
+		
+		foreach( $keys as $key )
+		{
+			$pages[ $key ] = acf_extract_var($GLOBALS['acf_options_pages'], $key);
+		}
 	}
 	
 	

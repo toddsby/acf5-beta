@@ -39,6 +39,13 @@ class acf_admin {
 	
 	function admin_menu() {
 		
+		// bail early if no show_admin
+		if( !acf_get_setting('show_admin') )
+		{
+			return;
+		}
+		
+		
 		add_menu_page(__("Custom Fields",'acf'), __("Custom Fields",'acf'), 'manage_options', 'edit.php?post_type=acf-field-group', false, false, '80.025');
 		
 	}

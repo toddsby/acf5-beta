@@ -37,6 +37,13 @@ class acf_settings_export {
 	
 	function admin_menu() {
 		
+		// bail early if no show_admin
+		if( !acf_get_setting('show_admin') )
+		{
+			return;
+		}
+		
+		
 		// add page
 		$page = add_submenu_page('edit.php?post_type=acf-field-group', __('Import / Export','acf'), __('Import/Export','acf'), 'manage_options','acf-settings-export', array($this,'html') );
 		

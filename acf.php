@@ -79,6 +79,8 @@ class acf {
 		// includes
 		$this->include_api();
 		$this->include_core();
+		$this->include_forms();
+		$this->include_admin();
 		$this->include_pro();
 		
 		
@@ -98,59 +100,6 @@ class acf {
 		
 		//add_filter('posts_join', array($this, 'wp_posts_join'), 0, 2 );
 		//add_filter('posts_request', array($this, 'posts_request'), 0, 1 );
-	}
-	
-	
-	/*
-	*  include_after_plugins
-	*
-	*  description
-	*
-	*  @type	function
-	*  @date	5/03/2014
-	*  @since	5.0.0
-	*
-	*  @param	$post_id (int)
-	*  @return	$post_id (int)
-	*/
-	
-	function include_after_plugins() {
-		
-		// wpml
-		if( defined('ICL_SITEPRESS_VERSION') )
-		{
-			include_once('core/wpml.php');
-		}
-		
-	}
-	
-	
-	/*
-	*  include_after_theme
-	*
-	*  This function will include all files AFTER the theme has been setup.
-	*  By this point, the user can modify the acf settings via filters
-	*
-	*  @type	function
-	*  @date	26/02/2014
-	*  @since	5.0.0
-	*
-	*  @param	$post_id (int)
-	*  @return	$post_id (int)
-	*/
-	
-	function include_after_theme() {
-		
-		// admin
-		if( is_admin() && acf_get_setting('show_admin') )
-		{
-			$this->include_admin();
-		}
-		
-		
-		// include fields types
-		$this->include_field_types();
-		
 	}
 	
 	
@@ -194,12 +143,115 @@ class acf {
 		
 		include_once('core/field.php');
 		include_once('core/input.php');
-		include_once('core/location.php');
 		include_once('core/json.php');
+		include_once('core/location.php');
+		include_once('core/revisions.php');
 		
-		include_once('core/comment.php');
-		include_once('core/widget.php');
-		include_once('core/user.php');
+	}
+	
+	
+	/*
+	*  include_forms
+	*
+	*  This function will include all form files
+	*
+	*  @type	function
+	*  @date	28/09/13
+	*  @since	5.0.0
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	function include_forms() {
+		
+		include_once('forms/comment.php');
+		include_once('forms/post.php');
+		include_once('forms/taxonomy.php');
+		include_once('forms/user.php');
+		include_once('forms/widget.php');
+		
+	}
+	
+	
+	/*
+	*  include_admin
+	*
+	*  This function will include all admin files
+	*
+	*  @type	function
+	*  @date	4/03/2014
+	*  @since	5.0.0
+	*
+	*  @param	n/a
+	*  @return	n/a
+	*/
+	
+	function include_admin() {
+		
+		// bail early if not admin
+		if( !is_admin() )
+		{
+			return;
+		}
+		
+		
+		// admin
+		include_once('admin/admin.php');
+		include_once('admin/field-group.php');
+		include_once('admin/field-groups.php');
+		include_once('admin/update.php');
+		
+		
+		// settings
+		include_once('admin/settings-export.php');
+		include_once('admin/settings-addons.php');
+			
+	}
+	
+	
+	/*
+	*  include_after_plugins
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	5/03/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function include_after_plugins() {
+		
+		// wpml
+		if( defined('ICL_SITEPRESS_VERSION') )
+		{
+			include_once('core/wpml.php');
+		}
+		
+	}
+	
+	
+	/*
+	*  include_after_theme
+	*
+	*  This function will include all files AFTER the theme has been setup.
+	*  By this point, the user can modify the acf settings via filters
+	*
+	*  @type	function
+	*  @date	26/02/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function include_after_theme() {
+		
+		// include fields types
+		$this->include_field_types();
 		
 	}
 	
@@ -296,41 +348,6 @@ class acf {
 		{
 			include_once( acf_get_path('pro/acf-pro.php') );
 		}
-	}
-	
-	
-	/*
-	*  include_admin
-	*
-	*  This function will include all admin files
-	*
-	*  @type	function
-	*  @date	4/03/2014
-	*  @since	5.0.0
-	*
-	*  @param	n/a
-	*  @return	n/a
-	*/
-	
-	function include_admin() {
-		
-		// admin
-		include_once('admin/admin.php');
-		include_once('admin/revisions.php');
-		include_once('admin/update.php');
-		include_once('admin/field-group.php');
-		include_once('admin/field-groups.php');
-		
-		
-		// admin input
-		include_once('admin/post.php');
-		include_once('admin/taxonomy.php');
-		
-		
-		// settings
-		include_once('admin/settings-export.php');
-		include_once('admin/settings-addons.php');
-			
 	}
 	
 	

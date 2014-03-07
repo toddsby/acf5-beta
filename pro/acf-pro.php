@@ -21,11 +21,11 @@ class acf_pro {
 		
 		// includes
 		$this->include_api();
+		$this->include_admin();
 				
 		
 		// includes (admin only)
 		add_action('acf/include_field_types',					array($this, 'include_field_types'));
-		add_action('after_setup_theme',							array($this, 'include_after_theme'));
 		
 		
 		// actions
@@ -37,31 +37,6 @@ class acf_pro {
 		
 		// add-ons
 		add_filter('acf/is_add_on_active/slug=acf-pro',			'__return_true');
-	}
-	
-	
-	/*
-	*  include_after_theme
-	*
-	*  This function will include all files AFTER the theme has been setup.
-	*  By this point, the user can modify the acf settings via filters
-	*
-	*  @type	function
-	*  @date	26/02/2014
-	*  @since	5.0.0
-	*
-	*  @param	$post_id (int)
-	*  @return	$post_id (int)
-	*/
-	
-	function include_after_theme() {
-		
-		// admin
-		if( is_admin() && acf_get_setting('show_admin') )
-		{
-			$this->include_admin();
-		}
-		
 	}
 	
 	
@@ -86,6 +61,33 @@ class acf_pro {
 	
 	
 	/*
+	*  include_admin
+	*
+	*  This function will include all admin files
+	*
+	*  @type	function
+	*  @date	28/09/13
+	*  @since	5.0.0
+	*
+	*  @param	N/A
+	*  @return	N/A
+	*/
+	
+	function include_admin() {
+		
+		// options page
+		include_once('admin/options-page.php');
+		
+		// connect (update)
+		include_once('admin/connect.php');
+			
+		// settings
+		include_once('admin/settings-updates.php');
+		
+	}
+	
+	
+	/*
 	*  include_field_types
 	*
 	*  This function will include all field files
@@ -103,34 +105,6 @@ class acf_pro {
 		include_once('fields/repeater.php');
 		include_once('fields/flexible-content.php');
 		include_once('fields/gallery.php');
-		
-	}
-	
-	
-	/*
-	*  include_admin
-	*
-	*  This function will include all admin files
-	*
-	*  @type	function
-	*  @date	28/09/13
-	*  @since	5.0.0
-	*
-	*  @param	N/A
-	*  @return	N/A
-	*/
-	
-	function include_admin() {
-		
-		// connect (update)
-		include_once('admin/connect.php');
-		
-		// settings
-		include_once('admin/settings-updates.php');
-		
-		// options page
-		include_once('admin/options-page.php');
-		
 		
 	}
 	

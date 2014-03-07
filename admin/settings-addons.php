@@ -40,6 +40,13 @@ class acf_settings_addons {
 	
 	function admin_menu() {
 		
+		// bail early if no show_admin
+		if( !acf_get_setting('show_admin') )
+		{
+			return;
+		}
+		
+		
 		// add page
 		$page = add_submenu_page('edit.php?post_type=acf-field-group', __('Add-ons','acf'), __('Add-ons','acf'), 'manage_options','acf-settings-addons', array($this,'html') );
 		

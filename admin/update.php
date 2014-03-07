@@ -218,6 +218,13 @@ class acf_update {
 	
 	function admin_menu() {
 		
+		// bail early if no show_admin
+		if( !acf_get_setting('show_admin') )
+		{
+			return;
+		}
+		
+		
 		// update admin page
 		$page = add_submenu_page('edit.php?post_type=acf-field-group', __('Upgrade','acf'), __('Upgrade','acf'), 'manage_options','acf-upgrade', array($this,'html') );
 		
