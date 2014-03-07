@@ -427,7 +427,7 @@ img.acf-fw {
 .acf-error-message p {
 	font-size: 12px !important;
 	line-height: 14px;
-	margin: 10px 0;
+	margin: 10px 0 !important;
 	padding: 0;
 	text-shadow: none;
 	color: #fff;
