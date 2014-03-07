@@ -1057,13 +1057,15 @@
 			this.$el.find('.acf-gallery-attachments').unbind('sortable').sortable({
 				
 				items					: '.acf-gallery-attachment',
-				//handle				: '.acf-gallery-attachment',
 				forceHelperSize			: true,
 				forcePlaceholderSize	: true,
 				scroll					: true,
 				
 				start : function (event, ui) {
 					
+					ui.placeholder.html( ui.item.html() );
+					ui.placeholder.removeAttr('style');
+								
 					acf.do_action('sortstart', ui.item, ui.placeholder);
 					
 	   			},
@@ -1078,6 +1080,10 @@
 			
 			// render
 			this.render();
+			
+			
+			// resize
+			this.resize();
 					
 		},
 
@@ -1478,6 +1484,33 @@ close : function( $a ){
 					
 				}
 			});
+		},
+		
+		resize : function(){
+			
+			// vars
+			var min = 100,
+				max = 175,
+				columns = 4,
+				width = this.$el.width();
+			
+			
+			// get width
+			for( var i = 0; i < 10; i++ )
+			{
+				var w = width/i;
+				
+				if( min < w && w < max )
+				{
+					columns = i;
+					break;
+				}
+			}
+						
+			
+			// update data
+			this.$el.attr('data-columns', columns);
+			
 		}
 		
 	};
@@ -1519,6 +1552,17 @@ close : function( $a ){
 	*  @param	N/A
 	*  @return	N/A
 	*/
+	
+	$(window).on('resize', function(){
+		
+		acf.get_fields({ type : 'gallery'}).each(function(){
+			
+			acf.fields.gallery.set( $(this) ).resize();
+			
+		});
+		
+	});
+	
 	
 	$(document).on('click', '.acf-gallery .acf-gallery-attachment', function( e ){
 		
