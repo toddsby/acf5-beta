@@ -666,7 +666,7 @@ var acf_field_group = {};
 			
 			// give field a new id
 			$el.attr('data-key', new_id);
-			$el.attr('data-id', '');
+			$el.attr('data-id', new_id);
 			
 			
 			// update hidden inputs
