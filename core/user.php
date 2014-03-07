@@ -114,12 +114,8 @@ class acf_controller_user {
 	
 	function edit_profile( $profileuser ) {
 		
-		// vars
-		$user_id = $profileuser->ID;
-		
-		
-		// redner
-		$this->render( $user_id, 'edit' );
+		// render
+		$this->render( $profileuser->ID, 'edit', 'tr' );
 		
 	}
 	
@@ -139,12 +135,8 @@ class acf_controller_user {
 	
 	function register_user() {
 		
-		// vars
-		$user_id = 0;
-		
-		
-		// redner
-		$this->render( $user_id, 'register' );
+		// render
+		$this->render( 0, 'register', 'div' );
 	}
 	
 	
@@ -161,14 +153,10 @@ class acf_controller_user {
 	*  @return	$post_id (int)
 	*/
 	
-	function edit_user( $profileuser )
-	{
-		// vars
-		$user_id = $profileuser->ID;
+	function edit_user( $profileuser ) {
 		
-		
-		// redner
-		$this->render( $user_id, 'edit' );
+		// render
+		$this->render( $profileuser->ID, 'edit', 'tr' );
 		
 	}
 	
@@ -186,52 +174,52 @@ class acf_controller_user {
 	*  @return	$post_id (int)
 	*/
 	
-	function user_new_form()
-	{
-		// vars
-		$user_id = 0;
+	function user_new_form() {
 		
+		// render
+		$this->render( 0, 'add', 'tr' );
 		
-		// redner
-		$this->render( $user_id, 'add' );
 	}
 	
 	
 	/*
-	*  html
+	*  render
 	*
-	*  description
+	*  This function will render ACF fields for a given $post_id parameter
 	*
 	*  @type	function
 	*  @date	7/10/13
 	*  @since	5.0.0
 	*
-	*  @param	$post_id (int)
-	*  @return	$post_id (int)
+	*  @param	$user_id (int) this can be set to 0 for a new user
+	*  @param	$user_form (string) used for location rule matching. edit | add | register
+	*  @param	$el (string)
+	*  @return	n/a
 	*/
 	
-	function render( $user_id = 0, $user_form = '' ) {
+	function render( $user_id, $user_form, $el = 'tr' ) {
 		
 		// vars
-		$el = 'tr';
-		$post_id = 0;
+		$post_id = "user_{$user_id}";
+		$show_title = true;
+		
+		
+		// show title
+		if( $user_form == 'register' )
+		{
+			$show_title = false;
+		}
+		
+		
+		// args
 		$args = array(
 			'user_id'	=> 'new',
 			'user_form'	=> $user_form
 		);
 		
-		
 		if( $user_id )
 		{
 			$args['user_id'] = $user_id;
-			$post_id = "user_{$user_id}";
-		}
-		
-		
-		// el
-		if( $user_form == 'register' )
-		{
-			$el = 'div';
 		}
 		
 		
@@ -252,14 +240,21 @@ class acf_controller_user {
 				$fields = acf_get_fields( $field_group );
 
 				?>
-				<?php if( $field_group['style'] == 'default' ): ?>
+				<?php if( $show_title && $field_group['style'] == 'default' ): ?>
 					<h3><?php echo $field_group['title']; ?></h3>
 				<?php endif; ?>
-				<table class="form-table">
-					<tbody>
-						<?php acf_render_fields( $post_id, $fields, $el, 'field' ); ?>
-					</tbody>
-				</table>
+				
+				<?php if( $el == 'tr' ): ?>
+					<table class="form-table">
+						<tbody>
+				<?php endif; ?>
+				
+					<?php acf_render_fields( $post_id, $fields, $el, 'field' ); ?>
+				
+				<?php if( $el == 'tr' ): ?>
+						</tbody>
+					</table>
+				<?php endif; ?>
 				<?php 
 				
 			endforeach; 
