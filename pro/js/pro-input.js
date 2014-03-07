@@ -110,7 +110,7 @@
 			
 			
 			// row limit reached
-			if( this.count() >= this.o.max )
+			if( this.o.max > 0 && this.count() >= this.o.max )
 			{
 				this.$el.addClass('disabled');
 				this.$el.find('> .acf-hl .acf-button').addClass('disabled');
@@ -130,7 +130,7 @@
 			
 			
 			// validate
-			if( this.count() >= this.o.max )
+			if( this.o.max > 0 && this.count() >= this.o.max )
 			{
 				alert( acf._e('repeater','max').replace('{max}', this.o.max) );
 				return false;
