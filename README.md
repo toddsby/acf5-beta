@@ -44,7 +44,7 @@ New features in ACF5
 * Overhaul of HTML & CSS
 * Fields & Sub fields now save as separate post objects, not postmeta
 * Added Select2 JS for AJAX and search functionality on select lists
-* Added AXAJ search functionality for Post Object, taxonomy, user and select fields
+* Added AJAX search functionality for Post Object, taxonomy, user and select fields
 * Added JSON read/write functionality to save field groups to files (saves DB query time)
 * Added JSON import/export functionality to replace old XML style
 * New location rules allow field groups on comments
