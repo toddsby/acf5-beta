@@ -63,6 +63,12 @@ New features in ACF5
 * New archives group in page_link field selection
 * New functions for options page allow for both parent and child menu pages
 
+Missing features in ACF5
+------------------------
+ 
+* Export to PHP
+* `register_field_group` functionality
+
 Thank you
 ---------
 
