@@ -260,7 +260,7 @@ class acf_field_gallery extends acf_field
 			<p class="uploaded"><?php echo $attachment['dateFormatted']; ?></p>
 			<p class="dimensions"><?php echo $attachment['width']; ?> × <?php echo $attachment['height']; ?></p>
 			<p>
-				<a target="_blank" href="#" >Edit</a> 
+				<a target="_blank" href="<?php echo admin_url("post.php?post={$id}&action=edit"); ?>">Edit</a> 
 				<a href="#" class="remove-attachment" data-name="remove-attachment-button" data-id="<?php echo $id; ?>">Remove</a>
 			</p>
 		</div>
