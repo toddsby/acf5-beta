@@ -497,10 +497,6 @@ acf_render_field_option( $this->name, array(
 		}
 		
 		
-		// convert to int
-		$value = array_map('intval', $value);
-		
-		
 		// bail early if not formatting for template use
 		if( !$template )
 		{
@@ -508,56 +504,43 @@ acf_render_field_option( $this->name, array(
 		}
 		
 		
-		// null?
-		if( $value == 'null' )
-		{
-			return null;
-		}
+		// force value to array
+		$value = acf_force_type_array( $value );
 		
 		
-		// multiple / single
-		if( is_array($value) )
+		// load posts in 1 query to save multiple DB calls from following code
+		$posts = get_posts(array(
+			'posts_per_page'	=> -1,
+			'post_type'			=> acf_get_post_types(),
+			'post_status'		=> 'any',
+			'post__in'			=> $value,
+			'orderby'			=> 'post__in'
+		));
+		
+		
+		foreach( $value as $k => $v )
 		{
-			// find posts (DISTINCT POSTS)
-			$posts = get_posts(array(
-				'numberposts'	=> -1,
-				'post__in'		=> $value,
-				'post_type'		=>	apply_filters('acf/get_post_types', array()),
-				'post_status'	=> array('publish', 'private', 'draft', 'inherit', 'future'),
-			));
-	
-			
-			$ordered_posts = array();
-			foreach( $posts as $post )
+			if( is_numeric($v) )
 			{
-				// create array to hold value data
-				$ordered_posts[ $post->ID ] = $post;
+				$value[ $k ] = get_post( $v );
 			}
-			
-			
-			// override value array with attachments
-			foreach( $value as $k => $v)
+			else
 			{
-				// check that post exists (my have been trashed)
-				if( !isset($ordered_posts[ $v ]) )
-				{
-					unset( $value[ $k ] );
-				}
-				else
-				{
-					$value[ $k ] = $ordered_posts[ $v ];
-				}
+				// do nothing
 			}
-			
-		}
-		else
-		{
-			$value = get_post($value);
 		}
 		
+		
+		// convert back from array if neccessary
+		if( !$field['multiple'] )
+		{
+			$value = array_shift($value);
+		}
+				
 		
 		// return value
-		return $value;	
+		return $value;
+		
 	}
 	
 	
