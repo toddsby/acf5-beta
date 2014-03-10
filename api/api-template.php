@@ -107,6 +107,7 @@ function get_field_reference( $field_name, $post_id ) {
 
 function acf_get_valid_post_id( $post_id = 0 ) {
 	
+	
 	// set post_id to global
 	if( !$post_id )
 	{
@@ -217,6 +218,10 @@ function get_field( $selector, $post_id = false, $format_value = true ) {
 	$value = false;
 	
 	
+	// filter post_id
+	$post_id = acf_get_valid_post_id( $post_id );
+	
+	
 	// get field
 	$field = get_field_object( $selector, $post_id, false, false);
 	
@@ -318,6 +323,7 @@ function get_field_object( $selector, $post_id = false, $format_value = true, $l
 	{
 		$field['value'] = acf_get_value( $post_id, $field, $format_value, $format_value );
 	}
+	
 	
 	
 	// return
