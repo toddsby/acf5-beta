@@ -260,9 +260,9 @@ function acf_get_fields( $parent = false ) {
 	
 	
 	// try JSON before DB to save query time
-	if( acf_has_json_fields( $parent['key'] ) )
+	if( acf_have_local_fields( $parent['key'] ) )
 	{
-		$fields = acf_get_json_fields( $parent['key'] );
+		$fields = acf_get_local_fields( $parent['key'] );
 	}
 	else
 	{
@@ -482,7 +482,7 @@ function _acf_get_field_by_id( $post_id = 0 ) {
 
 
 	// override with JSON
-	if( acf_is_json_field( $field['key'] ) )
+	if( acf_is_local_field( $field['key'] ) )
 	{
 		// extract some args
 		$backup = acf_extract_vars($field, array(
@@ -494,7 +494,7 @@ function _acf_get_field_by_id( $post_id = 0 ) {
 		
 
 		// load JSON field
-		$field = acf_get_json_field( $field['key'] );
+		$field = acf_get_local_field( $field['key'] );
 		
 		
 		// merge in backup
@@ -532,9 +532,9 @@ function _acf_get_field_by_key( $key = '' ) {
 	
 	
 	// try JSON before DB to save query time
-	if( acf_is_json_field( $key ) )
+	if( acf_is_local_field( $key ) )
 	{
-		$field = acf_get_json_field( $key );
+		$field = acf_get_local_field( $key );
 		
 		// validate
 		$field = acf_get_valid_field( $field );

@@ -279,7 +279,7 @@ function _acf_get_field_group_by_id( $post_id = 0 ) {
 	
 	
 	// override with JSON
-	if( acf_is_json_field_group( $field_group['key'] ) )
+	if( acf_is_local_field_group( $field_group['key'] ) )
 	{
 		// extract some args
 		$backup = acf_extract_vars($field_group, array(
@@ -287,7 +287,7 @@ function _acf_get_field_group_by_id( $post_id = 0 ) {
 		));
 		
 		
-		$field_group = acf_get_json_field_group( $field_group['key'] );
+		$field_group = acf_get_local_field_group( $field_group['key'] );
 		
 		
 		// merge in backup
@@ -328,9 +328,9 @@ function _acf_get_field_group_by_key( $key = '' ) {
 		
 	
 	// try JSON before DB to save query time
-	if( acf_is_json_field_group( $key ) )
+	if( acf_is_local_field_group( $key ) )
 	{
-		$field_group = acf_get_json_field_group( $key );
+		$field_group = acf_get_local_field_group( $key );
 		
 		// validate
 		$field_group = acf_get_valid_field_group( $field_group );

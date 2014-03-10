@@ -33,9 +33,10 @@ class acf {
 	*  @return	N/A
 	*/
 	
-	function __construct()
-	{
+	function __construct() {
+		
 		/* Do nothing here */
+		
 	}
 	
 	
@@ -77,277 +78,213 @@ class acf {
 		
 		
 		// includes
-		$this->include_api();
-		$this->include_core();
-		$this->include_forms();
-		$this->include_admin();
-		$this->include_pro();
+		$this->includes();
 		
 		
 		// set text domain
 		load_textdomain( 'acf', acf_get_path( 'lang/acf-' . get_locale() . '.mo' ) );
 		
-		
-		// includes (after theme)
-		add_action('plugins_loaded',	array($this, 'include_after_plugins'));
-		add_action('after_setup_theme',	array($this, 'include_after_theme'));
-		
-		
+			
 		// actions
-		add_action('init',				array($this, 'wp_init'), 1);
-		add_filter('posts_where',		array($this, 'wp_posts_where'), 0, 2 );
-		
-		
-		//add_filter('posts_join', array($this, 'wp_posts_join'), 0, 2 );
-		//add_filter('posts_request', array($this, 'posts_request'), 0, 1 );
-	}
-	
-	
-	/*
-	*  include_api
-	*
-	*  This function will include all API files
-	*
-	*  @type	function
-	*  @date	28/09/13
-	*  @since	5.0.0
-	*
-	*  @param	N/A
-	*  @return	N/A
-	*/
-	
-	function include_api() {
-		
-		include_once('api/api-helpers.php');
-		include_once('api/api-value.php');
-		include_once('api/api-field.php');
-		include_once('api/api-field-group.php');
-		include_once('api/api-template.php');
-	}
-	
-	
-	/*
-	*  include_core
-	*
-	*  This function will include all core files
-	*
-	*  @type	function
-	*  @date	28/09/13
-	*  @since	5.0.0
-	*
-	*  @param	N/A
-	*  @return	N/A
-	*/
-	
-	function include_core() {
-		
-		include_once('core/field.php');
-		include_once('core/input.php');
-		include_once('core/json.php');
-		include_once('core/location.php');
-		include_once('core/revisions.php');
+		add_action('plugins_loaded',	array($this, 'wp_plugins_loaded'), 99);
+		add_action('setup_theme',		array($this, 'wp_setup_theme'), 99);
+		add_action('after_setup_theme',	array($this, 'wp_after_setup_theme'), 5);
+		add_action('init',				array($this, 'wp_init'), 5);
+		add_filter('posts_where',		array($this, 'wp_posts_where'), 10, 2 );
 		
 	}
 	
 	
 	/*
-	*  include_forms
+	*  includes
 	*
-	*  This function will include all form files
-	*
-	*  @type	function
-	*  @date	28/09/13
-	*  @since	5.0.0
-	*
-	*  @param	N/A
-	*  @return	N/A
-	*/
-	
-	function include_forms() {
-		
-		include_once('forms/comment.php');
-		include_once('forms/post.php');
-		include_once('forms/taxonomy.php');
-		include_once('forms/user.php');
-		include_once('forms/widget.php');
-		
-	}
-	
-	
-	/*
-	*  include_admin
-	*
-	*  This function will include all admin files
+	*  This function will include all the ACF files
 	*
 	*  @type	function
-	*  @date	4/03/2014
+	*  @date	10/03/2014
 	*  @since	5.0.0
 	*
 	*  @param	n/a
 	*  @return	n/a
 	*/
 	
-	function include_admin() {
+	function includes() {
 		
-		// bail early if not admin
-		if( !is_admin() )
-		{
-			return;
-		}
+		// helpers
+		include_once('api/api-helpers.php');
+		
+		
+		// api
+		acf_include('api/api-value.php');
+		acf_include('api/api-field.php');
+		acf_include('api/api-field-group.php');
+		acf_include('api/api-template.php');
+		
+		
+		// core
+		acf_include('core/field.php');
+		acf_include('core/input.php');
+		acf_include('core/json.php');
+		acf_include('core/local.php');
+		acf_include('core/location.php');
+		acf_include('core/revisions.php');
+		
+		
+		// forms
+		acf_include('forms/comment.php');
+		acf_include('forms/post.php');
+		acf_include('forms/taxonomy.php');
+		acf_include('forms/user.php');
+		acf_include('forms/widget.php');
 		
 		
 		// admin
-		include_once('admin/admin.php');
-		include_once('admin/field-group.php');
-		include_once('admin/field-groups.php');
-		include_once('admin/update.php');
-		
-		
-		// settings
-		include_once('admin/settings-export.php');
-		include_once('admin/settings-addons.php');
+		if( is_admin() ) {
 			
+			acf_include('admin/admin.php');
+			acf_include('admin/field-group.php');
+			acf_include('admin/field-groups.php');
+			acf_include('admin/update.php');
+			acf_include('admin/settings-export.php');
+			acf_include('admin/settings-addons.php');
+			
+		}
+		
+		
+		// fields
+		acf_include('fields/text.php');
+		acf_include('fields/textarea.php');
+		acf_include('fields/number.php');
+		acf_include('fields/email.php');
+		acf_include('fields/password.php');
+		acf_include('fields/wysiwyg.php');
+		acf_include('fields/oembed.php');
+		acf_include('fields/image.php');
+		acf_include('fields/file.php');
+		acf_include('fields/select.php');
+		acf_include('fields/checkbox.php');
+		acf_include('fields/radio.php');
+		acf_include('fields/true_false.php');
+		acf_include('fields/post_object.php');
+		acf_include('fields/page_link.php');
+		acf_include('fields/relationship.php');
+		acf_include('fields/taxonomy.php');
+		acf_include('fields/user.php');
+		acf_include('fields/google-map.php');
+		acf_include('fields/date_picker.php');
+		acf_include('fields/color_picker.php');
+		acf_include('fields/message.php');
+		acf_include('fields/tab.php');
+		
+		
+		// pro
+		acf_include('pro/acf-pro.php');
 	}
 	
+
 	
 	/*
-	*  include_after_plugins
+	*  wp_plugins_loaded
 	*
-	*  description
+	*  This function will fire once all plugins have loaded
 	*
 	*  @type	function
 	*  @date	5/03/2014
 	*  @since	5.0.0
 	*
-	*  @param	$post_id (int)
-	*  @return	$post_id (int)
+	*  @param	n/a
+	*  @return	n/a
 	*/
 	
-	function include_after_plugins() {
+	function wp_plugins_loaded() {
 		
 		// wpml
 		if( defined('ICL_SITEPRESS_VERSION') )
 		{
-			include_once('core/wpml.php');
+			acf_include('core/wpml.php');
 		}
 		
 	}
 	
 	
 	/*
-	*  include_after_theme
+	*  wp_setup_theme
 	*
-	*  This function will include all files AFTER the theme has been setup.
-	*  By this point, the user can modify the acf settings via filters
+	*  This function will fire before the functions.php file is read
 	*
 	*  @type	function
-	*  @date	26/02/2014
+	*  @date	10/03/2014
 	*  @since	5.0.0
 	*
-	*  @param	$post_id (int)
-	*  @return	$post_id (int)
+	*  @param	n/a
+	*  @return	n/a
 	*/
 	
-	function include_after_theme() {
+	function wp_setup_theme() {
 		
-		// include fields types
-		$this->include_field_types();
+		acf_update_setting('setup_theme', true);
+		
+	}
+	
+	
+	
+	/*
+	*  wp_after_setup_theme
+	*
+	*  This function will fire after the functions.php file is read
+	*
+	*  @type	function
+	*  @date	10/03/2014
+	*  @since	5.0.0
+	*
+	*  @param	n/a
+	*  @return	n/a
+	*/
+	
+	function wp_after_setup_theme() {
+		
+		$this->complete();
 		
 	}
 	
 	
 	/*
-	*  include_field_types
+	*  complete
 	*
-	*  This function will include all field files
+	*  This function will ensure all files are included
 	*
 	*  @type	function
-	*  @date	28/09/13
+	*  @date	10/03/2014
 	*  @since	5.0.0
 	*
-	*  @param	N/A
-	*  @return	N/A
+	*  @param	n/a
+	*  @return	n/a
 	*/
 	
-	function include_field_types() {
+	function complete() {
 		
-		// validate
-		if( acf_get_setting('include_field_types', false) )
+		// bail early if actions have not passed 'setup_theme'
+		if( ! acf_get_setting('setup_theme') )
+		{
+			return;
+		}
+		
+		
+		// once run once
+		if( acf_get_setting('complete') )
 		{
 			return;
 		}
 		
 		
 		// update setting
-		acf_update_setting('include_field_types', 1);
+		acf_update_setting('complete', true);
 		
 		
-		// basic
-		include_once('fields/text.php');
-		include_once('fields/textarea.php');
-		include_once('fields/number.php');
-		include_once('fields/email.php');
-		include_once('fields/password.php');
-		
-		
-		// content
-		include_once('fields/wysiwyg.php');
-		include_once('fields/oembed.php');
-		include_once('fields/image.php');
-		include_once('fields/file.php');
-		
-		
-		// choice
-		include_once('fields/select.php');
-		include_once('fields/checkbox.php');
-		include_once('fields/radio.php');
-		include_once('fields/true_false.php');
-		
-		
-		// relational
-		include_once('fields/post_object.php');
-		include_once('fields/page_link.php');
-		include_once('fields/relationship.php');
-		include_once('fields/taxonomy.php');
-		include_once('fields/user.php');
-		
-		
-		// jQuery
-		include_once('fields/google-map.php');
-		include_once('fields/date_picker.php');
-		include_once('fields/color_picker.php');
-		
-		
-		// layout
-		include_once('fields/message.php');
-		include_once('fields/tab.php');
-		
-		
-		// 3rd party
+		// action for 3rd party customization
 		do_action('acf/include_field_types', 5);
+		do_action('acf/include_fields', 5);
 		
-	}
-	
-	
-	/*
-	*  include_pro
-	*
-	*  This function will include all pro files
-	*
-	*  @type	function
-	*  @date	28/09/13
-	*  @since	5.0.0
-	*
-	*  @param	N/A
-	*  @return	N/A
-	*/
-	
-	function include_pro() {
-		
-		if( file_exists( acf_get_path('pro/acf-pro.php') ) )
-		{
-			include_once( acf_get_path('pro/acf-pro.php') );
-		}
 	}
 	
 	
