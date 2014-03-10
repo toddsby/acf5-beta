@@ -124,6 +124,32 @@ function acf_get_dir( $path )
 
 
 /*
+*  acf_include
+*
+*  This function will include a file
+*
+*  @type	function
+*  @date	10/03/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_include( $file ) {
+	
+	$path = acf_get_path( $file );
+	
+	if( file_exists($path) ) {
+		
+		include_once( $path );
+		
+	}
+	
+}
+
+
+/*
 *  acf_parse_args
 *
 *  This function will merge together 2 arrays and also convert any numeric values to ints
