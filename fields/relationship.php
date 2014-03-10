@@ -782,40 +782,19 @@ class acf_field_relationship extends acf_field
 		}
 		
 		
-		// vars
-		$r = array();
-		
-		
 		// find posts (DISTINCT POSTS)
 		$posts = get_posts(array(
-			'numberposts'	=>	-1,
-			'post__in'		=>	$post_ids,
-			'post_type'		=>	apply_filters('acf/get_post_types', array()),
-			'post_status'	=>	'any',
+			'posts_per_page'	=> -1,
+			'post_type'			=> acf_get_post_types(),
+			'post_status'		=> 'any',
+			'post__in'			=> $post_ids,
+			'orderby'			=> 'post__in'
 		));
-
-		
-		$ordered_posts = array();
-		foreach( $posts as $p )
-		{
-			// create array to hold value data
-			$ordered_posts[ $p->ID ] = $p;
-		}
-		
-		
-		// override value array with attachments
-		foreach( $post_ids as $k => $v)
-		{
-			// check that post exists (my have been trashed)
-			if( isset($ordered_posts[ $v ]) )
-			{
-				$r[] = $ordered_posts[ $v ];
-			}
-		}
 		
 		
 		// return
-		return $r;
+		return $posts;
+
 	}
 	
 	
