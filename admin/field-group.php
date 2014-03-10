@@ -840,7 +840,7 @@ class acf_field_group {
 			// render
 			acf_render_field_wrap( $field );
 			
-			echo '<button type="submit" class="acf-button blue">Move Field</button>';
+			echo '<button type="submit" class="acf-button blue">' . __("Move Field",'acf') . '</button>';
 			
 		echo '</form>';
 		

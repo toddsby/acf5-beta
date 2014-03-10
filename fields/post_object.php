@@ -362,7 +362,7 @@ $choices = array_merge(acf_get_post_types(), array(
 			'multiple'		=> 1,
 			'ui'			=> 1,
 			'allow_null'	=> 1,
-			'placeholder'	=> 'All post types',
+			'placeholder'	=> __("All post types",'acf'),
 		));
 		
 		
@@ -383,7 +383,7 @@ $choices = wp_parse_args(acf_get_taxonomy_terms(), array(
 			'multiple'		=> 1,
 			'ui'			=> 1,
 			'allow_null'	=> 1,
-			'placeholder'	=> 'No taxonomy filter',
+			'placeholder'	=> __("No taxonomy filter",'acf'),
 		));
 		
 		

@@ -385,7 +385,7 @@ class acf_field_page_link extends acf_field
 			'multiple'		=> 1,
 			'ui'			=> 1,
 			'allow_null'	=> 1,
-			'placeholder'	=> 'All post types',
+			'placeholder'	=> __("All post types",'acf'),
 		));
 		
 		
@@ -401,7 +401,7 @@ class acf_field_page_link extends acf_field
 			'multiple'		=> 1,
 			'ui'			=> 1,
 			'allow_null'	=> 1,
-			'placeholder'	=> 'No taxonomy filter',
+			'placeholder'	=> __("No taxonomy filter",'acf'),
 		));
 		
 		

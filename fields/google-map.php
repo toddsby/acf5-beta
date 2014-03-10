@@ -114,7 +114,7 @@ class acf_field_google_map extends acf_field
 				
 				<div class="no-value">
 					<a href="#" class="acf-sprite-locate" title="Find current location"></a>
-					<input type="text" placeholder="Search for address..." class="search" />
+					<input type="text" placeholder="<?php _e("Search for address...",'acf'); ?>" class="search" />
 				</div>
 				
 			</div>

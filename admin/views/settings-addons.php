@@ -6,7 +6,7 @@ $json = acf_extract_var( $args, 'json');
 ?>
 <div class="wrap acf-settings-wrap">
 	
-	<h2>Add-ons</h2>
+	<h2><?php _e("Add-ons",'acf'); ?></h2>
 	
 	<div class="add-ons-list acf-cf">
 		
@@ -20,7 +20,7 @@ $json = acf_extract_var( $args, 'json');
 			        "description"	=> "",
 			        "thumbnail"		=> "",
 			        "url"			=> "",
-			        "btn"			=> "Download & Install",
+			        "btn"			=> __("Download & Install",'acf'),
 			        "btn_color"		=> ""
 				));
 				

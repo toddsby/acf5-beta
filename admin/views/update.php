@@ -6,11 +6,11 @@ $updates = acf_extract_var( $args, 'updates');
 ?>
 <div id="acf-upgrade-wrap" class="wrap">
 	
-	<h2>Data Upgrade</h2>
+	<h2><?php _e("Data Upgrade",'acf'); ?></h2>
 	
 	<?php if( !empty($updates) ): ?>
 		
-		<p><?php _e('Reading upgrade tasks...'); ?></p>
+		<p><?php _e('Reading upgrade tasks...', 'acf'); ?></p>
 		
 		<ul class="bl acf-update-list" style="display:none;">
 			
@@ -22,9 +22,9 @@ $updates = acf_extract_var( $args, 'updates');
 			
 		</ul>
 		
-		<p class="show-on-complete"><?php _e('Data upgraded successfully.'); ?></p>
+		<p class="show-on-complete"><?php _e('Data upgraded successfully.', 'acf'); ?></p>
 		
-		<p class="show-on-complete"><a href="<?php admin_url('edit.php?post_type=acf-field-group'); ?>">Return to custom fields</a></p>
+		<p class="show-on-complete"><a href="<?php admin_url('edit.php?post_type=acf-field-group'); ?>"><?php _e("Return to custom fields",'acf'); ?></a></p>
 	
 	<?php else: ?>
 	

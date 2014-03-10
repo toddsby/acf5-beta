@@ -254,7 +254,7 @@ class acf_field_user extends acf_field
 			'multiple'		=> 1,
 			'ui'			=> 1,
 			'allow_null'	=> 1,
-			'placeholder'	=> 'All user roles',
+			'placeholder'	=> __("All user roles",'acf'),
 		));
 		
 		
