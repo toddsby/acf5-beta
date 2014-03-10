@@ -8,21 +8,20 @@ extract($args);
 $active = $license ? true : false;
 $nonce = $active ? 'deactivate_pro_licence' : 'activate_pro_licence';
 $input = $active ? 'password' : 'text';
-$button = $active ? 'Deactivate License' : 'Activate License';
+$button = $active ? __('Deactivate License', 'acf') : __('Activate License', 'acf');
 $readonly = $active ? 1 : 0;
 
 ?>
 <div class="wrap acf-settings-wrap">
 	
-	<h2>Updates</h2>
+	<h2><?php __('Updates', 'acf'); ?></h2>
 	
 	<div class="acf-box">
 		<div class="title">
-			<h3><?php echo acf_get_setting('name'); ?> License</h3>
+			<h3><?php echo acf_get_setting('name'); ?> <?php _e('License','acf') ?></h3>
 		</div>
 		<div class="inner">
-			<p>To unlock updates, please enter your license key bellow. If you don't have a licence key, you may <a href="#">purchase one</a>.</p>
-			
+			<p><?php _e("To unlock updates, please enter your license key bellow. If you don't have a licence key, please see",'acf'); ?> <a href="#"><?php _e('details & pricing', 'acf'); ?></a></p>
 			<form action="" method="post">
 			<div class="acf-hidden">
 				<input type="hidden" name="_acfnonce" value="<?php echo wp_create_nonce( $nonce ); ?>" />
@@ -31,7 +30,7 @@ $readonly = $active ? 1 : 0;
                 <tbody>
                 	<tr>
                     	<th>
-                    		<label for="acf-field-acf_pro_licence">License Key</label>
+                    		<label for="acf-field-acf_pro_licence"><?php _e('License Key', 'acf'); ?></label>
                     	</th>
 						<td>
 							<?php 
@@ -63,14 +62,14 @@ $readonly = $active ? 1 : 0;
 	
 	<div class="acf-box">
 		<div class="title">
-			<h3>Update Information</h3>
+			<h3><?php _e('Update Information', 'acf'); ?></h3>
 		</div>
 		<div class="inner">
 			<table class="form-table">
                 <tbody>
                 	<tr>
                     	<th>
-                    		<label>Current Version</label>
+                    		<label><?php _e('Current Version', 'acf'); ?></label>
                     	</th>
 						<td>
 							<?php echo $current_version; ?>
@@ -78,7 +77,7 @@ $readonly = $active ? 1 : 0;
 					</tr>
 					<tr>
                     	<th>
-                    		<label>Latest Version</label>
+                    		<label><?php _e('Latest Version', 'acf'); ?></label>
                     	</th>
 						<td>
 							<?php echo $remote_version; ?>
@@ -86,26 +85,28 @@ $readonly = $active ? 1 : 0;
 					</tr>
 					<tr>
                     	<th>
-                    		<label>Update Available</label>
+                    		<label><?php _e('Update Available', 'acf'); ?></label>
                     	</th>
 						<td>
 							<?php if( $update_available ): ?>
 								
+								<?php _e('Yes', 'acf'); ?> &nbsp;&nbsp; 
+								
 								<?php if( $active ): ?>
-									Yes &nbsp;&nbsp; <a class="acf-button blue" href="<?php echo admin_url('plugins.php?s=Advanced+Custom+Fields+Pro'); ?>">Update Plugin</a>
+									<a class="acf-button blue" href="<?php echo admin_url('plugins.php?s=Advanced+Custom+Fields+Pro'); ?>"><?php _e('Update Plugin', 'acf'); ?></a>
 								<?php else: ?>
-									Yes &nbsp;&nbsp; <a class="acf-button" disabled="disabled" href="#">Please enter your license key above to unlock updates</a>
+									<a class="acf-button" disabled="disabled" href="#"><?php _e('Please enter your license key above to unlock updates', 'acf'); ?></a>
 								<?php endif; ?>
 								
 							<?php else: ?>
-								No &nbsp;&nbsp; <a class="acf-button" href="<?php echo add_query_arg('force-check', 1); ?>">Check Again</a>
+								<?php _e('No', 'acf'); ?> &nbsp;&nbsp; <a class="acf-button" href="<?php echo add_query_arg('force-check', 1); ?>"><?php _e('Check Again', 'acf'); ?></a>
 							<?php endif; ?>
 						</td>
 					</tr>
 					<?php if( $changelog ): ?>
 					<tr>
                     	<th>
-                    		<label>Changelog</label>
+                    		<label><?php _e('Changelog', 'acf'); ?></label>
                     	</th>
 						<td>
 							<?php echo $changelog; ?>
@@ -115,7 +116,7 @@ $readonly = $active ? 1 : 0;
 					<?php if( $upgrade_notice ): ?>
 					<tr>
                     	<th>
-                    		<label>Upgrade Notice</label>
+                    		<label><?php _e('Upgrade Notice', 'acf'); ?></label>
                     	</th>
 						<td>
 							<?php echo $upgrade_notice; ?>

@@ -1,13 +1,13 @@
 <div class="wrap acf-settings-wrap">
 	
-	<h2>Import / Export</h2>
+	<h2><?php _e('Import / Export', 'acf'); ?></h2>
 	
 	<div class="acf-box">
 		<div class="title">
-			<h3>Export Field Groups</h3>
+			<h3><?php _e('Export Field Groups', 'acf'); ?></h3>
 		</div>
 		<div class="inner">
-			<p>Select the field groups you would like to export. When you click the download button below, ACF will create a JSON file for you to save to your computer. Once you've saved the download file, you can use the Import tool to import the field groups into another website. You can also include this JSON file in a theme folder called 'acf-json' for auto import!</p>
+			<p><?php _e('Select the field groups you would like to export. When you click the download button below, ACF will create a JSON file for you to save to your computer. Once you&rsquo;ve saved the download file, you can use the Import tool to import the field groups into another website. You can also include this JSON file in a theme folder called &rsquo;acf-json&rsquo; for auto import!', 'acf'); ?></p>
 			
 			<form method="post" action="">
 			<div class="acf-hidden">
@@ -17,7 +17,7 @@
                 <tbody>
                 	<tr>
                     	<th>
-                    		<label>Select Forms</label>
+                    		<label><?php _e('Select Forms', 'acf'); ?></label>
                     	</th>
 						<td>
 							<?php 
@@ -52,7 +52,7 @@
 					<tr>
 						<th></th>
 						<td>
-							<input type="submit" class="acf-button blue" value="Download Export file" />
+							<input type="submit" class="acf-button blue" value="<?php _e('Download Export file', 'acf'); ?>" />
 						</td>
 					</tr>
 				</tbody>
@@ -67,10 +67,10 @@
 	
 	<div class="acf-box">
 		<div class="title">
-			<h3>Import Field Groups</h3>
+			<h3><?php _e('Import Field Groups', 'acf'); ?></h3>
 		</div>
 		<div class="inner">
-			<p>Select the Advanced Custom Fields JSON file you would like to import. When you click the import button below, ACF will import the field groups. </p>
+			<p><?php _e('Select the Advanced Custom Fields JSON file you would like to import. When you click the import button below, ACF will import the field groups.', 'acf'); ?></p>
 			
 			<form method="post" action="" enctype="multipart/form-data">
 			<div class="acf-hidden">
@@ -80,7 +80,7 @@
                 <tbody>
                 	<tr>
                     	<th>
-                    		<label>Select File</label>
+                    		<label><?php _e('Select File', 'acf'); ?></label>
                     	</th>
 						<td>
 							<input type="file" name="acf_import_file">
@@ -89,7 +89,7 @@
 					<tr>
 						<th></th>
 						<td>
-							<input type="submit" class="acf-button blue" value="Import" />
+							<input type="submit" class="acf-button blue" value="<?php _e('Import', 'acf'); ?>" />
 						</td>
 					</tr>
 				</tbody>
