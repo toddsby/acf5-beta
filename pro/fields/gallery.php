@@ -40,15 +40,15 @@ class acf_field_gallery extends acf_field
 		);
 		
 		
-		// ajax
-		add_action('wp_ajax_acf/fields/gallery/get_attachment',			array($this, 'ajax_get_attachment'));
-		add_action('wp_ajax_nopriv_acf/fields/gallery/get_attachment',	array($this, 'ajax_get_attachment'));
+		// actions
+		add_action('wp_ajax_acf/fields/gallery/get_attachment',				array($this, 'ajax_get_attachment'));
+		add_action('wp_ajax_nopriv_acf/fields/gallery/get_attachment',		array($this, 'ajax_get_attachment'));
 		
+		add_action('wp_ajax_acf/fields/gallery/update_attachment',			array($this, 'ajax_update_attachment'));
+		add_action('wp_ajax_nopriv_acf/fields/gallery/update_attachment',	array($this, 'ajax_update_attachment'));
 		
-		add_action('wp_ajax_acf/fields/gallery/update_attachment',		array($this, 'ajax_update_attachment'));
-		
-		add_action('wp_ajax_acf/fields/gallery/get_sort_order',			array($this, 'ajax_get_sort_order'));
-		add_action('wp_ajax_nopriv_acf/fields/gallery/get_sort_order',	array($this, 'ajax_get_sort_order'));
+		add_action('wp_ajax_acf/fields/gallery/get_sort_order',				array($this, 'ajax_get_sort_order'));
+		add_action('wp_ajax_nopriv_acf/fields/gallery/get_sort_order',		array($this, 'ajax_get_sort_order'));
 		
 		
 		

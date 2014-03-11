@@ -141,7 +141,6 @@ class acf_json {
 	
 	function include_fields() {
 		
-		
 		// validate
 		if( !acf_get_setting('json') )
 		{
