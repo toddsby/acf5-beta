@@ -65,9 +65,7 @@ New features in ACF5
 
 Missing features in ACF5
 ------------------------
- 
-* Export to PHP
-* `register_field_group` functionality
+
 * Attachment fields
 
 Thank you
