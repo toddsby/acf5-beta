@@ -296,7 +296,7 @@ class acf_settings_export {
     		$message = __('<b>Success</b>. Import tool added %s field groups: %s', 'acf');
     		$message = sprintf( $message, count($added), implode(', ', $added) );
     		
-	    	acf_add_admin_notice( $mesasge );
+	    	acf_add_admin_notice( $message );
     	}
     	
     	if( !empty($ignored) )
