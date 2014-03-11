@@ -182,10 +182,12 @@ class acf_field_groups {
 		{
 			// vars
 			$id = filter_var( $_GET['duplicate_complete'], FILTER_SANITIZE_NUMBER_INT );
-			
-			
+						
+			$message = __('Field group duplicated! Edit the new "%s" field group.', 'acf');
+			$message = sprintf($message, '<a href="' . get_edit_post_link( $id ) . '">' . get_the_title( $id ) . '</a>');
+
 			// message
-			acf_add_admin_notice('Field group duplicated! Edit the new "<a href="' . get_edit_post_link( $id ) . '">' . get_the_title( $id ) . '</a>" field group.');
+			acf_add_admin_notice($message);
 		}
 		
 		
