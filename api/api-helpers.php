@@ -1,6 +1,66 @@
 <?php 
 
 /*
+*  acf_e
+*
+*  This function wraps the `_e` in extra logic
+*
+*  @type	function
+*  @date	11/03/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_e() {
+	
+	// vars
+	$args = func_get_args();
+	
+	
+	// acf__
+	echo call_user_func_array('acf__', $args);
+	
+}
+
+
+function acf__() {
+	
+	// vars
+	$args = func_get_args();
+	$domain = 'acf';
+	
+	
+	// __()
+	foreach( $args as $k => $v )
+	{
+		$args[ $k ] = __( $v, $domain );
+	}
+	
+	
+	// string
+	$string = $args[0];
+	
+	
+	// sprintf
+	if( count($args) > 1 )
+	{
+		$string = call_user_func_array('sprintf', $args);
+	}
+	
+	
+	// replace backticks
+	$string = preg_replace("/`(.*?)`/s", '<pre>$1</pre>', $string);
+	
+	
+	// return
+	return $string;
+	
+}
+
+
+/*
 *  acf_get_setting
 *
 *  This function will return a value from the settings array found in the acf object
