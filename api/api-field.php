@@ -955,4 +955,176 @@ function acf_untrash_field( $selector = 0 ) {
 	return true;
 }
 
+
+/*
+*  acf_prepare_fields_for_export
+*
+*  description
+*
+*  @type	function
+*  @date	11/03/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_prepare_fields_for_export( $fields = false ) {
+	
+	// validate
+	if( empty($fields) ) {
+		
+		return $fields;
+	}
+	
+	
+	// format
+	$keys = array_keys( $fields );
+	
+	foreach( $keys as $key ) {
+		
+		// prepare
+		$fields[ $key ] = acf_prepare_field_for_export( $fields[ $key ] );
+				
+	}
+	
+	
+	// filter for 3rd party customization
+	$fields = apply_filters('acf/prepare_fields_for_export', $fields);
+	
+	
+	// return
+	return $fields;
+	
+}
+
+
+/*
+*  acf_prepare_field_for_export
+*
+*  description
+*
+*  @type	function
+*  @date	11/03/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_prepare_field_for_export( $field ) {
+	
+	// extract some args
+	$extract = acf_extract_vars($field, array(
+		'ID',
+		'value',
+		'menu_order',
+		'id',
+		'class',
+		'parent',
+		'ancestors',
+		'field_group',
+		'_name',
+		'_input',
+		'_valid',
+	));
+	
+	
+	// filter for 3rd party customization
+	$field = apply_filters( "acf/prepare_field_for_export", $field );
+	
+	
+	// return
+	return $field;
+}
+
+
+/*
+*  acf_prepare_fields_for_import
+*
+*  description
+*
+*  @type	function
+*  @date	11/03/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_prepare_fields_for_import( $fields = false ) {
+	
+	// validate
+	if( empty($fields) ) {
+		
+		return $fields;
+	}
+	
+	
+	// format
+	$keys = array_keys( $fields );
+	
+	foreach( $keys as $key ) {
+		
+		// prepare field
+		$field = acf_prepare_field_for_import( $fields[ $key ] );
+		
+		
+		// $field may be an array of multiple fields (including sub fields)
+		if( !isset($field['key']) ) {
+			
+			$extra = $field;
+			
+			$field = array_shift($extra);
+			$fields = array_merge($fields, $extra);
+			$keys = array_keys($fields);
+			
+		}
+		
+		// prepare
+		$fields[ $key ] = $field;
+				
+	}
+	
+	
+	// filter for 3rd party customization
+	$fields = apply_filters('acf/prepare_fields_for_import', $fields);
+	
+	
+	// return
+	return $fields;
+	
+}
+
+
+/*
+*  acf_prepare_field_for_import
+*
+*  description
+*
+*  @type	function
+*  @date	11/03/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function acf_prepare_field_for_import( $field ) {
+	
+	// add dummy parent
+	$field['parent'] = 0;
+	
+	
+	// filter for 3rd party customization
+	$field = apply_filters( "acf/prepare_field_for_import", $field );
+	
+	
+	// return
+	return $field;
+}
+
+
+
+
 ?>

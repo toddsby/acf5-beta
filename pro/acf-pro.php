@@ -33,6 +33,8 @@ class acf_pro {
 		add_action('acf/input/admin_enqueue_scripts',			array($this, 'input_admin_enqueue_scripts'));
 		add_action('acf/field_group/admin_enqueue_scripts',		array($this, 'field_group_admin_enqueue_scripts'));
 		add_filter('acf/update_field',							array($this, 'update_field'), 1, 1);
+		add_filter('acf/prepare_field_for_export', 				array($this, 'prepare_field_for_export'));
+		add_filter('acf/prepare_field_for_import', 				array($this, 'prepare_field_for_import'));
 		
 		
 		// add-ons
@@ -209,6 +211,7 @@ class acf_pro {
 	
 	function update_field( $field ) {
 		
+		// don't use acf_get_field. Instead, keep a global record of ID from each update_field and use this to get the parent ID => key 
 		if( $field['parent'] )
 		{
 			if( strpos($field['parent'], 'field_') === 0 )
@@ -223,6 +226,145 @@ class acf_pro {
 	}
 	
 	
+	/*
+	*  prepare_field_for_export
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	11/03/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function prepare_field_for_export( $field ) {
+		
+		// sub field (parent_layout)
+		acf_extract_var( $field, 'parent_layout');
+		
+		
+		// sub fields
+		if( $field['type'] == 'repeater' ) {
+			
+			$field['sub_fields'] = acf_prepare_fields_for_export( $field['sub_fields'] );
+			
+		}
+		elseif( $field['type'] == 'flexible_content' ) {
+			
+			foreach( $field['layouts'] as $l => $layout ) {
+				
+				$field['layouts'][ $l ]['sub_fields'] = acf_prepare_fields_for_export( $layout['sub_fields'] );
+			
+			}
+
+		}
+		
+		
+		// return
+		return $field;
+		
+	}
+	
+	
+	/*
+	*  prepare_field_for_import
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	11/03/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function prepare_field_for_import( $field ) {
+		
+		// var
+		$extra = array();
+		
+		
+		// sub fields
+		if( $field['type'] == 'repeater' ) {
+			
+			// extract sub fields
+			$sub_fields = acf_extract_var( $field, 'sub_fields');
+			
+			if( !empty($sub_fields) ) {
+			
+				foreach( $sub_fields as $sub_field ) {
+					
+					// attributes
+					$sub_field['parent'] = $field['key'];
+					
+					
+					// append to extra
+					$extra[] = $sub_field;
+					
+				}
+				
+			}
+			
+			
+		}
+		elseif( $field['type'] == 'flexible_content' ) {
+			
+			$layouts = acf_extract_var( $field, 'layouts');
+			
+			if( !empty($layouts) ) {
+				
+				$field['layouts'] = array();
+				
+				foreach( $layouts as $layout ) {
+					
+					// extract sub fields
+					$sub_fields = acf_extract_var( $layout, 'sub_fields');
+					
+					if( !empty($sub_fields) ) {
+						
+						foreach( $sub_fields as $sub_field ) {
+							
+							// attributes
+							$sub_field['parent'] = $field['key'];
+							$sub_field['parent_layout'] = $layout['key'];
+							
+							
+							// append to extra
+							$extra[] = $sub_field;
+							
+						}
+						
+					}
+					
+					
+					// append to layout
+					$field['layouts'][] = $layout;
+				
+				}
+				
+			}
+
+		}
+		
+		
+		// extra
+		if( !empty($extra) ) {
+			
+			array_unshift($extra, $field);
+			
+			return $extra;
+			
+		}
+		
+		
+		// return
+		return $field;
+		
+	}
+	 
 }
 
 

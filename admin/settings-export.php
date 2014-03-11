@@ -2,6 +2,10 @@
 
 class acf_settings_export {
 	
+	var $view = 'settings-export',
+		$data = array();
+	
+	
 	/*
 	*  __construct
 	*
@@ -55,16 +59,54 @@ class acf_settings_export {
 	
 	
 	/*
-	*  html
+	*  load
 	*
-	*  description
+	*  This function will look at the $_POST data and run any functions if needed
 	*
 	*  @type	function
 	*  @date	7/01/2014
 	*  @since	5.0.0
 	*
-	*  @param	$post_id (int)
-	*  @return	$post_id (int)
+	*  @param	n/a
+	*  @return	n/a
+	*/
+	
+	function load() {
+		
+		// all export pages should not load local fields
+		acf_update_setting('local', false);
+		
+		
+		if( acf_verify_nonce('import') )
+		{
+			$this->import();
+		}
+		elseif( acf_verify_nonce('export') )
+		{
+			if( isset($_POST['generate']) )
+			{
+				$this->generate();
+			}
+			else
+			{
+				$this->export();
+			}
+		}
+		
+	}
+	
+	
+	/*
+	*  html
+	*
+	*  This function will render the view
+	*
+	*  @type	function
+	*  @date	7/01/2014
+	*  @since	5.0.0
+	*
+	*  @param	n/a
+	*  @return	n/a
 	*/
 	
 	function html() {
@@ -73,41 +115,24 @@ class acf_settings_export {
 		acf_update_setting('json', false);
 		
 		
-		// vars
-		$view = array();
-		
-		
 		// load view
-		acf_get_view('settings-export', $view);
+		acf_get_view($this->view, $this->data);
 		
 	}
 	
 	
 	/*
-	*  load
+	*  export
 	*
-	*  description
+	*  This function will export field groups to a .json file
 	*
 	*  @type	function
-	*  @date	7/01/2014
+	*  @date	11/03/2014
 	*  @since	5.0.0
 	*
-	*  @param	$post_id (int)
-	*  @return	$post_id (int)
+	*  @param	n/a
+	*  @return	n/a
 	*/
-	
-	function load() {
-		
-		if( acf_verify_nonce('import') )
-		{
-			$this->import();
-		}
-		elseif( acf_verify_nonce('export') )
-		{
-			$this->export();
-		}
-		
-	}
 	
 	function export() {
 		
@@ -116,11 +141,6 @@ class acf_settings_export {
 		{
 			return;
 		}
-		
-		
-		// vars
-		$id_ref = array();
-		$json = array();
 		
 		
 		// construct JSON
@@ -139,45 +159,18 @@ class acf_settings_export {
 			
 			// load fields
 			$fields = acf_get_fields( $field_group );
-			
-			
-			// extract field group ID and add to ref
-			$id = acf_extract_var( $field_group, 'ID' );
-			$id_ref[ $id ] = $field_group['key'];
-			
-			
-			// load fields from DB
-			if( !empty($fields) )
-			{
-				foreach( $fields as $field )
-				{
-					// extract some args
-					$extract = acf_extract_vars($field, array(
-						'ID',
-						'value',
-						'menu_order',
-						'id',
-						'class',
-						'ancestors',
-						'field_group'
-					));
 	
-					
-					// extract field ID and add to ref
-					$id_ref[ $extract['ID'] ] = $field['key'];
-					
-					
-					// update parent ID to parent key
-					if( isset($id_ref[ $field['parent'] ]) )
-					{
-						$field['parent'] = $id_ref[ $field['parent'] ];
-					}					
-					
-					
-					// append field
-					$field_group['fields'][] = $field;
-				}
-			}
+	
+			// prepare fields
+			$fields = acf_prepare_fields_for_export( $fields );
+			
+			
+			// add to field group
+			$field_group['fields'] = $fields;
+			
+			
+			// extract field group ID
+			$id = acf_extract_var( $field_group, 'ID' );
 			
 			
 			// add to json array
@@ -200,11 +193,25 @@ class acf_settings_export {
 	}
 	
 	
+	/*
+	*  import
+	*
+	*  This function will import a .json file of field groups
+	*
+	*  @type	function
+	*  @date	11/03/2014
+	*  @since	5.0.0
+	*
+	*  @param	n/a
+	*  @return	n/a
+	*/
+	
 	function import() {
 		
 		// validate
 		if( empty($_FILES['acf_import_file']) )
 		{
+			acf_add_admin_notice( __("No file selected", 'acf') , 'error');
 			return;
 		}
 		
@@ -248,7 +255,7 @@ class acf_settings_export {
     	// vars
     	$added = array();
     	$ignored = array();
-    	
+    	$ref = array();
     	
     	foreach( $json as $field_group )
     	{
@@ -261,28 +268,49 @@ class acf_settings_export {
 	    	}
 	    	
 	    	
-	    	// extract fields
-	    	$fields = acf_extract_var($field_group, 'fields');
-	    	
-	
-	    	// save field group
+	    	// remove fields
+			$fields = acf_extract_var($field_group, 'fields');
+			
+			
+			// format fields
+			$fields = acf_prepare_fields_for_import( $fields );
+			
+			
+			// save field group
 			$field_group = acf_update_field_group( $field_group );
 			
-	    	
-	    	// save fields
-	    	if( !empty($fields) )
-			{
-				foreach( $fields as $field )
-				{
-					// add args
+			
+			// add to ref
+			$ref[ $field_group['key'] ] = $field_group['ID'];
+			
+			
+			// add fields
+			foreach( $fields as $field ) {
+				
+				// add parent
+				if( !$field['parent'] ) {
+					
 					$field['parent'] = $field_group['ID'];
 					
+				} elseif( isset($ref[ $field['parent'] ]) ) {
 					
-					// save field
-					acf_update_field( $field );
+					$field['parent'] = $ref[ $field['parent'] ];
+						
 				}
+				
+				
+				// add field group reference
+				$field['field_group'] = $field_group['key'];
+				
+				
+				// save field
+				$field = acf_update_field( $field );
+				
+				
+				// add to ref
+				$ref[ $field['key'] ] = $field['ID'];
+				
 			}
-			
 			
 			// append to added
 	    	$added[] = $field_group['title'];
@@ -296,7 +324,7 @@ class acf_settings_export {
     		$message = __('<b>Success</b>. Import tool added %s field groups: %s', 'acf');
     		$message = sprintf( $message, count($added), implode(', ', $added) );
     		
-	    	acf_add_admin_notice( $mesasge );
+	    	acf_add_admin_notice( $message );
     	}
     	
     	if( !empty($ignored) )
@@ -307,6 +335,78 @@ class acf_settings_export {
 	    	acf_add_admin_notice( $message, 'error' );
     	}
     	
+		
+	}
+	
+	
+	/*
+	*  generate
+	*
+	*  This function will generate PHP code to include in your theme
+	*
+	*  @type	function
+	*  @date	11/03/2014
+	*  @since	5.0.0
+	*
+	*  @param	n/a
+	*  @return	n/a
+	*/
+	
+	function generate() {
+		
+		// validate
+		if( empty($_POST['acf_export_keys']) )
+		{
+			acf_add_admin_notice( __("No field groups selected", 'acf') , 'error');
+			return;
+		}
+		
+		
+		// vars
+		$id_ref = array();
+		$json = array();
+		
+		
+		// construct JSON
+		foreach( $_POST['acf_export_keys'] as $key )
+		{
+			// load field group
+			$field_group = acf_get_field_group( $key );
+			
+			
+			// validate field group
+			if( empty($field_group) )
+			{
+				continue;
+			}
+			
+			
+			// load fields
+			$fields = acf_get_fields( $field_group );
+	
+	
+			// prepare fields
+			$fields = acf_prepare_fields_for_export( $fields );
+			
+			
+			// add to field group
+			$field_group['fields'] = $fields;
+			
+			
+			// extract field group ID
+			$id = acf_extract_var( $field_group, 'ID' );
+			
+			
+			// add to json array
+			$json[] = $field_group;
+			
+		}
+		// end foreach
+		
+		
+		// update view
+		$this->view = 'settings-export-generate';
+		$this->data['field_groups'] = $json;
 		
 	}
 	

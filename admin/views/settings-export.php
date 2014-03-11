@@ -7,7 +7,7 @@
 			<h3><?php _e('Export Field Groups', 'acf'); ?></h3>
 		</div>
 		<div class="inner">
-			<p><?php _e('Select the field groups you would like to export. When you click the download button below, ACF will create a JSON file for you to save to your computer. Once you&rsquo;ve saved the download file, you can use the Import tool to import the field groups into another website. You can also include this JSON file in a theme folder called &rsquo;acf-json&rsquo; for auto import!', 'acf'); ?></p>
+			<p><?php _e('Select the field groups you would like to export and then select your export method. Use the download button to export to a .json file which you can then import to another ACF installation. Use the generate button to export to PHP code which you can place in your theme.', 'acf'); ?> <a href="#"><?php _e("Learn more about the differences here",'acf'); ?></a></p>
 			
 			<form method="post" action="">
 			<div class="acf-hidden">
@@ -52,7 +52,8 @@
 					<tr>
 						<th></th>
 						<td>
-							<input type="submit" class="acf-button blue" value="<?php _e('Download Export file', 'acf'); ?>" />
+							<input type="submit" name="download" class="acf-button blue" value="<?php _e('Download export file', 'acf'); ?>" />
+							<input type="submit" name="generate" class="acf-button blue" value="<?php _e('Generate export code', 'acf'); ?>" />
 						</td>
 					</tr>
 				</tbody>

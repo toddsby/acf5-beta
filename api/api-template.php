@@ -1447,6 +1447,26 @@ function acf_convert_field_names_to_keys( $value, $field )
 }
 
 
+/*
+*  register_field_group
+*
+*  description
+*
+*  @type	function
+*  @date	11/03/2014
+*  @since	5.0.0
+*
+*  @param	$post_id (int)
+*  @return	$post_id (int)
+*/
+
+function register_field_group( $field_group ) {
+	
+	// add local
+	acf_add_local_field_group( $field_group );
+	
+}
+
 
 /*
 *  Depreceated Functions
