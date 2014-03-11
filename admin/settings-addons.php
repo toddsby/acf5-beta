@@ -85,7 +85,7 @@ class acf_settings_addons {
         // validate
         if( is_wp_error($request) || wp_remote_retrieve_response_code($request) !== 200)
         {
-        	acf_add_admin_notice('<b>Error</b>. Could not load add-ons list', 'error');
+        	acf_add_admin_notice(__('<b>Error</b>. Could not load add-ons list', 'acf'), 'error');
         }
         else
         {

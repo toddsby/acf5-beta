@@ -117,7 +117,7 @@ class acf_settings_updates {
 		// validate
         if( !$info )
         {
-        	acf_add_admin_notice('<b>Error</b>. Could not connect to update server', 'error');
+        	acf_add_admin_notice( __('<b>Error</b>. Could not connect to update server', 'acf'), 'error');
         	return;
         }
         
@@ -246,7 +246,7 @@ class acf_settings_updates {
 		// validate
 		if( empty($response) )
 		{
-			acf_add_admin_notice('<b>Connection Error</b>. Sorry, please try again', 'error');
+			acf_add_admin_notice( __('<b>Connection Error</b>. Sorry, please try again', 'acf'), 'error');
 			return;
 		}
 		
@@ -305,7 +305,7 @@ class acf_settings_updates {
 		// validate
 		if( empty($response) )
 		{
-			acf_add_admin_notice('<b>Connection Error</b>. Sorry, please try again', 'error');
+			acf_add_admin_notice(__('<b>Connection Error</b>. Sorry, please try again', 'acf'), 'error');
 			return;
 		}
 		
