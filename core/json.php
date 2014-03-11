@@ -47,48 +47,19 @@ class acf_json {
 		
 		
 		// load fields
-		$id_ref = array();
-		$fields = array();
-		$this->populate_fields( $field_group, $fields );
-		
-		
-		// extract field group ID and add to ref
-		$id = acf_extract_var( $field_group, 'ID' );
-		$id_ref[ $id ] = $field_group['key'];
-		
-		
-		// load fields from DB
-		if( !empty($fields) )
-		{
-			foreach( $fields as $field )
-			{
-				// extract some args
-				$extract = acf_extract_vars($field, array(
-					'ID',
-					'value',
-					'menu_order',
-					'id',
-					'class',
-					'ancestors',
-					'field_group',
-					'_name',
-					'_input',
-					'_valid',
-				));
+		$fields = acf_get_fields( $field_group );
 
-				
-				// extract field ID and add to ref
-				$id_ref[ $extract['ID'] ] = $field['key'];
-				
-				
-				// update parent ID to parent key
-				$field['parent'] = $id_ref[ $field['parent'] ];
-				
-				
-				// append to fields
-				$field_group['fields'][] = $field;
-			}
-		}
+
+		// prepare fields
+		$fields = acf_prepare_fields_for_export( $fields );
+		
+		
+		// add to field group
+		$field_group['fields'] = $fields;
+		
+		
+		// extract field group ID
+		$id = acf_extract_var( $field_group, 'ID' );
 		
 				
 		// write file
@@ -101,30 +72,7 @@ class acf_json {
 		return;
 			
 	}
-	
-	
-	function populate_fields( $parent, &$return ) {
 		
-		// get fields
-		$fields = acf_get_fields( $parent );
-		
-		
-		// load fields from DB
-		if( !empty($fields) )
-		{
-			foreach( $fields as $field )
-			{
-				// append to return
-				$return[] = $field;
-				
-				
-				// attempt next level
-				$this->populate_fields( $field, $return );
-			}
-		}
-		
-	}
-	
 	
 	/*
 	*  include_fields

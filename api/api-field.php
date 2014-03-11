@@ -747,7 +747,6 @@ function acf_update_field( $field = false, $specific = false ) {
     	// clean up
     	unset($_save);
     	
-    	
     }
     
     
@@ -766,8 +765,12 @@ function acf_update_field( $field = false, $specific = false ) {
     }
 	
     
+    // clear cache
+	wp_cache_delete( "load_field/ID={$field['ID']}", 'acf' );
+	
+	
     // update cache
-	wp_cache_set( "load_field/ID={$field['ID']}", $field, 'acf' );
+	//wp_cache_set( "load_field/ID={$field['ID']}", $field, 'acf' );
 	
 	
     // return
