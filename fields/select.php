@@ -545,16 +545,15 @@ acf_render_field_option( $this->name, array(
 	function update_value( $value, $post_id, $field ) {
 		
 		// validate
-		if( empty($value) )
-		{
+		if( empty($value) ) {
+		
 			return $value;
+			
 		}
 		
 		
-		if( is_string($value) )
-		{
-			// string
-			$value = explode(',', $value);
+		// array
+		if( is_array($value) ) {
 			
 			// save value as strings, so we can clearly search for them in SQL LIKE statements
 			$value = array_map('strval', $value);
@@ -562,6 +561,7 @@ acf_render_field_option( $this->name, array(
 		}
 		
 		
+		// return
 		return $value;
 	}
 	

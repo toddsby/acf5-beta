@@ -4255,13 +4255,14 @@ acf.add_action('ready append', function( $el ){
 			$input.select2('container').before( $input );
 			
 			
-			// clear input value (allow nothing to be saved)
-			$input.val('');
-			
-			
-			// sortable?
+			// multiple
 			if( o.multiple )
 			{
+				// clear input value (allow nothing to be saved) - only for multiple
+				$input.val('');
+				
+				
+				// sortable
 				$input.select2('container').find('ul.select2-choices').sortable({
 					 //containment: 'parent',
 					 start: function() {
