@@ -1115,10 +1115,6 @@ var acf = {
 			_prototype.orig_dispose = _prototype.dispose;
 			
 			
-			// update class
-			_prototype.className = 'compat-item acf_postbox no_box';
-			
-			
 			// modify render
 			_prototype.render = function() {
 				
@@ -1195,8 +1191,8 @@ var acf = {
 				// The clearTimout is needed to prevent many setup functions from running at the same time
 				clearTimeout( acf.media.render_timout );
 				acf.media.render_timout = setTimeout(function(){
-
-					$(document).trigger( 'acf/setup_fields', [ _this.$el ] );
+					
+					acf.do_action('append', _this.$el);
 					
 				}, 50);
 
@@ -1210,7 +1206,7 @@ var acf = {
 			_prototype.dispose = function() {
 				
 				// remove
-				$(document).trigger('acf/remove_fields', [ this.$el ]);
+				acf.do_action('remove', this.$el);
 				
 				
 				// run the old render function

@@ -118,7 +118,7 @@ class acf_controller_attachment {
 		// $el
 		if( $this->validate_page() ) {
 			
-			$el = 'div';
+			//$el = 'div';
 			
 		}
 		
@@ -139,11 +139,27 @@ class acf_controller_attachment {
 			));
 			
 			
+			// $el
+			if( $el == 'tr' ) {
+				
+				echo '</td></tr>';
+				
+			}
+			
+			
 			foreach( $field_groups as $field_group ) {
 				
 				$fields = acf_get_fields( $field_group );
 				
 				acf_render_fields( $post_id, $fields, $el, 'field' );
+				
+			}
+			
+			
+			// $el
+			if( $el == 'tr' ) {
+				
+				echo '<tr class="compat-field-acf-blank"><td>';
 				
 			}
 			
@@ -154,7 +170,7 @@ class acf_controller_attachment {
 			ob_end_clean();
 			
 			
-			$form_fields[ 'acf' ] = array(
+			$form_fields[ 'acf-form-data' ] = array(
 	       		'label' => '',
 	   			'input' => 'html',
 	   			'html' => $html

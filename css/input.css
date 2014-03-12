@@ -899,29 +899,25 @@ ul.acf-radio-list.pill li label input {
 	
 }
 
-.media-modal .field {
-	padding: 0;
-}
-
-
 /* WP sets tables to act as divs. ACF uses tables, so these muct be reset */
-.media-modal .compat-attachment-fields td.field table {
+.media-modal .compat-attachment-fields td.acf-input table {
 	display: table;
 }
-.media-modal .compat-attachment-fields td.field table tbody {
+.media-modal .compat-attachment-fields td.acf-input table tbody {
 	display: table-row-group;
 }
-.media-modal .compat-attachment-fields td.field table tr {
+.media-modal .compat-attachment-fields td.acf-input table tr {
 	display: table-row;
 }
-.media-modal .compat-attachment-fields td.field table td,
-.media-modal .compat-attachment-fields td.field table th {
+.media-modal .compat-attachment-fields td.acf-input table td,
+.media-modal .compat-attachment-fields td.acf-input table th {
 	display: table-cell;
 }
 
 .compat-item table.widefat {
 	border: #DFDFDF solid 1px;
 }
+
 
 
 /* Expand / Collapse button */
@@ -1015,13 +1011,15 @@ ul.acf-radio-list.pill li label input {
 }
 
 .media-modal.acf-expanded .media-sidebar .setting span,
-.media-modal.acf-expanded .compat-item .label {
+.media-modal.acf-expanded .compat-item .label,
+.media-modal.acf-expanded .compat-item .acf-label {
 	min-width: 20%;	
 }
 
 .media-modal.acf-expanded .media-sidebar .setting input, 
 .media-modal.acf-expanded .media-sidebar .setting textarea,
-.media-modal.acf-expanded .compat-item .field {
+.media-modal.acf-expanded .compat-item .field,
+.media-modal.acf-expanded .compat-item .acf-input {
 	width: 77%;
 }
 
@@ -1086,7 +1084,8 @@ ul.acf-radio-list.pill li label input {
 @media (max-width: 760px) {
 	
 	.media-modal.acf-expanded .media-sidebar .setting span,
-	.media-modal.acf-expanded .compat-item .label {
+	.media-modal.acf-expanded .compat-item .label,
+	.media-modal.acf-expanded .compat-item .acf-label {
 		min-width: 100%;
 		text-align: left;
 		min-height: 0;
@@ -1099,11 +1098,50 @@ ul.acf-radio-list.pill li label input {
 	
 	.media-modal.acf-expanded .media-sidebar .setting input, 
 	.media-modal.acf-expanded .media-sidebar .setting textarea,
-	.media-modal.acf-expanded .compat-item .field {
+	.media-modal.acf-expanded .compat-item .field,
+	.media-modal.acf-expanded .compat-item .acf-input {
 		width: 100%;
 	}
 	
 }
+
+
+
+/* compat-item */
+.compat-item .compat-field-acf-form-data {
+	display: none;
+}
+
+.compat-item .acf-field {
+	margin: 0;
+}
+
+.compat-item .acf-label {
+	min-width: 30%;
+	margin: 0;
+	padding: 0;
+	float: left;
+    text-align: right;
+    display: block;
+    float: left;
+}
+
+.compat-item .acf-label label {
+	padding-top: 7px;
+	margin: 5px 0 0;
+	color: #666666;
+    font-weight: 400;
+    line-height: 16px;
+}
+
+.compat-item .acf-input {
+	width: 66%;
+	margin: 5px 0 0;
+	padding: 0;
+    float: right;
+    display: block;
+}
+
 
 
 /*--------------------------------------------------------------------------
