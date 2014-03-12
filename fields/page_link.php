@@ -530,39 +530,41 @@ class acf_field_page_link extends acf_field
 	function update_value( $value, $post_id, $field ) {
 		
 		// validate
-		if( empty($value) )
-		{
+		if( empty($value) ) {
+		
 			return $value;
+			
 		}
 		
 		
-		// force value to array
-		$value = acf_force_type_array( $value );
-		
-					
-		// array
-		foreach( $value as $k => $v ){
-		
-			// object?
-			if( is_object($v) && isset($v->ID) )
-			{
-				$value[ $k ] = $v->ID;
+		// format
+		if( is_array($value) ) {
+			
+			// array
+			foreach( $value as $k => $v ){
+			
+				// object?
+				if( is_object($v) && isset($v->ID) )
+				{
+					$value[ $k ] = $v->ID;
+				}
 			}
+			
+			
+			// save value as strings, so we can clearly search for them in SQL LIKE statements
+			$value = array_map('strval', $value);
+			
+		} elseif( is_object($value) && isset($value->ID) ) {
+			
+			// object
+			$value = $value->ID;
+			
 		}
 		
 		
-		// save value as strings, so we can clearly search for them in SQL LIKE statements
-		$value = array_map('strval', $value);
-			
-			
-		// convert back from array if neccessary
-		if( !$field['multiple'] )
-		{
-			$value = array_shift($value);
-		}
-		
-		
+		// return
 		return $value;
+		
 	}
 	
 }

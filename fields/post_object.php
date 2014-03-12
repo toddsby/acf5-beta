@@ -563,29 +563,16 @@ acf_render_field_option( $this->name, array(
 	function update_value( $value, $post_id, $field ) {
 		
 		// validate
-		if( empty($value) )
-		{
+		if( empty($value) ) {
+		
 			return $value;
+			
 		}
 		
 		
-		if( is_string($value) )
-		{
-			// string
-			$value = explode(',', $value);
+		// format
+		if( is_array($value) ) {
 			
-			// save value as strings, so we can clearly search for them in SQL LIKE statements
-			$value = array_map('strval', $value);
-			
-		}
-		elseif( is_object($value) && isset($value->ID) )
-		{
-			// object
-			$value = $value->ID;
-			
-		}
-		elseif( is_array($value) )
-		{
 			// array
 			foreach( $value as $k => $v ){
 			
@@ -596,13 +583,21 @@ acf_render_field_option( $this->name, array(
 				}
 			}
 			
+			
 			// save value as strings, so we can clearly search for them in SQL LIKE statements
 			$value = array_map('strval', $value);
+			
+		} elseif( is_object($value) && isset($value->ID) ) {
+			
+			// object
+			$value = $value->ID;
 			
 		}
 		
 		
+		// return
 		return $value;
+		
 	}
 	
 }
