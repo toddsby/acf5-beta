@@ -132,6 +132,7 @@ class acf {
 		
 		
 		// forms
+		acf_include('forms/attachment.php');
 		acf_include('forms/comment.php');
 		acf_include('forms/post.php');
 		acf_include('forms/taxonomy.php');

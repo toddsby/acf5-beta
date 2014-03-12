@@ -435,7 +435,8 @@ class acf_field_group {
 			case "post_type" :
 				
 				// all post types except attachment
-				$choices = acf_get_post_types();
+				$exclude = array('attachment');
+				$choices = acf_get_post_types( $exclude );
 
 				break;
 			
@@ -603,7 +604,7 @@ class acf_field_group {
 			*  Forms
 			*/
 			
-			case "media" :
+			case "attachment" :
 				
 				$choices = array('all' => __('All', 'acf'));
 			

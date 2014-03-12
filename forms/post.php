@@ -56,22 +56,27 @@ class acf_controller_post {
 		
 		
 		// validate page
-		if( in_array( $pagenow, array('post.php', 'post-new.php') ) )
-		{
-			// validate post type
-			if( $typenow != "acf-field-group" )
-			{
-				$return = true;
-			}
+		if( in_array($pagenow, array('post.php', 'post-new.php')) ) {
+			
+			$return = true;
 			
 		}
 		
 		
 		// update vars
-		if( !empty($post) )
-		{
+		if( !empty($post) ) {
+		
 			$this->post_id = $post->ID;
 			$this->typenow = $typenow;
+			
+		}
+		
+		
+		// validate post type
+		if( in_array($typenow, array('acf-field-group', 'attachment')) ) {
+			
+			return false;
+			
 		}
 		
 		
@@ -83,7 +88,7 @@ class acf_controller_post {
 			$this->post_id = absint( $_GET['id'] );
 			$this->typenow = 'shopp_product';
 		}
-		
+				
 		
 		// return
 		return $return;

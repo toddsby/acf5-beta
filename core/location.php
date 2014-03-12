@@ -762,6 +762,56 @@ function match_field_groups_ajax()
     
     
     /*
+    *  rule_match_attachment
+    *
+    *  description
+    *
+    *  @type	function
+    *  @date	12/03/2014
+    *  @since	5.0.0
+    *
+    *  @param	$post_id (int)
+    *  @return	$post_id (int)
+    */
+	
+	function rule_match_attachment( $match, $rule, $options ) {
+		
+		$attachment = $options['attachment'];
+		
+		
+		if( $attachment )
+		{
+			if($rule['operator'] == "==")
+	        {
+	        	$match = ( $attachment == $rule['value'] );
+	        	
+	        	// override for "all"
+		        if( $rule['value'] == "all" )
+				{
+					$match = true;
+				}
+				
+	        }
+	        elseif($rule['operator'] == "!=")
+	        {
+	        	$match = ( $attachment != $rule['value'] );
+	        		
+	        	// override for "all"
+		        if( $rule['value'] == "all" )
+				{
+					$match = false;
+				}
+				
+	        }
+		}
+        
+        
+        return $match;
+        
+    }
+    
+    
+    /*
 	*  rule_match_user_role
 	*
 	*  @description: 

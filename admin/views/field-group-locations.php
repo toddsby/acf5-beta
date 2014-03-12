@@ -90,7 +90,7 @@ if( empty($field_group['location']) )
 													'user_role'		=>	__("User Role",'acf'),
 												),
 												__("Forms",'acf') => array(
-													'media'			=>	__("Attachment",'acf'),
+													'attachment'	=>	__("Attachment",'acf'),
 													'taxonomy'		=>	__("Taxonomy Term",'acf'),
 													'comment'		=>	__("Comment",'acf'),
 													'widget'		=>	__("Widget",'acf'),
