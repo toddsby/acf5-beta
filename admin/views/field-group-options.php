@@ -56,8 +56,8 @@ if( !$field_group['key'] )
 			'name'			=> 'acf_field_group[style]',
 			'value'			=> $field_group['style'],
 			'choices' 		=> array(
-				'seamless'			=>	__("Seamless (no metabox)",'acf'),
 				'default'			=>	__("Standard (WP metabox)",'acf'),
+				'seamless'			=>	__("Seamless (no metabox)",'acf'),
 			)
 		), 'tr');
 		
