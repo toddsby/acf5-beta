@@ -49,7 +49,7 @@ class acf_json {
 		// load fields
 		$fields = acf_get_fields( $field_group );
 
-
+		
 		// prepare fields
 		$fields = acf_prepare_fields_for_export( $fields );
 		
