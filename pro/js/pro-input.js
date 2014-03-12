@@ -1200,12 +1200,17 @@
 		
 		open_sidebar : function(){
 			
+			this.$el.find('[data-name="bulk-actions-select"]').hide();
+			
 			this.$el.find('.acf-gallery-main').animate({ right : 300 }, 250);
 			this.$el.find('.acf-gallery-side').animate({ width : 299 }, 250);
 			
 		},
 		
 		close_sidebar : function(){
+			
+			// vars
+			var $select = this.$el.find('[data-name="bulk-actions-select"]');
 			
 			// deselect attachmnet
 			this.clear_selection();
@@ -1215,22 +1220,13 @@
 			this.$el.find('.acf-gallery-main').animate({ right : 0 }, 250);
 			this.$el.find('.acf-gallery-side').animate({ width : 0 }, 250, function(){
 				
+				$select.show();
+				
 				$(this).find('.acf-gallery-side-data').html( '' );
 				
 			});
 			
 		},
-		
-		/*
-close : function( $a ){
-			
-			// vars
-			var $gallery = this.get_field( $a );
-			
-			
-			this.close_sidebar( $gallery );
-		},
-*/
 		
 		fetch : function( id ){
 			

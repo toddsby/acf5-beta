@@ -443,12 +443,16 @@
 }
 
 .acf-gallery .acf-gallery-side-data .acf-label {
-	color: #999999;
+	color: #666666;
 	font-size: 12px;
 	line-height: 25px;
 	padding: 0 4px 8px 0;
 	width: auto;
 	vertical-align: top;
+}
+
+.acf-gallery .acf-gallery-side-data .acf-label label {
+	font-weight: normal
 }
 
 .acf-gallery .acf-gallery-side-data .acf-input {
