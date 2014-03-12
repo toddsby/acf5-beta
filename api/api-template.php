@@ -1288,28 +1288,22 @@ function update_field( $selector, $value, $post_id = false ) {
 	
 	// get field
 	$field = get_field_object( $selector, $post_id, false, false);
-
 	
-	// sub fields? They need formatted data
-	if( $field['type'] == 'repeater' )
+	
+	// create dummy field
+	if( !$field )
 	{
-		$value = acf_convert_field_names_to_keys( $value, $field );
-	}
-	elseif( $field['type'] == 'flexible_content' )
-	{
-		if( $field['layouts'] )
-		{
-			foreach( $field['layouts'] as $layout )
-			{
-				$value = acf_convert_field_names_to_keys( $value, $layout );
-			}
-		}
+		$field = acf_get_valid_field(array(
+			'name'	=> $selector,
+			'key'	=> '',
+			'type'	=> '',
+		));
 	}
 	
 	
 	// save
 	return acf_update_value( $value, $post_id, $field );
-	
+		
 }
 
 

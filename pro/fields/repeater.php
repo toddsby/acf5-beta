@@ -533,8 +533,20 @@ class acf_field_repeater extends acf_field
 				// loop through sub fields
 				foreach( $field['sub_fields'] as $sub_field )
 				{
-					// get sub field data
-					$v = isset( $row[$sub_field['key']] ) ? $row[$sub_field['key']] : false;
+					// value
+					$v = false;
+					
+					
+					// key (backend)
+					if( isset($row[ $sub_field['key'] ]) ) {
+						
+						$v = $row[ $sub_field['key'] ];
+						
+					} elseif( isset($row[ $sub_field['name'] ]) ) {
+						
+						$v = $row[ $sub_field['name'] ];
+						
+					}
 					
 					
 					// modify name for save

@@ -572,79 +572,119 @@ class acf_field_flexible_content extends acf_field
 	*  @return	$value - the modified value
 	*/
 	
-	function update_value( $value, $post_id, $field )
-	{
+	function update_value( $value, $post_id, $field ) {
+		
 		// vars
-		$sub_fields = array();
+		$order = array();
+		$layouts = array();
 		
-		foreach( $field['layouts'] as $layout )
-		{
-			foreach( $layout['sub_fields'] as $sub_field )
-			{
-				$sub_fields[ $sub_field['key'] ] = $sub_field;
-			}
+		
+		// populate $layouts
+		foreach( $field['layouts'] as $layout ) {
+			
+			$layouts[ $layout['name'] ] = $layout['sub_fields'];
+			
 		}
-
-		$total = array();
 		
-		if( $value )
-		{
+		
+		if( !empty($value) ) {
+			
 			// remove dummy field
 			unset( $value['acfcloneindex'] );
 			
+			
+			// $i
 			$i = -1;
 			
+			
 			// loop through rows
-			foreach( $value as $row )
-			{	
+			foreach( $value as $row ) {	
+				
+				// $i
 				$i++;
 				
 				
-				// increase total
-				$total[] = $row['acf_fc_layout'];
-				unset( $row['acf_fc_layout'] );
+				// get layout
+				$l = acf_extract_var( $row, 'acf_fc_layout');
+				
+				
+				// append to order
+				$order[] = $l;
 				
 				
 				// loop through sub fields
-				foreach( $row as $field_key => $v )
-				{
-					// get sub field data
-					$sub_field = $sub_fields[ $field_key ];
+				if( !empty($layouts[ $l ]) ) {
 					
+					foreach( $layouts[ $l ] as $sub_field ) {
+						
+						// value
+						$v = false;
+						
+						
+						// key (backend)
+						if( isset($row[ $sub_field['key'] ]) ) {
+							
+							$v = $row[ $sub_field['key'] ];
+							
+						} elseif( isset($row[ $sub_field['name'] ]) ) {
+							
+							$v = $row[ $sub_field['name'] ];
+							
+						}
+						
+						
+						// modify name for save
+						$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
+						
+						
+						// update field
+						acf_update_value( $v, $post_id, $sub_field );
+						
+					}
+					// foreach
 					
-					// modify name for save
-					$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
-					
-					
-					// update field
-					acf_update_value( $v, $post_id, $sub_field );
 				}
+				// if
+				
 			}
+			// foreach
+			
 		}
+		// if
 		
 		
 		// remove old data
-		$old_total = acf_get_value( $post_id, $field );
-		$old_total = count( $old_total );
-		$new_total = count( $total );
+		$old_order = acf_get_value( $post_id, $field, false );
 		
-		
-		if( $old_total > $new_total )
-		{
-			for ( $i = $new_total; $i < $old_total; $i++ )
-			{
-				foreach( $sub_fields as $sub_field )
-				{
-					acf_delete_value( $post_id, "{$field['name']}_{$i}_{$sub_field['name']}" );
+		if( count($old_order) > count($order) ) {
+			
+			for( $i = count($order); $i < count($old_order); $i++ ) {
+				
+				// get layout
+				$l = $old_order[ $i ];
+				
+				
+				// loop through sub fields
+				if( !empty($layouts[ $l ]) ) {
+					
+					foreach( $layouts[ $l ] as $sub_field ) {
+					
+						acf_delete_value( $post_id, "{$field['name']}_{$i}_{$sub_field['name']}" );
+						
+					}
+					
 				}
+				
 			}
+			
 		}
 
 		
 		// update $value and return to allow for the normal save function to run
-		$value = $total;
+		$value = $order;
 		
 		
+		// return
 		return $value;
 	}
 	
