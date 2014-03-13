@@ -392,9 +392,10 @@ class acf_field_repeater extends acf_field
 	function format_value( $value, $post_id, $field, $template ) {
 		
 		// bail early if no value
-		if( empty($value) )
-		{
+		if( empty($value) ) {
+			
 			return $value;
+			
 		}
 		
 		
@@ -404,28 +405,37 @@ class acf_field_repeater extends acf_field
 		$format_template = $template;
 		
 		
-		if( $value > 0 )
-		{
+		if( $value > 0 ) {
+			
 			// loop through rows
-			for( $i = 0; $i < $value; $i++ )
-			{
+			for( $i = 0; $i < $value; $i++ ) {
+				
 				// create empty array
 				$values[ $i ] = array();
 				
 				
 				// loop through sub fields
-				foreach( $field['sub_fields'] as $sub_field )
-				{
+				foreach( $field['sub_fields'] as $sub_field ) {
+					
+					// var
+					$k = $template ? $sub_field['name'] : $sub_field['key'];
+					
+					
 					// update full name
 					$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
 					
 					
 					// get value
-					$values[ $i ][ $sub_field['key'] ] = acf_get_value( $post_id, $sub_field, $format, $format_template );
+					$values[ $i ][ $k ] = acf_get_value( $post_id, $sub_field, $format, $format_template );
 					
 				}
+				// foreach
+				
 			}
+			// for
+			
 		}
+		// if
 		
 		
 		// return
@@ -511,75 +521,104 @@ class acf_field_repeater extends acf_field
 	*  @return	$value - the modified value
 	*/
 	
-	function update_value( $value, $post_id, $field )
-	{
+	function update_value( $value, $post_id, $field ) {
+		
+		// remove acfcloneindex
+		if( isset($value['acfcloneindex']) )
+		{
+			unset($value['acfcloneindex']);
+		}
+		
+		
+		// vars
 		$total = 0;
 		
-		if( !empty($value) )
-		{
-			// remove dummy field
-			unset( $value['acfcloneindex'] );
+		
+		// update sub fields
+		if( !empty($value) ) {
 			
+			// $i
 			$i = -1;
 			
+			
 			// loop through rows
-			foreach( $value as $row )
-			{	
+			foreach( $value as $row ) {	
+				
+				// $i
 				$i++;
+				
 				
 				// increase total
 				$total++;
 				
+				
 				// loop through sub fields
-				foreach( $field['sub_fields'] as $sub_field )
-				{
-					// value
-					$v = false;
-					
-					
-					// key (backend)
-					if( isset($row[ $sub_field['key'] ]) ) {
+				if( !empty($field['sub_fields']) ) {
+				
+					foreach( $field['sub_fields'] as $sub_field ) {
 						
-						$v = $row[ $sub_field['key'] ];
+						// value
+						$v = false;
 						
-					} elseif( isset($row[ $sub_field['name'] ]) ) {
 						
-						$v = $row[ $sub_field['name'] ];
+						// key (backend)
+						if( isset($row[ $sub_field['key'] ]) ) {
+							
+							$v = $row[ $sub_field['key'] ];
+							
+						} elseif( isset($row[ $sub_field['name'] ]) ) {
+							
+							$v = $row[ $sub_field['name'] ];
+							
+						}
+						
+						
+						// modify name for save
+						$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
+						
+						
+						// update field
+						acf_update_value( $v, $post_id, $sub_field );
 						
 					}
-					
-					
-					// modify name for save
-					$sub_field['name'] = "{$field['name']}_{$i}_{$sub_field['name']}";
-					
-					
-					// update field
-					acf_update_value( $v, $post_id, $sub_field );
+					// foreach
 					
 				}
+				// if
+				
 			}
+			// foreach
+			
 		}
+		// if
 		
 		
 		// remove old data
 		$old_total = intval( acf_get_value( $post_id, $field ) );
 		
-		if( $old_total > $total )
-		{
-			for ( $i = $total; $i < $old_total; $i++ )
-			{
-				foreach( $field['sub_fields'] as $sub_field )
-				{
+		if( $old_total > $total ) {
+			
+			for ( $i = $total; $i < $old_total; $i++ ) {
+				
+				foreach( $field['sub_fields'] as $sub_field ) {
+					
 					acf_delete_value( $post_id, "{$field['name']}_{$i}_{$sub_field['name']}" );
+				
 				}
+				// foreach
+			
 			}
+			// for
+			
 		}
+		// if
 
 		
 		// update $value and return to allow for the normal save function to run
 		$value = $total;
 		
 		
+		// return
 		return $value;
 	}
 
