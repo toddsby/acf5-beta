@@ -125,11 +125,23 @@
 	        	embed = $el.find('[data-name="value-embed"]').html();
 	        
 	        
-	        // detect change
-	        if( new_url != old_url )
-	        {
-		        this.search( $el );
+	        // bail early if no valu
+	        if( !new_url ) {
+		        
+		        this.clear( $el );
+		        return;
 	        }
+	        
+	        
+	        // bail early if no change
+	        if( new_url == old_url ) {
+		        
+		        return;
+		        
+	        }
+	        
+	        this.search( $el );
+	        
 	        			
 		}
 	};
@@ -218,7 +230,22 @@ acf.add_action('ready append', function( $el ){
 	});
 	
 	
-	$(document).on('keyup', '.acf-oembed [data-name="search-input"]', function(e){
+	$(document).on('keyup', '.acf-oembed [data-name="search-input"]', function( e ){
+		
+		// bail early if no value
+		if( ! $(this).val() ) {
+			
+			return;
+			
+		}
+		
+		
+		// bail early for directional controls
+		if( ! e.which ) {
+		
+			return;
+			
+		}
 		
 		acf.fields.oembed.search( $(this).closest('.acf-oembed') );
 		
