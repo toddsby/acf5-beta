@@ -70,7 +70,6 @@ class acf {
 			// options
 			'show_admin'	=> true,
 			'stripslashes'	=> true,
-			'load_db'		=> true,
 			'local'			=> true,
 			'json'			=> true,
 			'save_json'		=> '',

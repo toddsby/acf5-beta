@@ -308,8 +308,6 @@ function acf_get_fields_by_id( $id ) {
 		
 	
 	// load fields
-	//if( acf->get_setting('alow_db') )
-	//{
 	$posts = get_posts( $args );
 	
 	if( $posts )
@@ -319,8 +317,7 @@ function acf_get_fields_by_id( $id ) {
 			$fields[] = acf_get_field( $post->ID );
 		}	
 	}
-	//}
-	
+		
 	
 	// return
 	return $fields;
