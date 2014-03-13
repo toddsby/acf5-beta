@@ -4275,6 +4275,8 @@ acf.add_action('ready append', function( $el ){
 			}
 			
 			
+			// make sure select is disabled (repeater / flex may enable it!)
+			$select.attr('disabled', 'disabled');
 			
 		}
 	};
