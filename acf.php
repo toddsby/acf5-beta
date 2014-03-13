@@ -8,6 +8,8 @@ Author: elliot condon
 Author URI: http://www.elliotcondon.com/
 License: GPL
 Copyright: Elliot Condon
+Text Domain: acf
+Domain Path: /lang
 */
 
 // Current with acf v4 as of 27th Feb 1dde13a0bb8af763ef086f2ca0be4553ac955346
