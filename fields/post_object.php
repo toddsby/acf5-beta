@@ -491,16 +491,18 @@ acf_render_field_option( $this->name, array(
 	function format_value( $value, $post_id, $field, $template ) {
 		
 		// bail early if no value
-		if( empty($value) )
-		{
+		if( empty($value) ) {
+			
 			return $value;
+		
 		}
 		
 		
 		// bail early if not formatting for template use
-		if( !$template )
-		{
+		if( !$template ) {
+			
 			return $value;
+		
 		}
 		
 		
