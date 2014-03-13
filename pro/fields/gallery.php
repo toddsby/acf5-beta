@@ -528,17 +528,108 @@ class acf_field_gallery extends acf_field
 	function format_value( $value, $post_id, $field, $template ) {
 		
 		// bail early if no value
-		if( empty($value) )
-		{
+		if( empty($value) ) {
+			
 			return $value;
+		
 		}
 		
 		
 		// bail early if not formatting for template use
-		if( !$template )
-		{
+		if( !$template ) {
+			
 			return $value;
+		
 		}
+		
+		
+		// force value to array
+		$value = acf_force_type_array( $value );
+		
+		
+		// load posts in 1 query to save multiple DB calls from following code
+		$posts = get_posts(array(
+			'posts_per_page'	=> -1,
+			'post_type'			=> acf_get_post_types(),
+			'post_status'		=> 'any',
+			'post__in'			=> $value,
+			'orderby'			=> 'post__in'
+		));
+		
+		
+		
+		foreach( $value as $k => $v ) {
+			
+			// get post
+			$post = get_post( $v );
+			
+			
+			// create $attachment
+			$a = array(
+				'ID'			=> $post->ID,
+				'alt'			=> get_post_meta($post->ID, '_wp_attachment_image_alt', true),
+				'title'			=> $post->post_title,
+				'caption'		=> $post->post_excerpt,
+				'description'	=> $post->post_content,
+				'mime_type'		=> $post->post_mime_type,
+				'type'			=> 'file',
+				'url'			=> ''
+			);
+			
+			
+			// image
+			if( strpos($a['mime_type'], 'image') !== false ) {
+				
+				// type
+				$a['type'] = 'image';
+				
+				
+				// url
+				$src = wp_get_attachment_image_src( $a['ID'], 'full' );
+				
+				$a['url'] = $src[0];
+				$a['width'] = $src[1];
+				$a['height'] = $src[2];
+				
+				
+				// find all image sizes
+				$sizes = get_intermediate_image_sizes();
+				
+				
+				// sizes
+				if( !empty($sizes) ) {
+					
+					$a['sizes'] = array();
+					
+					foreach( $sizes as $size ) {
+						
+						// url
+						$src = wp_get_attachment_image_src( $a['ID'], $size );
+						
+						// add src
+						$a['sizes'][ $size ] = $src[0];
+						$a['sizes'][ $size . '-width' ] = $src[1];
+						$a['sizes'][ $size . '-height' ] = $src[2];
+						
+					}
+					// foreach
+					
+				}
+				// if
+				
+			} else {
+				
+				// is file
+				$src = wp_get_attachment_url( $a['ID'] );
+				
+				$a['url'] = $src;
+			}
+			
+			
+			$value[ $k ] = 	$a;
+		
+		}
+		// foreach
 		
 		
 		// return
