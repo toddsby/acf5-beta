@@ -230,6 +230,19 @@ function _migrate_field_500( $field ) {
 	}
 	
 	
+	// image / file settings
+	if( $field['type'] == 'image' || $field['type'] == 'file' ) {
+		
+		// object is now array
+		if( $field['return_format'] == 'object' ) {
+			
+			$field['return_format'] = 'array';
+			
+		}
+		
+	}
+	
+	
 	// save field
 	$field = acf_update_field( $field );
 	
