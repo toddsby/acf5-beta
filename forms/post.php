@@ -143,10 +143,15 @@ class acf_controller_post {
 	
 	function admin_head() {
 		
+		// vars
+		$style_found = false;
+		
+		
 		// get field groups
 		$field_groups = acf_get_field_groups();
 		
 		
+		// add meta boxes
 		if( !empty($field_groups) )
 		{
 			foreach( $field_groups as $i => $field_group )
@@ -156,7 +161,10 @@ class acf_controller_post {
 				$title = $field_group['title'];
 				$context = $field_group['position'];
 				$priority = 'high';
-				$args = array( 'field_group' => $field_group );
+				$args = array( 
+					'field_group'	=> $field_group,
+					'visibility'	=> false
+				);
 				
 				
 				// tweaks to vars
@@ -170,13 +178,22 @@ class acf_controller_post {
 				$priority = apply_filters('acf/input/meta_box_priority', $priority, $field_group);
 				
 				
+				// visibility
+				$args['visibility'] = acf_get_field_group_visibility( $field_group, array(
+					'post_id'	=> $this->post_id, 
+					'post_type'	=> $this->typenow
+				));
+				
+				
 				// add meta box
 				add_meta_box( $id, $title, array($this, 'render_meta_box'), $this->typenow, $context, $priority, $args );
 				
 				
 				// update style
-				if( $i == 0 )
-				{
+				if( !$style_found && $args['visibility'] ) {
+					
+					$style_found = true;
+					
 					$this->style = acf_get_field_group_style( $field_group );
 				}
 				
@@ -245,13 +262,6 @@ class acf_controller_post {
 		// extract args
 		extract( $args ); // all variables from the add_meta_box function
 		extract( $args ); // all variables from the args argument
-		
-		
-		// vars
-		$visibility = acf_get_field_group_visibility( $field_group, array(
-			'post_id'	=> $this->post_id, 
-			'post_type'	=> $this->typenow
-		));
 		
 		
 		// classes
