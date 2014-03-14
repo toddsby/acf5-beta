@@ -6,6 +6,11 @@ class acf_json {
 		
 		add_action('acf/update_field_group',		array($this, 'update_field_group'), 10, 1);
 		add_action('acf/duplicate_field_group',		array($this, 'update_field_group'), 10, 1);
+		add_action('acf/untrash_field_group',		array($this, 'update_field_group'), 10, 1);
+		
+		add_action('acf/trash_field_group',			array($this, 'delete_field_group'), 10, 1);
+		add_action('acf/delete_field_group',		array($this, 'delete_field_group'), 10, 1);
+		
 		add_action('acf/include_fields', 			array($this, 'include_fields'), 10, 1);
 		
 	}
@@ -39,7 +44,7 @@ class acf_json {
 		
 		
 		// bail early if dir does not exist
-		if( !is_dir( $path) )
+		if( !is_writable($path) )
 		{
 			//error_log( 'ACF failed to save field group to .json file. Path does not exist: ' . $path );
 			return;
@@ -66,10 +71,49 @@ class acf_json {
 		$f = fopen("{$path}/{$file}", 'w');
 		fwrite($f, acf_json_encode( $field_group ));
 		fclose($f);
+			
+	}
+	
+	
+	/*
+	*  delete_field_group
+	*
+	*  This function will remove the field group .json file
+	*
+	*  @type	function
+	*  @date	10/03/2014
+	*  @since	5.0.0
+	*
+	*  @param	$field_group (array)
+	*  @return	n/a
+	*/
+	
+	function delete_field_group( $field_group ) {
+		
+		// vars
+		$path = acf_get_setting('save_json');
+		$file = $field_group['key'] . '.json';
 		
 		
-		// return
-		return;
+		// default
+		if( !$path ) {
+			
+			$path = get_template_directory() . '/acf-json';
+			
+		}
+		
+		
+		// bail early if file does not exist
+		if( !is_readable("{$path}/{$file}") ) {
+		
+			//error_log( 'ACF failed to save field group to .json file. Path does not exist: ' . $path );
+			return;
+			
+		}
+		
+			
+		// remove file
+		unlink("{$path}/{$file}");
 			
 	}
 		
