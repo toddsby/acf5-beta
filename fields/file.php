@@ -12,14 +12,14 @@ class acf_field_file extends acf_field
 	*  @date	23/01/13
 	*/
 	
-	function __construct()
-	{
+	function __construct() {
+		
 		// vars
 		$this->name = 'file';
 		$this->label = __("File",'acf');
 		$this->category = 'content';
 		$this->defaults = array(
-			'return_format'	=>	'object',
+			'return_format'	=>	'array',
 			'library' 		=>	'all'
 		);
 		$this->l10n = array(
@@ -37,6 +37,35 @@ class acf_field_file extends acf_field
     	// filters
 		add_filter('get_media_item_args', array($this, 'get_media_item_args'));
 		add_filter('wp_prepare_attachment_for_js', array($this, 'wp_prepare_attachment_for_js'), 10, 3);
+	}
+	
+	
+	/*
+	*  load_field()
+	*
+	*  This filter is applied to the $field after it is loaded from the database
+	*
+	*  @type	filter
+	*  @date	23/01/2013
+	*  @since	3.6.0	
+	*
+	*  @param	$field (array) the field array holding all the field options
+	*  @return	$field
+	*/
+	
+	function load_field( $field ) {
+		
+		// v4 to v5 compatibility
+		if( $field['return_format'] == 'object' ) {
+			
+			$field['return_format'] = 'array';
+			
+		}
+		
+		
+		// return
+		return $field;
+		
 	}
 	
 	
@@ -147,7 +176,7 @@ class acf_field_file extends acf_field
 			'value'			=> $field['return_format'],
 			'layout'		=> 'horizontal',
 			'choices'		=> array(
-				'object'		=> __("File Array",'acf'),
+				'array'			=> __("File Array",'acf'),
 				'url'			=> __("File URL",'acf'),
 				'id'			=> __("File ID",'acf')
 			)
@@ -215,7 +244,7 @@ class acf_field_file extends acf_field
 		{
 			$value = wp_get_attachment_url($value);
 		}
-		elseif( $field['return_format'] == 'object' )
+		elseif( $field['return_format'] == 'array' )
 		{
 			$attachment = get_post( $value );
 			
