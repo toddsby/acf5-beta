@@ -1,7 +1,6 @@
 <?php
 
-class acf_field_image extends acf_field
-{
+class acf_field_image extends acf_field {
 	
 	/*
 	*  __construct
@@ -12,8 +11,8 @@ class acf_field_image extends acf_field
 	*  @date	23/01/13
 	*/
 	
-	function __construct()
-	{
+	function __construct() {
+		
 		// vars
 		$this->name = 'image';
 		$this->label = __("Image",'acf');
@@ -38,6 +37,35 @@ class acf_field_image extends acf_field
 		// filters
 		add_filter('get_media_item_args', array($this, 'get_media_item_args'));
 		add_filter('wp_prepare_attachment_for_js', array($this, 'wp_prepare_attachment_for_js'), 10, 3);
+		
+	}
+	
+	
+	/*
+	*  load_field()
+	*
+	*  This filter is applied to the $field after it is loaded from the database
+	*
+	*  @type	filter
+	*  @date	23/01/2013
+	*  @since	3.6.0	
+	*
+	*  @param	$field (array) the field array holding all the field options
+	*  @return	$field
+	*/
+	
+	function load_field( $field ) {
+		
+		// v4 to v5 compatibility
+		if( $field['return_format'] == 'object' ) {
+			
+			$field['return_format'] = 'array';
+			
+		}
+		
+		
+		// return
+		return $field;
 		
 	}
 	
