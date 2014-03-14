@@ -507,6 +507,7 @@ acf_render_field_option( $this->name, array(
 		
 		
 		// force value to array
+		$is_array = is_array($value);
 		$value = acf_force_type_array( $value );
 		
 		
@@ -534,11 +535,11 @@ acf_render_field_option( $this->name, array(
 		
 		
 		// convert back from array if neccessary
-		if( !$field['multiple'] )
+		if( !$is_array || !$field['multiple'] )
 		{
 			$value = array_shift($value);
 		}
-				
+		
 		
 		// return value
 		return $value;

@@ -473,41 +473,33 @@ class acf_field_page_link extends acf_field
 		
 		
 		// force value to array
+		$is_array = is_array($value);
 		$value = acf_force_type_array( $value );
-		
-		
-		// load posts in 1 query to save multiple DB calls from following code
-		$posts = get_posts(array(
-			'posts_per_page'	=> -1,
-			'post_type'			=> acf_get_post_types(),
-			'post_status'		=> 'any',
-			'post__in'			=> $value,
-			'orderby'			=> 'post__in'
-		));
 		
 		
 		foreach( $value as $k => $v )
 		{
 			if( is_numeric($v) )
 			{
-				$value[ $k ] = get_post( $v );
+				$value[ $k ] = get_permalink( $v );
 			}
 			else
 			{
-				//$field['choices'][ $v ] = $v;
+				// do nothing
 			}
 		}
 		
 		
 		// convert back from array if neccessary
-		if( !$field['multiple'] )
+		if( !$is_array || !$field['multiple'] )
 		{
 			$value = array_shift($value);
 		}
-				
+		
 		
 		// return value
-		return $value;	
+		return $value;
+		
 	}
 	
 	
