@@ -1212,9 +1212,9 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 			var choices		= [],
 				key			= $field.attr('data-key'),
 				$ancestors	= $field.parents('.acf-field-list'),
-				$tr			= $field.find('tr[data-name="conditional_logic"]:first');
+				$tr			= $field.find('> .field-options > table > tbody > tr[data-name="conditional_logic"]');
 				
-			
+			console.log( $tr );
 			$.each( $ancestors, function( i ){
 				
 				var group = (i == 0) ? acf.l10n.sibling_fields : acf.l10n.parent_fields;
@@ -1226,7 +1226,7 @@ $(document).on('change', '#adv-settings input[name="show-field_key"]', function(
 					var $this_field	= $(this),
 						this_key	= $this_field.attr('data-key'),
 						this_type	= $this_field.attr('data-type'),
-						this_label	= $this_field.find('tr[data-name="label"]:first input').val();
+						this_label	= $this_field.find('> .field-options > table > tbody > tr[data-name="label"] input').val();
 					
 					
 					// validate
