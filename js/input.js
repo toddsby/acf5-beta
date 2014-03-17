@@ -5032,7 +5032,15 @@ $(document).on('click', '#publish', function(){
 			
 			
 			// add functionality back in
-			tinyMCE.execCommand("mceAddControl", false, this.o.id);
+			if( tinymce.majorVersion == 4 ) {
+				
+				tinyMCE.execCommand("mceAddEditor", false, this.o.id);
+				
+			} else {
+				
+				tinyMCE.execCommand("mceAddControl", false, this.o.id);
+				
+			}
 				
 				
 			// add events (click, focus, blur) for inserting image into correct editor
@@ -5112,7 +5120,15 @@ $(document).on('click', '#publish', function(){
 			// a JS error will be thrown when launching the edit window twice in a row.
 			try
 			{
-				tinyMCE.execCommand("mceRemoveControl", false, id);
+				if( tinymce.majorVersion == 4 ) {
+					
+					tinyMCE.execCommand("mceRemoveEditor", false, id);
+					
+				} else {
+					
+					tinyMCE.execCommand("mceRemoveControl", false, id);
+					
+				}
 			} 
 			catch(e)
 			{
