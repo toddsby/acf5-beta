@@ -24,6 +24,10 @@ class acf_pro_connect {
         
 		// insert our update info into the update array maintained by WP
 		add_filter('site_transient_update_plugins', array($this, 'inject_update'));
+		
+		
+		// add custom message when PRO not activated but update available
+		add_action('in_plugin_update_message-' . acf_get_setting('basename'), array($this, 'in_plugin_update_message'), 10, 2 );
 	}
 	
 	
@@ -50,6 +54,12 @@ class acf_pro_connect {
     	if( isset($args->slug) && $args->slug == $slug )
     	{
 	    	$info = acf_pro_get_remote_info();
+	    	$sections = acf_extract_vars($info, array(
+	    		'description',
+	    		'installation',
+	    		'changelog',
+	    		'upgrade_notice',
+	    	));
 	    	
 	    	$obj = new stdClass();
 		
@@ -58,9 +68,12 @@ class acf_pro_connect {
 		        $obj->$k = $v;
 		    }
 		    
+		    $obj->sections = $sections;
+
 		    return $obj;
 		    
     	}
+    	
     	
     	        
         return $res;
@@ -93,6 +106,9 @@ class acf_pro_connect {
         // vars
         $info = acf_pro_get_remote_info();
         
+        
+        // fake info version
+        //$info['version'] = '5.0.1';
         
         // bail early if no info
         if( !$info )
@@ -135,6 +151,34 @@ class acf_pro_connect {
 		
 		// return 
         return $transient;
+	}
+	
+	
+	/*
+	*  in_plugin_update_message
+	*
+	*  Displays an update message for plugin list screens.
+	*  Shows only the version updates from the current until the newest version
+	*
+	*  @type	function
+	*  @date	5/06/13
+	*
+	*  @param	{array}		$plugin_data
+	*  @param	{object}	$r
+	*/
+
+	function in_plugin_update_message( $plugin_data, $r ) {
+		
+		// validate
+		if( acf_pro_is_license_active() )
+		{
+			return;
+		}
+		
+		$m = __('To enable updates, please enter your license key on the <a href="%s">Updates</a> page. If you don\'t have a licence key, please see <a href="%s">details & pricing</a>', 'acf');
+		
+		echo '<br />' . sprintf( $m, admin_url('edit.php?post_type=acf-field-group&page=acf-settings-updates'), '#');
+	
 	}
 	
 	
