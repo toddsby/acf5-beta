@@ -145,8 +145,8 @@ function acf_pro_is_license_active() {
 	$data = acf_pro_get_license( true );
 	$url = get_bloginfo('url');
 	
-	
-	if( isset($data['url'], $data['key']) && $data['url'] == $url )
+
+	if( !empty($data['url']) && !empty($data['key']) && $data['url'] == $url )
 	{
 		return true;
 	}
