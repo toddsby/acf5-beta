@@ -776,7 +776,7 @@ class acf_field_group {
 	function ajax_move_field() {
 		
 		// disable JSON to avoid conflicts between DB and JSON
-		acf_update_setting('json', false);
+		acf_update_setting('local', false);
 		
 		
 		$args = acf_parse_args($_POST, array(
@@ -796,11 +796,20 @@ class acf_field_group {
 		// confirm?
 		if( $args['field_id'] && $args['field_group_id'] )
 		{
+			// vars 
 			$field = acf_get_field($args['field_id']);
 			$field_group = acf_get_field_group($args['field_group_id']);
 			
+			
+			// update parent
 			$field['parent'] = $field_group['ID'];
 			
+			
+			// remove conditional logic
+			$field['conditional_logic'] = 0;
+			
+			
+			// update field
 			acf_update_field($field);
 			
 			echo '<p><strong>' . __('Success', 'acf') . '</strong>. ' . sprintf( __('The field %s was moved to field group %s', 'acf'), "'{$field['name']}'", "'{$field_group['title']}'" ). '</p>';
