@@ -66,8 +66,6 @@ New features in ACF5
 Missing features in ACF5
 ------------------------
 
-* Attachment fields
-
 Thank you
 ---------
 
