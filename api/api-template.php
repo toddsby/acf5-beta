@@ -815,7 +815,7 @@ function the_sub_field( $field_name ) {
 *  @return	(array)	
 */
 
-function get_sub_field_object( $child_name ) {
+function get_sub_field_object( $selector ) {
 	
 	// no field?
 	if( empty($GLOBALS['acf_field']) )
@@ -823,74 +823,26 @@ function get_sub_field_object( $child_name ) {
 		return false;
 	}
 
-
-	// vars
-	$depth = count( $GLOBALS['acf_field'] ) - 1;
-	$parent = $GLOBALS['acf_field'][ $depth ]['field'];
-
-
-	// return
-	return acf_get_child_field_from_parent_field( $child_name, $parent );
-	
-}
-
-
-/*
-*  acf_get_sub_field_from_parent_field()
-*
-*  This function is used by the get_sub_field_object to find a sub field within a parent field
-*
-*  @type	function
-*  @since	3.5.8.1
-*  @date	29/01/13
-*
-*  @param	$child_name (string) the field name
-*  @param	$parent (array) the parent field
-*  @return	(array)	
-*/
-
-function acf_get_child_field_from_parent_field( $child_name, $parent ) {
 	
 	// vars
-	$return = false;
-	
-	
-	// find child
-	if( isset($parent['sub_fields']) && is_array($parent['sub_fields']) )
-	{
-		foreach( $parent['sub_fields'] as $child )
-		{
-			if( $child['name'] == $child_name || $child['key'] == $child_name )
-			{
-				$return = $child;
-				break;
-			}
-			
-			// perhaps child has grand children?
-			$grand_child = acf_get_child_field_from_parent_field( $child_name, $child );
-			if( $grand_child )
-			{
-				$return = $grand_child;
-				break;
-			}
-		}
-	}
-	elseif( isset($parent['layouts']) && is_array($parent['layouts']) )
-	{
-		foreach( $parent['layouts'] as $layout )
-		{
-			$child = acf_get_child_field_from_parent_field( $child_name, $layout );
-			if( $child )
-			{
-				$return = $child;
-				break;
-			}
-		}
-	}
-	
+	$row = end( $GLOBALS['acf_field'] );
+	$parent = $row['field'];
 
+	
+	// get sub field
+	$sub_field = acf_get_sub_field( $selector, $parent );
+	
+	
+	// add value
+	if( !empty($sub_field) ) {
+		
+		$sub_field['value'] = get_sub_field( $sub_field['name'] );
+		
+	}
+	
+	
 	// return
-	return $return;
+	return $sub_field;
 	
 }
 

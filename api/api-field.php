@@ -239,7 +239,6 @@ function acf_render_field_options( $field ) {
 */
 
 function acf_get_fields( $parent = false ) {
-
 	
 	// allow $parent to be a field group ID
 	if( !is_array($parent) )
@@ -1122,6 +1121,91 @@ function acf_prepare_field_for_import( $field ) {
 	
 	// return
 	return $field;
+}
+
+
+/*
+*  acf_get_sub_field
+*
+*  This function will return a field for the given selector, and $field (parent). 
+*
+*  @type	function
+*  @date	30/09/13
+*  @since	5.0.0
+*
+*  @param	$selector (string)
+*  @param	$field (mixed)
+*  @return	$field (array)
+*/
+
+function acf_get_sub_field( $selector, $field ) {
+	
+	// sub fields
+	if( $field['type'] == 'repeater' ) {
+		
+		// extract sub fields
+		$sub_fields = acf_extract_var( $field, 'sub_fields');
+		
+		if( !empty($sub_fields) ) {
+		
+			foreach( $sub_fields as $sub_field ) {
+				
+				if( $sub_field['name'] == $selector || $sub_field['key'] == $selector ) {
+					
+					// return
+					return $sub_field;
+					
+				}
+				// if
+				
+			}
+			// foreach
+			
+		}
+		// if
+		
+	} elseif( $field['type'] == 'flexible_content' ) {
+		
+		$layouts = acf_extract_var( $field, 'layouts');
+		
+		if( !empty($layouts) ) {
+			
+			foreach( $layouts as $layout ) {
+				
+				// extract sub fields
+				$sub_fields = acf_extract_var( $layout, 'sub_fields');
+				
+				if( !empty($sub_fields) ) {
+					
+					foreach( $sub_fields as $sub_field ) {
+						
+						if( $sub_field['name'] == $selector || $sub_field['key'] == $selector ) {
+							
+							// return
+							return $sub_field;
+							
+						}
+						// if
+						
+					}
+					// foreach
+					
+				}
+				// if
+				
+			}
+			// foreach
+			
+		}
+		// if
+
+	}
+	// if
+	
+	
+	// return
+	return false;
+	
 }
 
 
