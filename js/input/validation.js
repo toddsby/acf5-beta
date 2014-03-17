@@ -137,13 +137,15 @@
 				
 				
 				// attempt to find $trigger
-				if( ! this.$trigger )
+				/*
+if( ! this.$trigger )
 				{
 					if( $form.find('.submit input[type="submit"]').exists() )
 					{
 						this.$trigger = $form.find('.submit input[type="submit"]');
 					}
 				}
+*/
 				
 				
 				// submit form again
@@ -213,11 +215,13 @@
 			
 			
 			// click publish
-			$(document).on('click', '#publish', function(){
+			/*
+$(document).on('click', '#publish', function(){
 				
 				_this.$trigger = $(this);
 				
 			});
+*/
 			
 			
 			// submit
