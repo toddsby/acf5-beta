@@ -102,7 +102,7 @@ class acf_field_group {
     
 		
 		// disable JSON to avoid conflicts between DB and JSON
-		acf_update_setting('json', false);
+		acf_update_setting('local', false);
 		
 		
 		// actions

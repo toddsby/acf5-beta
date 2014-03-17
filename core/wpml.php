@@ -22,7 +22,6 @@ class acf_wpml_compatibility {
 		add_action('acf/field_group/admin_head',	array($this, 'admin_head'));
 		add_action('acf/input/admin_head',			array($this, 'admin_head'));
 		
-		
 	}
 	
 	

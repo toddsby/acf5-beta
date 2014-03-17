@@ -475,7 +475,7 @@ function acf_update_field_group( $field_group = array() ) {
 function acf_duplicate_field_group( $selector = 0, $new_post_id = 0 ) {
 	
 	// disable JSON to avoid conflicts between DB and JSON
-	acf_update_setting('json', false);
+	acf_update_setting('local', false);
 	
 	
 	// load the origional field gorup

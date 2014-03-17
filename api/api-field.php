@@ -803,7 +803,7 @@ function acf_update_field_wp_unique_post_slug( $slug, $post_ID, $post_status, $p
 function acf_duplicate_field( $selector = 0, $parent_id = 0 ){
 	
 	// disable JSON to avoid conflicts between DB and JSON
-	acf_update_setting('json', false);
+	acf_update_setting('local', false);
 	
 	
 	// load the origional field
