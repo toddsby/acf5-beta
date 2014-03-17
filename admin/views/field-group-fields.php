@@ -3,15 +3,18 @@
 // vars
 // Note: $args is always passed to this view from above
 $fields = array();
+$layout = false;
 
-if( !empty($args) )
+
+// use fields if passed in
+if( !empty($args['fields']) )
 {
-	// use fields if passed in
-	if( array_key_exists('fields', $args) )
-	{
-		$fields = acf_extract_var( $args, 'fields');
-	}
+	$fields = acf_extract_var( $args, 'fields');
 }
+
+
+// get layout
+$layout = acf_extract_var( $args, 'layout');
 
 
 // add clone
@@ -33,7 +36,7 @@ $fields[] = acf_get_valid_field(array(
 		<li class="li-field_type"><?php _e('Type','acf'); ?></li>
 	</ul>
 	
-	<div class="acf-field-list">
+	<div class="acf-field-list<?php if( !empty($layout) ): ?> layout-<?php echo $layout; ?><?php endif; ?>">
 		
 		<?php foreach( $fields as $i => $field ): ?>
 			

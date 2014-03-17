@@ -345,7 +345,8 @@ class acf_field_flexible_content extends acf_field
 					
 					// vars
 					$args = array(
-						'fields' => $layout['sub_fields']
+						'fields'	=> $layout['sub_fields'],
+						'layout'	=> $layout['display']
 					);
 					
 					acf_get_view('field-group-fields', $args);

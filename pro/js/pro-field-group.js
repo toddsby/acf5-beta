@@ -321,7 +321,7 @@
 			this.$el.on('change', '.acf-fc-meta-display select', function( e ){
 				
 				// vars
-				var $repeater = $(this).closest('.acf-fc-meta').siblings('.repeater');
+				var $repeater = $(this).closest('.acf-fc-meta').siblings('.acf-field-list-wrap').children('.acf-field-list');
 				
 				
 				// Set class
