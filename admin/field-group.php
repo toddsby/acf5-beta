@@ -812,7 +812,13 @@ class acf_field_group {
 			// update field
 			acf_update_field($field);
 			
-			echo '<p><strong>' . __('Success', 'acf') . '</strong>. ' . sprintf( __('The field %s was moved to field group %s', 'acf'), "'{$field['name']}'", "'{$field_group['title']}'" ). '</p>';
+			$v1 = $field['label'];
+			$v2 = '<a href="' . admin_url("post.php?post={$field_group['ID']}&action=edit") . '" target="_blank">' . $field_group['title'] . '</a>';
+			
+			echo '<p><strong>' . __('Move Complete.', 'acf') . '</strong></p>';
+			echo  sprintf( __('The %s field can now be found in the %s field group', 'acf'), $v1, $v2 ). '</p>';
+			
+			echo '<a href="#" class="acf-button blue acf-close-popup">' . __("Close Window",'acf') . '</a>';
 			
 			die();
 			
@@ -843,7 +849,7 @@ class acf_field_group {
 		));
 		
 		
-		echo '<p>' . __('Please select the field group you wish this field to move to', 'acf') . '</p>';
+		echo '<p>' . __('Please select the destination for this field', 'acf') . '</p>';
 		
 		echo '<form id="acf-move-field-form">';
 		

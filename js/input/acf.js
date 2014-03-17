@@ -515,7 +515,7 @@ var acf = {
 			var tmpl = [
 				'<div id="acf-popup">',
 					'<div class="acf-popup-box acf-box">',
-						'<div class="title"><h3></h3><a href="#" class="acf-icon"><i class="acf-sprite-delete "></i></a></div>',
+						'<div class="title"><h3></h3><a href="#" class="acf-icon acf-close-popup"><i class="acf-sprite-delete "></i></a></div>',
 						'<div class="inner"></div>',
 						'<div class="loading"><i class="acf-loading"></i></div>',
 					'</div>',
@@ -528,7 +528,7 @@ var acf = {
 			$('body').append( tmpl );
 			
 			
-			$('#acf-popup .bg, #acf-popup .acf-icon').on('click', function(){
+			$('#acf-popup').on('click', '.bg, .acf-close-popup', function(){
 				
 				acf.close_popup();
 				
