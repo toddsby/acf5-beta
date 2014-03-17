@@ -128,8 +128,6 @@ ul.acf-checkbox-list li {
 	font-size: 13px;
 	line-height: 22px;
 	margin: 0;
-	clear: both;
-	float: left;
 	position: relative;
 	word-wrap: break-word;
 }
@@ -149,75 +147,9 @@ ul.acf-checkbox-list li input {
 
 ul.acf-radio-list li label,
 ul.acf-checkbox-list li label {
-	float: left;
+	display: inline;
 	margin: 2px 0;
 }
-
-ul.acf-radio-list.pill {
-	overflow: hidden;
-}
-
-ul.acf-radio-list.pill li {
-	float: left;
-}
-
-ul.acf-radio-list.pill li label {
-	display: block;
-	overflow: hidden;
-	position: relative;
-	
-	border-radius: 0;
-	padding: 4px 10px;
-    cursor: pointer;
-	
-    color: #333;
-    font-weight: normal;
-    text-align: center;
-	
-	background: #F9F9F9;
-	border: #E1E1E1 solid 1px;
-}
-
-ul.acf-radio-list.pill li label:hover {
-	color: #333;
-	border-color: #999;
-	z-index: 1;
-}
-
-ul.acf-radio-list.pill li.active label {
-	background: #3595BC;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#46AFDB), to(#3199C5)); /* Safari 4+, Chrome */
-	background-image: -webkit-linear-gradient(top, #46AFDB, #3199C5); /* Chrome 10+, Safari 5.1+, iOS 5+ */
-	background-image:    -moz-linear-gradient(top, #46AFDB, #3199C5); /* Firefox 3.6-15 */
-	background-image:      -o-linear-gradient(top, #46AFDB, #3199C5); /* Opera 11.10+ */
-	background-image:         linear-gradient(to bottom, #46AFDB, #3199C5); /* Firefox 16+ */
-	
-	z-index: 1;
-	color: #fff;
-	border: #268FBB solid 1px;
-	text-shadow: #268FBB 0 1px 0;
-	box-shadow: inset #5FC8F4 0 1px 0 0;
-}
-
-ul.acf-radio-list.pill li:first-child label {
-	border-radius: 5px 0 0 5px;
-}
-
-ul.acf-radio-list.pill li:last-child label {
-	border-radius: 0 5px 5px 0;
-}
-
-ul.acf-radio-list.pill li + li label {
-	margin-left: -1px;
-}
-
-/*
-ul.acf-radio-list.pill li label input {
-	margin: 0 0 0 -999px;
-	position: absolute;
-}
-*/
-
 
 /*--------------------------------------------------------------------------
 *
