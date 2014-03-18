@@ -313,7 +313,7 @@ class acf_settings_export {
 			}
 			
 			// append to added
-	    	$added[] = $field_group['title'];
+			$added[] = '<a href="' . admin_url("post.php?post={$field_group['ID']}&action=edit") . '" target="_blank">' . $field_group['title'] . '</a>';
 			
     	}
     	
