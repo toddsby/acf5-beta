@@ -1603,9 +1603,6 @@ var acf = {
 		
 		change : function( $el ){
 			
-			console.log('change %o', $el);
-			
-			
 			// reference
 			var _this = this;
 			
@@ -1722,7 +1719,8 @@ var acf = {
 			
 			
 			// remove "disabled"
-			$field.find('input, textarea, select').removeAttr('disabled');
+			// ignore inputs which have a class of 'acf-disabled'. These inputs are disabled for life
+			$field.find('input, textarea, select').not('.acf-disabled').removeAttr('disabled');
 			
 			
 			// hook
@@ -4303,8 +4301,7 @@ acf.add_action('ready append', function( $el ){
 			
 			
 			// make sure select is disabled (repeater / flex may enable it!)
-			$select.attr('disabled', 'disabled');
-			
+			$select.attr('disabled', 'disabled').addClass('acf-disabled');
 		}
 	};
 	
