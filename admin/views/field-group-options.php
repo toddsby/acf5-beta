@@ -9,7 +9,7 @@ $field_group = acf_get_field_group( $post );
 
 
 // field key
-if( !$field_group['key'] )
+if( !acf_is_field_group_key( $field_group['key']) )
 {
 	$field_group['key'] = uniqid('group_');
 }

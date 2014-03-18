@@ -1,6 +1,41 @@
 <?php 
 
 /*
+*  acf_is_field_group_key
+*
+*  This function will return true or false for the given $group_key parameter
+*
+*  @type	function
+*  @date	6/12/2013
+*  @since	5.0.0
+*
+*  @param	$group_key (string)
+*  @return	(boolean)
+*/
+
+function acf_is_field_group_key( $group_key = '' ) {
+	
+	// validate type
+	if( ! is_string($group_key) )
+	{
+		return false;
+	}
+	
+	
+	// search for 'field_'
+	if( substr($group_key, 0, 6) === 'group_' )
+	{
+		return true;
+	}
+	
+	
+	// return
+	return false;
+	
+}
+
+
+/*
 *  acf_get_valid_field_group
 *
 *  This function will fill in any missing keys to the $field_group array making it valid
