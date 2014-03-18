@@ -18,14 +18,6 @@
 		"outputAbbreviatedPath": "No Output Path",
 		"outputPathIsSetByUser": 0
 		},
-	"\/admin\/field-group.php": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/admin\/field-group.php",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsSetByUser": 0
-		},
 	"\/admin\/field-groups.php": {
 		"fileType": 8192,
 		"ignore": 0,
@@ -1150,6 +1142,26 @@
 		"outputAbbreviatedPath": "\/inc\/select2\/select2x2.png",
 		"outputPathIsSetByUser": 0,
 		"processed": 0
+		},
+	"\/js\/field-group.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/js\/field-group.js",
+		"outputAbbreviatedPath": "\/js\/field-group.min.js",
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 0
+		},
+	"\/js\/field-group.min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/js\/field-group.min.js",
+		"outputAbbreviatedPath": "\/js\/field-group.min.min.js",
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
 		},
 	"\/js\/input.js": {
 		"fileType": 64,

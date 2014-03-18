@@ -57,6 +57,13 @@ class acf_field_image extends acf_field {
 	function load_field( $field ) {
 		
 		// v4 to v5 compatibility
+		if( !empty($field['save_format']) ) {
+			
+			$field['return_format'] = acf_extract_var( $field, 'save_format' );
+			
+		}
+		
+		
 		if( $field['return_format'] == 'object' ) {
 			
 			$field['return_format'] = 'array';

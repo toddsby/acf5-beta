@@ -233,6 +233,14 @@ function _migrate_field_500( $field ) {
 	// image / file settings
 	if( $field['type'] == 'image' || $field['type'] == 'file' ) {
 		
+		// save_format is now return_format
+		if( !empty($field['save_format']) ) {
+			
+			$field['return_format'] = acf_extract_var( $field, 'save_format' );
+			
+		}
+		
+		
 		// object is now array
 		if( $field['return_format'] == 'object' ) {
 			
