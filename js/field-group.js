@@ -27,7 +27,11 @@ var acf_field_group = {};
 		
 			return false;
 		}
-
+		
+		
+		// remove unchanged fields
+		acf_field_group.fields.submit();
+		
 		
 	});
 	
@@ -81,6 +85,10 @@ var acf_field_group = {};
 		// custom Publish metabox
 		$('#submitdiv #publish').attr('class', 'acf-button blue large');
 		$('#submitdiv a.submitdelete').attr('class', 'delete-field-group').attr('id', 'submit-delete');
+		
+		
+		// prevent validation
+		acf.validation.active = 0;
 		
 		
 		// initialize modules
@@ -787,6 +795,35 @@ var acf_field_group = {};
 			
 			// render meta
 			this.render_field( $el );
+			
+		},
+		
+		submit : function(){
+			
+			// reference
+			var _this = this;
+			
+			
+			this.$el.find('.field').each(function(){
+				
+				
+				// vars
+				var changed = _this.get_field_meta( $(this), 'changed'),
+					ID = _this.get_field_meta( $(this), 'ID');
+				
+				
+				// validate
+				if( changed == '1' ) {
+					
+					return;
+				}
+				
+				
+				// remove settings
+				$(this).children('.field-options').find('[name^="acf_fields[' + ID + ']"]').attr('disabled', 'disabled');
+				
+				
+			});
 			
 		}
 		
