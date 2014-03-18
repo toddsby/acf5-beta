@@ -474,6 +474,10 @@ ul.acf-checkbox-list li label {
 	display: none;
 }
 
+.acf-postbox .acf-tab-wrap:first-child .acf-tab-group {
+	border-top: 0 none;
+}
+
 
 /*
 *  Box
