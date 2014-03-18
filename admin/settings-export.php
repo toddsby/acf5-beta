@@ -288,7 +288,7 @@ class acf_settings_export {
 			foreach( $fields as $field ) {
 				
 				// add parent
-				if( !$field['parent'] ) {
+				if( empty($field['parent']) ) {
 					
 					$field['parent'] = $field_group['ID'];
 					

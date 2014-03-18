@@ -133,7 +133,7 @@ class acf_local {
 		foreach( $fields as $field ) {
 			
 			// add parent
-			if( !$field['parent'] ) {
+			if( empty($field['parent']) ) {
 				
 				$field['parent'] = $field_group['key'];
 				

@@ -1068,13 +1068,15 @@ function acf_prepare_fields_for_import( $fields = false ) {
 	}
 	
 	
-	// format
-	$keys = array_keys( $fields );
+	// vars
+	$i = 0;
 	
-	foreach( $keys as $key ) {
+	
+	// format
+	while( $i < count($fields) ) {
 		
 		// prepare field
-		$field = acf_prepare_field_for_import( $fields[ $key ] );
+		$field = acf_prepare_field_for_import( $fields[ $i ] );
 		
 		
 		// $field may be an array of multiple fields (including sub fields)
@@ -1084,13 +1086,15 @@ function acf_prepare_fields_for_import( $fields = false ) {
 			
 			$field = array_shift($extra);
 			$fields = array_merge($fields, $extra);
-			$keys = array_keys($fields);
 			
 		}
 		
 		// prepare
-		$fields[ $key ] = $field;
-				
+		$fields[ $i ] = $field;
+		
+		
+		// $i
+		$i++;	
 	}
 	
 	
@@ -1120,7 +1124,7 @@ function acf_prepare_fields_for_import( $fields = false ) {
 function acf_prepare_field_for_import( $field ) {
 	
 	// add dummy parent
-	$field['parent'] = 0;
+	//$field['parent'] = 0;
 	
 	
 	// filter for 3rd party customization
