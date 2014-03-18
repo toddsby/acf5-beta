@@ -288,10 +288,18 @@ function acf_get_fields( $parent = false ) {
 *  @return	$fields (array)
 */
 
-function acf_get_fields_by_id( $id ) {
+function acf_get_fields_by_id( $id = 0 ) {
 	
 	// vars
 	$fields = array();
+	
+	
+	// validate
+	if( empty($id) ) {
+		
+		return $fields;
+		
+	}
 	
 	
 	// args
