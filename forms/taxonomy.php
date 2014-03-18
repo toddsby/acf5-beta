@@ -148,6 +148,64 @@ class acf_controller_taxonomy {
 				
 			endforeach; 
 			
+				?>
+			<script type="text/javascript">
+			(function($) {
+			
+				$(document).ready(function(){
+					
+					// update acf validation class
+					acf.validation.error_class = 'form-invalid';
+					
+					
+					// events
+					$('#submit').on('click', function( e ){
+						
+						// bail early if this form does not contain ACF data
+						if( ! $('#addtag').find('#acf-form-data').exists() )
+						{
+							return true;
+						}
+						
+						
+						// ignore this submit?
+						if( acf.validation.ignore == 1 )
+						{
+							acf.validation.ignore = 0;
+							return true;
+						}
+						
+				
+						// bail early if disabled
+						if( acf.validation.active == 0 )
+						{
+							return true;
+						}
+						
+						
+						// stop WP JS validation
+						e.stopImmediatePropagation();
+						
+						
+						// store submit trigger so it will be clicked if validation is passed
+						acf.validation.$trigger = $(this);
+						
+						
+						// run validation
+						acf.validation.fetch( $('#addtag') );
+						
+						
+						// stop all other click events on this input
+						return false;
+					});
+				
+				});
+ 
+				
+			})(jQuery);	
+			</script>
+			<?php
+			
 		endif;
 		
 	}

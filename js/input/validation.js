@@ -198,8 +198,8 @@ if( ! this.$trigger )
 			
 			
 			// focus
-			$(document).on('focus click change', '.acf-field.required input, .acf-field.required textarea, .acf-field.required select', function( e ){
-				
+			$(document).on('focus click change', '.acf-field[data-required="1"] input, .acf-field[data-required="1"] textarea, .acf-field[data-required="1"] select', function( e ){
+
 				_this.remove_error( $(this).closest('.acf-field') );
 				
 			});
@@ -215,13 +215,12 @@ if( ! this.$trigger )
 			
 			
 			// click publish
-			/*
-$(document).on('click', '#publish', function(){
+			$(document).on('click', '#submit', function(){
 				
 				_this.$trigger = $(this);
 				
 			});
-*/
+
 			
 			
 			// submit

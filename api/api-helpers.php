@@ -409,7 +409,7 @@ function acf_render_field_wrap( $field, $el = 'div', $instruction = 'label', $at
 	// add required
 	if( $field['required'] )
 	{
-		//$atts['class'] .= ' required';
+		$atts['data-required'] = 1;
 	}
 	
 	
