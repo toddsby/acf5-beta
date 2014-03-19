@@ -220,7 +220,14 @@ if( ! this.$trigger )
 				_this.$trigger = $(this);
 				
 			});
-
+			
+			
+			// click publish
+			$(document).on('click', '#publish', function(){
+				
+				_this.$trigger = $(this);
+				
+			});
 			
 			
 			// submit
