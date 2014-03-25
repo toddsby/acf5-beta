@@ -328,6 +328,7 @@
 	width: 25%;
 	float: left;
 	cursor: pointer;
+	position: relative;
 }
 
 .acf-gallery .acf-gallery-attachment.ui-sortable-placeholder {
@@ -353,6 +354,17 @@
 	width: 100%;
 	height: auto;
 }
+
+.acf-gallery .acf-gallery-attachment .acf-icon {
+	
+}
+
+.acf-gallery .acf-gallery-attachment .actions {
+	position: absolute;
+	top: -3px;
+	right: -3px;
+}
+
 
 /* toolbar */
 .acf-gallery .acf-gallery-toolbar {

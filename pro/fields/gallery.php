@@ -31,10 +31,15 @@ class acf_field_gallery extends acf_field
 			'uploadedTo'	=>	__("uploaded to this post",'acf'),
 			'max'			=>	__("Maximum selection reached",'acf'),
 			
-			'tmpl'			=> '<div data-id="<%= id %>" class="acf-gallery-attachment">
+			'tmpl'			=> '<div data-id="<%= id %>" class="acf-gallery-attachment acf-soh">
 									<input type="hidden" value="<%= id %>" name="<%= name %>[]">
 									<div class="padding">
 										<img alt="" src="<%= url %>">
+									</div>
+									<div class="actions acf-soh-target">
+										<a class="acf-icon" data-name="remove-attachment-button" data-id="<%= id %>" href="#">
+											<i class="acf-sprite-delete"></i>
+										</a>
 									</div>
 								</div>'
 		);
@@ -366,10 +371,15 @@ class acf_field_gallery extends acf_field
 					
 					?>
 					
-					<div class="acf-gallery-attachment" data-id="<?php echo $id; ?>">
+					<div class="acf-gallery-attachment acf-soh" data-id="<?php echo $id; ?>">
 						<input type="hidden" name="<?php echo $field['name']; ?>[]" value="<?php echo $id; ?>" />
 						<div class="padding">
 							<img src="<?php echo $src; ?>" alt="" />
+						</div>
+						<div class="actions acf-soh-target">
+							<a class="acf-icon" data-name="remove-attachment-button" data-id="<?php echo $id; ?>" href="#">
+								<i class="acf-sprite-delete"></i>
+							</a>
 						</div>
 					</div>
 					
