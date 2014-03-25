@@ -216,6 +216,16 @@
 			
 			// make sure select is disabled (repeater / flex may enable it!)
 			$select.attr('disabled', 'disabled').addClass('acf-disabled');
+		},
+		
+		remove : function( $select ){
+		
+			if( acf.get_data( $select, 'ui' ) ) {
+				
+				$select.siblings('.select2-container').remove();
+
+			}
+						
 		}
 	};
 	
@@ -266,6 +276,16 @@
 		});
 		
 	});
+	
+	acf.add_action('remove', function( $el ){
+		
+		acf.get_fields({ type : 'select'}, $el).each(function(){
+			
+			acf.fields.select.remove( $(this).find('select') );
+			
+		});
+		
+	})
 	
 	
 

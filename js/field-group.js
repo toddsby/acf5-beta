@@ -511,6 +511,8 @@ var acf_field_group = {};
 					$show.show();
 				}
 				
+				acf.do_action('remove', $(this));
+				
 				$(this).remove();
 				
 				_this.render();
@@ -609,6 +611,10 @@ var acf_field_group = {};
 			// vars
 			var $el = $field.clone(),
 				$field_list	= $field.closest('.acf-field-list');
+			
+			
+			// remove JS functionality
+			acf.do_action('remove', $el);
 			
 			
 			// update names
