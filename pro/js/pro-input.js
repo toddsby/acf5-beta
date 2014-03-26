@@ -637,7 +637,31 @@
 			{
 				$layout.attr('data-toggle', 'closed');
 				$layout.children('.acf-input-table').hide();
-			}	
+			}
+			
+			
+			// sync local storage (collapsed)
+			this.sync();
+			
+		},
+		
+		sync : function(){
+			
+			// vars
+			var name = 'acf_collapsed_' + acf.get_data(this.$field, 'key'),
+				collapsed = [];
+			
+			this.$values.children('.layout').each(function( i ){
+				
+				if( $(this).attr('data-toggle') == 'closed' ) {
+				
+					collapsed.push( i );
+					
+				}
+				
+			});
+			
+			acf.update_cookie( name, collapsed.join('|') );	
 			
 		},
 		

@@ -785,9 +785,33 @@ function acf_get_valid_flexible_content_layout( $layout = array() ) {
 */
 
 function acf_render_flexible_content_layout( $field, $layout, $i, $value ) {
-
+	
 	// vars
 	$order = is_numeric($i) ? ($i + 1) : 0;
+	$layout_atts = array(
+		'class'			=> 'layout',
+		'data-layout'	=> $layout['name'],
+		'data-toggle'	=> 'open',
+	);
+	$table_atts = array(
+		'class'			=> "acf-table acf-input-table {$layout['display']}-layout",	
+	);
+	
+
+	// collapsed
+	if( isset($_COOKIE[ "acf_collapsed_{$field['key']}" ]) ) {
+		
+		$collapsed = $_COOKIE[ "acf_collapsed_{$field['key']}" ];
+		$collapsed = explode('|', $collapsed);
+		
+		if( in_array($i, $collapsed) ) {
+			
+			$layout_atts['data-toggle'] = 'closed';
+			$table_atts['style'] = 'display:none;';
+			
+		}
+	}
+	
 	
 	
 	// field wrap
@@ -798,7 +822,7 @@ function acf_render_flexible_content_layout( $field, $layout, $i, $value ) {
 	}
 	
 	?>
-	<div class="layout" data-layout="<?php echo $layout['name']; ?>">
+	<div <?php acf_esc_attr_e($layout_atts); ?>>
 				
 		<div style="display:none">
 			<input type="hidden" name="<?php echo $field['name'] ?>[<?php echo $i ?>][acf_fc_layout]" value="<?php echo $layout['name']; ?>" />
@@ -817,7 +841,7 @@ function acf_render_flexible_content_layout( $field, $layout, $i, $value ) {
 			<span class="fc-layout-order"><?php echo $order; ?></span>. <?php echo $layout['label']; ?>
 		</div>
 		
-		<table <?php acf_esc_attr_e(array( 'class' => "acf-table acf-input-table {$layout['display']}-layout" )); ?>>
+		<table <?php acf_esc_attr_e($table_atts); ?>>
 			
 			<?php if( $layout['display'] == 'table' ): ?>
 				<thead>
