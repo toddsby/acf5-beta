@@ -107,7 +107,6 @@ function get_field_reference( $field_name, $post_id ) {
 
 function acf_get_valid_post_id( $post_id = 0 ) {
 	
-	
 	// set post_id to global
 	if( !$post_id )
 	{

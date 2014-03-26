@@ -29,11 +29,12 @@
 			
 			// select2 args
 			var args = {
-				width		: '100%',
-				allowClear	: o.allow_null,
-				placeholder	: o.placeholder,
-				multiple	: o.multiple,
-				data		: []
+				width			: '100%',
+				allowClear		: o.allow_null,
+				placeholder		: o.placeholder,
+				multiple		: o.multiple,
+				data			: [],
+				escapeMarkup	: function( m ){ return m; }
 			};
 			
 			
@@ -157,7 +158,7 @@
 						
 					},
 					results		: function (data, page) {
-						
+					
 						// vars
 						return {
 							results : data
