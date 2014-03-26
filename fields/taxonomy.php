@@ -20,6 +20,7 @@ class acf_field_taxonomy extends acf_field
 		$this->defaults = array(
 			'taxonomy' 			=> 'category',
 			'field_type' 		=> 'checkbox',
+			'multiple'			=> 0,
 			'allow_null' 		=> 0,
 			'load_save_terms' 	=> 0,
 			'return_format'		=> 'id'
@@ -151,9 +152,19 @@ class acf_field_taxonomy extends acf_field
 	function get_result( $term, $field, $post_id = 0 ) {
 		
 		// get post_id
-		if( !$post_id )
-		{
-			$post_id = get_the_ID();
+		if( !$post_id ) {
+			
+			$form_data = acf_get_setting('form_data');
+			
+			if( !empty($form_data['post_id']) ) {
+				
+				$post_id = $form_data['post_id'];
+				
+			} else {
+				
+				$post_id = get_the_ID();
+				
+			}
 		}
 		
 		
@@ -336,37 +347,40 @@ class acf_field_taxonomy extends acf_field
 		$field['choices'] = array();
 		
 		
+		// is array
+		$is_array = is_array($field['value']);
+		
+		
+		// value must be array!
+		$field['value'] = acf_force_type_array( $field['value'] );
+		
+		
 		// populate choices
 		if( !empty($field['value']) )
 		{
-			if( is_array($field['value']) )
+			$taxonomy = acf_force_type_array( $field['taxonomy'] );
+				
+			$terms = get_terms($taxonomy, array(
+				'hide_empty'    => false,
+				'include'		=> $field['value'],
+			));
+			
+			if( !empty($terms) )
 			{
-				//$taxonomies = acf_force_type_array( $field['taxonomy'] );
-				
-				$terms = get_terms($field['taxonomy'], array(
-					'include'		=> $field['value'],
-				));
-				
-				if( !empty($terms) )
-				{
-					foreach( $terms as $term )
-					{
-						$field['choices'][ $term->term_id ] = $this->get_result( $term, $field );
-					}
-				}
-				
-			}
-			else
-			{
-				$term = get_term( $field['value'], $field['taxonomy'] );
-				
-				if( !empty($term) )
+				foreach( $terms as $term )
 				{
 					$field['choices'][ $term->term_id ] = $this->get_result( $term, $field );
 				}
-				
 			}
 		}
+	
+		
+		// convert back from array if neccessary
+		if( !$is_array || !$field['multiple'] )
+		{
+			$field['value'] = array_shift($field['value']);
+		}
+		
 		
 		acf_render_field( $field );
 			
