@@ -4853,6 +4853,9 @@ if( ! this.$trigger )
 				// submit form again
 				if( this.$trigger )
 				{
+					// remove disabled
+					this.$trigger.removeClass('disabled button-disabled button-primary-disabled');
+					
 					this.$trigger.click();
 				}
 				else
@@ -4867,13 +4870,15 @@ if( ! this.$trigger )
 			
 			
 			// hide ajax stuff on submit button
-			if( $('#submitdiv').exists() )
+			/*
+if( $('#submitdiv').exists() )
 			{
 				$('#save-post').removeClass('button-disabled');
 				$('#publish').removeClass('button-primary-disabled');
 				$('#ajax-loading').removeAttr('style');
 				$('#publishing-action .spinner').hide();
 			}
+*/
 			
 			
 			// show error message	
