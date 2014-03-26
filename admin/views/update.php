@@ -24,7 +24,7 @@ $updates = acf_extract_var( $args, 'updates');
 		
 		<p class="show-on-complete"><?php _e('Data upgraded successfully.', 'acf'); ?></p>
 		
-		<p class="show-on-complete"><a href="<?php admin_url('edit.php?post_type=acf-field-group'); ?>"><?php _e("Return to custom fields",'acf'); ?></a></p>
+		<p class="show-on-complete"><a href="<?php echo admin_url('edit.php?post_type=acf-field-group'); ?>"><?php _e("Return to custom fields",'acf'); ?></a></p>
 	
 	<?php else: ?>
 	
