@@ -124,6 +124,21 @@
 			$form.children('.' + this.message_class).remove();
 			
 			
+			// hide ajax stuff on submit button
+			if( $('#submitdiv').exists() ) {
+				
+				// remove disabled classes
+				$('#submitdiv').find('.disabled').removeClass('disabled');
+				$('#submitdiv').find('.button-disabled').removeClass('button-disabled');
+				$('#submitdiv').find('.button-primary-disabled').removeClass('button-primary-disabled');
+				
+				
+				// remove spinner
+				$('#submitdiv .spinner').hide();
+				
+			}
+			
+			
 			// validate json
 			if( !json || json.result == 1)
 			{
@@ -151,9 +166,6 @@ if( ! this.$trigger )
 				// submit form again
 				if( this.$trigger )
 				{
-					// remove disabled
-					this.$trigger.removeClass('disabled button-disabled button-primary-disabled');
-					
 					this.$trigger.click();
 				}
 				else
@@ -165,18 +177,6 @@ if( ! this.$trigger )
 				// end function
 				return;
 			}
-			
-			
-			// hide ajax stuff on submit button
-			/*
-if( $('#submitdiv').exists() )
-			{
-				$('#save-post').removeClass('button-disabled');
-				$('#publish').removeClass('button-primary-disabled');
-				$('#ajax-loading').removeAttr('style');
-				$('#publishing-action .spinner').hide();
-			}
-*/
 			
 			
 			// show error message	
