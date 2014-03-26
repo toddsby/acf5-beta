@@ -868,11 +868,12 @@
 		
 		// vars
 		var $a		= $(this),
+			$field	= acf.get_field_wrap( $a ),
 			$layout	= $a.closest('.layout');
 			
 		
 		// toggle
-		acf.fields.flexible_content.toggle( $layout );
+		acf.fields.flexible_content.set( $field ).toggle( $layout );
 		
 		
 		// blur
