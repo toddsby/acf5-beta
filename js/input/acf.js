@@ -239,9 +239,18 @@ var acf = {
 			        		
 			        		
 			        		// convert ints (don't worry about floats. I doubt these would ever appear in data atts...)
-			        		if( $.isNumeric(v) )
-			        		{
-				        		v = parseInt(v);
+			        		if( $.isNumeric(v) ) {
+			        			
+			        			if( v.match(/[^0-9]/) ) {
+				        			
+				        			// leave value if it contains such characters: . + - e
+				        			
+			        			} else {
+				        			
+				        			v = parseInt(v);
+				        			
+			        			}
+				        		
 			        		}
 			        		
 			        		
