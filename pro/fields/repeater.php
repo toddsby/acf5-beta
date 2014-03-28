@@ -264,13 +264,18 @@ class acf_field_repeater extends acf_field
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-		<ul class="acf-hl acf-clearfix">
-			<li class="acf-fr">
-				<a href="#" class="acf-button blue acf-repeater-add-row"><?php echo $field['button_label']; ?></a>
-			</li>
-		</ul>
+		<?php if( $field['min'] && $field['min'] >= $field['max'] ): ?>
+			
+			<?php // do nothing ?>
+			
+		<?php else: ?>
+			<ul class="acf-hl acf-clearfix">
+				<li class="acf-fr">
+					<a href="#" class="acf-button blue acf-repeater-add-row"><?php echo $field['button_label']; ?></a>
+				</li>
+			</ul>
 		</div>
-		<?php
+		<?php endif;
 		
 	}
 	
