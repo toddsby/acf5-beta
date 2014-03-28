@@ -53,54 +53,88 @@
 			return r;
 			
 		},
+		get_toolbar : function(){
+			
+			// safely get toolbar
+			if( acf.isset( this, 'toolbars', this.o.toolbar ) ) {
+				
+				return this.toolbars[ this.o.toolbar ];
+				
+			}
+			
+			
+			// return
+			return false;
+			
+		},
+		
 		init : function(){
 			
-			// temp store tinyMCE.settings
-			var backup = $.extend( {}, tinyMCE.settings );
+			// vars
+			var toolbar = this.get_toolbar(),
+				command = 'mceAddControl',
+				setting = 'theme_advanced_buttons{i}';
 			
 			
-			// reset tinyMCE settings
-			tinyMCE.settings.theme_advanced_buttons1 = '';
-			tinyMCE.settings.theme_advanced_buttons2 = '';
-			tinyMCE.settings.theme_advanced_buttons3 = '';
-			tinyMCE.settings.theme_advanced_buttons4 = '';
+			// backup
+			var _settings = $.extend( {}, tinyMCE.settings );
 			
-			if( acf.isset( this, 'toolbars', this.o.toolbar ) )
-			{
-				$.each( this.toolbars[ this.o.toolbar ], function( k, v ){
-					tinyMCE.settings[ k ] = v;
-				})
-			}
+			
+			// v4 settings
+			if( tinymce.majorVersion == 4 ) {
 				
+				command = 'mceAddEditor';
+				setting = 'toolbar{i}';
+				
+			}
+			
+			
+			// add toolbars
+			if( toolbar ) {
+					
+				for( var i = 1; i < 5; i++ ) {
+					
+					// vars
+					var v = '';
+					
+					
+					// load toolbar
+					if( acf.isset( toolbar, 'theme_advanced_buttons' + i ) ) {
+						
+						v = toolbar['theme_advanced_buttons' + i];
+						
+					}
+					
+					
+					// update setting
+					tinyMCE.settings[ setting.replace('{i}', i) ] = v;
+					
+				}
+				
+			}
+			
 			
 			// hook for 3rd party customization
 			tinyMCE.settings = acf.apply_filters('wysiwyg_tinymce_settings', tinyMCE.settings, this.o.id);
 			
 			
-			// add functionality back in
-			if( tinymce.majorVersion == 4 ) {
-				
-				tinyMCE.execCommand("mceAddEditor", false, this.o.id);
-				
-			} else {
-				
-				tinyMCE.execCommand("mceAddControl", false, this.o.id);
-				
-			}
-				
-				
+			// add editor
+			tinyMCE.execCommand( command, false, this.o.id);
+			
+			
 			// add events (click, focus, blur) for inserting image into correct editor
 			this.add_events();
 				
 			
 			// restore tinyMCE.settings
-			tinyMCE.settings = backup;
+			tinyMCE.settings = _settings;
 			
 			
 			// set active editor to null
 			wpActiveEditor = null;
 					
 		},
+		
 		add_events : function(){
 		
 			// vars
