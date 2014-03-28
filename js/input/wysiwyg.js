@@ -369,15 +369,16 @@
 	*  @created: 26/02/13
 	*/
 	
-	$(document).on('click', '.acfacf.fields.wysiwyg a.mce_fullscreen', function(){
+	$(document).on('click', '.acf-wysiwyg-wrap .mce_fullscreen', function(){
 		
 		// vars
-		var wysiwyg = $(this).closest('.acfacf.fields.wysiwyg'),
-			upload = wysiwyg.attr('data-upload');
+		var $wrap = $(this).closest('.acf-wysiwyg-wrap');
 		
-		if( upload == 'no' )
-		{
-			$('#mce_fullscreen_container td.mceToolbar .mce_add_media').remove();
+		
+		if( ! acf.get_data( $wrap, 'upload' ) ) {
+		
+			$('#mce_fullscreen_container #mce_fullscreen_add_media').hide();
+			
 		}
 		
 	});
