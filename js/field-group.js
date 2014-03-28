@@ -10,8 +10,8 @@ var acf_field_group = {};
 	*  @type	function
 	*  @date	1/03/2011
 	*
-	*  @param	N/A
-	*  @return	N/A
+	*  @param	n/a
+	*  @return	n/a
 	*/
 	
 	$(document).on('submit', '#post', function(){
@@ -19,12 +19,32 @@ var acf_field_group = {};
 		// validate post title
 		var title = $('#titlewrap #title');
 		
-		if( !title.val() )
-		{
+		if( !title.val() ) {
+			
+			// hide ajax stuff on submit button
+			if( $('#submitdiv').exists() ) {
+				
+				// remove disabled classes
+				$('#submitdiv').find('.disabled').removeClass('disabled');
+				$('#submitdiv').find('.button-disabled').removeClass('button-disabled');
+				$('#submitdiv').find('.button-primary-disabled').removeClass('button-primary-disabled');
+				
+				
+				// remove spinner
+				$('#submitdiv .spinner').hide();
+				
+			}
+			
+			
+			// alert
 			alert( acf.l10n.title );
 			
+			
+			// focus
 			title.focus();
-		
+			
+			
+			// return
 			return false;
 		}
 		
@@ -49,9 +69,9 @@ var acf_field_group = {};
 	*  @return	n/a
 	*/
 	
-	$(document).on('click', '#submit-delete', function(){
+	$(document).on('click', '#submitdiv .submitdelete', function(){
 			
-		var response = confirm( acf.l10n.move_to_trash );
+		var response = confirm( acf._e('move_to_trash') );
 		
 		if( !response )
 		{
@@ -78,13 +98,7 @@ var acf_field_group = {};
 		
 		// update postbox classes
 		$('#submitdiv, #acf-field-group-fields, #acf-field-group-locations, #acf-field-group-options').addClass('acf-postbox');
-		
 		$('#acf-field-group-fields').addClass('seamless');
-		
-		
-		// custom Publish metabox
-		$('#submitdiv #publish').attr('class', 'acf-button blue large');
-		$('#submitdiv a.submitdelete').attr('class', 'delete-field-group').attr('id', 'submit-delete');
 		
 		
 		// prevent validation
