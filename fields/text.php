@@ -97,7 +97,7 @@ class acf_field_text extends acf_field
 		
 		// render
 		$e .= '<div class="acf-input-wrap">';
-		$e .= '<input type="text" ' . acf_esc_attr( $atts ) . ' />';
+		$e .= '<input ' . acf_esc_attr( $atts ) . ' />';
 		$e .= '</div>';
 		
 		
