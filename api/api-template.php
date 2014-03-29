@@ -923,11 +923,11 @@ add_shortcode( 'acf', 'acf_shortcode' );
 function acf_form_head() {
 	
 	// verify nonce
-	if( acf_verify_nonce('acf_form') )
-	{
+	if( acf_verify_nonce('acf_form') ) {
+	
 		// validate data
-	    if( acf_validate_save_post(true) )
-		{
+	    if( acf_validate_save_post(true) ) {
+	    	
 			// $post_id to save against
 			$post_id = $_POST['post_id'];
 			
@@ -946,8 +946,12 @@ function acf_form_head() {
 				wp_redirect( $_POST['return'] );
 				exit;
 			}
+			
 		}
+		// if
+		
 	}
+	// if
 	
 	
 	// load acf scripts
@@ -972,39 +976,74 @@ add_filter('acf/pre_save_post', '_acf_pre_save_post', 0);
 
 function _acf_pre_save_post( $post_id ) {
 	
-	// validate post_id
-	if( !is_numeric($post_id) )
-	{
-		return $post_id;
-	}
-	
-	
 	// vars
 	$save = array(
-		'ID' => $post_id
+		'ID' => 0
 	);
 	
 	
+	// validate post_id
+	if( is_numeric($post_id) ) {
+		
+		$save['ID'] = $post_id;
+		
+	}
+	
+	
+	// new?
+	if( $post_id == 'new_post' ) {
+		
+		// don't update
+		$update = false;
+		
+		
+		// new post defaults
+		$_POST['new_post'] = acf_parse_args( $_POST['new_post'], array(
+			'post_type' 	=> 'post',
+			'post_status'	=> 'draft',
+		));
+		
+		
+		// merge in new post data
+		$save = array_merge($save, $_POST['new_post']);
+				
+	}
+	
+	
 	// save post_title
-	if( isset($_POST['acf']['post_title']) )
-	{
+	if( isset($_POST['acf']['post_title']) ) {
+		
 		$save['post_title'] = acf_extract_var($_POST['acf'], 'post_title');
+	
 	}
 	
 	
 	// save post_content
-	if( isset($_POST['acf']['post_content']) )
-	{
+	if( isset($_POST['acf']['post_content']) ) {
+		
 		$save['post_content'] = acf_extract_var($_POST['acf'], 'post_content');
+		
 	}
 	
 	
-	// update post
-	if( count($save) > 1 )
-	{
+	// validate
+	if( count($save) == 1 ) {
+		
+		return $post_id;
+		
+	}
+	
+	
+	if( $save['ID'] ) {
+		
 		wp_update_post( $save );
+		
+	} else {
+		
+		$post_id = wp_insert_post( $save );
+		
 	}
-	
+		
 	
 	// return
 	return $post_id;
@@ -1043,9 +1082,9 @@ function acf_form( $args = array() ) {
 	
 	// defaults
 	$args = acf_parse_args( $args, array(
-		'id'					=> 'acf-form-1',
+		'id'					=> 'acf-form',
 		'post_id'				=> false,
-		'post_type'				=> false,
+		'new_post'				=> false,
 		'field_groups'			=> false,
 		'fields'				=> false,
 		'post_title'			=> true,
@@ -1072,6 +1111,26 @@ function acf_form( $args = array() ) {
 	$args['post_id'] = acf_get_valid_post_id( $args['post_id'] );
 	
 	
+	// load values from this post
+	$post_id = $args['post_id'];
+	
+	
+	// new post?
+	if( $post_id == 'new_post' ) {
+		
+		// dont load values
+		$post_id = false;
+		
+		
+		// new post defaults
+		$args['new_post'] = acf_parse_args( $args['new_post'], array(
+			'post_type' 	=> 'post',
+			'post_status'	=> 'draft',
+		));
+		
+	}
+	
+	
 	// attributes
 	$args['form_attributes']['class'] .= " acf-form {$args['id']}";
 	
@@ -1088,7 +1147,7 @@ function acf_form( $args = array() ) {
 			'name'		=> 'post_title',
 			'label'		=> 'Title',
 			'type'		=> 'text',
-			'value'		=> get_post_field('post_title', $args['post_id'])
+			'value'		=> $post_id ? get_post_field('post_title', $post_id) : ''
 		));
 	}
 	
@@ -1100,54 +1159,60 @@ function acf_form( $args = array() ) {
 			'name'		=> 'post_content',
 			'label'		=> 'Content',
 			'type'		=> 'wysiwyg',
-			'value'		=> get_post_field('post_content', $args['post_id'])
+			'value'		=> $post_id ? get_post_field('post_content', $post_id) : ''
 		));
 	}
 	
 	
 	// specific fields
-	if( !empty($args['fields']) )
-	{
-		foreach( $args['fields'] as $selector )
-		{
+	if( !empty($args['fields']) ) {
+		
+		foreach( $args['fields'] as $selector ) {
+		
 			$fields[] = acf_get_field( $selector );
+			
 		}
-	}
-	elseif( !empty($args['field_groups']) )
-	{
-		foreach( $args['field_groups'] as $selector )
-		{
+		
+	} elseif( !empty($args['field_groups']) ) {
+		
+		foreach( $args['field_groups'] as $selector ) {
+		
 			$field_groups[] = acf_get_field_group( $selector );
+			
 		}
-	}
-	elseif( $args['post_id'] == 'new' )
-	{
+		
+	} elseif( $args['post_id'] == 'new_post' ) {
+		
 		$field_groups = acf_get_field_groups(array(
-			'post_type' => $args['post_type']
+			'post_type' => $args['new_post']['post_type']
 		));
-	}
-	else
-	{
+	
+	} else {
+		
 		$field_groups = acf_get_field_groups(array(
 			'post_id' => $args['post_id']
 		));
+		
 	}
 	
 	
 	//load fields based on field groups
-	if( !empty($field_groups) )
-	{
-		foreach( $field_groups as $field_group )
-		{
+	if( !empty($field_groups) ) {
+		
+		foreach( $field_groups as $field_group ) {
+			
 			$fields = array_merge($fields, acf_get_fields( $field_group ));
+		
 		}
+	
 	}
 	
 	
 	// updated message
-	if( !empty($_GET['updated']) && $args['updated_message'] )
-	{
+	if( !empty($_GET['updated']) && $args['updated_message'] ) {
+	
 		echo '<div id="message" class="updated"><p>' . $args['updated_message'] . '</p></div>';
+		
 	}
 	
 	
@@ -1165,8 +1230,20 @@ function acf_form( $args = array() ) {
 	
 	?>
 	<div class="acf-hidden">
-		<input type="hidden" name="return" value="<?php echo $args['return']; ?>" />
-		<input type="hidden" name="post_id" value="<?php echo $args['post_id']; ?>" />
+		
+		<?php acf_hidden_input(array( 'name' => 'return', 'value' => $args['return'] )); ?>
+		<?php acf_hidden_input(array( 'name' => 'post_id', 'value' => $args['post_id'] )); ?>
+		
+		<?php if( !empty($args['new_post']) ): ?>
+			
+			<?php foreach( $args['new_post'] as $k => $v ): ?>
+				
+				<?php acf_hidden_input(array( 'name' => "new_post[{$k}]", 'value' => $v )); ?>
+				
+			<?php endforeach; ?>
+			
+		<?php endif; ?>
+		
 	</div>
 	
 	<div class="acf-form-fields">
@@ -1185,7 +1262,7 @@ function acf_form( $args = array() ) {
 	}
 	
 	
-	acf_render_fields( $args['post_id'], $fields, $args['field_el'], $args['instruction_placement'] );
+	acf_render_fields( $post_id, $fields, $args['field_el'], $args['instruction_placement'] );
 	
 	
 	// end table
@@ -1200,12 +1277,12 @@ function acf_form( $args = array() ) {
 	
 	?>
 	
-	</div><!-- <div id="poststuff"> -->
+	</div><!-- acf-form-fields -->
 	
 	<?php if( $args['form'] ): ?>
 	<!-- Submit -->
 	<div class="acf-form-submit">
-		<input class="acf-button blue" type="submit" value="<?php echo $args['submit_value']; ?>" />
+		<input type="submit" value="<?php echo $args['submit_value']; ?>" />
 	</div>
 	<!-- / Submit -->
 	<?php endif; ?>
