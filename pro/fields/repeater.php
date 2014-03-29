@@ -269,13 +269,16 @@ class acf_field_repeater extends acf_field
 			<?php // do nothing ?>
 			
 		<?php else: ?>
+		
 			<ul class="acf-hl acf-clearfix">
 				<li class="acf-fr">
 					<a href="#" class="acf-button blue acf-repeater-add-row"><?php echo $field['button_label']; ?></a>
 				</li>
 			</ul>
+		
+		<?php endif; ?>
 		</div>
-		<?php endif;
+		<?php
 		
 	}
 	
