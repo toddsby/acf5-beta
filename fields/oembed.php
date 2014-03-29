@@ -167,14 +167,14 @@ class acf_field_oembed extends acf_field
 				
 				<div class="title-value">
 					<a data-name="clear-button" href="#" class="acf-icon full">
-						<i class="acf-sprite-delete" href="#"></i>
+						<i class="acf-sprite-delete"></i>
 					</a>
 					<h4 data-name="value-title"><?php echo $field['value']; ?></h4>
 				</div>
 				
 				<div class="title-search">
 					<a data-name="search-button" href="#" class="acf-icon full">
-						<i class="acf-sprite-submit" href="#"></i>
+						<i class="acf-sprite-submit"></i>
 					</a>
 					<input data-name="search-input" type="text" placeholder="Search..." autocomplete="off" />
 				</div>
