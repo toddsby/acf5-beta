@@ -928,22 +928,31 @@ function acf_form_head() {
 		// validate data
 	    if( acf_validate_save_post(true) ) {
 	    	
-			// $post_id to save against
-			$post_id = $_POST['post_id'];
-			
-			
+	    	// form
+	    	$form = acf_extract_var($_POST, '_acf_form');
+	    	$form = @json_decode(base64_decode($form), true);
+	    	
+	    	
+	    	// validate
+	    	if( empty($form) ) {
+		    	
+		    	return;
+		    	
+	    	}
+	    		    	
+	    	
 			// allow for custom save
-			$post_id = apply_filters('acf/pre_save_post', $post_id);
+			$form['post_id'] = apply_filters('acf/pre_save_post', $form['post_id'], $form);
 			
 			
 			// save
-			acf_save_post( $post_id );
+			acf_save_post( $form['post_id'] );
 			
 			
 			// redirect
-			if( !empty($_POST['return']) )
+			if( !empty($form['return']) )
 			{
-				wp_redirect( $_POST['return'] );
+				wp_redirect( $form['return'] );
 				exit;
 			}
 			
@@ -972,9 +981,9 @@ function acf_form_head() {
 *  @return	$post_id (int)
 */
 
-add_filter('acf/pre_save_post', '_acf_pre_save_post', 0);
+add_filter('acf/pre_save_post', '_acf_pre_save_post', 0, 2);
 
-function _acf_pre_save_post( $post_id ) {
+function _acf_pre_save_post( $post_id, $form ) {
 	
 	// vars
 	$save = array(
@@ -998,14 +1007,14 @@ function _acf_pre_save_post( $post_id ) {
 		
 		
 		// new post defaults
-		$_POST['new_post'] = acf_parse_args( $_POST['new_post'], array(
+		$form['new_post'] = acf_parse_args( $form['new_post'], array(
 			'post_type' 	=> 'post',
 			'post_status'	=> 'draft',
 		));
 		
 		
 		// merge in new post data
-		$save = array_merge($save, $_POST['new_post']);
+		$save = array_merge($save, $form['new_post']);
 				
 	}
 	
@@ -1231,6 +1240,11 @@ function acf_form( $args = array() ) {
 	?>
 	<div class="acf-hidden">
 		
+		<?php 
+		
+		acf_hidden_input(array( 'name' => '_acf_form', 'value' => base64_encode(json_encode($args)) )); ?>
+		
+		<?php /*
 		<?php acf_hidden_input(array( 'name' => 'return', 'value' => $args['return'] )); ?>
 		<?php acf_hidden_input(array( 'name' => 'post_id', 'value' => $args['post_id'] )); ?>
 		
@@ -1243,7 +1257,7 @@ function acf_form( $args = array() ) {
 			<?php endforeach; ?>
 			
 		<?php endif; ?>
-		
+*/ ?>		
 	</div>
 	
 	<div class="acf-form-fields">
