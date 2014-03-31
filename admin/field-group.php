@@ -481,12 +481,12 @@ class acf_field_group {
 			
 			case "post_category" :
 				
-				$category_ids = get_all_category_ids();
-		
-				foreach( $category_ids as $cat_id ) 
-				{
-					$cat_name = get_cat_name( $cat_id );
-					$choices[ $cat_id ] = $cat_name;
+				$terms = acf_get_taxonomy_terms( 'category' );
+				
+				if( !empty($terms['category']) ) {
+					
+					$choices = $terms['category'];
+					
 				}
 				
 				break;
@@ -516,7 +516,7 @@ class acf_field_group {
 			
 			case "post_taxonomy" :
 				
-				$choices = acf_get_taxonomies();
+				$choices = acf_get_taxonomy_terms();
 				
 				// unset post_format
 				if( isset($choices['post_format']) )

@@ -8,7 +8,6 @@
 			page_template	:	0,
 			page_parent		:	0,
 			page_type		:	0,
-			post_category	:	0,
 			post_format		:	0,
 			post_taxonomy	:	0,
 			lang			:	0,
