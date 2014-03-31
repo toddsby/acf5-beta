@@ -1057,6 +1057,16 @@ function acf_get_taxonomy_terms( $taxonomies = false ) {
 	}
 	
 	
+	// no array?
+	if( is_string($taxonomies) ) {
+		
+		$taxonomies = array(
+			$taxonomies => $taxonomies
+		);
+		
+	}
+	
+	
 	// vars
 	$r = array();
 	
@@ -1102,9 +1112,10 @@ function acf_get_taxonomy_terms( $taxonomies = false ) {
 function acf_decode_taxonomy_terms( $terms = false ) {
 	
 	// load all taxonomies if not specified in args
-	if( !$terms )
-	{
+	if( !$terms ) {
+		
 		$terms = acf_get_taxonomy_terms();
+		
 	}
 	
 	
@@ -1112,22 +1123,57 @@ function acf_decode_taxonomy_terms( $terms = false ) {
 	$r = array();
 	
 	
-	foreach( $terms as $term )
-	{
+	foreach( $terms as $term ) {
+		
 		// vars
-		$term = explode(':', $term);
+		$data = acf_decode_taxonomy_term( $term );
 		
 		
 		// create empty array
-		if( !array_key_exists($term[0], $r) )
+		if( !array_key_exists($data['taxonomy'], $r) )
 		{
-			$r[ $term[0] ] = array();
+			$r[ $data['taxonomy'] ] = array();
 		}
 		
 		
 		// append to taxonomy
-		$r[ $term[0] ][] = $term[1];
+		$r[ $data['taxonomy'] ][] = $data['term'];
+		
 	}
+	
+	
+	// return
+	return $r;
+	
+}
+
+
+/*
+*  acf_decode_taxonomy_term
+*
+*  This function will convert a term string into an array of term data
+*
+*  @type	function
+*  @date	31/03/2014
+*  @since	5.0.0
+*
+*  @param	$string (string)
+*  @return	(array)
+*/
+
+function acf_decode_taxonomy_term( $string ) {
+	
+	// vars
+	$r = array();
+	
+	
+	// vars
+	$data = explode(':', $string);
+	
+	
+	// add data to $r
+	$r['taxonomy'] = $data[0];
+	$r['term'] = $data[1];
 	
 	
 	// return
