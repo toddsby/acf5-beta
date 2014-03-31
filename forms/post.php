@@ -357,21 +357,23 @@ class acf_controller_post {
 
 	function get_field_groups() {
 		
-		// vars
+		// options
 		$options = acf_parse_args($_POST, array(
 			'nonce'		=> '',
 			'post_id'	=> 0
 		));
 		
 		
+		// vars
 		$r = array();
 		$nonce = acf_extract_var( $options, 'nonce' );
 		
 		
 		// verify nonce
-		if( ! wp_verify_nonce($nonce, 'acf_nonce') )
-		{
+		if( ! wp_verify_nonce($nonce, 'acf_nonce') ) {
+		
 			die;
+			
 		}
 		
 		
@@ -380,10 +382,10 @@ class acf_controller_post {
 		
 		
 		// loop through field groups and build $r
-		if( !empty($field_groups) )
-		{
-			foreach( $field_groups as $field_group )
-			{
+		if( !empty($field_groups) ) {
+			
+			foreach( $field_groups as $field_group ) {
+				
 				// vars
 				$class = 'acf-postbox ' . $field_group['style'];
 				
@@ -422,7 +424,7 @@ class acf_controller_post {
 				
 				// append to $r
 				$r[] = array(
-					'ID'	=> $field_group['ID'],
+					//'ID'	=> $field_group['ID'], - JSON does not have ID (not used by JS anyway)
 					'key'	=> $field_group['key'],
 					'title'	=> $field_group['title'],
 					'html'	=> $html,
