@@ -50,6 +50,13 @@ if( empty($groups) )
 			
 			<?php foreach( $groups as $group_id => $group ): 
 				
+				// validate
+				if( empty($group) ) {
+				
+					continue;
+					
+				}
+				
 				// $group_id must be completely different to $rule_id to avoid JS issues
 				$group_id = "group_{$group_id}";
 				
@@ -61,8 +68,6 @@ if( empty($groups) )
 					<?php else: ?>
 						<h4><?php _e("or",'acf'); ?></h4>
 					<?php endif; ?>
-		
-					<?php if( is_array($group) ): ?>
 					
 					<table class="acf-table acf-clear-table">
 						<tbody>
@@ -144,7 +149,7 @@ if( empty($groups) )
 							<?php endforeach; ?>
 						</tbody>
 					</table>
-					<?php endif; ?>
+					
 				</div>
 			<?php endforeach; ?>
 			
