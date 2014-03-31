@@ -891,7 +891,7 @@ var acf_field_group = {};
 			
 			
 			// hide on screen toggle
-			var $ul = this.$el.find('.tr-hide-on-screen ul.acf-checkbox-list'),
+			var $ul = this.$el.find('tr[data-name="hide_on_screen"] ul'),
 				$li = $('<li><label><input type="checkbox" value="" name="" >' + acf.l10n.hide_show_all + '</label></li>');
 			
 			

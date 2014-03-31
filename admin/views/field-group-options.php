@@ -27,7 +27,8 @@ if( !acf_is_field_group_key( $field_group['key']) )
 			'label'			=> __('Order No.','acf'),
 			'instructions'	=> __('Field groups are created in order <br />from lowest to highest','acf'),
 			'type'			=> 'number',
-			'name'			=> 'acf_field_group[menu_order]',
+			'name'			=> 'menu_order',
+			'prefix'		=> 'acf_field_group',
 			'value'			=> $field_group['menu_order'],
 		), 'tr');
 		
@@ -37,7 +38,8 @@ if( !acf_is_field_group_key( $field_group['key']) )
 			'label'			=> __('Position','acf'),
 			'instructions'	=> '',
 			'type'			=> 'select',
-			'name'			=> 'acf_field_group[position]',
+			'name'			=> 'position',
+			'prefix'		=> 'acf_field_group',
 			'value'			=> $field_group['position'],
 			'choices' 		=> array(
 				'acf_after_title'	=> __("High (after title)",'acf'),
@@ -53,7 +55,8 @@ if( !acf_is_field_group_key( $field_group['key']) )
 			'label'			=> __('Style','acf'),
 			'instructions'	=> '',
 			'type'			=> 'select',
-			'name'			=> 'acf_field_group[style]',
+			'name'			=> 'style',
+			'prefix'		=> 'acf_field_group',
 			'value'			=> $field_group['style'],
 			'choices' 		=> array(
 				'default'			=>	__("Standard (WP metabox)",'acf'),
@@ -67,7 +70,8 @@ if( !acf_is_field_group_key( $field_group['key']) )
 			'label'			=> __('Label placement','acf'),
 			'instructions'	=> '',
 			'type'			=> 'select',
-			'name'			=> 'acf_field_group[label_placement]',
+			'name'			=> 'label_placement',
+			'prefix'		=> 'acf_field_group',
 			'value'			=> $field_group['label_placement'],
 			'choices' 		=> array(
 				'top'			=>	__("Top aligned",'acf'),
@@ -81,7 +85,8 @@ if( !acf_is_field_group_key( $field_group['key']) )
 			'label'			=> __('Instruction placement','acf'),
 			'instructions'	=> '',
 			'type'			=> 'select',
-			'name'			=> 'acf_field_group[instruction_placement]',
+			'name'			=> 'instruction_placement',
+			'prefix'		=> 'acf_field_group',
 			'value'			=> $field_group['instruction_placement'],
 			'choices' 		=> array(
 				'label'		=>	__("Below labels",'acf'),
@@ -95,7 +100,8 @@ if( !acf_is_field_group_key( $field_group['key']) )
 			'label'			=> __('Hide on screen','acf'),
 			'instructions'	=> __('<b>Select</b> items to <b>hide</b> them from the edit screen','acf') . '</p><p>' . __("If multiple field groups appear on an edit screen, the first field group's options will be used. (the one with the lowest order number)",'acf'),
 			'type'			=> 'checkbox',
-			'name'			=> 'acf_field_group[hide_on_screen]',
+			'name'			=> 'hide_on_screen',
+			'prefix'		=> 'acf_field_group',
 			'value'			=> $field_group['hide_on_screen'],
 			'choices' => array(
 				'permalink'			=>	__("Permalink", 'acf'),
