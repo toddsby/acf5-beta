@@ -177,7 +177,7 @@ class acf_pro_connect {
 		
 		$m = __('To enable updates, please enter your license key on the <a href="%s">Updates</a> page. If you don\'t have a licence key, please see <a href="%s">details & pricing</a>', 'acf');
 		
-		echo '<br />' . sprintf( $m, admin_url('edit.php?post_type=acf-field-group&page=acf-settings-updates'), '#');
+		echo '<br />' . sprintf( $m, admin_url('edit.php?post_type=acf-field-group&page=acf-settings-updates'), 'http://www.advancedcustomfields.com/pro');
 	
 	}
 	

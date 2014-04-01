@@ -21,7 +21,7 @@ $readonly = $active ? 1 : 0;
 			<h3><?php echo acf_get_setting('name'); ?> <?php _e('License','acf') ?></h3>
 		</div>
 		<div class="inner">
-			<p><?php _e("To unlock updates, please enter your license key bellow. If you don't have a licence key, please see",'acf'); ?> <a href="#"><?php _e('details & pricing', 'acf'); ?></a></p>
+			<p><?php _e("To unlock updates, please enter your license key bellow. If you don't have a licence key, please see",'acf'); ?> <a href="http://www.advancedcustomfields.com/pro" target="_blank"><?php _e('details & pricing', 'acf'); ?></a></p>
 			<form action="" method="post">
 			<div class="acf-hidden">
 				<input type="hidden" name="_acfnonce" value="<?php echo wp_create_nonce( $nonce ); ?>" />
