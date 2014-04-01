@@ -236,55 +236,48 @@ class acf_location {
 		}
 		
 		
+		// vars
+		$terms = $options['post_taxonomy'];
+		
+			
 		// get term data
 		$data = acf_decode_taxonomy_term( $rule['value'] );
+		$field = is_numeric( $data['term'] ) ? 'id' : 'slug';
+		$term = get_term_by( $field, $data['term'], $data['taxonomy'] );
 		
 		
-		// if is ajax
-		if( $options['ajax'] ) {
+		// validate term
+		if( empty($term) ) {
 			
-			// post type
-			if( !$options['post_type'] ) {
+			return false;
+						
+		}
+		
+		
+		// post type
+		if( !$options['post_type'] ) {
+		
+			$options['post_type'] = get_post_type( $options['post_id'] );
 			
-				$options['post_type'] = get_post_type( $options['post_id'] );
+		}
+		
+		
+		// get terms
+		if( !$options['ajax'] ) {
+		
+			$terms = wp_get_post_terms( $options['post_id'], $term->taxonomy, array('fields' => 'ids') );
+			
+		}
+		
+		
+		// If no terms, this is a new post and should be treated as if it has the "Uncategorized" (1) category ticked
+		if( empty($terms) ) {
+			
+			if( is_object_in_taxonomy($options['post_type'], 'category') ) {
+			
+				$terms = array( 1 );
 				
 			}
-			
-			
-			// vars
-			$terms = $options['post_taxonomy'];
-			
-			
-			// If no terms, this is a new post and should be treated as if it has the "Uncategorized" (1) category ticked
-			if( empty($terms) ) {
-				
-				if( is_object_in_taxonomy($options['post_type'], 'category') ) {
-				
-					$terms = array( 1 );
-					
-				}
-				
-			}
-			
-			
-			// get term
-			$field = is_numeric( $data['term'] ) ? 'id' : 'slug';
-			$term = get_term_by( $field, $data['term'], $data['taxonomy'] );
-			
-			
-			// match
-			if( !empty($term) ) {
-				
-				$match = in_array($term->term_id, $terms);
-				
-			}
-			
-		} else {
-			
-			// does this allow for 'Uncategorized'?
-			
-			// get term connection data
-			$match = has_term( $data['term'], $data['taxonomy'], $options['post_id'] );
 			
 		}
 		
@@ -292,13 +285,13 @@ class acf_location {
 		// compare
         if( $rule['operator'] == "==") {
         	
-        	$match = $match;
+        	$match = in_array($term->term_id, $terms);
         
         } elseif( $rule['operator'] == "!=") {
         	
-        	$match = !$match;
+        	$match = !in_array($term->term_id, $terms);
         
-        }
+        }		
             
         
         // return
