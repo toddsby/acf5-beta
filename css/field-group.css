@@ -8,6 +8,9 @@
 	display: none;
 }
 
+#adv-settings .show-field-keys label {
+	padding: 0 5px;
+}
 
 /*---------------------------------------------------------------------------------------------
 *
@@ -81,10 +84,11 @@
 	padding: 15px 15px;
 }
 
-.li-field_order { width: 24%; }
-.li-field_label { width: 26%; }
+.li-field_order { width: 22%; padding-right: 0 !important; }
+.li-field_label { width: 28%; }
 .li-field_name { width: 25%; }
 .li-field_type { width: 25%; }
+
 
 .acf-field-list-wrap {
 	border: #DFDFDF solid 1px;
@@ -138,9 +142,10 @@
 }
 
 .acf-field-list .field .field-info .acf-icon {
-	margin: 2px 0 0;
+	margin: 2px 5px 0 0;
 	cursor: move;
 	background: transparent;
+	float: left;
 }
 
 .acf-field-list .field .field-info strong {
@@ -201,10 +206,35 @@
 	border-color: #fff;
 }
 
+
 .acf-field-list .field[data-key="acfcloneindex"] {
 	display: none !important;
 }
 
+
+/* field keys */
+.acf-field-list .pre-field_key {
+	background: #F9F9F9;
+	border: #E1E1E1 solid 1px;
+	padding: 5px;
+	font: inherit;
+	margin: 1px 0 0;
+	float: left;
+	border-radius: 3px;
+	display: none;
+}
+
+.acf-field-list .field.open > .field-info .pre-field_key {
+	border-color: #268FBB;
+	background: transparent;
+}
+
+#acf-field-group-fields.show-field-keys .acf-field-list .pre-field_key {
+	display: block;
+}
+
+#acf-field-group-fields.show-field-keys .li-field_order { width: 24%; }
+#acf-field-group-fields.show-field-keys .li-field_label { width: 26%; }
 
 /*---------------------------------------------------------------------------------------------
 *

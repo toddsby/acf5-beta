@@ -212,6 +212,20 @@ var acf_field_group = {};
 				
 			});
 			
+			$(document).on('change', '#adv-settings input[name="show_field_keys"]', function(){
+				
+				if( $(this).val() == "1" ) {
+				
+					_this.$el.addClass('show-field-keys');
+				
+				} else {
+					
+					_this.$el.removeClass('show-field-keys');
+					
+				}
+				
+			});
+			
 		},
 		
 		init_field_list : function( $el ){
@@ -1100,31 +1114,6 @@ var acf_field_group = {};
 	};
 	
 	
-
-	/*
-	*  Screen Options
-	*
-	*  @description: 
-	*  @created: 4/09/12
-	*/
-	
-	/*
-$(document).on('change', '#adv-settings input[name="show-field_key"]', function(){
-		
-		if( $(this).val() == "1" )
-		{
-			$('#acf_fields table.acf').addClass('show-field_key');
-		}
-		else
-		{
-			$('#acf_fields table.acf').removeClass('show-field_key');
-		}
-		
-	});
-*/
-	
-	
-
 	/*
 	*  Conditional Logic
 	*

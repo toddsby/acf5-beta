@@ -175,7 +175,7 @@ class acf_field_group {
 		
 		
 		// add screen settings
-		//add_filter('screen_settings', array($this, 'screen_settings'), 10, 1);
+		add_filter('screen_settings', array($this, 'screen_settings'), 10, 1);
 		
 		
 		// 3rd party hook
@@ -185,6 +185,37 @@ class acf_field_group {
 		// hidden $_POST data
 		add_action( 'edit_form_after_title', array($this, 'edit_form_after_title') );
 		
+	}
+	
+	
+	/*
+	*  screen_settings
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	26/01/13
+	*  @since	3.6.0
+	*
+	*  @param	$current (string)
+	*  @return	$current
+	*/
+	
+	function screen_settings( $current ) {
+		
+		// heading
+	    $current .= '<h5>' . __("Fields",'acf') . '</h5>';
+	    
+	    
+	    // radio buttons
+	    $current .= '<div class="show-field-keys">' . __('Show Field Keys','acf') . ':';
+		$current .= '<label><input type="radio" value="1" name="show_field_keys" />' . __('Yes','acf') . '</label>';
+		$current .= '<label><input checked="checked" type="radio" value="0" name="show_field_keys" />' . __('No','acf') . '</label>';
+		$current .= '</div>';
+	    
+	    
+	    // return
+	    return $current;
 	}
 	
 	

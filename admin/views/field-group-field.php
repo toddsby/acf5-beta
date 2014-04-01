@@ -29,13 +29,15 @@ $atts = array(
 	</div>
 	
 	<ul class="field-info acf-hl acf-tbody">
-		<li class="li-field_order"><span class="acf-icon"><?php echo ($i + 1); ?></span></li>
+		<li class="li-field_order">
+			<span class="acf-icon"><?php echo ($i + 1); ?></span>
+			<pre class="pre-field_key"><?php echo $field['key']; ?></pre>
+		</li>
 		<li class="li-field_label">
 			<strong>
 				<a class="edit-field" title="<?php _e("Edit field",'acf'); ?>" href="#"><?php echo $field['label']; ?></a>
 			</strong>
 			<div class="row-options">
-				<span><a class="edit-field" title="<?php _e("Edit field",'acf'); ?>" href="#"><?php _e("Edit",'acf'); ?></a> |</span>
 				<span><a class="duplicate-field" title="<?php _e("Duplicate field",'acf'); ?>" href="#"><?php _e("Duplicate",'acf'); ?></a> | </span>
 				<span><a class="move-field" title="<?php _e("Move field to another group",'acf'); ?>" href="#"><?php _e("Move",'acf'); ?></a> | </span>
 				<span><a class="delete-field" title="<?php _e("Delete field",'acf'); ?>" href="#"><?php _e("Delete",'acf'); ?></a></span>
