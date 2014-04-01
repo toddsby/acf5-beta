@@ -253,31 +253,31 @@ class acf_location {
 			
 			// vars
 			$terms = $options['post_taxonomy'];
-			$taxonomies = get_object_taxonomies( $options['post_type'] );
 			
 			
+			// If no terms, this is a new post and should be treated as if it has the "Uncategorized" (1) category ticked
 			if( empty($terms) ) {
 				
-				// If no ters, this is a new post and should be treated as if it has the "Uncategorized" (1) category ticked
-				if( !empty($taxonomies) && in_array('category', $taxonomies) )
-				{
-					$terms[] = '1';
+				if( is_object_in_taxonomy($options['post_type'], 'category') ) {
+				
+					$terms = array( 1 );
+					
 				}
 				
 			}
 			
 			
-			// get all possible terms
-			$all_terms = get_terms( $taxonomies, array(
-				'include'		=> $terms,
-				'hide_empty'	=> false,
-				'fields'		=> 'id=>slug'
-			));
+			// get term
+			$field = is_numeric( $data['term'] ) ? 'id' : 'slug';
+			$term = get_term_by( $field, $data['term'], $data['taxonomy'] );
 			
 			
 			// match
-			$match = in_array($data['term'], $all_terms);
-			
+			if( !empty($term) ) {
+				
+				$match = in_array($term->term_id, $terms);
+				
+			}
 			
 		} else {
 			

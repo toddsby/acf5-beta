@@ -360,7 +360,8 @@ class acf_controller_post {
 		// options
 		$options = acf_parse_args($_POST, array(
 			'nonce'		=> '',
-			'post_id'	=> 0
+			'post_id'	=> 0,
+			'ajax'		=> 1,
 		));
 		
 		
@@ -436,8 +437,7 @@ class acf_controller_post {
 		
 		
 		// return
-		echo json_encode( $r );
-		die;
+		wp_send_json_success( $r );
 		
 	}
 	

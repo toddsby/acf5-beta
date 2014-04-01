@@ -640,6 +640,18 @@ var acf = {
 			
 		},
 		
+		is_ajax_success : function( json ) {
+			
+			if( json && json.success ) {
+				
+				return true;
+				
+			}
+			
+			return false;
+			
+		},
+		
 		update_cookie : function( name, value, days ) {
 			
 			// defaults

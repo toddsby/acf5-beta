@@ -11,7 +11,6 @@
 			post_format		:	0,
 			post_taxonomy	:	0,
 			lang			:	0,
-			nonce			:	0
 		},
 		
 		update : function( k, v ){
@@ -38,7 +37,6 @@
 			
 			// vars
 			this.update('post_id', acf.o.post_id);
-			this.update('nonce', acf.o.nonce);
 			
 			
 			// MPML
@@ -67,14 +65,15 @@
 			// ajax
 			$.ajax({
 				url			: acf.get('ajaxurl'),
-				data		: this.o,
+				data		: acf.prepare_for_ajax( this.o ),
 				type		: 'post',
 				dataType	: 'json',
 				success		: function( json ){
 					
-					if( json && json.length )
-					{
-						_this.render( json );
+					if( acf.is_ajax_success( json ) ) {
+						
+						_this.render( json.data );
+						
 					}
 					
 				}

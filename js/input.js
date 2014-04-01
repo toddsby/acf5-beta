@@ -900,6 +900,18 @@ var acf = {
 			
 		},
 		
+		is_ajax_success : function( json ) {
+			
+			if( json && json.success ) {
+				
+				return true;
+				
+			}
+			
+			return false;
+			
+		},
+		
 		update_cookie : function( name, value, days ) {
 			
 			// defaults
@@ -2090,11 +2102,9 @@ else if( acf.isset(_this, 'triggers', key) )
 			page_template	:	0,
 			page_parent		:	0,
 			page_type		:	0,
-			post_category	:	0,
 			post_format		:	0,
 			post_taxonomy	:	0,
 			lang			:	0,
-			nonce			:	0
 		},
 		
 		update : function( k, v ){
@@ -2121,7 +2131,6 @@ else if( acf.isset(_this, 'triggers', key) )
 			
 			// vars
 			this.update('post_id', acf.o.post_id);
-			this.update('nonce', acf.o.nonce);
 			
 			
 			// MPML
@@ -2150,14 +2159,15 @@ else if( acf.isset(_this, 'triggers', key) )
 			// ajax
 			$.ajax({
 				url			: acf.get('ajaxurl'),
-				data		: this.o,
+				data		: acf.prepare_for_ajax( this.o ),
 				type		: 'post',
 				dataType	: 'json',
 				success		: function( json ){
 					
-					if( json && json.length )
-					{
-						_this.render( json );
+					if( acf.is_ajax_success( json ) ) {
+						
+						_this.render( json.data );
+						
 					}
 					
 				}
