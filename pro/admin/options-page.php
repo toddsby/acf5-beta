@@ -34,7 +34,7 @@ class acf_pro_options_page {
 			'menu_slug' 	=> 'acf-options',
 			'capability'	=> 'edit_posts',
 			'parent_slug'	=> false,
-			'position'		=> '90.025',
+			'position'		=> false,
 			'icon_url'		=> false,
 		));
 		
@@ -167,6 +167,10 @@ class acf_pro_options_page {
 	
 	function admin_menu() {
 		
+		// global
+		global $_wp_last_utility_menu;
+		
+		
 		// vars
 		$pages = acf_get_options_pages();
 		
@@ -182,6 +186,16 @@ class acf_pro_options_page {
 				
 				if( empty($page['parent_slug']) )
 				{
+					// position
+					if( !$page['position']) {
+						
+						$_wp_last_utility_menu++;
+						
+						$page['position'] = $_wp_last_utility_menu;
+						
+					}
+					
+					
 					// add page
 					$slug = add_menu_page( $page['page_title'], $page['menu_title'], $page['capability'], $page['menu_slug'], array($this, 'html'), $page['icon_url'], $page['position'] );
 					
