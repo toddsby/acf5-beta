@@ -78,6 +78,10 @@ if( $ofgs ){ foreach( $ofgs as $ofg ){
 
 function _migrate_field_group_500( $ofg ) {
 	
+	// global
+	global $wpdb;
+	
+	
 	// get post status
 	$post_status = $ofg->post_status;
 	
@@ -124,6 +128,34 @@ function _migrate_field_group_500( $ofg ) {
 		 	// extract vars
 		 	$group = acf_extract_var( $rule, 'group_no' );
 		 	$order = acf_extract_var( $rule, 'order_no' );
+		 	
+		 	
+		 	// param changes
+		 	$param_replace = array(
+		 		'taxonomy'		=> 'post_taxonomy',
+		 		'ef_media'		=> 'attachment',
+		 		'ef_taxonomy'	=> 'taxonomy',
+		 		'ef_user'		=> 'user_role',
+		 	);
+		 	
+		 	if( array_key_exists($rule['param'], $param_replace) ) {
+			 	
+			 	$rule['param'] = $param_replace[ $rule['param'] ];
+			 	
+		 	}
+		 	
+		 	
+		 	// category / taxonomy terms are saved differently
+		 	if( $rule['param'] == 'post_category' || $rule['param'] == 'post_taxonomy' ) {
+			 	
+			 	$term_id = $rule['value'];
+			 	$taxonomy = $wpdb->get_var( $wpdb->prepare( "SELECT taxonomy FROM $wpdb->term_taxonomy WHERE term_id = %d LIMIT 1", $term_id) );
+			 	$term = get_term( $term_id, $taxonomy );
+			 	
+			 	// update rule value
+			 	$rule['value'] = "{$term->taxonomy}:{$term->slug}";
+			 	
+		 	}
 		 	
 		 	
 		 	// add to group
