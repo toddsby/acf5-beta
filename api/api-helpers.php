@@ -269,7 +269,8 @@ function acf_parse_types( $var )
 			'label',
 			'name',
 			'value',
-			'instructions'
+			'instructions',
+			'nonce'
 		);
 		
 		
