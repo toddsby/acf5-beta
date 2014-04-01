@@ -293,8 +293,9 @@ class acf_field_taxonomy extends acf_field
 	
 	function format_value( $value, $post_id, $field, $template ) {
 		
+		
 		// bail early if no value
-		if( empty($value) || !is_string($value) )
+		if( empty($value) )
 		{
 			return $value;
 		}
@@ -313,7 +314,7 @@ class acf_field_taxonomy extends acf_field
 		if( !is_array($value) )
 		{
 			$is_array = false;
-			$value = array( $value );
+			$value = acf_force_type_array( $value );
 		}
 		
 		
