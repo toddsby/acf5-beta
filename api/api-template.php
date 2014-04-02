@@ -1358,7 +1358,7 @@ function update_field( $selector, $value, $post_id = false ) {
 *  @date	2/04/2014
 *  @since	5.0.0
 *
-*  @param	$selector (mixed) the field name or key, or an array of ancestors
+*  @param	$selector (mixed) the sub field name or key, or an array of ancestors
 *  @param	$value (mixed) the value to save in the database
 *  @param	$post_id (mixed) the post_id of which the value is saved against
 *  @return	(boolean)
