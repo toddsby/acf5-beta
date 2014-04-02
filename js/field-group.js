@@ -297,7 +297,6 @@ var acf_field_group = {};
 			
 		},
 		
-		
 		edit : function( $el ){
 			
 			// class / action
@@ -730,6 +729,10 @@ var acf_field_group = {};
 				$(this).attr('name', $(this).attr('name').replace(old_id, new_id) );
 			});
 			
+			
+			// update key
+			$el.find('> .field-info .pre-field_key').text( new_id );
+			
 		},
 		
 		render : function(){
@@ -870,7 +873,6 @@ var acf_field_group = {};
 		// repeater sub field
 		if( $field.parents('.field[data-key="acfcloneindex"]').exists() )
 		{
-			//console.log( $field );
 			ready = false;
 		}
 		
@@ -1260,7 +1262,7 @@ var acf_field_group = {};
 				$ancestors	= $field.parents('.acf-field-list'),
 				$tr			= $field.find('> .field-options > table > tbody > tr[data-name="conditional_logic"]');
 				
-			console.log( $tr );
+			
 			$.each( $ancestors, function( i ){
 				
 				var group = (i == 0) ? acf.l10n.sibling_fields : acf.l10n.parent_fields;
