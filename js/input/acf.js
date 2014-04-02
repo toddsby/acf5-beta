@@ -367,6 +367,14 @@ var acf = {
 			$selector = $el.find('select, textarea, input');
 			
 			
+			// filter our hidden field groups
+			$selector = $selector.filter(function(){
+				
+				return $(this).closest('.postbox.acf-hidden').exists() ? false : true;
+								
+			});
+			
+			
 			// populate data
 			$.each( $selector.serializeArray(), function( i, pair ) {
 				
