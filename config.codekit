@@ -1,6 +1,6 @@
 {
 "CodeKitInfo": "This is a CodeKit 2.x project configuration file. It is designed to sync project settings across multiple machines. MODIFYING THE CONTENTS OF THIS FILE IS A POOR LIFE DECISION. If you do so, you will likely cause CodeKit to crash. This file is not useful unless accompanied by the project that created it in CodeKit 2. This file is not backwards-compatible with CodeKit 1.x. For more information, see: http:\/\/incident57.com\/codekit",
-"creatorBuild": "16877",
+"creatorBuild": "16895",
 "files": {
 	"\/acf.php": {
 		"fileType": 8192,
@@ -8,6 +8,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/acf.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/admin.php": {
@@ -16,6 +17,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/admin.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/field-group.php": {
@@ -24,6 +26,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/field-group.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/field-groups.php": {
@@ -32,6 +35,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/field-groups.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/settings-addons.php": {
@@ -40,6 +44,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/settings-addons.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/settings-export.php": {
@@ -48,6 +53,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/settings-export.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/update.php": {
@@ -56,6 +62,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/update.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/updates\/5.0.0.php": {
@@ -64,6 +71,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/updates\/5.0.0.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/views\/field-group-field-conditional-logic.php": {
@@ -72,6 +80,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/views\/field-group-field-conditional-logic.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/views\/field-group-field.php": {
@@ -80,6 +89,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/views\/field-group-field.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/views\/field-group-fields.php": {
@@ -88,6 +98,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/views\/field-group-fields.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/views\/field-group-locations.php": {
@@ -96,6 +107,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/views\/field-group-locations.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/views\/field-group-options.php": {
@@ -104,6 +116,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/views\/field-group-options.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/views\/settings-addons.php": {
@@ -112,6 +125,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/views\/settings-addons.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/views\/settings-export-generate.php": {
@@ -120,6 +134,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/views\/settings-export-generate.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/views\/settings-export.php": {
@@ -128,6 +143,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/views\/settings-export.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/admin\/views\/update.php": {
@@ -136,6 +152,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/admin\/views\/update.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/api\/api-field-group.php": {
@@ -144,6 +161,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/api\/api-field-group.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/api\/api-field.php": {
@@ -152,6 +170,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/api\/api-field.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/api\/api-helpers.php": {
@@ -160,6 +179,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/api\/api-helpers.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/api\/api-template.php": {
@@ -168,6 +188,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/api\/api-template.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/api\/api-value.php": {
@@ -176,6 +197,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/api\/api-value.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/core\/field.php": {
@@ -184,6 +206,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/core\/field.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/core\/input.php": {
@@ -192,6 +215,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/core\/input.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/core\/json.php": {
@@ -200,6 +224,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/core\/json.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/core\/local.php": {
@@ -208,6 +233,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/core\/local.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/core\/location.php": {
@@ -216,6 +242,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/core\/location.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/core\/revisions.php": {
@@ -224,6 +251,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/core\/revisions.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/core\/wpml.php": {
@@ -232,6 +260,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/core\/wpml.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/css\/field-group.css": {
@@ -240,6 +269,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/css\/field-group.css",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/css\/global.css": {
@@ -248,6 +278,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/css\/global.css",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/css\/input.css": {
@@ -256,6 +287,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/css\/input.css",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/checkbox.php": {
@@ -264,6 +296,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/checkbox.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/color_picker.php": {
@@ -272,6 +305,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/color_picker.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/date_picker.php": {
@@ -280,6 +314,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/date_picker.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/dummy.php": {
@@ -288,6 +323,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/dummy.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/email.php": {
@@ -296,6 +332,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/email.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/file.php": {
@@ -304,6 +341,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/file.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/google-map.php": {
@@ -312,6 +350,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/google-map.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/image.php": {
@@ -320,6 +359,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/image.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/message.php": {
@@ -328,6 +368,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/message.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/number.php": {
@@ -336,6 +377,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/number.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/oembed.php": {
@@ -344,6 +386,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/oembed.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/page_link.php": {
@@ -352,6 +395,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/page_link.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/password.php": {
@@ -360,6 +404,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/password.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/post_object.php": {
@@ -368,6 +413,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/post_object.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/radio.php": {
@@ -376,6 +422,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/radio.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/relationship.php": {
@@ -384,6 +431,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/relationship.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/select.php": {
@@ -392,6 +440,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/select.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/tab.php": {
@@ -400,6 +449,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/tab.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/taxonomy.php": {
@@ -408,6 +458,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/taxonomy.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/text.php": {
@@ -416,6 +467,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/text.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/textarea.php": {
@@ -424,6 +476,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/textarea.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/true_false.php": {
@@ -432,6 +485,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/true_false.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/user.php": {
@@ -440,6 +494,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/user.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/fields\/wysiwyg.php": {
@@ -448,6 +503,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/fields\/wysiwyg.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/forms\/attachment.php": {
@@ -456,6 +512,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/forms\/attachment.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/forms\/comment.php": {
@@ -464,6 +521,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/forms\/comment.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/forms\/post.php": {
@@ -472,6 +530,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/forms\/post.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/forms\/taxonomy.php": {
@@ -480,6 +539,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/forms\/taxonomy.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/forms\/user.php": {
@@ -488,6 +548,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/forms\/user.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/forms\/widget.php": {
@@ -496,6 +557,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/forms\/widget.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/images\/sprite.png": {
@@ -505,6 +567,7 @@
 		"initialSize": 5398,
 		"inputAbbreviatedPath": "\/images\/sprite.png",
 		"outputAbbreviatedPath": "\/images\/sprite.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -515,6 +578,7 @@
 		"initialSize": 12783,
 		"inputAbbreviatedPath": "\/images\/sprite@2x.png",
 		"outputAbbreviatedPath": "\/images\/sprite@2x.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -525,6 +589,7 @@
 		"initialSize": 206,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_flat_0_2EA2CC_40x100.png",
 		"outputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_flat_0_2EA2CC_40x100.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -535,6 +600,7 @@
 		"initialSize": 212,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_flat_0_aaaaaa_40x100.png",
 		"outputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_flat_0_aaaaaa_40x100.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -545,6 +611,7 @@
 		"initialSize": 206,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_flat_0_E14D43_40x100.png",
 		"outputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_flat_0_E14D43_40x100.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -555,6 +622,7 @@
 		"initialSize": 230,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_flat_0_F0F0F0_40x100.png",
 		"outputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_flat_0_F0F0F0_40x100.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -565,6 +633,7 @@
 		"initialSize": 230,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_flat_0_F9F9F9_40x100.png",
 		"outputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_flat_0_F9F9F9_40x100.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -575,6 +644,7 @@
 		"initialSize": 208,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_flat_0_ffffff_40x100.png",
 		"outputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_flat_0_ffffff_40x100.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -585,6 +655,7 @@
 		"initialSize": 208,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_flat_75_ffffff_40x100.png",
 		"outputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_flat_75_ffffff_40x100.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -595,6 +666,7 @@
 		"initialSize": 203,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_highlight-soft_0_ffffff_1x100.png",
 		"outputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-bg_highlight-soft_0_ffffff_1x100.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -605,6 +677,7 @@
 		"initialSize": 6922,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-icons_222222_256x240.png",
 		"outputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-icons_222222_256x240.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -615,6 +688,7 @@
 		"initialSize": 4549,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-icons_2EA2CC_256x240.png",
 		"outputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-icons_2EA2CC_256x240.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -625,6 +699,7 @@
 		"initialSize": 6992,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-icons_444444_256x240.png",
 		"outputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-icons_444444_256x240.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -635,6 +710,7 @@
 		"initialSize": 6992,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-icons_454545_256x240.png",
 		"outputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-icons_454545_256x240.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -645,6 +721,7 @@
 		"initialSize": 6923,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-icons_DDDDDD_256x240.png",
 		"outputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-icons_DDDDDD_256x240.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -655,6 +732,7 @@
 		"initialSize": 6299,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-icons_ffffff_256x240.png",
 		"outputAbbreviatedPath": "\/inc\/datepicker\/images\/ui-icons_ffffff_256x240.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -664,6 +742,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/jquery-ui-1.10.4.custom.css",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/inc\/datepicker\/jquery-ui-1.10.4.custom.min.css": {
@@ -672,6 +751,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/datepicker\/jquery-ui-1.10.4.custom.min.css",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/inc\/select2\/README.md": {
@@ -683,6 +763,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/README.md",
 		"outputAbbreviatedPath": "\/inc\/select2\/README.html",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/inc\/select2\/select2-bootstrap.css": {
@@ -691,6 +772,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2-bootstrap.css",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/inc\/select2\/select2.css": {
@@ -699,6 +781,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2.css",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/inc\/select2\/select2.js": {
@@ -707,6 +790,7 @@
 		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -717,6 +801,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2.min.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2.min.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -728,6 +813,7 @@
 		"initialSize": 613,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2.png",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -737,6 +823,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_ar.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_ar.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -747,6 +834,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_bg.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_bg.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -757,6 +845,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_ca.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_ca.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -767,6 +856,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_cs.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_cs.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -777,6 +867,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_da.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_da.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -787,6 +878,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_de.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_de.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -797,6 +889,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_el.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_el.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -807,6 +900,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_es.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_es.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -817,6 +911,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_et.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_et.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -827,6 +922,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_eu.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_eu.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -837,6 +933,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_fa.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_fa.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -847,6 +944,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_fi.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_fi.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -857,6 +955,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_fr.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_fr.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -867,6 +966,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_gl.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_gl.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -877,6 +977,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_he.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_he.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -887,6 +988,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_hr.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_hr.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -897,6 +999,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_hu.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_hu.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -907,6 +1010,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_id.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_id.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -917,6 +1021,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_is.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_is.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -927,6 +1032,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_it.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_it.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -937,6 +1043,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_ja.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_ja.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -947,6 +1054,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_ka.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_ka.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -957,6 +1065,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_ko.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_ko.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -967,6 +1076,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_lt.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_lt.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -977,6 +1087,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_lv.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_lv.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -987,6 +1098,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_mk.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_mk.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -997,6 +1109,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_ms.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_ms.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1007,6 +1120,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_nl.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_nl.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1017,6 +1131,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_no.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_no.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1027,6 +1142,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_pl.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_pl.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1037,6 +1153,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_pt-BR.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_pt-BR.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1047,6 +1164,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_pt-PT.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_pt-PT.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1057,6 +1175,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_ro.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_ro.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1067,6 +1186,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_rs.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_rs.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1077,6 +1197,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_ru.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_ru.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1087,6 +1208,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_sk.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_sk.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1097,6 +1219,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_sv.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_sv.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1107,6 +1230,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_th.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_th.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1117,6 +1241,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_tr.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_tr.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1127,6 +1252,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_uk.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_uk.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1137,6 +1263,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_vi.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_vi.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1147,6 +1274,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_zh-CN.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_zh-CN.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1157,6 +1285,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2_locale_zh-TW.js",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2_locale_zh-TW.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1168,6 +1297,7 @@
 		"initialSize": 845,
 		"inputAbbreviatedPath": "\/inc\/select2\/select2x2.png",
 		"outputAbbreviatedPath": "\/inc\/select2\/select2x2.png",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
@@ -1177,6 +1307,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/field-group.js",
 		"outputAbbreviatedPath": "\/js\/field-group.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 0
@@ -1187,6 +1318,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/field-group.min.js",
 		"outputAbbreviatedPath": "\/js\/field-group.min.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1197,6 +1329,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input.js",
 		"outputAbbreviatedPath": "\/js\/input.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1207,6 +1340,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input.min.js",
 		"outputAbbreviatedPath": "\/js\/input.min.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1217,6 +1351,7 @@
 		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/js\/input\/_listener.js",
 		"outputAbbreviatedPath": "\/js\/input.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 1,
 		"outputStyle": 0,
 		"syntaxCheckerStyle": 0
@@ -1227,6 +1362,7 @@
 		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/js\/input\/_listener.min.js",
 		"outputAbbreviatedPath": "\/js\/input.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 1,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 0
@@ -1237,6 +1373,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/acf.js",
 		"outputAbbreviatedPath": "\/js\/input\/acf.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1247,6 +1384,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/ajax.js",
 		"outputAbbreviatedPath": "\/js\/input\/ajax.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1257,6 +1395,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/color-picker.js",
 		"outputAbbreviatedPath": "\/js\/input\/color-picker.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1267,6 +1406,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/date-picker.js",
 		"outputAbbreviatedPath": "\/js\/input\/date-picker.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1277,6 +1417,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/event-manager.js",
 		"outputAbbreviatedPath": "\/js\/input\/event-manager.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1287,6 +1428,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/file.js",
 		"outputAbbreviatedPath": "\/js\/input\/file.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1297,6 +1439,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/google-map.js",
 		"outputAbbreviatedPath": "\/js\/input\/google-map.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1307,6 +1450,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/image.js",
 		"outputAbbreviatedPath": "\/js\/input\/image.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1317,6 +1461,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/oembed.js",
 		"outputAbbreviatedPath": "\/js\/input\/oembed.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1327,6 +1472,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/post_object.js",
 		"outputAbbreviatedPath": "\/js\/input\/post_object.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1337,6 +1483,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/radio.js",
 		"outputAbbreviatedPath": "\/js\/input\/radio.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1347,6 +1494,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/relationship.js",
 		"outputAbbreviatedPath": "\/js\/input\/relationship.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1357,6 +1505,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/select.js",
 		"outputAbbreviatedPath": "\/js\/input\/select.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1367,6 +1516,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/tab.js",
 		"outputAbbreviatedPath": "\/js\/input\/tab.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1377,6 +1527,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/validation.js",
 		"outputAbbreviatedPath": "\/js\/input\/validation.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1387,6 +1538,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/js\/input\/wysiwyg.js",
 		"outputAbbreviatedPath": "\/js\/input\/wysiwyg.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1397,6 +1549,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/acf-pro.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/pro\/admin\/connect.php": {
@@ -1405,6 +1558,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/admin\/connect.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/pro\/admin\/options-page.php": {
@@ -1413,6 +1567,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/admin\/options-page.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/pro\/admin\/settings-updates.php": {
@@ -1421,6 +1576,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/admin\/settings-updates.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/pro\/admin\/views\/options-page.php": {
@@ -1429,6 +1585,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/admin\/views\/options-page.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/pro\/admin\/views\/settings-updates.php": {
@@ -1437,6 +1594,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/admin\/views\/settings-updates.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/pro\/api-pro.php": {
@@ -1445,6 +1603,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/api-pro.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/pro\/css\/pro-field-group.css": {
@@ -1453,6 +1612,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/css\/pro-field-group.css",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/pro\/css\/pro-input.css": {
@@ -1461,6 +1621,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/css\/pro-input.css",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/pro\/fields\/flexible-content.php": {
@@ -1469,6 +1630,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/fields\/flexible-content.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/pro\/fields\/gallery.php": {
@@ -1477,6 +1639,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/fields\/gallery.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/pro\/fields\/repeater.php": {
@@ -1485,6 +1648,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/fields\/repeater.php",
 		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
 	"\/pro\/js\/pro-field-group.js": {
@@ -1493,6 +1657,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/js\/pro-field-group.js",
 		"outputAbbreviatedPath": "\/pro\/js\/pro-field-group.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 0
@@ -1503,6 +1668,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/js\/pro-field-group.min.js",
 		"outputAbbreviatedPath": "\/pro\/js\/pro-field-group.min.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1513,6 +1679,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/js\/pro-input.js",
 		"outputAbbreviatedPath": "\/pro\/js\/pro-input.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 0
@@ -1523,6 +1690,7 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/pro\/js\/pro-input.min.js",
 		"outputAbbreviatedPath": "\/pro\/js\/pro-input.min.min.js",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
@@ -1536,6 +1704,7 @@
 		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/README.md",
 		"outputAbbreviatedPath": "\/README.html",
+		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		}
 	},

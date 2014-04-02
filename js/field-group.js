@@ -672,6 +672,7 @@ var acf_field_group = {};
 			
 			
 			// trigger append
+			acf.do_action('duplicate', $el);
 			acf.do_action('append', $el);
 			
 			

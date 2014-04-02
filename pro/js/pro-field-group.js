@@ -18,6 +18,12 @@
 				
 		    });
 		    
+		    acf.add_action('duplicate', function( $el ){
+			    
+			    _this.duplicate( $el );
+				
+		    });
+		    
 		    
 		    acf_field_group.fields.$el.find('.field').each(function(){
 			   
@@ -108,6 +114,29 @@
 			$input.val( value );
 	    	
     	},
+    	
+    	duplicate : function( $el ){
+	    	
+	    	$el.find('.field:not([data-key="acfcloneindex"])').each(function(){
+		    	
+		    	// vars
+		    	var $parent = $(this).parent().closest('.field'),
+		    		key = acf_field_group.fields.get_field_meta( $parent, 'key');
+		    		
+		    	
+		    	// wipe field
+		    	acf_field_group.fields.wipe_field( $(this) );
+		    	
+		    	
+		    	// update parent & changed
+		    	acf_field_group.fields.update_field_meta( $(this), {
+		    		parent		: key,
+		    		changed		: 1
+		    	});
+		    	
+	    	});
+	    	
+    	}
 	    
     };
     
@@ -380,11 +409,14 @@
 			this.wipe_layout( $new_tr );
 			
 			
-			// update field names
-			$new_tr.find('.field').each(function(){
+			$new_tr.find('.field:not([data-key="acfcloneindex"])').each(function(){
 				
+				// wipe
 				acf_field_group.fields.wipe_field( $(this) );
 				
+				
+				// save
+				acf_field_group.fields.save_field( $(this) );
 			});
 			
 			
