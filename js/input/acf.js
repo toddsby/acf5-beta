@@ -1527,7 +1527,7 @@ var acf = {
 			
 			
 			// hook
-			acf.do_action('conditional_logic_show', $field );
+			acf.do_action('show_field', $field );
 			
 		},
 		
@@ -1561,7 +1561,7 @@ var acf = {
 			
 			
 			// hook
-			acf.do_action('conditional_logic_hide', $field );
+			acf.do_action('hide_field', $field );
 			
 		},
 		
