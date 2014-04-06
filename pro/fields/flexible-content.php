@@ -733,6 +733,45 @@ class acf_field_flexible_content extends acf_field
 		return $order;
 	}
 	
+	
+	/*
+	*  delete_field
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	4/04/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function delete_field( $field ) {
+		
+		if( !empty($field['layouts']) ) {
+			
+			
+			
+		}
+		
+		// loop through layouts
+		foreach( $field['layouts'] as $layout )
+		
+		
+		// loop through sub fields
+		if( !empty($field['sub_fields']) ) {
+		
+			foreach( $field['sub_fields'] as $sub_field ) {
+			
+				acf_delete_field( $sub_field['ID'] );
+				
+			}
+			
+		}
+		
+	}
+	
 }
 
 new acf_field_flexible_content();

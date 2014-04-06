@@ -82,6 +82,11 @@ class acf_field_repeater extends acf_field
 		}
 		
 		
+		// rows
+		$field['min'] = empty($field['min']) ? 0 : $field['min'];
+		$field['max'] = empty($field['max']) ? 0 : $field['max'];
+		
+		
 		// populate the empty row data (used for acfcloneindex and min setting)
 		$empty_row = array();
 		
@@ -136,20 +141,25 @@ class acf_field_repeater extends acf_field
 		
 		// show columns
 		$show_order = true;
+		$show_add = true;
 		$show_remove = true;
 		
 		
-		if( $field['max'] )
-		{
-			if( $field['max'] == 1 )
-			{
+		if( $field['max'] ) {
+		
+			if( $field['max'] == 1 ) {
+			
 				$show_order = false;
+				
 			}
 			
-			if( $field['max'] <= $field['min'] )
-			{
+			if( $field['max'] <= $field['min'] ) {
+			
 				$show_remove = false;
+				$show_add = false;
+				
 			}
+			
 		}
 		
 		
@@ -264,18 +274,14 @@ class acf_field_repeater extends acf_field
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-		<?php if( $field['min'] && $field['min'] >= $field['max'] ): ?>
+		<?php if( $show_add ): ?>
 			
-			<?php // do nothing ?>
-			
-		<?php else: ?>
-		
 			<ul class="acf-hl acf-clearfix">
 				<li class="acf-fr">
 					<a href="#" class="acf-button blue acf-repeater-add-row"><?php echo $field['button_label']; ?></a>
 				</li>
 			</ul>
-		
+					
 		<?php endif; ?>
 		</div>
 		<?php
@@ -629,6 +635,35 @@ class acf_field_repeater extends acf_field
 		
 		// return
 		return $value;
+	}
+	
+	
+	/*
+	*  delete_field
+	*
+	*  description
+	*
+	*  @type	function
+	*  @date	4/04/2014
+	*  @since	5.0.0
+	*
+	*  @param	$post_id (int)
+	*  @return	$post_id (int)
+	*/
+	
+	function delete_field( $field ) {
+		
+		// loop through sub fields
+		if( !empty($field['sub_fields']) ) {
+		
+			foreach( $field['sub_fields'] as $sub_field ) {
+			
+				acf_delete_field( $sub_field['ID'] );
+				
+			}
+			
+		}
+		
 	}
 
 }
