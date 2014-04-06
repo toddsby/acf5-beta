@@ -110,12 +110,35 @@ class acf_local {
 	
 	function add_field_group( $field_group ) {
 		
+		// validate
+		$field_group = acf_get_valid_field_group($field_group);
+		
+		
+		// ACF4
+		if( empty($field_group['key']) ) {
+			
+			// add in key
+			$field_group['key'] = empty($field_group['id']) ? uniqid('group_') : 'group_' . $field_group['id'];
+			
+			
+			// extract options
+			if( !empty($field_group['options']) ) {
+				
+				$options = acf_extract_var($field_group, 'options');
+				
+				$field_group = array_merge($field_group, $options);
+			}
+			
+		}
+		
+		
 		// don't allow overrides
 		if( acf_is_local_field_group($field_group['key']) ) {
 			
 			return;	
 			
 		}
+		
 		
 		// remove fields
 		$fields = acf_extract_var($field_group, 'fields');
