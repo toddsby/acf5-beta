@@ -718,7 +718,7 @@ img.acf-fw {
 	border-top: #EEEEEE solid 1px;
 }
 
-.acf-postbox .acf-field:first-child {
+.acf-postbox > .inside > .acf-field:first-child {
 	border-top: 0 none;
 }
 
