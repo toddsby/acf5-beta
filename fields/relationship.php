@@ -411,10 +411,11 @@ class acf_field_relationship extends acf_field
 			$field['value'] = array_map('intval', $field['value']);
 			
 			$posts = get_posts(array(
-				'post_type'		=> $post_types,
-				'post_status'	=> 'any',
-				'post__in'		=> $field['value'],
-				'orderby'		=> 'post__in'
+				'posts_per_page'	=> -1,
+				'post_type'			=> $post_types,
+				'post_status'		=> 'any',
+				'post__in'			=> $field['value'],
+				'orderby'			=> 'post__in'
 			));
 			
 			if( !empty($posts) )
@@ -826,6 +827,7 @@ class acf_field_relationship extends acf_field
 	
 	function update_value( $value, $post_id, $field ) {
 		
+		
 		// validate
 		if( empty($value) ) {
 		
@@ -851,7 +853,10 @@ class acf_field_relationship extends acf_field
 		
 		// save value as strings, so we can clearly search for them in SQL LIKE statements
 		$value = array_map('strval', $value);
-			
+			echo '<pre>';
+			print_r( $value );
+		echo '</pre>';
+		die;
 	
 		// return
 		return $value;

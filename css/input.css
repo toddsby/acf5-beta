@@ -300,13 +300,13 @@ ul.acf-checkbox-list li label {
 
 .acf-relationship .choices .list {
 	border-right: #DFDFDF solid 1px;
-	overflow: auto;
 }
 
 .acf-relationship .list {
 	margin: 0;
 	padding: 5px;
 	height: 160px;
+	overflow: auto;
 }
 
 .acf-relationship .list .acf-relationship-label,
