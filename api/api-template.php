@@ -1178,7 +1178,7 @@ function acf_form( $args = array() ) {
 		
 		foreach( $args['fields'] as $selector ) {
 		
-			$fields[] = acf_get_field( $selector );
+			$fields[] = get_field_object( $selector, $post_id, false, false);
 			
 		}
 		
@@ -1296,7 +1296,7 @@ function acf_form( $args = array() ) {
 	<?php if( $args['form'] ): ?>
 	<!-- Submit -->
 	<div class="acf-form-submit">
-		<input type="submit" value="<?php echo $args['submit_value']; ?>" />
+		<input type="submit" class="button button-primary button-large" value="<?php echo $args['submit_value']; ?>" />
 	</div>
 	<!-- / Submit -->
 	<?php endif; ?>
