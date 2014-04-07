@@ -47,14 +47,19 @@ $page = acf_get_options_page( $slug );
 						<!-- Update -->
 						<div id="submitdiv" class="postbox">
 							
-							<h3 class="hndle"><span><?php _e("Publish",'acf'); ?></span></h3>
+							<h3 class="hndle" style="border-bottom:none;"><span><?php _e("Publish",'acf'); ?></span></h3>
 							
 							<div id="major-publishing-actions">
+
+								<div id="publishing-action">
+									<span class="spinner"></span>
+									<input type="submit" accesskey="p" value="<?php _e("Save Options",'acf'); ?>" class="button button-primary button-large" id="publish" name="publish">
+								</div>
 								
-								<input type="submit" class="acf-button blue" value="<?php _e("Save Options",'acf'); ?>" />
+								<div class="clear"></div>
 							
 							</div>
-							
+
 						</div>
 						
 						<?php do_meta_boxes('acf_options_page', 'side', null); ?>
@@ -87,6 +92,13 @@ $page = acf_get_options_page( $slug );
 		{
 			postbox.addClass('closed');
 		}
+		
+	});
+	
+	$(document).on('submit', '#post', function(){
+		
+		$('#publishing-action .spinner').css('display', 'inline-block');
+		$('#publishing-action #publish').addClass('button-primary-disabled');
 		
 	});
 	
