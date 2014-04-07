@@ -487,18 +487,25 @@ var acf_field_group = {};
 			
 		},
 		
-		remove : function( $el ){
+		delete_field : function( $el ){
 			
-			// reference
-			var _this	= this,
-				id		= $el.attr('data-ID');
+			// vars
+			var id = this.get_field_meta($el, 'ID');
 			
 			
 			// add to remove list
-			if( id )
-			{
+			if( id ) {
+			
 				$('#input-delete-fields').val( $('#input-delete-fields').val() + '|' + id );	
-			}
+				
+			}	
+			
+		},
+		
+		remove : function( $el ){
+			
+			// add to delete list
+			this.delete_field( $el );
 			
 			
 			// vars

@@ -440,6 +440,7 @@
 		
 		remove : function( $tr ){
 			
+			// validate
 			if( $tr.siblings('tr[data-name="fc_layout"]').length == 0 )
 			{
 				alert( acf._e('flexible_content','delete') );
@@ -447,33 +448,20 @@
 			}
 			
 			
-			// set layout
-			$tr.css({
-				height		: $tr.height(),
-				width		: $tr.width(),
-				position	: 'absolute'
-			});
-			
-			
-			// fade $tr
-			$tr.animate({ opacity : 0 }, 250, function(){
+			// delete fields
+			$tr.find('.field:not([data-key="acfcloneindex"])').each(function(){
 				
-				$(this).remove();
+				acf_field_group.fields.delete_field( $(this) );
 				
 			});
 			
 			
-			// create blank space
-			$blank = $('<tr style="height:' + $tr.height() + 'px"><td colspan="2"></td></tr>');
+			// save field
+			acf_field_group.fields.save_field( $tr.closest('.field') );
 			
 			
-			$tr.after( $blank );
-			
-			$blank.animate({ height : 0 }, 250, function(){
-				
-				$(this).remove();
-				
-			});
+			// remove tr
+			acf.remove_tr( $tr );
 						
 		},
 		
